@@ -1,13 +1,6 @@
 import type { Workflow, ValidationResult, ValidationIssue, IssueSeverity } from './types.js';
 import { createSourceMap, findSourceLocation, extractSnippet, type SourceMap } from './source-location.js';
-
-// Known valid parameter keys for common problematic nodes (for context, not for fixing)
-const KNOWN_NODE_PARAMETERS: Record<string, string[]> = {
-  'n8n-nodes-base.if': ['conditions', 'looseTypeValidation'],
-  'n8n-nodes-base.switch': ['rules', 'fallbackOutput'],
-  'n8n-nodes-base.code': ['mode', 'jsCode', 'language', 'workflowMode'],
-  'n8n-nodes-base.webhook': ['path', 'responseMode', 'responseCode', 'responseData', 'options', 'authentication', 'httpMethod'],
-};
+import { validateNodeWithN8n } from './n8n-native-validator.js';
 
 interface IssueBuilder {
   code: string;
@@ -290,32 +283,32 @@ export function validateWorkflowStructure(data: unknown, options?: ValidateOptio
         issues.push(issue);
         errors.push(issue.message);
       } else {
-        // Deep Check: Invalid 'options' in parameters for IF/Switch nodes
-        if (node.type === 'n8n-nodes-base.if' || node.type === 'n8n-nodes-base.switch') {
-          if ('options' in node.parameters && 
-              typeof node.parameters.options === 'object' &&
-              node.parameters.options !== null &&
-              Object.keys(node.parameters.options).length === 0) {
-            
-            const knownParams = KNOWN_NODE_PARAMETERS[node.type] || [];
-            const actualParamKeys = Object.keys(node.parameters);
-            
-            const issue = enrichWithSourceInfo({
-              code: 'INVALID_IF_SWITCH_OPTIONS_ROOT',
-              severity: 'error',
-              message: `Node "${nodeName}" (${nodeType}): Found unexpected "options" key at parameters root level.`,
-              location: { ...baseLocation, path: `${nodePath}.parameters.options` },
-              context: { 
-                value: node.parameters.options,
-                expected: `This node type does not define "options" as a root-level parameter. The "options" key found here with value {} is not recognized by n8n's parameter schema for ${nodeType}.`,
-                n8nError: 'Could not find property option',
-                fullObject: node.parameters
-              },
-              validAlternatives: knownParams,
-              hint: `Observed parameter keys: [${actualParamKeys.join(', ')}]. Known valid keys for ${nodeType}: [${knownParams.join(', ')}]. The key "options" is not among the valid root-level parameters.`
-            }, sourceMap, `${nodePath}.parameters.options`);
-            issues.push(issue);
-            errors.push(issue.message);
+        // Delegate to native n8n validation for parameter-level issues
+        const nativeIssues = validateNodeWithN8n(node as any);
+
+        for (const nativeIssue of nativeIssues) {
+          const relativePath = nativeIssue.location?.path ?? '';
+          const fullPath = relativePath ? `${nodePath}.${relativePath}` : nodePath;
+
+          const enriched = enrichWithSourceInfo(
+            {
+              code: nativeIssue.code,
+              severity: nativeIssue.severity,
+              message: nativeIssue.message,
+              location: { ...baseLocation, ...nativeIssue.location, path: fullPath },
+              context: nativeIssue.context,
+              validAlternatives: nativeIssue.validAlternatives,
+              hint: nativeIssue.hint,
+            },
+            sourceMap,
+            fullPath,
+          );
+
+          issues.push(enriched);
+          if (enriched.severity === 'error') {
+            errors.push(enriched.message);
+          } else if (enriched.severity === 'warning') {
+            warnings.push(enriched.message);
           }
         }
       }

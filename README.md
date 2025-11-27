@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/n8n-workflow-validator.svg)](https://www.npmjs.com/package/n8n-workflow-validator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Standalone CLI tool that validates n8n workflow JSON files with **rich error diagnostics** including source locations, code snippets, and root cause analysis. Perfect for CI/CD pipelines and LLM-powered self-healing agents.
+Standalone CLI tool that validates n8n workflow JSON files with **rich error diagnostics** including source locations, code snippets, and root cause analysis. Perfect for LLM-powered self-healing agents that builds n8n workflows. As n8n does not have official validation utils, I have extracted the exactly same logic from n8n's source code that used for validation by source code of canvas editor.
 
 ## Quick Start
 
