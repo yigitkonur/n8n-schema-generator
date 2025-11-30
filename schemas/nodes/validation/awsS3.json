@@ -1,0 +1,754 @@
+{
+  "nodeType": "n8n-nodes-base.awsS3",
+  "displayName": "AWS S3",
+  "version": 2,
+  "rules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "default": "iam",
+      "enumValues": [
+        "iam",
+        "assumeRole"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "default": "file",
+      "enumValues": [
+        "bucket",
+        "file",
+        "folder"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "delete",
+        "getAll",
+        "search"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ]
+        }
+      }
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "bucket"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "bucket"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "bucket"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "bucket"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "delete",
+        "getAll"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "folderName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "folderKey",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "download",
+      "enumValues": [
+        "copy",
+        "delete",
+        "download",
+        "getAll",
+        "upload"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sourcePath",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "field": "destinationPath",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileName",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryData",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileContent",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "default": "data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "tagsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileKey",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "default": "data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileKey",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bucketName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "iam",
+    "resource": "file",
+    "additionalFields": {},
+    "folderName": "",
+    "folderKey": "",
+    "options": {},
+    "operation": "download",
+    "sourcePath": "",
+    "destinationPath": "",
+    "binaryData": true,
+    "fileContent": "",
+    "tagsUi": {},
+    "bucketName": "",
+    "fileKey": "",
+    "binaryPropertyName": "data"
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "tagsUi"
+  ]
+}

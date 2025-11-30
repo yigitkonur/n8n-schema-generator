@@ -1,0 +1,512 @@
+{
+  "nodeType": "n8n-nodes-base.beeminder",
+  "displayName": "Beeminder",
+  "version": 1,
+  "rules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "default": "apiToken",
+      "enumValues": [
+        "apiToken",
+        "oAuth2"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "default": "datapoint",
+      "enumValues": [
+        "charge",
+        "datapoint",
+        "goal",
+        "user"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "default": "create",
+      "enumValues": [
+        "create"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "createAll",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "default": "get",
+      "enumValues": [
+        "create",
+        "get",
+        "getAll",
+        "getArchived",
+        "update",
+        "refresh",
+        "shortCircuit",
+        "stepDown",
+        "cancelStepDown",
+        "uncle"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "default": "get",
+      "enumValues": [
+        "get"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      }
+    },
+    {
+      "field": "goalName",
+      "type": "options",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ]
+        }
+      }
+    },
+    {
+      "field": "goalName",
+      "type": "options",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "uncle"
+          ]
+        }
+      }
+    },
+    {
+      "field": "goalName",
+      "type": "options",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "get",
+            "update",
+            "refresh",
+            "shortCircuit",
+            "stepDown",
+            "cancelStepDown"
+          ]
+        }
+      }
+    },
+    {
+      "field": "amount",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "datapoints",
+      "type": "json",
+      "required": true,
+      "default": "[]",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "createAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "slug",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "goal_type",
+      "type": "options",
+      "required": true,
+      "default": "hustler",
+      "enumValues": [
+        "hustler",
+        "biker",
+        "fatloser",
+        "gainer",
+        "inboxer",
+        "drinker",
+        "custom"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "gunits",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "datapoint"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 30,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "datapoint"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "value",
+      "type": "number",
+      "required": true,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "datapointId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "update",
+            "delete",
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "getArchived"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "apiToken",
+    "resource": "datapoint",
+    "operation": "create",
+    "goalName": "",
+    "amount": 0,
+    "datapoints": "[]",
+    "slug": "",
+    "title": "",
+    "goal_type": "hustler",
+    "gunits": "",
+    "returnAll": false,
+    "limit": 30,
+    "value": 1,
+    "datapointId": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "options": {}
+  },
+  "hasFilter": false,
+  "fixedCollections": []
+}

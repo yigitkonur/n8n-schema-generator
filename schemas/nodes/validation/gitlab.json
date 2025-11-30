@@ -1,0 +1,813 @@
+{
+  "nodeType": "n8n-nodes-base.gitlab",
+  "displayName": "GitLab",
+  "version": 1,
+  "rules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "default": "accessToken",
+      "enumValues": [
+        "accessToken",
+        "oAuth2"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "default": "issue",
+      "enumValues": [
+        "file",
+        "issue",
+        "release",
+        "repository",
+        "user"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "createComment",
+        "edit",
+        "get",
+        "lock"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getIssues",
+      "enumValues": [
+        "get",
+        "getIssues"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "repository"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getRepositories",
+      "enumValues": [
+        "getRepositories"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "delete",
+        "edit",
+        "get",
+        "list"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "owner",
+      "type": "string",
+      "required": true,
+      "default": ""
+    },
+    {
+      "field": "repository",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "hide": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getRepositories"
+          ]
+        }
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "body",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "due_date",
+      "type": "dateTime",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "labels",
+      "type": "collection",
+      "required": false,
+      "default": {
+        "label": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "assignee_ids",
+      "type": "collection",
+      "required": false,
+      "default": {
+        "assignee": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "issueNumber",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createComment"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "body",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createComment"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "issueNumber",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "editFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "issueNumber",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "issueNumber",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "lockReason",
+      "type": "options",
+      "required": false,
+      "default": "resolved",
+      "enumValues": [
+        "off-topic",
+        "too heated",
+        "resolved",
+        "spam"
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      }
+    },
+    {
+      "field": "releaseTag",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "projectId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "tag_name",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "projectId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "release",
+            "file",
+            "repository"
+          ],
+          "operation": [
+            "getAll",
+            "list",
+            "getIssues"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 20,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "release",
+            "file",
+            "repository"
+          ],
+          "operation": [
+            "getAll",
+            "list",
+            "getIssues"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "projectId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "tag_name",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      }
+    },
+    {
+      "field": "getRepositoryIssuesFilters",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getIssues"
+          ],
+          "resource": [
+            "repository"
+          ]
+        }
+      }
+    },
+    {
+      "field": "filePath",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "field": "filePath",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "field": "page",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalParameters",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "field": "asBinaryProperty",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "default": "data",
+      "displayOptions": {
+        "show": {
+          "asBinaryProperty": [
+            true
+          ],
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalParameters",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryData",
+      "type": "boolean",
+      "required": true,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileContent",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "binaryData": [
+            false
+          ],
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "default": "data",
+      "displayOptions": {
+        "show": {
+          "binaryData": [
+            true
+          ],
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "commitMessage",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "branch",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "accessToken",
+    "resource": "issue",
+    "operation": "create",
+    "owner": "",
+    "repository": "",
+    "title": "",
+    "body": "",
+    "due_date": "",
+    "labels": [],
+    "assignee_ids": [],
+    "editFields": {},
+    "lockReason": "resolved",
+    "releaseTag": "",
+    "additionalFields": {},
+    "returnAll": false,
+    "limit": 20,
+    "getRepositoryIssuesFilters": {},
+    "page": 1,
+    "additionalParameters": {},
+    "asBinaryProperty": true,
+    "binaryData": false,
+    "fileContent": "",
+    "commitMessage": "",
+    "branch": ""
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "additionalParameters"
+  ]
+}

@@ -1,0 +1,109 @@
+name: Update n8n Schemas
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force update all schemas'
+        required: false
+        default: 'false'
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  update-schemas:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check for n8n updates
+        id: check
+        run: |
+          # Get current n8n version from package-lock
+          CURRENT=$(cat package-lock.json | jq -r '.packages["node_modules/n8n-workflow"].version // "0.0.0"')
+          echo "current=$CURRENT" >> $GITHUB_OUTPUT
+          
+          # Get latest n8n version
+          LATEST=$(npm view n8n-workflow version)
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          
+          # Check if update needed
+          if [ "$CURRENT" != "$LATEST" ] || [ "${{ inputs.force }}" == "true" ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "📦 Update needed: $CURRENT → $LATEST"
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "✅ Already up to date: $CURRENT"
+          fi
+      
+      - name: Update n8n packages
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          npm update n8n-workflow n8n-nodes-base
+          npm install
+      
+      - name: Extract schemas
+        if: steps.check.outputs.needs_update == 'true'
+        env:
+          CI: 'true'
+          FORCE_UPDATE: ${{ inputs.force && '1' || '0' }}
+        run: |
+          npx tsc
+          node dist/extract.js schemas
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "✅ No changes"
+          fi
+      
+      - name: Commit and push
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Get summary if exists
+          SUMMARY="Update schemas"
+          if [ -f .change-summary ]; then
+            SUMMARY=$(cat .change-summary)
+            rm .change-summary
+          fi
+          
+          git add -A
+          git commit -m "🔄 $SUMMARY" -m "n8n version: ${{ steps.check.outputs.latest }}"
+          git push
+      
+      - name: Summary
+        run: |
+          echo "## Schema Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Previous n8n | ${{ steps.check.outputs.current }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Latest n8n | ${{ steps.check.outputs.latest }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Update needed | ${{ steps.check.outputs.needs_update }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Changes committed | ${{ steps.changes.outputs.has_changes }} |" >> $GITHUB_STEP_SUMMARY

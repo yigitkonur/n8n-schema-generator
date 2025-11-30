@@ -1,0 +1,761 @@
+{
+  "nodeType": "n8n-nodes-base.httpRequest",
+  "displayName": "HTTP Request",
+  "version": [
+    3,
+    4,
+    4.1,
+    4.2,
+    4.3
+  ],
+  "defaultVersion": 4.3,
+  "rules": [
+    {
+      "field": "preBuiltAgentsCalloutHttpRequest",
+      "type": "callout",
+      "required": false,
+      "default": ""
+    },
+    {
+      "field": "curlImport",
+      "type": "curlImport",
+      "required": false,
+      "default": ""
+    },
+    {
+      "field": "method",
+      "type": "options",
+      "required": false,
+      "default": "GET",
+      "enumValues": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "required": true,
+      "default": ""
+    },
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "default": "none",
+      "enumValues": [
+        "none",
+        "predefinedCredentialType",
+        "genericCredentialType"
+      ]
+    },
+    {
+      "field": "nodeCredentialType",
+      "type": "credentialsSelect",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "predefinedCredentialType"
+          ]
+        }
+      }
+    },
+    {
+      "field": "googleApiWarning",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "nodeCredentialType": [
+            "googleApi"
+          ]
+        }
+      }
+    },
+    {
+      "field": "genericAuthType",
+      "type": "credentialsSelect",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "genericCredentialType"
+          ]
+        }
+      }
+    },
+    {
+      "field": "provideSslCertificates",
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    {
+      "field": "provideSslCertificatesNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "provideSslCertificates": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "sslCertificate",
+      "type": "credentials",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "provideSslCertificates": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "sendQuery",
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    {
+      "field": "specifyQuery",
+      "type": "options",
+      "required": false,
+      "default": "keypair",
+      "enumValues": [
+        "keypair",
+        "json"
+      ],
+      "displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "queryParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "keypair"
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonQuery",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sendHeaders",
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    {
+      "field": "specifyHeaders",
+      "type": "options",
+      "required": false,
+      "default": "keypair",
+      "enumValues": [
+        "keypair",
+        "json"
+      ],
+      "displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "headerParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "keypair"
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonHeaders",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sendBody",
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    {
+      "field": "contentType",
+      "type": "options",
+      "required": false,
+      "default": "json",
+      "enumValues": [
+        "form-urlencoded",
+        "multipart-form-data",
+        "json",
+        "binaryData",
+        "raw"
+      ],
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "specifyBody",
+      "type": "options",
+      "required": false,
+      "default": "keypair",
+      "enumValues": [
+        "keypair",
+        "json"
+      ],
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bodyParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "json"
+          ],
+          "specifyBody": [
+            "keypair"
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonBody",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "json"
+          ],
+          "specifyBody": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bodyParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "multipart-form-data"
+          ]
+        }
+      }
+    },
+    {
+      "field": "specifyBody",
+      "type": "options",
+      "required": false,
+      "default": "keypair",
+      "enumValues": [
+        "keypair",
+        "string"
+      ],
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "form-urlencoded"
+          ]
+        }
+      }
+    },
+    {
+      "field": "bodyParameters",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "form-urlencoded"
+          ],
+          "specifyBody": [
+            "keypair"
+          ]
+        }
+      }
+    },
+    {
+      "field": "body",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "specifyBody": [
+            "string"
+          ]
+        }
+      }
+    },
+    {
+      "field": "inputDataFieldName",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "binaryData"
+          ]
+        }
+      }
+    },
+    {
+      "field": "rawContentType",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "raw"
+          ]
+        }
+      }
+    },
+    {
+      "field": "body",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "raw"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {}
+    },
+    {
+      "field": "optimizeResponse",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "responseType",
+      "type": "options",
+      "required": false,
+      "default": "json",
+      "enumValues": [
+        "json",
+        "html",
+        "text"
+      ],
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "dataField",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "fieldsToInclude",
+      "type": "options",
+      "required": false,
+      "default": "all",
+      "enumValues": [
+        "all",
+        "selected",
+        "except"
+      ],
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "fields",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        },
+        "hide": {
+          "fieldsToInclude": [
+            "all"
+          ]
+        }
+      }
+    },
+    {
+      "field": "cssSelector",
+      "type": "string",
+      "required": false,
+      "default": "body",
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "onlyContent",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementsToOmit",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "onlyContent": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "truncateResponse",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "maxLength",
+      "type": "number",
+      "required": false,
+      "default": 1000,
+      "displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ],
+          "truncateResponse": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "infoMessage",
+      "type": "notice",
+      "required": false,
+      "default": ""
+    }
+  ],
+  "computedDefaults": {
+    "preBuiltAgentsCalloutHttpRequest": "",
+    "curlImport": "",
+    "method": "GET",
+    "url": "",
+    "authentication": "none",
+    "nodeCredentialType": "",
+    "googleApiWarning": "",
+    "genericAuthType": "",
+    "provideSslCertificates": false,
+    "provideSslCertificatesNotice": "",
+    "sslCertificate": "",
+    "sendQuery": false,
+    "specifyQuery": "keypair",
+    "queryParameters": {
+      "parameters": [
+        {
+          "name": "",
+          "value": ""
+        }
+      ]
+    },
+    "jsonQuery": "",
+    "sendHeaders": false,
+    "specifyHeaders": "keypair",
+    "headerParameters": {
+      "parameters": [
+        {
+          "name": "",
+          "value": ""
+        }
+      ]
+    },
+    "jsonHeaders": "",
+    "sendBody": false,
+    "contentType": "json",
+    "bodyParameters": {
+      "parameters": [
+        {
+          "name": "",
+          "value": ""
+        }
+      ]
+    },
+    "jsonBody": "",
+    "inputDataFieldName": "",
+    "rawContentType": "",
+    "options": {},
+    "optimizeResponse": false,
+    "responseType": "json",
+    "dataField": "",
+    "fieldsToInclude": "all",
+    "fields": "",
+    "cssSelector": "body",
+    "onlyContent": false,
+    "elementsToOmit": "",
+    "truncateResponse": false,
+    "maxLength": 1000,
+    "infoMessage": ""
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "queryParameters",
+    "headerParameters",
+    "bodyParameters",
+    "bodyParameters",
+    "bodyParameters"
+  ]
+}

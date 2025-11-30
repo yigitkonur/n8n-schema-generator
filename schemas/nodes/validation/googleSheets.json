@@ -1,0 +1,1174 @@
+{
+  "nodeType": "n8n-nodes-base.googleSheets",
+  "displayName": "Google Sheets",
+  "version": [
+    3,
+    4,
+    4.1,
+    4.2,
+    4.3,
+    4.4,
+    4.5,
+    4.6,
+    4.7
+  ],
+  "rules": [
+    {
+      "field": "preBuiltAgentsCalloutGoogleSheets",
+      "type": "callout",
+      "required": false,
+      "default": ""
+    },
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "default": "oAuth2",
+      "enumValues": [
+        "serviceAccount",
+        "oAuth2"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "default": "sheet",
+      "enumValues": [
+        "spreadsheet",
+        "sheet"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "read",
+      "enumValues": [
+        "appendOrUpdate",
+        "append",
+        "clear",
+        "create",
+        "remove",
+        "delete",
+        "read",
+        "update"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        }
+      }
+    },
+    {
+      "field": "documentId",
+      "type": "resourceLocator",
+      "required": true,
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sheetName",
+      "type": "resourceLocator",
+      "required": true,
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append",
+            "appendOrUpdate",
+            "clear",
+            "delete",
+            "read",
+            "remove",
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "default": "defineBelow",
+      "enumValues": [
+        "autoMapInputData",
+        "defineBelow",
+        "nothing"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "autoMapNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "append"
+          ],
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "fieldsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "clear",
+      "type": "options",
+      "required": false,
+      "default": "wholeSheet",
+      "enumValues": [
+        "wholeSheet",
+        "specificRows",
+        "specificColumns",
+        "specificRange"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "keepFirstRow",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "wholeSheet"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "startIndex",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "rowsToDelete",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "startIndex",
+      "type": "string",
+      "required": false,
+      "default": "A",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificColumns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columnsToDelete",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificColumns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "range",
+      "type": "string",
+      "required": true,
+      "default": "A:F",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRange"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "default": "n8n-sheet",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "toDelete",
+      "type": "options",
+      "required": false,
+      "default": "rows",
+      "enumValues": [
+        "rows",
+        "columns"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "startIndex",
+      "type": "number",
+      "required": false,
+      "default": 2,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "rows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "numberToDelete",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "rows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "startIndex",
+      "type": "string",
+      "required": false,
+      "default": "A",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "numberToDelete",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "filtersUI",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "combineFilters",
+      "type": "options",
+      "required": false,
+      "default": "OR",
+      "enumValues": [
+        "AND",
+        "OR"
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 4.3
+              }
+            }
+          ],
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "combineFilters",
+      "type": "options",
+      "required": false,
+      "default": "AND",
+      "enumValues": [
+        "AND",
+        "OR"
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.3
+              }
+            }
+          ],
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "default": "defineBelow",
+      "enumValues": [
+        "autoMapInputData",
+        "defineBelow",
+        "nothing"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columnToMatchOn",
+      "type": "options",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "valueToMatchOn",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "fieldsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.7
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "between": {
+                  "from": 4,
+                  "to": 4.6
+                }
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "default": "defineBelow",
+      "enumValues": [
+        "autoMapInputData",
+        "defineBelow",
+        "nothing"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columnToMatchOn",
+      "type": "options",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "valueToMatchOn",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "fieldsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.7
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "between": {
+                  "from": 4,
+                  "to": 4.6
+                }
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "deleteSpreadsheet"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ]
+        }
+      }
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sheetsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "documentId",
+      "type": "resourceLocator",
+      "required": true,
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "deleteSpreadsheet"
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "preBuiltAgentsCalloutGoogleSheets": "",
+    "authentication": "oAuth2",
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "sheetName": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "autoMapNotice": "",
+    "fieldsUi": {},
+    "options": {},
+    "clear": "wholeSheet",
+    "keepFirstRow": false,
+    "rowsToDelete": 1,
+    "columnsToDelete": 1,
+    "range": "A:F",
+    "toDelete": "rows",
+    "filtersUI": {},
+    "sheetsUi": {}
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "fieldsUi",
+    "filtersUI",
+    "fieldsUi",
+    "fieldsUi",
+    "sheetsUi"
+  ]
+}

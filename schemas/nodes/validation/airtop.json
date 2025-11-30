@@ -1,0 +1,1493 @@
+{
+  "nodeType": "n8n-nodes-base.airtop",
+  "displayName": "Airtop",
+  "version": [
+    1,
+    1.1
+  ],
+  "rules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "default": "session",
+      "enumValues": [
+        "agent",
+        "extraction",
+        "file",
+        "interaction",
+        "session",
+        "window"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "run",
+      "enumValues": [
+        "run"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ]
+        }
+      }
+    },
+    {
+      "field": "webhookUrl",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "field": "agentParameters",
+      "type": "json",
+      "required": true,
+      "default": "{}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "field": "awaitExecution",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "field": "timeout",
+      "type": "number",
+      "required": false,
+      "default": 600,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ],
+          "awaitExecution": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "save",
+        "terminate",
+        "waitForDownload"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ]
+        }
+      }
+    },
+    {
+      "field": "profileName",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "saveProfileOnTermination",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "record",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "timeoutMinutes",
+      "type": "number",
+      "required": false,
+      "default": 10,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "proxy",
+      "type": "options",
+      "required": false,
+      "default": "none",
+      "enumValues": [
+        "none",
+        "integrated",
+        "proxyUrl"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "proxyConfig",
+      "type": "collection",
+      "required": false,
+      "default": {
+        "country": "US",
+        "sticky": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "integrated"
+          ]
+        }
+      }
+    },
+    {
+      "field": "proxyUrl",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "proxyUrl"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "notice",
+      "type": "notice",
+      "required": false,
+      "default": "This operation will save the profile on session termination",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      }
+    },
+    {
+      "field": "profileName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "terminate"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "waitForDownload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "waitForDownload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "close",
+        "create",
+        "getLiveView",
+        "list",
+        "load",
+        "takeScreenshot"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ]
+        }
+      }
+    },
+    {
+      "field": "windowId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"windowId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "close",
+            "takeScreenshot",
+            "load",
+            "getLiveView"
+          ]
+        }
+      }
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "getLiveView",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "includeNavigationBar",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "screenResolution",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "disableResize",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "getLiveView"
+          ]
+        }
+      }
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "outputImageAsBinary",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "takeScreenshot"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getMany",
+      "enumValues": [
+        "deleteFile",
+        "get",
+        "getMany",
+        "load",
+        "upload"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "deleteFile"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "outputBinaryFile",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 10,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionIds",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "field": "outputSingleItem",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "windowId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"windowId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementDescription",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "includeHiddenElements",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "windowId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"windowId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileName",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "fileType",
+      "type": "options",
+      "required": false,
+      "default": "customer_upload",
+      "enumValues": [
+        "browser_download",
+        "screenshot",
+        "video",
+        "customer_upload"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "source",
+      "type": "options",
+      "required": false,
+      "default": "url",
+      "enumValues": [
+        "url",
+        "binary"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "default": "data",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "binary"
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "url"
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "triggerFileInputParameter",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementDescription",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "triggerFileInputParameter": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "includeHiddenElements",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "triggerFileInputParameter": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getPaginated",
+      "enumValues": [
+        "query",
+        "getPaginated",
+        "scrape"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionMode",
+      "type": "options",
+      "required": false,
+      "default": "existing",
+      "enumValues": [
+        "new",
+        "existing"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated",
+            "query",
+            "scrape"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "existing"
+          ]
+        }
+      }
+    },
+    {
+      "field": "windowId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"windowId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "existing"
+          ]
+        }
+      }
+    },
+    {
+      "field": "url",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      }
+    },
+    {
+      "field": "profileName",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      }
+    },
+    {
+      "field": "autoTerminateSession",
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      }
+    },
+    {
+      "field": "prompt",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated"
+          ]
+        }
+      }
+    },
+    {
+      "field": "prompt",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "click",
+      "enumValues": [
+        "click",
+        "fill",
+        "hover",
+        "scroll",
+        "type"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      }
+    },
+    {
+      "field": "sessionId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"sessionId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      }
+    },
+    {
+      "field": "windowId",
+      "type": "string",
+      "required": true,
+      "default": "={{ $json[\"windowId\"] }}",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementDescription",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click"
+          ]
+        }
+      }
+    },
+    {
+      "field": "clickType",
+      "type": "options",
+      "required": false,
+      "default": "click",
+      "enumValues": [
+        "click",
+        "doubleClick",
+        "rightClick"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click"
+          ]
+        }
+      }
+    },
+    {
+      "field": "formData",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "fill"
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementDescription",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "hover"
+          ]
+        }
+      }
+    },
+    {
+      "field": "scrollingMode",
+      "type": "options",
+      "required": true,
+      "default": "automatic",
+      "enumValues": [
+        "automatic",
+        "manual"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "scrollToElement",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "automatic"
+          ]
+        }
+      }
+    },
+    {
+      "field": "scrollToEdge",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      }
+    },
+    {
+      "field": "scrollBy",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      }
+    },
+    {
+      "field": "scrollWithin",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      }
+    },
+    {
+      "field": "pressEnterKey",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      }
+    },
+    {
+      "field": "elementDescription",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click",
+            "hover",
+            "type",
+            "scroll"
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "resource": "session",
+    "webhookUrl": "",
+    "agentParameters": "{}",
+    "awaitExecution": true,
+    "timeout": 600,
+    "operation": "create",
+    "profileName": "",
+    "saveProfileOnTermination": false,
+    "record": false,
+    "timeoutMinutes": 10,
+    "proxy": "none",
+    "proxyConfig": {
+      "country": "US",
+      "sticky": true
+    },
+    "proxyUrl": "",
+    "additionalFields": {},
+    "notice": "This operation will save the profile on session termination",
+    "getLiveView": false,
+    "includeNavigationBar": false,
+    "screenResolution": "",
+    "disableResize": false,
+    "outputImageAsBinary": false,
+    "outputBinaryFile": false,
+    "returnAll": false,
+    "limit": 10,
+    "sessionIds": "",
+    "outputSingleItem": true,
+    "fileName": "",
+    "fileType": "customer_upload",
+    "source": "url",
+    "binaryPropertyName": "data",
+    "triggerFileInputParameter": true,
+    "sessionMode": "existing",
+    "autoTerminateSession": true,
+    "clickType": "click",
+    "formData": "",
+    "scrollingMode": "automatic",
+    "scrollToElement": "",
+    "scrollToEdge": {},
+    "scrollBy": {},
+    "scrollWithin": "",
+    "text": "",
+    "pressEnterKey": false
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "scrollToEdge",
+    "scrollBy"
+  ]
+}

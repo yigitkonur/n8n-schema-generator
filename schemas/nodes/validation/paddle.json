@@ -1,0 +1,808 @@
+{
+  "nodeType": "n8n-nodes-base.paddle",
+  "displayName": "Paddle",
+  "version": 1,
+  "rules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "default": "coupon",
+      "enumValues": [
+        "coupon",
+        "payment",
+        "plan",
+        "product",
+        "user"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "create",
+      "enumValues": [
+        "create",
+        "getAll",
+        "update"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ]
+        }
+      }
+    },
+    {
+      "field": "couponType",
+      "type": "options",
+      "required": false,
+      "default": "checkout",
+      "enumValues": [
+        "checkout",
+        "product"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "productIds",
+      "type": "multiOptions",
+      "required": true,
+      "default": [],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "couponType": [
+            "product"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "discountType",
+      "type": "options",
+      "required": false,
+      "default": "flat",
+      "enumValues": [
+        "flat",
+        "percentage"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "discountAmount",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "discountType": [
+            "flat"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "discountAmount",
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "discountType": [
+            "percentage"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "currency",
+      "type": "options",
+      "required": false,
+      "default": "EUR",
+      "enumValues": [
+        "ARS",
+        "AUD",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HUF",
+        "INR",
+        "JPY",
+        "KRW",
+        "MXN",
+        "NOK",
+        "NZD",
+        "PLN",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TWD",
+        "USD",
+        "ZAR"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "discountType": [
+            "flat"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "productId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "coupon"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "coupon"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "updateBy",
+      "type": "options",
+      "required": false,
+      "default": "couponCode",
+      "enumValues": [
+        "couponCode",
+        "group"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "couponCode",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "updateBy": [
+            "couponCode"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "group",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "updateBy": [
+            "group"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getAll",
+      "enumValues": [
+        "getAll",
+        "reschedule"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "payment"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "payment"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "paymentId",
+      "type": "options",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "reschedule"
+          ]
+        }
+      }
+    },
+    {
+      "field": "date",
+      "type": "dateTime",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "reschedule"
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "get",
+      "enumValues": [
+        "get",
+        "getAll"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "plan"
+          ]
+        }
+      }
+    },
+    {
+      "field": "planId",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "plan"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "plan"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "plan"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getAll",
+      "enumValues": [
+        "getAll"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "product"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "product"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "getAll",
+      "enumValues": [
+        "getAll"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": true,
+      "default": 100,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "resource": "coupon",
+    "operation": "create",
+    "couponType": "checkout",
+    "productIds": [],
+    "discountType": "flat",
+    "currency": "EUR",
+    "jsonParameters": false,
+    "additionalFields": {},
+    "productId": "",
+    "updateBy": "couponCode",
+    "couponCode": "",
+    "group": "",
+    "paymentId": "",
+    "date": "",
+    "planId": "",
+    "discountAmount": 1
+  },
+  "hasFilter": false,
+  "fixedCollections": []
+}

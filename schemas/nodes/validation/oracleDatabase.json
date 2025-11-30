@@ -1,0 +1,633 @@
+{
+  "nodeType": "n8n-nodes-base.oracleDatabase",
+  "displayName": "Oracle Database",
+  "version": [
+    1
+  ],
+  "rules": [
+    {
+      "field": "resource",
+      "type": "hidden",
+      "required": false,
+      "default": "database"
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "default": "insert",
+      "enumValues": [
+        "deleteTable",
+        "execute",
+        "insert",
+        "upsert",
+        "select",
+        "update"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      }
+    },
+    {
+      "field": "schema",
+      "type": "resourceLocator",
+      "required": true,
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "field": "table",
+      "type": "resourceLocator",
+      "required": true,
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "field": "deleteCommand",
+      "type": "options",
+      "required": false,
+      "default": "truncate",
+      "enumValues": [
+        "truncate",
+        "delete",
+        "drop"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "where",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "combineConditions",
+      "type": "options",
+      "required": false,
+      "default": "AND",
+      "enumValues": [
+        "AND",
+        "OR"
+      ],
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "query",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "default": 50,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ],
+          "returnAll": [
+            false
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "where",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "combineConditions",
+      "type": "options",
+      "required": false,
+      "default": "AND",
+      "enumValues": [
+        "AND",
+        "OR"
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "sort",
+      "type": "fixedCollection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "columns",
+      "type": "resourceMapper",
+      "required": true,
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "default": {},
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "field": "stmtBatchingNotice",
+      "type": "notice",
+      "required": false,
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/options.stmtBatching": [
+            "single"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    }
+  ],
+  "computedDefaults": {
+    "resource": "database",
+    "operation": "insert",
+    "schema": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "table": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "deleteCommand": "truncate",
+    "where": {},
+    "options": {},
+    "query": "",
+    "returnAll": false,
+    "limit": 50,
+    "sort": {}
+  },
+  "hasFilter": false,
+  "fixedCollections": [
+    "where",
+    "where",
+    "sort"
+  ]
+}
