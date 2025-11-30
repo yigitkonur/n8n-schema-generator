@@ -1,0 +1,182 @@
+{
+  "name": "convertKitTrigger",
+  "displayName": "ConvertKit Trigger",
+  "description": "Handle ConvertKit events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "event": "",
+    "formId": "",
+    "courseId": "",
+    "link": "",
+    "productId": "",
+    "tagId": ""
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "event",
+      "displayName": "Event",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The events that can trigger the webhook and whether they are enabled",
+      "options": [
+        {
+          "name": "Form Subscribe",
+          "value": "formSubscribe"
+        },
+        {
+          "name": "Link Click",
+          "value": "linkClick"
+        },
+        {
+          "name": "Product Purchase",
+          "value": "productPurchase"
+        },
+        {
+          "name": "Purchase Created",
+          "value": "purchaseCreate"
+        },
+        {
+          "name": "Sequence Complete",
+          "value": "courseComplete"
+        },
+        {
+          "name": "Sequence Subscribe",
+          "value": "courseSubscribe"
+        },
+        {
+          "name": "Subscriber Activated",
+          "value": "subscriberActivate"
+        },
+        {
+          "name": "Subscriber Unsubscribe",
+          "value": "subscriberUnsubscribe"
+        },
+        {
+          "name": "Tag Add",
+          "value": "tagAdd"
+        },
+        {
+          "name": "Tag Remove",
+          "value": "tagRemove"
+        }
+      ]
+    },
+    {
+      "name": "formId",
+      "displayName": "Form Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getForms"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "formSubscribe"
+          ]
+        }
+      }
+    },
+    {
+      "name": "courseId",
+      "displayName": "Sequence Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getSequences"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "courseSubscribe",
+            "courseComplete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "link",
+      "displayName": "Initiating Link",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL of the initiating link",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "linkClick"
+          ]
+        }
+      }
+    },
+    {
+      "name": "productId",
+      "displayName": "Product ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "event": [
+            "productPurchase"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagId",
+      "displayName": "Tag Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getTags"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "tagAdd",
+            "tagRemove"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "convertKitApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "event",
+    "formId",
+    "courseId",
+    "link",
+    "productId",
+    "tagId"
+  ],
+  "optionalFields": [],
+  "parameterTypes": {
+    "event": "options",
+    "formId": "options",
+    "courseId": "options",
+    "link": "string",
+    "productId": "string",
+    "tagId": "options"
+  },
+  "hasVersions": false
+}

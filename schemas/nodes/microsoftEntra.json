@@ -1,0 +1,2898 @@
+{
+  "name": "microsoftEntra",
+  "displayName": "Microsoft Entra ID",
+  "description": "Interact with Microsoft Entra ID API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "user",
+    "groupType": "",
+    "mailEnabled": false,
+    "membershipType": "",
+    "securityEnabled": true,
+    "additionalFields": {},
+    "options": {},
+    "updateFields": {},
+    "operation": "getAll",
+    "accountEnabled": true,
+    "userPrincipalName": "",
+    "password": "",
+    "returnAll": false,
+    "limit": 50,
+    "filter": "",
+    "output": "simple"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "user",
+      "options": [
+        {
+          "name": "Group",
+          "value": "group"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a group",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "POST",
+              "url": "/groups"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create group"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a group",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "DELETE",
+              "url": "=/groups/{{ $parameter[\"group\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"deleted\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete group"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific group",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "url": "=/groups/{{ $parameter[\"group\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get group"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of groups",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "url": "/groups"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "value"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Get many groups"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a group",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "PATCH",
+              "url": "=/groups/{{ $parameter[\"group\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"updated\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Update group"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "groupType",
+      "displayName": "Group Type",
+      "type": "options",
+      "default": "",
+      "options": [
+        {
+          "name": "Microsoft 365",
+          "value": "Unified"
+        },
+        {
+          "name": "Security",
+          "value": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "displayName",
+      "displayName": "Group Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name to display in the address book for the group",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "displayName",
+          "type": "body",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "mailNickname",
+      "displayName": "Group Email Address",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The mail alias for the group. Only enter the local-part without the domain.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. alias",
+      "routing": {
+        "send": {
+          "property": "mailNickname",
+          "type": "body",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "mailEnabled",
+      "displayName": "Mail Enabled",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether the group is mail-enabled",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ],
+          "groupType": [
+            "Unified"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "mailEnabled",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "membershipType",
+      "displayName": "Membership Type",
+      "type": "options",
+      "default": "",
+      "options": [
+        {
+          "name": "Assigned",
+          "value": "",
+          "description": "Lets you add specific users as members of a group and have unique permissions"
+        },
+        {
+          "name": "Dynamic",
+          "value": "DynamicMembership",
+          "description": "Lets you use rules to automatically add and remove users as members"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "securityEnabled",
+      "displayName": "Security Enabled",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the group is a security group",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ],
+          "groupType": [
+            "Unified"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "securityEnabled",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignable to Role",
+          "name": "isAssignableToRole",
+          "default": false,
+          "description": "Whether Microsoft Entra roles can be assigned to the group",
+          "displayOptions": {
+            "hide": {
+              "/membershipType": [
+                "DynamicMembership"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "property": "isAssignableToRole",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "default": "",
+          "description": "Description for the group",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Membership Rule",
+          "name": "membershipRule",
+          "default": "",
+          "description": "The <a href=\"https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership\">dynamic membership rules</a>",
+          "displayOptions": {
+            "show": {
+              "/membershipType": [
+                "DynamicMembership"
+              ]
+            }
+          },
+          "placeholder": "e.g. user.department -eq \"Marketing\"",
+          "routing": {
+            "send": {
+              "property": "membershipRule",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Membership Rule Processing State",
+          "name": "membershipRuleProcessingState",
+          "default": "On",
+          "description": "Indicates whether the dynamic membership processing is on or paused",
+          "displayOptions": {
+            "show": {
+              "/membershipType": [
+                "DynamicMembership"
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "On",
+              "value": "On"
+            },
+            {
+              "name": "Paused",
+              "value": "Paused"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "membershipRuleProcessingState",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Preferred Data Location",
+          "name": "preferredDataLocation",
+          "default": "",
+          "description": "A property set for the group that Office 365 services use to provision the corresponding data-at-rest resources (mailbox, OneDrive, groups sites, and so on)",
+          "displayOptions": {
+            "show": {
+              "/groupType": [
+                "Unified"
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Unique Name",
+          "name": "uniqueName",
+          "default": "",
+          "description": "The unique identifier for the group, can only be updated if null, and is immutable once set",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Visibility",
+          "name": "visibility",
+          "default": "Public",
+          "description": "Specifies the visibility of the group",
+          "options": [
+            {
+              "name": "Private",
+              "value": "Private"
+            },
+            {
+              "name": "Public",
+              "value": "Public"
+            }
+          ],
+          "type": "options",
+          "validateType": "options"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field",
+      "routing": {
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "group",
+      "displayName": "Group to Delete",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "group",
+      "displayName": "Group to Get",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Output",
+      "type": "options",
+      "default": "simple",
+      "options": [
+        {
+          "name": "Simplified",
+          "value": "simple",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,createdDateTime,description,displayName,mail,mailEnabled,mailNickname,securityEnabled,securityIdentifier,visibility"
+            }
+          }
+        },
+        {
+          "name": "Raw",
+          "value": "raw"
+        },
+        {
+          "name": "Selected Fields",
+          "value": "fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [],
+      "description": "The fields to add to the output",
+      "typeOptions": {
+        "loadOptionsMethod": "getGroupProperties"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "get"
+          ],
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value.concat(\"id\").join(\",\") }}"
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Members",
+          "name": "includeMembers",
+          "default": false,
+          "routing": {
+            "send": {
+              "property": "$expand",
+              "type": "query",
+              "value": "={{ $value ? \"members($select=id,accountEnabled,createdDateTime,displayName,employeeId,mail,securityIdentifier,userPrincipalName,userType)\" : undefined }}"
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.body?.[\"@odata.nextLink\"] }}",
+              "request": {
+                "url": "={{ $response.body?.[\"@odata.nextLink\"] ?? $request.url }}",
+                "qs": {
+                  "$filter": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$filter }}",
+                  "$select": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$select }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$top",
+          "type": "query",
+          "value": "={{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "displayName": "Filter",
+      "type": "string",
+      "default": "",
+      "description": "<a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter\">Query parameter</a> to filter results by",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "e.g. startswith(displayName, 'a')",
+      "hint": "If empty, all the groups will be returned",
+      "routing": {
+        "send": {
+          "property": "$filter",
+          "type": "query",
+          "value": "={{ $value ? $value : undefined }}"
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Output",
+      "type": "options",
+      "default": "simple",
+      "options": [
+        {
+          "name": "Simplified",
+          "value": "simple",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,createdDateTime,description,displayName,mail,mailEnabled,mailNickname,securityEnabled,securityIdentifier,visibility"
+            }
+          }
+        },
+        {
+          "name": "Raw",
+          "value": "raw"
+        },
+        {
+          "name": "Selected Fields",
+          "value": "fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [],
+      "description": "The fields to add to the output",
+      "typeOptions": {
+        "loadOptionsMethod": "getGroupPropertiesGetAll"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value.concat(\"id\").join(\",\") }}"
+        }
+      }
+    },
+    {
+      "name": "group",
+      "displayName": "Group to Update",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Allow External Senders",
+          "name": "allowExternalSenders",
+          "default": false,
+          "description": "Whether people external to the organization can send messages to the group. Wait a few seconds before editing this field in a newly created group.",
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Auto Subscribe New Members",
+          "name": "autoSubscribeNewMembers",
+          "default": false,
+          "description": "Whether new members added to the group will be auto-subscribed to receive email notifications. Wait a few seconds before editing this field in a newly created group.",
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "default": "",
+          "description": "Description for the group",
+          "routing": {
+            "send": {
+              "property": "description",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Group Name",
+          "name": "displayName",
+          "default": "",
+          "description": "The name to display in the address book for the group",
+          "routing": {
+            "send": {
+              "property": "displayName",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Group Email Address",
+          "name": "mailNickname",
+          "default": "",
+          "description": "The mail alias for the group. Only enter the local-part without the domain.",
+          "placeholder": "e.g. alias",
+          "routing": {
+            "send": {
+              "property": "mailNickname",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Membership Rule",
+          "name": "membershipRule",
+          "default": "",
+          "description": "The <a href=\"https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership\">dynamic membership rules</a>",
+          "placeholder": "e.g. user.department -eq \"Marketing\"",
+          "routing": {
+            "send": {
+              "property": "membershipRule",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Membership Rule Processing State",
+          "name": "membershipRuleProcessingState",
+          "default": "On",
+          "description": "Indicates whether the dynamic membership processing is on or paused",
+          "options": [
+            {
+              "name": "On",
+              "value": "On"
+            },
+            {
+              "name": "Paused",
+              "value": "Paused"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "membershipRuleProcessingState",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Preferred Data Location",
+          "name": "preferredDataLocation",
+          "default": "",
+          "description": "A property set for the group that Office 365 services use to provision the corresponding data-at-rest resources (mailbox, OneDrive, groups sites, and so on)",
+          "routing": {
+            "send": {
+              "property": "preferredDataLocation",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Security Enabled",
+          "name": "securityEnabled",
+          "default": true,
+          "description": "Whether the group is a security group",
+          "routing": {
+            "send": {
+              "property": "securityEnabled",
+              "type": "body"
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Unique Name",
+          "name": "uniqueName",
+          "default": "",
+          "description": "The unique identifier for the group, can only be updated if null, and is immutable once set",
+          "routing": {
+            "send": {
+              "property": "uniqueName",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Visibility",
+          "name": "visibility",
+          "default": "Public",
+          "description": "Specifies the visibility of the group",
+          "options": [
+            {
+              "name": "Private",
+              "value": "Private"
+            },
+            {
+              "name": "Public",
+              "value": "Public"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "visibility",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field",
+      "routing": {
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Add to Group",
+          "value": "addGroup",
+          "description": "Add user to group",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/groups/{{ $parameter[\"group\"] }}/members/$ref",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"added\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Add user to group"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a user",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/users",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create user"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a user",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/users/{{ $parameter[\"user\"] }}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"deleted\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete user"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific user",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/users/{{ $parameter[\"user\"] }}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get user"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of users",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/users",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "value"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Get many users"
+        },
+        {
+          "name": "Remove from Group",
+          "value": "removeGroup",
+          "description": "Remove user from group",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/groups/{{ $parameter[\"group\"] }}/members/{{ $parameter[\"user\"] }}/$ref",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"removed\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Remove user from group"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a user",
+          "routing": {
+            "request": {
+              "method": "PATCH",
+              "url": "=/users/{{ $parameter[\"user\"] }}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"updated\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Update user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "group",
+      "displayName": "Group",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "addGroup"
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User to Add",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "addGroup"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "@odata.id",
+          "propertyInDotNotation": false,
+          "type": "body",
+          "value": "=https://graph.microsoft.com/v1.0/directoryObjects/{{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "accountEnabled",
+      "displayName": "Account Enabled",
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "description": "Whether the account is enabled",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "accountEnabled",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "displayName",
+      "displayName": "Display Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name to display in the address book for the user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. Nathan Smith",
+      "routing": {
+        "send": {
+          "property": "displayName",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "userPrincipalName",
+      "displayName": "User Principal Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The user principal name (UPN)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. NathanSmith@contoso.com",
+      "routing": {
+        "send": {
+          "property": "userPrincipalName",
+          "type": "body",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "mailNickname",
+      "displayName": "Mail Nickname",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The mail alias for the user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. NathanSmith",
+      "routing": {
+        "send": {
+          "property": "mailNickname",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "password",
+      "displayName": "Password",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The password for the user",
+      "typeOptions": {
+        "password": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "passwordProfile.password",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "About Me",
+          "name": "aboutMe",
+          "default": "",
+          "description": "A freeform text entry field for the user to describe themselves",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Age Group",
+          "name": "ageGroup",
+          "default": "Adult",
+          "description": "Sets the age group of the user",
+          "options": [
+            {
+              "name": "Adult",
+              "value": "Adult"
+            },
+            {
+              "name": "Minor",
+              "value": "Minor"
+            },
+            {
+              "name": "Not Adult",
+              "value": "NotAdult"
+            }
+          ],
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Birthday",
+          "name": "birthday",
+          "default": "",
+          "description": "The birthday of the user",
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Business Phone",
+          "name": "businessPhones",
+          "default": "",
+          "description": "The telephone number for the user",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "City",
+          "name": "city",
+          "default": "",
+          "description": "The city in which the user is located",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Company Name",
+          "name": "companyName",
+          "default": "",
+          "description": "The name of the company associated with the user",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Consent Provided",
+          "name": "consentProvidedForMinor",
+          "default": "Denied",
+          "description": "Specifies if consent is provided for minors",
+          "options": [
+            {
+              "name": "Denied",
+              "value": "Denied"
+            },
+            {
+              "name": "Granted",
+              "value": "Granted"
+            },
+            {
+              "name": "Not Required",
+              "value": "NotRequired"
+            }
+          ],
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Country",
+          "name": "country",
+          "default": "",
+          "description": "The country/region of the user",
+          "placeholder": "e.g. US",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Department",
+          "name": "department",
+          "default": "",
+          "description": "The department name where the user works",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee ID",
+          "name": "employeeId",
+          "default": "",
+          "description": "Employee identifier assigned by the organization",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee Type",
+          "name": "employeeType",
+          "default": "",
+          "description": "Defines enterprise worker type",
+          "placeholder": "e.g. Contractor",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee Hire Date",
+          "name": "employeeHireDate",
+          "default": "",
+          "description": "The hire date of the user",
+          "placeholder": "e.g. 2014-01-01T00:00:00Z",
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Employee Leave Date",
+          "name": "employeeLeaveDateTime",
+          "default": "",
+          "description": "The date and time when the user left or will leave the organization",
+          "placeholder": "e.g. 2014-01-01T00:00:00Z",
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Employee Organization Data",
+          "name": "employeeOrgData",
+          "default": {},
+          "description": "Represents organization data (for example, division and costCenter) associated with a user",
+          "options": [
+            {
+              "displayName": "Employee Organization Data",
+              "name": "employeeOrgValues",
+              "values": [
+                {
+                  "displayName": "Cost Center",
+                  "name": "costCenter",
+                  "description": "The cost center associated with the user",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Division",
+                  "name": "division",
+                  "description": "The name of the division in which the user works",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ],
+          "type": "fixedCollection",
+          "validateType": "string"
+        },
+        {
+          "displayName": "First Name",
+          "name": "givenName",
+          "default": "",
+          "description": "The given name (first name) of the user",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Force Change Password",
+          "name": "forceChangePassword",
+          "default": "forceChangePasswordNextSignIn",
+          "description": "Whether the user must change their password on the next sign-in",
+          "options": [
+            {
+              "name": "Next Sign In",
+              "value": "forceChangePasswordNextSignIn"
+            },
+            {
+              "name": "Next Sign In with MFA",
+              "value": "forceChangePasswordNextSignInWithMfa"
+            }
+          ],
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Interests",
+          "name": "interests",
+          "default": [],
+          "description": "A list for the user to describe their interests",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Job Title",
+          "name": "jobTitle",
+          "default": "",
+          "description": "The user's job title",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Last Name",
+          "name": "surname",
+          "default": "",
+          "description": "The user's last name (family name)",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Mail",
+          "name": "mail",
+          "default": "",
+          "description": "The SMTP address for the user",
+          "placeholder": "e.g. jeff@contoso.com",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Mobile Phone",
+          "name": "mobilePhone",
+          "default": "",
+          "description": "The primary cellular telephone number for the user",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "My Site",
+          "name": "mySite",
+          "default": "",
+          "description": "The URL for the user's personal site",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Office Location",
+          "name": "officeLocation",
+          "default": "",
+          "description": "The office location for the user",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "On Premises Immutable ID",
+          "name": "onPremisesImmutableId",
+          "default": "",
+          "description": "This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Other Emails",
+          "name": "otherMails",
+          "default": [],
+          "description": "Additional email addresses for the user",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Password Policies",
+          "name": "passwordPolicies",
+          "default": [],
+          "description": "Specifies password policies",
+          "options": [
+            {
+              "name": "Disable Password Expiration",
+              "value": "DisablePasswordExpiration"
+            },
+            {
+              "name": "Disable Strong Password",
+              "value": "DisableStrongPassword"
+            }
+          ],
+          "type": "multiOptions"
+        },
+        {
+          "displayName": "Past Projects",
+          "name": "pastProjects",
+          "default": [],
+          "description": "A list of past projects the user has worked on",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Postal Code",
+          "name": "postalCode",
+          "default": "",
+          "description": "The postal code for the user's address",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Preferred Language",
+          "name": "preferredLanguage",
+          "default": "",
+          "description": "User's preferred language in ISO 639-1 code",
+          "placeholder": "e.g. en-US",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Responsibilities",
+          "name": "responsibilities",
+          "default": [],
+          "description": "A list of responsibilities the user has",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Schools Attended",
+          "name": "schools",
+          "default": [],
+          "description": "A list of schools the user attended",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Skills",
+          "name": "skills",
+          "default": [],
+          "description": "A list of skills the user possesses",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "State",
+          "name": "state",
+          "default": "",
+          "description": "The state or province of the user's address",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Street Address",
+          "name": "streetAddress",
+          "default": "",
+          "description": "The street address of the user's place of business",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Usage Location",
+          "name": "usageLocation",
+          "default": "",
+          "description": "Two-letter country code where the user is located",
+          "placeholder": "e.g. US",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "User Type",
+          "name": "userType",
+          "default": "Guest",
+          "description": "Classifies the user type",
+          "options": [
+            {
+              "name": "Guest",
+              "value": "Guest"
+            },
+            {
+              "name": "Member",
+              "value": "Member"
+            }
+          ],
+          "type": "options",
+          "validateType": "options"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field",
+      "routing": {
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User to Delete",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User to Get",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Output",
+      "type": "options",
+      "default": "simple",
+      "options": [
+        {
+          "name": "Simplified",
+          "value": "simple",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,createdDateTime,displayName,userPrincipalName,mail,mailNickname,securityIdentifier"
+            }
+          }
+        },
+        {
+          "name": "Raw",
+          "value": "raw",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,accountEnabled,ageGroup,assignedLicenses,assignedPlans,authorizationInfo,businessPhones,city,companyName,consentProvidedForMinor,country,createdDateTime,creationType,customSecurityAttributes,deletedDateTime,department,displayName,employeeHireDate,employeeId,employeeLeaveDateTime,employeeOrgData,employeeType,externalUserState,externalUserStateChangeDateTime,faxNumber,givenName,identities,imAddresses,isManagementRestricted,isResourceAccount,jobTitle,lastPasswordChangeDateTime,legalAgeGroupClassification,licenseAssignmentStates,mail,mailNickname,mobilePhone,officeLocation,onPremisesDistinguishedName,onPremisesDomainName,onPremisesExtensionAttributes,onPremisesImmutableId,onPremisesLastSyncDateTime,onPremisesProvisioningErrors,onPremisesSamAccountName,onPremisesSecurityIdentifier,onPremisesSyncEnabled,onPremisesUserPrincipalName,otherMails,passwordPolicies,passwordProfile,postalCode,preferredDataLocation,preferredLanguage,provisionedPlans,proxyAddresses,securityIdentifier,serviceProvisioningErrors,showInAddressList,signInSessionsValidFromDateTime,state,streetAddress,surname,usageLocation,userPrincipalName,userType"
+            }
+          }
+        },
+        {
+          "name": "Selected Fields",
+          "value": "fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [],
+      "description": "The fields to add to the output",
+      "typeOptions": {
+        "loadOptionsMethod": "getUserProperties"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value.concat(\"id\").join(\",\") }}"
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.body?.[\"@odata.nextLink\"] }}",
+              "request": {
+                "url": "={{ $response.body?.[\"@odata.nextLink\"] ?? $request.url }}",
+                "qs": {
+                  "$filter": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$filter }}",
+                  "$select": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$select }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$top",
+          "type": "query",
+          "value": "={{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "displayName": "Filter",
+      "type": "string",
+      "default": "",
+      "description": "<a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter\">Query parameter</a> to filter results by",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "e.g. startswith(displayName, 'a')",
+      "routing": {
+        "send": {
+          "property": "$filter",
+          "type": "query",
+          "value": "={{ $value ? $value : undefined }}"
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Output",
+      "type": "options",
+      "default": "simple",
+      "options": [
+        {
+          "name": "Simplified",
+          "value": "simple",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,createdDateTime,displayName,userPrincipalName,mail,mailNickname,securityIdentifier"
+            }
+          }
+        },
+        {
+          "name": "Raw",
+          "value": "raw",
+          "routing": {
+            "send": {
+              "property": "$select",
+              "type": "query",
+              "value": "id,accountEnabled,ageGroup,assignedLicenses,assignedPlans,authorizationInfo,businessPhones,city,companyName,consentProvidedForMinor,country,createdDateTime,creationType,customSecurityAttributes,deletedDateTime,department,displayName,employeeHireDate,employeeId,employeeLeaveDateTime,employeeOrgData,employeeType,externalUserState,externalUserStateChangeDateTime,faxNumber,givenName,identities,imAddresses,isManagementRestricted,isResourceAccount,jobTitle,lastPasswordChangeDateTime,legalAgeGroupClassification,licenseAssignmentStates,mail,mailNickname,mobilePhone,officeLocation,onPremisesDistinguishedName,onPremisesDomainName,onPremisesExtensionAttributes,onPremisesImmutableId,onPremisesLastSyncDateTime,onPremisesProvisioningErrors,onPremisesSamAccountName,onPremisesSecurityIdentifier,onPremisesSyncEnabled,onPremisesUserPrincipalName,otherMails,passwordPolicies,passwordProfile,postalCode,preferredDataLocation,preferredLanguage,provisionedPlans,proxyAddresses,securityIdentifier,serviceProvisioningErrors,showInAddressList,signInSessionsValidFromDateTime,state,streetAddress,surname,usageLocation,userPrincipalName,userType"
+            }
+          }
+        },
+        {
+          "name": "Selected Fields",
+          "value": "fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [],
+      "description": "The fields to add to the output",
+      "typeOptions": {
+        "loadOptionsMethod": "getUserPropertiesGetAll"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value.concat(\"id\").join(\",\") }}"
+        }
+      }
+    },
+    {
+      "name": "group",
+      "displayName": "Group",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeGroup"
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User to Remove",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeGroup"
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User to Update",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "About Me",
+          "name": "aboutMe",
+          "default": "",
+          "description": "A freeform text entry field for the user to describe themselves",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Account Enabled",
+          "name": "accountEnabled",
+          "default": true,
+          "description": "Whether the account is enabled",
+          "routing": {
+            "send": {
+              "property": "accountEnabled",
+              "type": "body"
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Age Group",
+          "name": "ageGroup",
+          "default": "Adult",
+          "description": "Sets the age group of the user",
+          "options": [
+            {
+              "name": "Adult",
+              "value": "Adult"
+            },
+            {
+              "name": "Minor",
+              "value": "Minor"
+            },
+            {
+              "name": "Not Adult",
+              "value": "NotAdult"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "ageGroup",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Birthday",
+          "name": "birthday",
+          "default": "",
+          "description": "The birthday of the user",
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Business Phone",
+          "name": "businessPhones",
+          "default": "",
+          "description": "The telephone number for the user",
+          "routing": {
+            "send": {
+              "property": "businessPhones",
+              "type": "body",
+              "value": "={{ $value ? [$value] : [] }}"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "City",
+          "name": "city",
+          "default": "",
+          "description": "The city in which the user is located",
+          "routing": {
+            "send": {
+              "property": "city",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Company Name",
+          "name": "companyName",
+          "default": "",
+          "description": "The name of the company associated with the user",
+          "routing": {
+            "send": {
+              "property": "companyName",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Consent Provided",
+          "name": "consentProvidedForMinor",
+          "default": "Denied",
+          "description": "Specifies if consent is provided for minors",
+          "options": [
+            {
+              "name": "Denied",
+              "value": "Denied"
+            },
+            {
+              "name": "Granted",
+              "value": "Granted"
+            },
+            {
+              "name": "Not Required",
+              "value": "NotRequired"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "consentProvidedForMinor",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Country",
+          "name": "country",
+          "default": "",
+          "description": "The country/region of the user",
+          "placeholder": "e.g. US",
+          "routing": {
+            "send": {
+              "property": "country",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Department",
+          "name": "department",
+          "default": "",
+          "description": "The department name where the user works",
+          "routing": {
+            "send": {
+              "property": "department",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Display Name",
+          "name": "displayName",
+          "default": "",
+          "description": "The name to display in the address book for the user",
+          "routing": {
+            "send": {
+              "property": "displayName",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee ID",
+          "name": "employeeId",
+          "default": "",
+          "description": "Employee identifier assigned by the organization",
+          "routing": {
+            "send": {
+              "property": "employeeId",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee Type",
+          "name": "employeeType",
+          "default": "",
+          "description": "Defines enterprise worker type",
+          "placeholder": "e.g. Contractor",
+          "routing": {
+            "send": {
+              "property": "employeeType",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "First Name",
+          "name": "givenName",
+          "default": "",
+          "description": "The given name (first name) of the user",
+          "routing": {
+            "send": {
+              "property": "givenName",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Employee Hire Date",
+          "name": "employeeHireDate",
+          "default": "",
+          "description": "The hire date of the user",
+          "placeholder": "e.g. 2014-01-01T00:00:00Z",
+          "routing": {
+            "send": {
+              "property": "employeeHireDate",
+              "type": "body",
+              "value": "={{ $value?.toUTC().toISO() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Employee Leave Date",
+          "name": "employeeLeaveDateTime",
+          "default": "",
+          "description": "The date and time when the user left or will leave the organization",
+          "placeholder": "e.g. 2014-01-01T00:00:00Z",
+          "routing": {
+            "send": {
+              "property": "employeeLeaveDateTime",
+              "type": "body",
+              "value": "={{ $value?.toUTC().toISO() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Employee Organization Data",
+          "name": "employeeOrgData",
+          "default": {},
+          "description": "Represents organization data (for example, division and costCenter) associated with a user",
+          "options": [
+            {
+              "displayName": "Employee Organization Data",
+              "name": "employeeOrgValues",
+              "values": [
+                {
+                  "displayName": "Cost Center",
+                  "name": "costCenter",
+                  "description": "The cost center associated with the user",
+                  "routing": {
+                    "send": {
+                      "property": "employeeOrgData.costCenter",
+                      "type": "body"
+                    }
+                  },
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Division",
+                  "name": "division",
+                  "description": "The name of the division in which the user works",
+                  "routing": {
+                    "send": {
+                      "property": "employeeOrgData.division",
+                      "type": "body"
+                    }
+                  },
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ],
+          "type": "fixedCollection",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Force Change Password",
+          "name": "forceChangePassword",
+          "default": "forceChangePasswordNextSignIn",
+          "description": "Whether the user must change their password on the next sign-in",
+          "options": [
+            {
+              "name": "Next Sign In",
+              "value": "forceChangePasswordNextSignIn"
+            },
+            {
+              "name": "Next Sign In with MFA",
+              "value": "forceChangePasswordNextSignInWithMfa"
+            }
+          ],
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Interests",
+          "name": "interests",
+          "default": [],
+          "description": "A list for the user to describe their interests",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Job Title",
+          "name": "jobTitle",
+          "default": "",
+          "description": "The user's job title",
+          "routing": {
+            "send": {
+              "property": "jobTitle",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Last Name",
+          "name": "surname",
+          "default": "",
+          "description": "The user's last name (family name)",
+          "routing": {
+            "send": {
+              "property": "surname",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Mail",
+          "name": "mail",
+          "default": "",
+          "description": "The SMTP address for the user",
+          "placeholder": "e.g. jeff@contoso.com",
+          "routing": {
+            "send": {
+              "property": "mail",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Mail Nickname",
+          "name": "mailNickname",
+          "default": "",
+          "description": "The mail alias for the user",
+          "routing": {
+            "send": {
+              "property": "mailNickname",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Mobile Phone",
+          "name": "mobilePhone",
+          "default": "",
+          "description": "The primary cellular telephone number for the user",
+          "routing": {
+            "send": {
+              "property": "mobilePhone",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "My Site",
+          "name": "mySite",
+          "default": "",
+          "description": "The URL for the user's personal site",
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Office Location",
+          "name": "officeLocation",
+          "default": "",
+          "description": "The office location for the user",
+          "routing": {
+            "send": {
+              "property": "officeLocation",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "On Premises Immutable ID",
+          "name": "onPremisesImmutableId",
+          "default": "",
+          "description": "This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object",
+          "routing": {
+            "send": {
+              "property": "onPremisesImmutableId",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Other Emails",
+          "name": "otherMails",
+          "default": [],
+          "description": "Additional email addresses for the user",
+          "routing": {
+            "send": {
+              "property": "otherMails",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Password",
+          "name": "password",
+          "default": "",
+          "description": "The password for the user. The password must satisfy minimum requirements as specified by the passwordPolicies property.",
+          "routing": {
+            "send": {
+              "property": "passwordProfile.password",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "typeOptions": {
+            "password": true
+          },
+          "validateType": "string"
+        },
+        {
+          "displayName": "Password Policies",
+          "name": "passwordPolicies",
+          "default": [],
+          "description": "Specifies password policies",
+          "options": [
+            {
+              "name": "Disable Password Expiration",
+              "value": "DisablePasswordExpiration"
+            },
+            {
+              "name": "Disable Strong Password",
+              "value": "DisableStrongPassword"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "passwordPolicies",
+              "type": "body",
+              "value": "={{ $value?.join(\",\") }}"
+            }
+          },
+          "type": "multiOptions"
+        },
+        {
+          "displayName": "Past Projects",
+          "name": "pastProjects",
+          "default": [],
+          "description": "A list of past projects the user has worked on",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Postal Code",
+          "name": "postalCode",
+          "default": "",
+          "description": "The postal code for the user's address",
+          "routing": {
+            "send": {
+              "property": "postalCode",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Preferred Language",
+          "name": "preferredLanguage",
+          "default": "",
+          "description": "User's preferred language in ISO 639-1 code",
+          "placeholder": "e.g. en-US",
+          "routing": {
+            "send": {
+              "property": "preferredLanguage",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Responsibilities",
+          "name": "responsibilities",
+          "default": [],
+          "description": "A list of responsibilities the user has",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Schools Attended",
+          "name": "schools",
+          "default": [],
+          "description": "A list of schools the user attended",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "Skills",
+          "name": "skills",
+          "default": [],
+          "description": "A list of skills the user possesses",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "validateType": "array"
+        },
+        {
+          "displayName": "State",
+          "name": "state",
+          "default": "",
+          "description": "The state or province of the user's address",
+          "routing": {
+            "send": {
+              "property": "state",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Street Address",
+          "name": "streetAddress",
+          "default": "",
+          "description": "The street address of the user's place of business",
+          "routing": {
+            "send": {
+              "property": "streetAddress",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Usage Location",
+          "name": "usageLocation",
+          "default": "",
+          "description": "Two-letter country code where the user is located",
+          "placeholder": "e.g. US",
+          "routing": {
+            "send": {
+              "property": "usageLocation",
+              "type": "body"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "User Principal Name",
+          "name": "userPrincipalName",
+          "default": "",
+          "description": "The user principal name (UPN)",
+          "placeholder": "e.g. AdeleV@contoso.com",
+          "routing": {
+            "send": {
+              "property": "userPrincipalName",
+              "type": "body",
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "User Type",
+          "name": "userType",
+          "default": "Guest",
+          "description": "Classifies the user type",
+          "options": [
+            {
+              "name": "Guest",
+              "value": "Guest"
+            },
+            {
+              "name": "Member",
+              "value": "Member"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "userType",
+              "type": "body"
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field",
+      "routing": {
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "microsoftEntraOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "displayName",
+    "mailNickname",
+    "mailEnabled",
+    "group",
+    "group",
+    "group",
+    "group",
+    "user",
+    "accountEnabled",
+    "displayName",
+    "userPrincipalName",
+    "mailNickname",
+    "password",
+    "user",
+    "user",
+    "group",
+    "user",
+    "user"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "groupType",
+    "membershipType",
+    "securityEnabled",
+    "additionalFields",
+    "output",
+    "fields",
+    "options",
+    "returnAll",
+    "limit",
+    "filter",
+    "output",
+    "fields",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "output",
+    "fields",
+    "returnAll",
+    "limit",
+    "filter",
+    "output",
+    "fields",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "groupType": "options",
+    "displayName": "string",
+    "mailNickname": "string",
+    "mailEnabled": "boolean",
+    "membershipType": "options",
+    "securityEnabled": "boolean",
+    "additionalFields": "collection",
+    "group": "resourceLocator",
+    "output": "options",
+    "fields": "multiOptions",
+    "options": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filter": "string",
+    "updateFields": "collection",
+    "user": "resourceLocator",
+    "accountEnabled": "boolean",
+    "userPrincipalName": "string",
+    "password": "string"
+  },
+  "hasVersions": false
+}

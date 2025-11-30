@@ -1,0 +1,574 @@
+{
+  "name": "git",
+  "displayName": "Git",
+  "description": "Control git.",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "none",
+    "operation": "log",
+    "repositoryPath": "",
+    "pathsToAdd": "",
+    "key": "",
+    "value": "",
+    "options": {},
+    "sourceRepository": "",
+    "message": "",
+    "returnAll": false,
+    "limit": 100,
+    "branchName": "",
+    "name": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "none",
+      "description": "The way to authenticate",
+      "options": [
+        {
+          "name": "Authenticate",
+          "value": "gitPassword"
+        },
+        {
+          "name": "None",
+          "value": "none"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "clone",
+            "push"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "log",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add a file or folder to commit",
+          "action": "Add a file or folder to commit"
+        },
+        {
+          "name": "Add Config",
+          "value": "addConfig",
+          "description": "Add configuration property",
+          "action": "Add configuration property"
+        },
+        {
+          "name": "Clone",
+          "value": "clone",
+          "description": "Clone a repository",
+          "action": "Clone a repository"
+        },
+        {
+          "name": "Commit",
+          "value": "commit",
+          "description": "Commit files or folders to git",
+          "action": "Commit files or folders to git"
+        },
+        {
+          "name": "Fetch",
+          "value": "fetch",
+          "description": "Fetch from remote repository",
+          "action": "Fetch from remote repository"
+        },
+        {
+          "name": "List Config",
+          "value": "listConfig",
+          "description": "Return current configuration",
+          "action": "Return current configuration"
+        },
+        {
+          "name": "Log",
+          "value": "log",
+          "description": "Return git commit history",
+          "action": "Return git commit history"
+        },
+        {
+          "name": "Pull",
+          "value": "pull",
+          "description": "Pull from remote repository",
+          "action": "Pull from remote repository"
+        },
+        {
+          "name": "Push",
+          "value": "push",
+          "description": "Push to remote repository",
+          "action": "Push to remote repository"
+        },
+        {
+          "name": "Push Tags",
+          "value": "pushTags",
+          "description": "Push Tags to remote repository",
+          "action": "Push tags to remote repository"
+        },
+        {
+          "name": "Status",
+          "value": "status",
+          "description": "Return status of current repository",
+          "action": "Return status of current repository"
+        },
+        {
+          "name": "Switch Branch",
+          "value": "switchBranch",
+          "description": "Switch to a different branch",
+          "action": "Switch to a different branch"
+        },
+        {
+          "name": "Tag",
+          "value": "tag",
+          "description": "Create a new tag",
+          "action": "Create a new tag"
+        },
+        {
+          "name": "User Setup",
+          "value": "userSetup",
+          "description": "Set the user",
+          "action": "Set up a user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "repositoryPath",
+      "displayName": "Repository Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Local path of the git repository to operate on",
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "placeholder": "/tmp/repository"
+    },
+    {
+      "name": "repositoryPath",
+      "displayName": "New Repository Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Local path to which the git repository should be cloned into",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "placeholder": "/tmp/repository"
+    },
+    {
+      "name": "pathsToAdd",
+      "displayName": "Paths to Add",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Comma-separated list of paths (absolute or relative to Repository Path) of files or folders to add",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "placeholder": "README.md"
+    },
+    {
+      "name": "key",
+      "displayName": "Key",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the key to set",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "addConfig"
+          ]
+        }
+      },
+      "placeholder": "user.email"
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Value of the key to set",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "addConfig"
+          ]
+        }
+      },
+      "placeholder": "name@example.com"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Mode",
+          "name": "mode",
+          "type": "options",
+          "options": [
+            {
+              "name": "Append",
+              "value": "append"
+            },
+            {
+              "name": "Set",
+              "value": "set"
+            }
+          ],
+          "default": "set",
+          "description": "Append setting rather than set it in the local config"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "addConfig"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "sourceRepository",
+      "displayName": "Source Repository",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL or path of the repository to clone",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "placeholder": "https://github.com/n8n-io/n8n"
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "description": "The commit message to use",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "commit"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branch",
+          "name": "branch",
+          "type": "string",
+          "default": "",
+          "placeholder": "main",
+          "description": "The branch to switch to before committing. If empty or not set, will commit to current branch."
+        },
+        {
+          "displayName": "Paths to Add",
+          "name": "pathsToAdd",
+          "type": "string",
+          "default": "",
+          "placeholder": "/data/file1.json",
+          "description": "Comma-separated list of paths (absolute or relative to Repository Path) of files or folders to commit. If not set will all \"added\" files and folders be committed."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "commit"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "log"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "log"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File",
+          "name": "file",
+          "type": "string",
+          "default": "README.md",
+          "description": "The path (absolute or relative to Repository Path) of file or folder to get the history of"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "log"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branch",
+          "name": "branch",
+          "type": "string",
+          "default": "",
+          "placeholder": "main",
+          "description": "The branch to switch to before pushing. If empty or not set, will push current branch."
+        },
+        {
+          "displayName": "Target Repository",
+          "name": "targetRepository",
+          "type": "string",
+          "default": "",
+          "placeholder": "https://github.com/n8n-io/n8n",
+          "description": "The URL or path of the repository to push to"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "branchName",
+      "displayName": "Branch Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the branch to switch to",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "switchBranch"
+          ]
+        }
+      },
+      "placeholder": "feature/new-feature"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Create Branch If Not Exists",
+          "name": "createBranch",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to create the branch if it does not exist"
+        },
+        {
+          "displayName": "Start Point",
+          "name": "startPoint",
+          "type": "string",
+          "default": "",
+          "placeholder": "main",
+          "description": "The commit/branch/tag to create the new branch from. If not set, creates from current HEAD.",
+          "displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Force Switch",
+          "name": "force",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to force the branch switch, discarding any local changes"
+        },
+        {
+          "displayName": "Set Upstream",
+          "name": "setUpstream",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to set up tracking to a remote branch when creating a new branch",
+          "displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Remote Name",
+          "name": "remoteName",
+          "type": "string",
+          "default": "origin",
+          "placeholder": "origin",
+          "description": "The name of the remote to track",
+          "displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ],
+              "setUpstream": [
+                true
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "switchBranch"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the tag to create",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "tag"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "gitPassword",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "gitPassword"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "repositoryPath",
+    "repositoryPath",
+    "pathsToAdd",
+    "key",
+    "value",
+    "sourceRepository",
+    "branchName",
+    "name"
+  ],
+  "optionalFields": [
+    "authentication",
+    "operation",
+    "options",
+    "message",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "operation": "options",
+    "repositoryPath": "string",
+    "pathsToAdd": "string",
+    "key": "string",
+    "value": "string",
+    "options": "collection",
+    "sourceRepository": "string",
+    "message": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "branchName": "string",
+    "name": "string"
+  },
+  "hasVersions": false
+}

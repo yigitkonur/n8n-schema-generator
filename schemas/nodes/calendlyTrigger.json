@@ -1,0 +1,128 @@
+{
+  "name": "calendlyTrigger",
+  "displayName": "Calendly Trigger",
+  "description": "Starts the workflow when Calendly events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "apiKey",
+    "deprecationNotice": "",
+    "scope": "user",
+    "events": []
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiKey",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        },
+        {
+          "name": "API Key or Personal Access Token",
+          "value": "apiKey"
+        }
+      ]
+    },
+    {
+      "name": "deprecationNotice",
+      "displayName": "Action required: Calendly will discontinue API Key authentication on May 31, 2025. Update node to use OAuth2 authentication now to ensure your workflows continue to work.",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "scope",
+      "displayName": "Scope",
+      "type": "options",
+      "default": "user",
+      "required": true,
+      "options": [
+        {
+          "name": "Organization",
+          "value": "organization",
+          "description": "Triggers the webhook for all subscribed events within the organization"
+        },
+        {
+          "name": "User",
+          "value": "user",
+          "description": "Triggers the webhook for subscribed events that belong to the current user"
+        }
+      ],
+      "hint": "Ignored if you are using an API Key"
+    },
+    {
+      "name": "events",
+      "displayName": "Events",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "options": [
+        {
+          "name": "Event Created",
+          "value": "invitee.created",
+          "description": "Receive notifications when a new Calendly event is created"
+        },
+        {
+          "name": "Event Canceled",
+          "value": "invitee.canceled",
+          "description": "Receive notifications when a Calendly event is canceled"
+        }
+      ]
+    }
+  ],
+  "credentials": [
+    {
+      "name": "calendlyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "calendlyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "scope",
+    "events"
+  ],
+  "optionalFields": [
+    "authentication",
+    "deprecationNotice"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "deprecationNotice": "notice",
+    "scope": "options",
+    "events": "multiOptions"
+  },
+  "hasVersions": false
+}

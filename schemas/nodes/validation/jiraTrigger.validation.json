@@ -1,0 +1,184 @@
+{
+  "nodeType": "n8n-nodes-base.jiraTrigger",
+  "displayName": "Jira Trigger",
+  "version": [
+    1,
+    1.1
+  ],
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "events"
+  ],
+  "optionalParameters": [
+    "jiraVersion",
+    "authenticateWebhook",
+    "incomingAuthentication",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "jiraVersion",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "cloud",
+        "enumValues": [
+          "cloud",
+          "server",
+          "serverPat"
+        ]
+      }
+    },
+    {
+      "field": "authenticateWebhook",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "incomingAuthentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "queryAuth",
+          "none"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "events",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "*",
+          "board_configuration_changed",
+          "board_created",
+          "board_deleted",
+          "board_updated",
+          "comment_created",
+          "comment_deleted",
+          "comment_updated",
+          "jira:issue_created",
+          "jira:issue_deleted",
+          "issuelink_created",
+          "issuelink_deleted",
+          "jira:issue_updated",
+          "option_attachments_changed",
+          "option_issuelinks_changed",
+          "option_subtasks_changed",
+          "option_timetracking_changed",
+          "option_unassigned_issues_changed",
+          "option_voting_changed",
+          "option_watching_changed",
+          "project_created",
+          "project_deleted",
+          "project_updated",
+          "sprint_closed",
+          "sprint_created",
+          "sprint_deleted",
+          "sprint_started",
+          "sprint_updated",
+          "user_created",
+          "user_deleted",
+          "user_updated",
+          "jira:version_created",
+          "jira:version_deleted",
+          "jira:version_moved",
+          "jira:version_released",
+          "jira:version_unreleased",
+          "jira:version_updated",
+          "worklog_created",
+          "worklog_deleted",
+          "worklog_updated"
+        ]
+      }
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "jiraVersion": "cloud",
+    "authenticateWebhook": false,
+    "incomingAuthentication": "none",
+    "events": [],
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "authenticateWebhook",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "incomingAuthentication",
+      "condition": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

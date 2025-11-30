@@ -1,0 +1,2050 @@
+{
+  "name": "convertToFile",
+  "displayName": "Convert to File",
+  "description": "Convert JSON data to binary data",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "operation": "csv",
+    "binaryPropertyName": "data",
+    "options": {},
+    "mode": "once",
+    "title": "",
+    "start": "",
+    "end": "",
+    "allDay": false,
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "csv",
+      "options": [
+        {
+          "name": "Convert to CSV",
+          "value": "csv",
+          "action": "Convert to CSV",
+          "description": "Transform input data into a CSV file"
+        },
+        {
+          "name": "Convert to HTML",
+          "value": "html",
+          "action": "Convert to HTML",
+          "description": "Transform input data into a table in an HTML file"
+        },
+        {
+          "name": "Convert to ICS",
+          "value": "iCal",
+          "action": "Convert to ICS",
+          "description": "Converts each input item to an ICS event file"
+        },
+        {
+          "name": "Convert to JSON",
+          "value": "toJson",
+          "action": "Convert to JSON",
+          "description": "Transform input data into a single or multiple JSON files"
+        },
+        {
+          "name": "Convert to ODS",
+          "value": "ods",
+          "action": "Convert to ODS",
+          "description": "Transform input data into an ODS file"
+        },
+        {
+          "name": "Convert to RTF",
+          "value": "rtf",
+          "action": "Convert to RTF",
+          "description": "Transform input data into a table in an RTF file"
+        },
+        {
+          "name": "Convert to Text File",
+          "value": "toText",
+          "action": "Convert to text file",
+          "description": "Transform input data string into a file"
+        },
+        {
+          "name": "Convert to XLS",
+          "value": "xls",
+          "action": "Convert to XLS",
+          "description": "Transform input data into an Excel file"
+        },
+        {
+          "name": "Convert to XLSX",
+          "value": "xlsx",
+          "action": "Convert to XLSX",
+          "description": "Transform input data into an Excel file"
+        },
+        {
+          "name": "Move Base64 String to File",
+          "value": "toBinary",
+          "action": "Move base64 string to file",
+          "description": "Convert a base64-encoded string into its original file format"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "csv",
+            "html",
+            "rtf",
+            "ods",
+            "xls",
+            "xlsx"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Compression",
+          "name": "compression",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "xlsx",
+                "ods"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to reduce the output file size"
+        },
+        {
+          "displayName": "Delimiter",
+          "name": "delimiter",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": ",",
+          "description": "The character to use to separate fields"
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "description": "Name of the output file"
+        },
+        {
+          "displayName": "Header Row",
+          "name": "headerRow",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the first row of the file contains the header names"
+        },
+        {
+          "displayName": "Sheet Name",
+          "name": "sheetName",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "ods",
+                "xls",
+                "xlsx"
+              ]
+            }
+          },
+          "default": "Sheet",
+          "description": "Name of the sheet to create in the spreadsheet",
+          "placeholder": "e.g. mySheet"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "csv",
+            "html",
+            "rtf",
+            "ods",
+            "xls",
+            "xlsx"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "sourceProperty",
+      "displayName": "Base64 Input Field",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the input field that contains the base64 string to convert to a file. Use dot-notation for deep fields (e.g. 'level1.level2.currentKey').",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toBinary"
+          ]
+        }
+      },
+      "placeholder": "e.g data"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toBinary"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Add Byte Order Mark (BOM)",
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "name": "addBOM",
+          "displayOptions": {
+            "show": {
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Data Is Base64",
+          "name": "dataIsBase64",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the data is already base64 encoded",
+          "displayOptions": {
+            "show": {
+              "@version": [
+                1
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Encoding",
+          "name": "encoding",
+          "type": "options",
+          "options": [
+            {
+              "name": "armscii8",
+              "value": "armscii8"
+            },
+            {
+              "name": "ascii",
+              "value": "ascii"
+            },
+            {
+              "name": "base64",
+              "value": "base64"
+            },
+            {
+              "name": "big5hkscs",
+              "value": "big5hkscs"
+            },
+            {
+              "name": "binary",
+              "value": "binary"
+            },
+            {
+              "name": "cesu8",
+              "value": "cesu8"
+            },
+            {
+              "name": "cp1046",
+              "value": "cp1046"
+            },
+            {
+              "name": "cp1124",
+              "value": "cp1124"
+            },
+            {
+              "name": "cp1125",
+              "value": "cp1125"
+            },
+            {
+              "name": "cp1129",
+              "value": "cp1129"
+            },
+            {
+              "name": "cp1133",
+              "value": "cp1133"
+            },
+            {
+              "name": "cp1161",
+              "value": "cp1161"
+            },
+            {
+              "name": "cp1162",
+              "value": "cp1162"
+            },
+            {
+              "name": "cp1163",
+              "value": "cp1163"
+            },
+            {
+              "name": "cp437",
+              "value": "cp437"
+            },
+            {
+              "name": "cp720",
+              "value": "cp720"
+            },
+            {
+              "name": "cp737",
+              "value": "cp737"
+            },
+            {
+              "name": "cp775",
+              "value": "cp775"
+            },
+            {
+              "name": "cp808",
+              "value": "cp808"
+            },
+            {
+              "name": "cp850",
+              "value": "cp850"
+            },
+            {
+              "name": "cp852",
+              "value": "cp852"
+            },
+            {
+              "name": "cp855",
+              "value": "cp855"
+            },
+            {
+              "name": "cp856",
+              "value": "cp856"
+            },
+            {
+              "name": "cp857",
+              "value": "cp857"
+            },
+            {
+              "name": "cp858",
+              "value": "cp858"
+            },
+            {
+              "name": "cp860",
+              "value": "cp860"
+            },
+            {
+              "name": "cp861",
+              "value": "cp861"
+            },
+            {
+              "name": "cp862",
+              "value": "cp862"
+            },
+            {
+              "name": "cp863",
+              "value": "cp863"
+            },
+            {
+              "name": "cp864",
+              "value": "cp864"
+            },
+            {
+              "name": "cp865",
+              "value": "cp865"
+            },
+            {
+              "name": "cp866",
+              "value": "cp866"
+            },
+            {
+              "name": "cp869",
+              "value": "cp869"
+            },
+            {
+              "name": "cp922",
+              "value": "cp922"
+            },
+            {
+              "name": "cp936",
+              "value": "cp936"
+            },
+            {
+              "name": "cp949",
+              "value": "cp949"
+            },
+            {
+              "name": "cp950",
+              "value": "cp950"
+            },
+            {
+              "name": "eucjp",
+              "value": "eucjp"
+            },
+            {
+              "name": "gb18030",
+              "value": "gb18030"
+            },
+            {
+              "name": "gbk",
+              "value": "gbk"
+            },
+            {
+              "name": "georgianacademy",
+              "value": "georgianacademy"
+            },
+            {
+              "name": "georgianps",
+              "value": "georgianps"
+            },
+            {
+              "name": "hex",
+              "value": "hex"
+            },
+            {
+              "name": "hproman8",
+              "value": "hproman8"
+            },
+            {
+              "name": "iso646cn",
+              "value": "iso646cn"
+            },
+            {
+              "name": "iso646jp",
+              "value": "iso646jp"
+            },
+            {
+              "name": "iso88591",
+              "value": "iso88591"
+            },
+            {
+              "name": "iso885910",
+              "value": "iso885910"
+            },
+            {
+              "name": "iso885911",
+              "value": "iso885911"
+            },
+            {
+              "name": "iso885913",
+              "value": "iso885913"
+            },
+            {
+              "name": "iso885914",
+              "value": "iso885914"
+            },
+            {
+              "name": "iso885915",
+              "value": "iso885915"
+            },
+            {
+              "name": "iso885916",
+              "value": "iso885916"
+            },
+            {
+              "name": "iso88592",
+              "value": "iso88592"
+            },
+            {
+              "name": "iso88593",
+              "value": "iso88593"
+            },
+            {
+              "name": "iso88594",
+              "value": "iso88594"
+            },
+            {
+              "name": "iso88595",
+              "value": "iso88595"
+            },
+            {
+              "name": "iso88596",
+              "value": "iso88596"
+            },
+            {
+              "name": "iso88597",
+              "value": "iso88597"
+            },
+            {
+              "name": "iso88598",
+              "value": "iso88598"
+            },
+            {
+              "name": "iso88599",
+              "value": "iso88599"
+            },
+            {
+              "name": "koi8r",
+              "value": "koi8r"
+            },
+            {
+              "name": "koi8ru",
+              "value": "koi8ru"
+            },
+            {
+              "name": "koi8t",
+              "value": "koi8t"
+            },
+            {
+              "name": "koi8u",
+              "value": "koi8u"
+            },
+            {
+              "name": "maccenteuro",
+              "value": "maccenteuro"
+            },
+            {
+              "name": "maccroatian",
+              "value": "maccroatian"
+            },
+            {
+              "name": "maccyrillic",
+              "value": "maccyrillic"
+            },
+            {
+              "name": "macgreek",
+              "value": "macgreek"
+            },
+            {
+              "name": "maciceland",
+              "value": "maciceland"
+            },
+            {
+              "name": "macintosh",
+              "value": "macintosh"
+            },
+            {
+              "name": "macroman",
+              "value": "macroman"
+            },
+            {
+              "name": "macromania",
+              "value": "macromania"
+            },
+            {
+              "name": "macthai",
+              "value": "macthai"
+            },
+            {
+              "name": "macturkish",
+              "value": "macturkish"
+            },
+            {
+              "name": "macukraine",
+              "value": "macukraine"
+            },
+            {
+              "name": "mik",
+              "value": "mik"
+            },
+            {
+              "name": "pt154",
+              "value": "pt154"
+            },
+            {
+              "name": "rk1048",
+              "value": "rk1048"
+            },
+            {
+              "name": "shiftjis",
+              "value": "shiftjis"
+            },
+            {
+              "name": "tcvn",
+              "value": "tcvn"
+            },
+            {
+              "name": "tis620",
+              "value": "tis620"
+            },
+            {
+              "name": "ucs2",
+              "value": "ucs2"
+            },
+            {
+              "name": "utf16",
+              "value": "utf16"
+            },
+            {
+              "name": "utf16be",
+              "value": "utf16be"
+            },
+            {
+              "name": "utf32",
+              "value": "utf32"
+            },
+            {
+              "name": "utf32be",
+              "value": "utf32be"
+            },
+            {
+              "name": "utf32le",
+              "value": "utf32le"
+            },
+            {
+              "name": "utf7",
+              "value": "utf7"
+            },
+            {
+              "name": "utf7imap",
+              "value": "utf7imap"
+            },
+            {
+              "name": "utf8",
+              "value": "utf8"
+            },
+            {
+              "name": "viscii",
+              "value": "viscii"
+            },
+            {
+              "name": "windows1250",
+              "value": "windows1250"
+            },
+            {
+              "name": "windows1251",
+              "value": "windows1251"
+            },
+            {
+              "name": "windows1252",
+              "value": "windows1252"
+            },
+            {
+              "name": "windows1253",
+              "value": "windows1253"
+            },
+            {
+              "name": "windows1254",
+              "value": "windows1254"
+            },
+            {
+              "name": "windows1255",
+              "value": "windows1255"
+            },
+            {
+              "name": "windows1256",
+              "value": "windows1256"
+            },
+            {
+              "name": "windows1257",
+              "value": "windows1257"
+            },
+            {
+              "name": "windows1258",
+              "value": "windows1258"
+            },
+            {
+              "name": "windows874",
+              "value": "windows874"
+            }
+          ],
+          "default": "utf8",
+          "description": "Choose the character set to use to encode the data",
+          "displayOptions": {
+            "hide": {
+              "dataIsBase64": [
+                true
+              ],
+              "@version": [
+                {
+                  "_cnd": {
+                    "gt": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. myFile",
+          "description": "Name of the output file"
+        },
+        {
+          "displayName": "MIME Type",
+          "name": "mimeType",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g text/plain",
+          "description": "The MIME type of the output file. <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types\" target=\"_blank\">Common MIME types</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toBinary"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "sourceProperty",
+      "displayName": "Text Input Field",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the input field that contains a string to convert to a file. Use dot-notation for deep fields (e.g. 'level1.level2.currentKey').",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toText"
+          ]
+        }
+      },
+      "placeholder": "e.g data"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toText"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Add Byte Order Mark (BOM)",
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "name": "addBOM",
+          "displayOptions": {
+            "show": {
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Encoding",
+          "name": "encoding",
+          "type": "options",
+          "options": [
+            {
+              "name": "armscii8",
+              "value": "armscii8"
+            },
+            {
+              "name": "ascii",
+              "value": "ascii"
+            },
+            {
+              "name": "base64",
+              "value": "base64"
+            },
+            {
+              "name": "big5hkscs",
+              "value": "big5hkscs"
+            },
+            {
+              "name": "binary",
+              "value": "binary"
+            },
+            {
+              "name": "cesu8",
+              "value": "cesu8"
+            },
+            {
+              "name": "cp1046",
+              "value": "cp1046"
+            },
+            {
+              "name": "cp1124",
+              "value": "cp1124"
+            },
+            {
+              "name": "cp1125",
+              "value": "cp1125"
+            },
+            {
+              "name": "cp1129",
+              "value": "cp1129"
+            },
+            {
+              "name": "cp1133",
+              "value": "cp1133"
+            },
+            {
+              "name": "cp1161",
+              "value": "cp1161"
+            },
+            {
+              "name": "cp1162",
+              "value": "cp1162"
+            },
+            {
+              "name": "cp1163",
+              "value": "cp1163"
+            },
+            {
+              "name": "cp437",
+              "value": "cp437"
+            },
+            {
+              "name": "cp720",
+              "value": "cp720"
+            },
+            {
+              "name": "cp737",
+              "value": "cp737"
+            },
+            {
+              "name": "cp775",
+              "value": "cp775"
+            },
+            {
+              "name": "cp808",
+              "value": "cp808"
+            },
+            {
+              "name": "cp850",
+              "value": "cp850"
+            },
+            {
+              "name": "cp852",
+              "value": "cp852"
+            },
+            {
+              "name": "cp855",
+              "value": "cp855"
+            },
+            {
+              "name": "cp856",
+              "value": "cp856"
+            },
+            {
+              "name": "cp857",
+              "value": "cp857"
+            },
+            {
+              "name": "cp858",
+              "value": "cp858"
+            },
+            {
+              "name": "cp860",
+              "value": "cp860"
+            },
+            {
+              "name": "cp861",
+              "value": "cp861"
+            },
+            {
+              "name": "cp862",
+              "value": "cp862"
+            },
+            {
+              "name": "cp863",
+              "value": "cp863"
+            },
+            {
+              "name": "cp864",
+              "value": "cp864"
+            },
+            {
+              "name": "cp865",
+              "value": "cp865"
+            },
+            {
+              "name": "cp866",
+              "value": "cp866"
+            },
+            {
+              "name": "cp869",
+              "value": "cp869"
+            },
+            {
+              "name": "cp922",
+              "value": "cp922"
+            },
+            {
+              "name": "cp936",
+              "value": "cp936"
+            },
+            {
+              "name": "cp949",
+              "value": "cp949"
+            },
+            {
+              "name": "cp950",
+              "value": "cp950"
+            },
+            {
+              "name": "eucjp",
+              "value": "eucjp"
+            },
+            {
+              "name": "gb18030",
+              "value": "gb18030"
+            },
+            {
+              "name": "gbk",
+              "value": "gbk"
+            },
+            {
+              "name": "georgianacademy",
+              "value": "georgianacademy"
+            },
+            {
+              "name": "georgianps",
+              "value": "georgianps"
+            },
+            {
+              "name": "hex",
+              "value": "hex"
+            },
+            {
+              "name": "hproman8",
+              "value": "hproman8"
+            },
+            {
+              "name": "iso646cn",
+              "value": "iso646cn"
+            },
+            {
+              "name": "iso646jp",
+              "value": "iso646jp"
+            },
+            {
+              "name": "iso88591",
+              "value": "iso88591"
+            },
+            {
+              "name": "iso885910",
+              "value": "iso885910"
+            },
+            {
+              "name": "iso885911",
+              "value": "iso885911"
+            },
+            {
+              "name": "iso885913",
+              "value": "iso885913"
+            },
+            {
+              "name": "iso885914",
+              "value": "iso885914"
+            },
+            {
+              "name": "iso885915",
+              "value": "iso885915"
+            },
+            {
+              "name": "iso885916",
+              "value": "iso885916"
+            },
+            {
+              "name": "iso88592",
+              "value": "iso88592"
+            },
+            {
+              "name": "iso88593",
+              "value": "iso88593"
+            },
+            {
+              "name": "iso88594",
+              "value": "iso88594"
+            },
+            {
+              "name": "iso88595",
+              "value": "iso88595"
+            },
+            {
+              "name": "iso88596",
+              "value": "iso88596"
+            },
+            {
+              "name": "iso88597",
+              "value": "iso88597"
+            },
+            {
+              "name": "iso88598",
+              "value": "iso88598"
+            },
+            {
+              "name": "iso88599",
+              "value": "iso88599"
+            },
+            {
+              "name": "koi8r",
+              "value": "koi8r"
+            },
+            {
+              "name": "koi8ru",
+              "value": "koi8ru"
+            },
+            {
+              "name": "koi8t",
+              "value": "koi8t"
+            },
+            {
+              "name": "koi8u",
+              "value": "koi8u"
+            },
+            {
+              "name": "maccenteuro",
+              "value": "maccenteuro"
+            },
+            {
+              "name": "maccroatian",
+              "value": "maccroatian"
+            },
+            {
+              "name": "maccyrillic",
+              "value": "maccyrillic"
+            },
+            {
+              "name": "macgreek",
+              "value": "macgreek"
+            },
+            {
+              "name": "maciceland",
+              "value": "maciceland"
+            },
+            {
+              "name": "macintosh",
+              "value": "macintosh"
+            },
+            {
+              "name": "macroman",
+              "value": "macroman"
+            },
+            {
+              "name": "macromania",
+              "value": "macromania"
+            },
+            {
+              "name": "macthai",
+              "value": "macthai"
+            },
+            {
+              "name": "macturkish",
+              "value": "macturkish"
+            },
+            {
+              "name": "macukraine",
+              "value": "macukraine"
+            },
+            {
+              "name": "mik",
+              "value": "mik"
+            },
+            {
+              "name": "pt154",
+              "value": "pt154"
+            },
+            {
+              "name": "rk1048",
+              "value": "rk1048"
+            },
+            {
+              "name": "shiftjis",
+              "value": "shiftjis"
+            },
+            {
+              "name": "tcvn",
+              "value": "tcvn"
+            },
+            {
+              "name": "tis620",
+              "value": "tis620"
+            },
+            {
+              "name": "ucs2",
+              "value": "ucs2"
+            },
+            {
+              "name": "utf16",
+              "value": "utf16"
+            },
+            {
+              "name": "utf16be",
+              "value": "utf16be"
+            },
+            {
+              "name": "utf32",
+              "value": "utf32"
+            },
+            {
+              "name": "utf32be",
+              "value": "utf32be"
+            },
+            {
+              "name": "utf32le",
+              "value": "utf32le"
+            },
+            {
+              "name": "utf7",
+              "value": "utf7"
+            },
+            {
+              "name": "utf7imap",
+              "value": "utf7imap"
+            },
+            {
+              "name": "utf8",
+              "value": "utf8"
+            },
+            {
+              "name": "viscii",
+              "value": "viscii"
+            },
+            {
+              "name": "windows1250",
+              "value": "windows1250"
+            },
+            {
+              "name": "windows1251",
+              "value": "windows1251"
+            },
+            {
+              "name": "windows1252",
+              "value": "windows1252"
+            },
+            {
+              "name": "windows1253",
+              "value": "windows1253"
+            },
+            {
+              "name": "windows1254",
+              "value": "windows1254"
+            },
+            {
+              "name": "windows1255",
+              "value": "windows1255"
+            },
+            {
+              "name": "windows1256",
+              "value": "windows1256"
+            },
+            {
+              "name": "windows1257",
+              "value": "windows1257"
+            },
+            {
+              "name": "windows1258",
+              "value": "windows1258"
+            },
+            {
+              "name": "windows874",
+              "value": "windows874"
+            }
+          ],
+          "default": "utf8",
+          "description": "Choose the character set to use to encode the data"
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. myFile",
+          "description": "Name of the output file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toText"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "mode",
+      "displayName": "Mode",
+      "type": "options",
+      "default": "once",
+      "options": [
+        {
+          "name": "All Items to One File",
+          "value": "once"
+        },
+        {
+          "name": "Each Item to Separate File",
+          "value": "each"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toJson"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toJson"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Add Byte Order Mark (BOM)",
+          "name": "addBOM",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "displayOptions": {
+            "show": {
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Format",
+          "name": "format",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to format the JSON data for easier reading"
+        },
+        {
+          "displayName": "Encoding",
+          "name": "encoding",
+          "type": "options",
+          "options": [
+            {
+              "name": "armscii8",
+              "value": "armscii8"
+            },
+            {
+              "name": "ascii",
+              "value": "ascii"
+            },
+            {
+              "name": "base64",
+              "value": "base64"
+            },
+            {
+              "name": "big5hkscs",
+              "value": "big5hkscs"
+            },
+            {
+              "name": "binary",
+              "value": "binary"
+            },
+            {
+              "name": "cesu8",
+              "value": "cesu8"
+            },
+            {
+              "name": "cp1046",
+              "value": "cp1046"
+            },
+            {
+              "name": "cp1124",
+              "value": "cp1124"
+            },
+            {
+              "name": "cp1125",
+              "value": "cp1125"
+            },
+            {
+              "name": "cp1129",
+              "value": "cp1129"
+            },
+            {
+              "name": "cp1133",
+              "value": "cp1133"
+            },
+            {
+              "name": "cp1161",
+              "value": "cp1161"
+            },
+            {
+              "name": "cp1162",
+              "value": "cp1162"
+            },
+            {
+              "name": "cp1163",
+              "value": "cp1163"
+            },
+            {
+              "name": "cp437",
+              "value": "cp437"
+            },
+            {
+              "name": "cp720",
+              "value": "cp720"
+            },
+            {
+              "name": "cp737",
+              "value": "cp737"
+            },
+            {
+              "name": "cp775",
+              "value": "cp775"
+            },
+            {
+              "name": "cp808",
+              "value": "cp808"
+            },
+            {
+              "name": "cp850",
+              "value": "cp850"
+            },
+            {
+              "name": "cp852",
+              "value": "cp852"
+            },
+            {
+              "name": "cp855",
+              "value": "cp855"
+            },
+            {
+              "name": "cp856",
+              "value": "cp856"
+            },
+            {
+              "name": "cp857",
+              "value": "cp857"
+            },
+            {
+              "name": "cp858",
+              "value": "cp858"
+            },
+            {
+              "name": "cp860",
+              "value": "cp860"
+            },
+            {
+              "name": "cp861",
+              "value": "cp861"
+            },
+            {
+              "name": "cp862",
+              "value": "cp862"
+            },
+            {
+              "name": "cp863",
+              "value": "cp863"
+            },
+            {
+              "name": "cp864",
+              "value": "cp864"
+            },
+            {
+              "name": "cp865",
+              "value": "cp865"
+            },
+            {
+              "name": "cp866",
+              "value": "cp866"
+            },
+            {
+              "name": "cp869",
+              "value": "cp869"
+            },
+            {
+              "name": "cp922",
+              "value": "cp922"
+            },
+            {
+              "name": "cp936",
+              "value": "cp936"
+            },
+            {
+              "name": "cp949",
+              "value": "cp949"
+            },
+            {
+              "name": "cp950",
+              "value": "cp950"
+            },
+            {
+              "name": "eucjp",
+              "value": "eucjp"
+            },
+            {
+              "name": "gb18030",
+              "value": "gb18030"
+            },
+            {
+              "name": "gbk",
+              "value": "gbk"
+            },
+            {
+              "name": "georgianacademy",
+              "value": "georgianacademy"
+            },
+            {
+              "name": "georgianps",
+              "value": "georgianps"
+            },
+            {
+              "name": "hex",
+              "value": "hex"
+            },
+            {
+              "name": "hproman8",
+              "value": "hproman8"
+            },
+            {
+              "name": "iso646cn",
+              "value": "iso646cn"
+            },
+            {
+              "name": "iso646jp",
+              "value": "iso646jp"
+            },
+            {
+              "name": "iso88591",
+              "value": "iso88591"
+            },
+            {
+              "name": "iso885910",
+              "value": "iso885910"
+            },
+            {
+              "name": "iso885911",
+              "value": "iso885911"
+            },
+            {
+              "name": "iso885913",
+              "value": "iso885913"
+            },
+            {
+              "name": "iso885914",
+              "value": "iso885914"
+            },
+            {
+              "name": "iso885915",
+              "value": "iso885915"
+            },
+            {
+              "name": "iso885916",
+              "value": "iso885916"
+            },
+            {
+              "name": "iso88592",
+              "value": "iso88592"
+            },
+            {
+              "name": "iso88593",
+              "value": "iso88593"
+            },
+            {
+              "name": "iso88594",
+              "value": "iso88594"
+            },
+            {
+              "name": "iso88595",
+              "value": "iso88595"
+            },
+            {
+              "name": "iso88596",
+              "value": "iso88596"
+            },
+            {
+              "name": "iso88597",
+              "value": "iso88597"
+            },
+            {
+              "name": "iso88598",
+              "value": "iso88598"
+            },
+            {
+              "name": "iso88599",
+              "value": "iso88599"
+            },
+            {
+              "name": "koi8r",
+              "value": "koi8r"
+            },
+            {
+              "name": "koi8ru",
+              "value": "koi8ru"
+            },
+            {
+              "name": "koi8t",
+              "value": "koi8t"
+            },
+            {
+              "name": "koi8u",
+              "value": "koi8u"
+            },
+            {
+              "name": "maccenteuro",
+              "value": "maccenteuro"
+            },
+            {
+              "name": "maccroatian",
+              "value": "maccroatian"
+            },
+            {
+              "name": "maccyrillic",
+              "value": "maccyrillic"
+            },
+            {
+              "name": "macgreek",
+              "value": "macgreek"
+            },
+            {
+              "name": "maciceland",
+              "value": "maciceland"
+            },
+            {
+              "name": "macintosh",
+              "value": "macintosh"
+            },
+            {
+              "name": "macroman",
+              "value": "macroman"
+            },
+            {
+              "name": "macromania",
+              "value": "macromania"
+            },
+            {
+              "name": "macthai",
+              "value": "macthai"
+            },
+            {
+              "name": "macturkish",
+              "value": "macturkish"
+            },
+            {
+              "name": "macukraine",
+              "value": "macukraine"
+            },
+            {
+              "name": "mik",
+              "value": "mik"
+            },
+            {
+              "name": "pt154",
+              "value": "pt154"
+            },
+            {
+              "name": "rk1048",
+              "value": "rk1048"
+            },
+            {
+              "name": "shiftjis",
+              "value": "shiftjis"
+            },
+            {
+              "name": "tcvn",
+              "value": "tcvn"
+            },
+            {
+              "name": "tis620",
+              "value": "tis620"
+            },
+            {
+              "name": "ucs2",
+              "value": "ucs2"
+            },
+            {
+              "name": "utf16",
+              "value": "utf16"
+            },
+            {
+              "name": "utf16be",
+              "value": "utf16be"
+            },
+            {
+              "name": "utf32",
+              "value": "utf32"
+            },
+            {
+              "name": "utf32be",
+              "value": "utf32be"
+            },
+            {
+              "name": "utf32le",
+              "value": "utf32le"
+            },
+            {
+              "name": "utf7",
+              "value": "utf7"
+            },
+            {
+              "name": "utf7imap",
+              "value": "utf7imap"
+            },
+            {
+              "name": "utf8",
+              "value": "utf8"
+            },
+            {
+              "name": "viscii",
+              "value": "viscii"
+            },
+            {
+              "name": "windows1250",
+              "value": "windows1250"
+            },
+            {
+              "name": "windows1251",
+              "value": "windows1251"
+            },
+            {
+              "name": "windows1252",
+              "value": "windows1252"
+            },
+            {
+              "name": "windows1253",
+              "value": "windows1253"
+            },
+            {
+              "name": "windows1254",
+              "value": "windows1254"
+            },
+            {
+              "name": "windows1255",
+              "value": "windows1255"
+            },
+            {
+              "name": "windows1256",
+              "value": "windows1256"
+            },
+            {
+              "name": "windows1257",
+              "value": "windows1257"
+            },
+            {
+              "name": "windows1258",
+              "value": "windows1258"
+            },
+            {
+              "name": "windows874",
+              "value": "windows874"
+            }
+          ],
+          "default": "utf8",
+          "description": "Choose the character set to use to encode the data"
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. myFile.json",
+          "description": "Name of the output file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "toJson"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "title",
+      "displayName": "Event Title",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "placeholder": "e.g. New Event"
+    },
+    {
+      "name": "start",
+      "displayName": "Start",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date and time at which the event begins. (For all-day events, the time will be ignored.).",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      }
+    },
+    {
+      "name": "end",
+      "displayName": "End",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date and time at which the event ends. (For all-day events, the time will be ignored.).",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "hint": "If not set, will be equal to the start date"
+    },
+    {
+      "name": "allDay",
+      "displayName": "All Day",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the event lasts all day or not",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The field that your iCalendar file will be available under in the output",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Attendees",
+          "name": "attendeesUi",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Attendee",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Attendees",
+              "name": "attendeeValues",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "required": true,
+                  "default": ""
+                },
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "e.g. name@email.com",
+                  "required": true,
+                  "default": ""
+                },
+                {
+                  "displayName": "RSVP",
+                  "name": "rsvp",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Whether the attendee has to confirm attendance or not"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Busy Status",
+          "name": "busyStatus",
+          "type": "options",
+          "options": [
+            {
+              "name": "Busy",
+              "value": "BUSY"
+            },
+            {
+              "name": "Tentative",
+              "value": "TENTATIVE"
+            }
+          ],
+          "default": "",
+          "description": "Used to specify busy status for Microsoft applications, like Outlook"
+        },
+        {
+          "displayName": "Calendar Name",
+          "name": "calName",
+          "type": "string",
+          "default": "",
+          "description": "Specifies the calendar (not event) name. Used by Apple iCal and Microsoft Outlook. <a href=\"https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxcical/1da58449-b97e-46bd-b018-a1ce576f3e6d\">More info</a>."
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. event.ics",
+          "description": "The name of the file to be generated. Default name is event.ics."
+        },
+        {
+          "displayName": "Geolocation",
+          "name": "geolocationUi",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "placeholder": "Add Geolocation",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Geolocation",
+              "name": "geolocationValues",
+              "values": [
+                {
+                  "displayName": "Latitude",
+                  "name": "lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "lon",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Location",
+          "name": "location",
+          "type": "string",
+          "default": "",
+          "description": "The intended venue"
+        },
+        {
+          "displayName": "Recurrence Rule",
+          "name": "recurrenceRule",
+          "type": "string",
+          "default": "",
+          "description": "A rule to define the repeat pattern of the event (RRULE). (<a href=\"https://icalendar.org/rrule-tool.html\">Rule generator</a>)."
+        },
+        {
+          "displayName": "Organizer",
+          "name": "organizerUi",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "placeholder": "Add Organizer",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Organizer",
+              "name": "organizerValues",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "required": true
+                },
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "e.g. name@email.com",
+                  "default": "",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Sequence",
+          "name": "sequence",
+          "type": "number",
+          "default": 0,
+          "description": "When sending an update for an event (with the same uid), defines the revision sequence number"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Confirmed",
+              "value": "CONFIRMED"
+            },
+            {
+              "name": "Cancelled",
+              "value": "CANCELLED"
+            },
+            {
+              "name": "Tentative",
+              "value": "TENTATIVE"
+            }
+          ],
+          "default": "CONFIRMED"
+        },
+        {
+          "displayName": "UID",
+          "name": "uid",
+          "type": "string",
+          "default": "",
+          "description": "Universally unique ID for the event (will be auto-generated if not specified here). Should be globally unique."
+        },
+        {
+          "displayName": "URL",
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "URL associated with event"
+        },
+        {
+          "displayName": "Use Workflow Timezone",
+          "name": "useWorkflowTimezone",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use the workflow timezone set in node's settings rather than UTC"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "binaryPropertyName",
+    "sourceProperty",
+    "binaryPropertyName",
+    "sourceProperty",
+    "binaryPropertyName",
+    "binaryPropertyName",
+    "start",
+    "end",
+    "binaryPropertyName"
+  ],
+  "optionalFields": [
+    "operation",
+    "options",
+    "options",
+    "options",
+    "mode",
+    "options",
+    "title",
+    "allDay",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "binaryPropertyName": "string",
+    "options": "collection",
+    "sourceProperty": "string",
+    "mode": "options",
+    "title": "string",
+    "start": "dateTime",
+    "end": "dateTime",
+    "allDay": "boolean",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

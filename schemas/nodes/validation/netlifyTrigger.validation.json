@@ -1,0 +1,115 @@
+{
+  "nodeType": "n8n-nodes-base.netlifyTrigger",
+  "displayName": "Netlify Trigger",
+  "version": 1,
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "siteId",
+    "event"
+  ],
+  "optionalParameters": [
+    "formId",
+    "simple"
+  ],
+  "validationRules": [
+    {
+      "field": "siteId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      }
+    },
+    {
+      "field": "event",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "deployBuilding",
+          "deployFailed",
+          "deployCreated",
+          "submissionCreated"
+        ]
+      }
+    },
+    {
+      "field": "formId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      },
+      "dependsOn": [
+        "event"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      },
+      "dependsOn": [
+        "event"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "siteId": "",
+    "event": "",
+    "formId": "",
+    "simple": true
+  },
+  "conditionalFields": [
+    {
+      "field": "formId",
+      "condition": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "event"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "event"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

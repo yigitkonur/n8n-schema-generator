@@ -1,0 +1,2220 @@
+{
+  "name": "zendesk",
+  "displayName": "Zendesk",
+  "description": "Consume Zendesk API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "apiToken",
+    "resource": "ticket",
+    "operation": "create",
+    "description": "",
+    "jsonParameters": false,
+    "additionalFields": {},
+    "additionalFieldsJson": "",
+    "updateFields": {},
+    "updateFieldsJson": "",
+    "ticketType": "regular",
+    "options": {},
+    "ticketFieldId": "",
+    "filters": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiToken",
+      "options": [
+        {
+          "name": "API Token",
+          "value": "apiToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "ticket",
+      "options": [
+        {
+          "name": "Ticket",
+          "value": "ticket",
+          "description": "Tickets are the means through which your end users (customers) communicate with agents in Zendesk Support"
+        },
+        {
+          "name": "Ticket Field",
+          "value": "ticketField",
+          "description": "Manage system and custom ticket fields"
+        },
+        {
+          "name": "User",
+          "value": "user",
+          "description": "Manage users"
+        },
+        {
+          "name": "Organization",
+          "value": "organization",
+          "description": "Manage organizations"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a ticket",
+          "action": "Create a ticket"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a ticket",
+          "action": "Delete a ticket"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a ticket",
+          "action": "Get a ticket"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many tickets",
+          "action": "Get many tickets"
+        },
+        {
+          "name": "Recover",
+          "value": "recover",
+          "description": "Recover a suspended ticket",
+          "action": "Recover a ticket"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a ticket",
+          "action": "Update a ticket"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "description",
+      "displayName": "Description",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The first comment on the ticket",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jsonParameters",
+      "displayName": "JSON Parameters",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Field",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Custom Field",
+              "name": "customFieldsValues",
+              "values": [
+                {
+                  "displayName": "Name or ID",
+                  "name": "id",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "Custom field ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Custom field Value"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "External ID",
+          "name": "externalId",
+          "type": "string",
+          "default": "",
+          "description": "An ID you can use to link Zendesk Support tickets to local records"
+        },
+        {
+          "displayName": "Group Name or ID",
+          "name": "group",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getGroups"
+          },
+          "default": "",
+          "description": "The group this ticket is assigned to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Recipient",
+          "name": "recipient",
+          "type": "string",
+          "default": "",
+          "description": "The original recipient e-mail address of the ticket"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Closed",
+              "value": "closed"
+            },
+            {
+              "name": "New",
+              "value": "new"
+            },
+            {
+              "name": "On-Hold",
+              "value": "hold"
+            },
+            {
+              "name": "Open",
+              "value": "open"
+            },
+            {
+              "name": "Pending",
+              "value": "pending"
+            },
+            {
+              "name": "Solved",
+              "value": "solved"
+            }
+          ],
+          "default": "",
+          "description": "The state of the ticket"
+        },
+        {
+          "displayName": "Subject",
+          "name": "subject",
+          "type": "string",
+          "default": "",
+          "description": "The value of the subject field for this ticket"
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The array of tags applied to this ticket. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Type",
+          "name": "type",
+          "type": "options",
+          "options": [
+            {
+              "name": "Question",
+              "value": "question"
+            },
+            {
+              "name": "Incident",
+              "value": "incident"
+            },
+            {
+              "name": "Problem",
+              "value": "problem"
+            },
+            {
+              "name": "Task",
+              "value": "task"
+            }
+          ],
+          "default": "",
+          "description": "The type of this ticket"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFieldsJson",
+      "displayName": "Additional Fields",
+      "type": "json",
+      "default": "",
+      "description": "Object of values to set as described <a href=\"https://developer.zendesk.com/rest_api/docs/support/tickets\">here</a>",
+      "typeOptions": {
+        "alwaysOpenEditWindow": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jsonParameters",
+      "displayName": "JSON Parameters",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee Email",
+          "name": "assigneeEmail",
+          "type": "string",
+          "default": "",
+          "description": "The e-mail address of the assignee"
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Field",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Custom Field",
+              "name": "customFieldsValues",
+              "values": [
+                {
+                  "displayName": "Name or ID",
+                  "name": "id",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "Custom field ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Custom field Value"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "External ID",
+          "name": "externalId",
+          "type": "string",
+          "default": "",
+          "description": "An ID you can use to link Zendesk Support tickets to local records"
+        },
+        {
+          "displayName": "Group Name or ID",
+          "name": "group",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getGroups"
+          },
+          "default": "",
+          "description": "The group this ticket is assigned to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Internal Note",
+          "name": "internalNote",
+          "type": "string",
+          "default": "",
+          "description": "Internal Ticket Note (Accepts HTML)"
+        },
+        {
+          "displayName": "Public Reply",
+          "name": "publicReply",
+          "type": "string",
+          "default": "",
+          "description": "Public ticket reply"
+        },
+        {
+          "displayName": "Recipient",
+          "name": "recipient",
+          "type": "string",
+          "default": "",
+          "description": "The original recipient e-mail address of the ticket"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Closed",
+              "value": "closed"
+            },
+            {
+              "name": "New",
+              "value": "new"
+            },
+            {
+              "name": "On-Hold",
+              "value": "hold"
+            },
+            {
+              "name": "Open",
+              "value": "open"
+            },
+            {
+              "name": "Pending",
+              "value": "pending"
+            },
+            {
+              "name": "Solved",
+              "value": "solved"
+            }
+          ],
+          "default": "",
+          "description": "The state of the ticket"
+        },
+        {
+          "displayName": "Subject",
+          "name": "subject",
+          "type": "string",
+          "default": "",
+          "description": "The value of the subject field for this ticket"
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The array of tags applied to this ticket. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Type",
+          "name": "type",
+          "type": "options",
+          "options": [
+            {
+              "name": "Question",
+              "value": "question"
+            },
+            {
+              "name": "Incident",
+              "value": "incident"
+            },
+            {
+              "name": "Problem",
+              "value": "problem"
+            },
+            {
+              "name": "Task",
+              "value": "task"
+            }
+          ],
+          "default": "",
+          "description": "The type of this ticket"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFieldsJson",
+      "displayName": "Update Fields",
+      "type": "json",
+      "default": "",
+      "description": "Object of values to update as described <a href=\"https://developer.zendesk.com/rest_api/docs/support/tickets\">here</a>",
+      "typeOptions": {
+        "alwaysOpenEditWindow": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "ticketType",
+      "displayName": "Ticket Type",
+      "type": "options",
+      "default": "regular",
+      "required": true,
+      "options": [
+        {
+          "name": "Regular",
+          "value": "regular"
+        },
+        {
+          "name": "Suspended",
+          "value": "suspended"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "get",
+            "delete",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "get"
+          ],
+          "ticketType": [
+            "regular"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Suspended Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Ticket ID",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "get"
+          ],
+          "ticketType": [
+            "suspended"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Group Name or ID",
+          "name": "group",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getGroups"
+          },
+          "displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "default": "",
+          "description": "The group to search. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "default": "",
+          "description": "<a href=\"https://developer.zendesk.com/api-reference/ticketing/ticket-management/search/#syntax-examples\">Query syntax</a> to search tickets"
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sortBy",
+          "type": "options",
+          "options": [
+            {
+              "name": "Created At",
+              "value": "created_at"
+            },
+            {
+              "name": "Priority",
+              "value": "priority"
+            },
+            {
+              "name": "Status",
+              "value": "status"
+            },
+            {
+              "name": "Ticket Type",
+              "value": "ticket_type"
+            },
+            {
+              "name": "Updated At",
+              "value": "updated_at"
+            }
+          ],
+          "default": "updated_at",
+          "description": "Defaults to sorting by relevance"
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sortOrder",
+          "type": "options",
+          "options": [
+            {
+              "name": "Ascending",
+              "value": "asc"
+            },
+            {
+              "name": "Descending",
+              "value": "desc"
+            }
+          ],
+          "default": "asc"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "Closed",
+              "value": "closed"
+            },
+            {
+              "name": "New",
+              "value": "new"
+            },
+            {
+              "name": "On-Hold",
+              "value": "hold"
+            },
+            {
+              "name": "Open",
+              "value": "open"
+            },
+            {
+              "name": "Pending",
+              "value": "pending"
+            },
+            {
+              "name": "Solved",
+              "value": "solved"
+            }
+          ],
+          "default": "",
+          "description": "The state of the ticket"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "id",
+      "displayName": "Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "ticketType": [
+            "regular"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Suspended Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Ticket ID",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "ticketType": [
+            "suspended"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Suspended Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "recover"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a ticket field",
+          "action": "Get a ticket field"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many system and custom ticket fields",
+          "action": "Get many ticket fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticketField"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "ticketFieldId",
+      "displayName": "Ticket Field ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticketField"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticketField"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticketField"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a user",
+          "action": "Create a user"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a user",
+          "action": "Delete a user"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a user",
+          "action": "Get a user"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many users",
+          "action": "Get many users"
+        },
+        {
+          "name": "Get Organizations",
+          "value": "getOrganizations",
+          "description": "Get a user's organizations",
+          "action": "Get a user's organizations"
+        },
+        {
+          "name": "Get Related Data",
+          "value": "getRelatedData",
+          "description": "Get data related to the user",
+          "action": "Get data related to a user"
+        },
+        {
+          "name": "Search",
+          "value": "search",
+          "description": "Search users",
+          "action": "Search a user"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a user",
+          "action": "Update a user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The user's name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Alias",
+          "name": "alias",
+          "type": "string",
+          "default": "",
+          "description": "An alias displayed to end users"
+        },
+        {
+          "displayName": "Custom Role ID",
+          "name": "custom_role_id",
+          "type": "number",
+          "default": 0,
+          "description": "A custom role if the user is an agent on the Enterprise plan"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Any details you want to store about the user, such as an address"
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "description": "The user's primary email address"
+        },
+        {
+          "displayName": "External ID",
+          "name": "external_id",
+          "type": "string",
+          "default": "",
+          "description": "A unique identifier from another system"
+        },
+        {
+          "displayName": "Locale",
+          "name": "locale",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLocales"
+          },
+          "default": "",
+          "description": "The user's locale. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Moderator",
+          "name": "moderator",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user has forum moderation capabilities"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Any notes you want to store about the user"
+        },
+        {
+          "displayName": "Only Private Comments",
+          "name": "only_private_comments",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user can only create private comments"
+        },
+        {
+          "displayName": "Organization Name or ID",
+          "name": "organization_id",
+          "typeOptions": {
+            "loadOptionsMethod": "getOrganizations"
+          },
+          "type": "options",
+          "default": "",
+          "description": "The ID of the user's organization. If the user has more than one organization memberships, the ID of the user's default organization. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": "",
+          "description": "The user's primary phone number"
+        },
+        {
+          "displayName": "Report CSV",
+          "name": "report_csv",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether or not the user can access the CSV report on the Search tab of the Reporting page in the Support admin interface"
+        },
+        {
+          "displayName": "Restricted Agent",
+          "name": "restricted_agent",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the agent has any restrictions; false for admins and unrestricted agents, true for other agents"
+        },
+        {
+          "displayName": "Role",
+          "name": "role",
+          "type": "options",
+          "options": [
+            {
+              "name": "End User",
+              "value": "end-user"
+            },
+            {
+              "name": "Agent",
+              "value": "agent"
+            },
+            {
+              "name": "Admin",
+              "value": "admin"
+            }
+          ],
+          "default": "",
+          "description": "The user's role"
+        },
+        {
+          "displayName": "Signature",
+          "name": "signature",
+          "type": "string",
+          "default": "",
+          "description": "The user's signature. Only agents and admins can have signatures."
+        },
+        {
+          "displayName": "Suspended",
+          "name": "suspended",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the agent is suspended. Tickets from suspended users are also suspended, and these users cannot sign in to the end user portal."
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The array of tags applied to this user. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Ticket Restriction",
+          "name": "ticket_restriction",
+          "type": "options",
+          "options": [
+            {
+              "name": "Organization",
+              "value": "organization"
+            },
+            {
+              "name": "Groups",
+              "value": "groups"
+            },
+            {
+              "name": "Assigned",
+              "value": "assigned"
+            },
+            {
+              "name": "Requested",
+              "value": "requested"
+            }
+          ],
+          "default": "",
+          "description": "Specifies which tickets the user has access to"
+        },
+        {
+          "displayName": "Timezone",
+          "name": "time_zone",
+          "type": "string",
+          "default": "",
+          "description": "The user's time zone"
+        },
+        {
+          "displayName": "User Fields",
+          "name": "userFieldsUi",
+          "placeholder": "Add User Field",
+          "description": "Values of custom fields in the user's profile",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "userFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getUserFields"
+                  },
+                  "default": "",
+                  "description": "Name of the field to sort on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Verified",
+          "name": "verified",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user's primary identity is verified or not"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "id",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Alias",
+          "name": "alias",
+          "type": "string",
+          "default": "",
+          "description": "An alias displayed to end users"
+        },
+        {
+          "displayName": "Custom Role ID",
+          "name": "custom_role_id",
+          "type": "number",
+          "default": 0,
+          "description": "A custom role if the user is an agent on the Enterprise plan"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Any details you want to store about the user, such as an address"
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "description": "The user's primary email address"
+        },
+        {
+          "displayName": "External ID",
+          "name": "external_id",
+          "type": "string",
+          "default": "",
+          "description": "A unique identifier from another system"
+        },
+        {
+          "displayName": "Locale",
+          "name": "locale",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLocales"
+          },
+          "default": "",
+          "description": "The user's locale. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Moderator",
+          "name": "moderator",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user has forum moderation capabilities"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "The user's name"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Any notes you want to store about the user"
+        },
+        {
+          "displayName": "Only Private Comments",
+          "name": "only_private_comments",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user can only create private comments"
+        },
+        {
+          "displayName": "Organization Name or ID",
+          "name": "organization_id",
+          "typeOptions": {
+            "loadOptionsMethod": "getOrganizations"
+          },
+          "type": "options",
+          "default": "",
+          "description": "The ID of the user's organization. If the user has more than one organization memberships, the ID of the user's default organization. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": "",
+          "description": "The user's primary phone number"
+        },
+        {
+          "displayName": "Report CSV",
+          "name": "report_csv",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether or not the user can access the CSV report on the Search tab of the Reporting page in the Support admin interface"
+        },
+        {
+          "displayName": "Restricted Agent",
+          "name": "restricted_agent",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the agent has any restrictions; false for admins and unrestricted agents, true for other agents"
+        },
+        {
+          "displayName": "Role",
+          "name": "role",
+          "type": "options",
+          "options": [
+            {
+              "name": "End User",
+              "value": "end-user"
+            },
+            {
+              "name": "Agent",
+              "value": "agent"
+            },
+            {
+              "name": "Admin",
+              "value": "admin"
+            }
+          ],
+          "default": "",
+          "description": "The user's role"
+        },
+        {
+          "displayName": "Signature",
+          "name": "signature",
+          "type": "string",
+          "default": "",
+          "description": "The user's signature. Only agents and admins can have signatures."
+        },
+        {
+          "displayName": "Suspended",
+          "name": "suspended",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the agent is suspended. Tickets from suspended users are also suspended, and these users cannot sign in to the end user portal."
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The array of tags applied to this user. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Ticket Restriction",
+          "name": "ticket_restriction",
+          "type": "options",
+          "options": [
+            {
+              "name": "Organization",
+              "value": "organization"
+            },
+            {
+              "name": "Groups",
+              "value": "groups"
+            },
+            {
+              "name": "Assigned",
+              "value": "assigned"
+            },
+            {
+              "name": "Requested",
+              "value": "requested"
+            }
+          ],
+          "default": "",
+          "description": "Specifies which tickets the user has access to"
+        },
+        {
+          "displayName": "Timezone",
+          "name": "time_zone",
+          "type": "string",
+          "default": "",
+          "description": "The user's time zone"
+        },
+        {
+          "displayName": "User Fields",
+          "name": "userFieldsUi",
+          "placeholder": "Add User Field",
+          "description": "Values of custom fields in the user's profile",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "userFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getUserFields"
+                  },
+                  "default": "",
+                  "description": "Name of the field to sort on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Verified",
+          "name": "verified",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the user's primary identity is verified or not"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "id",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Roles",
+          "name": "role",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "End User",
+              "value": "end-user"
+            },
+            {
+              "name": "Agent",
+              "value": "agent"
+            },
+            {
+              "name": "Admin",
+              "value": "admin"
+            }
+          ],
+          "default": []
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "External ID",
+          "name": "external_id",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "id",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getRelatedData"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getOrganizations"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Count",
+          "value": "count",
+          "description": "Count organizations",
+          "action": "Count organizations"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an organization",
+          "action": "Create an organization"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an organization",
+          "action": "Delete an organization"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an organization",
+          "action": "Get an organization"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many organizations",
+          "action": "Get many organizations"
+        },
+        {
+          "name": "Get Related Data",
+          "value": "getRelatedData",
+          "description": "Get data related to the organization",
+          "action": "Get data related to an organization"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a organization",
+          "action": "Update an organization"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Details about the organization, such as the address"
+        },
+        {
+          "displayName": "Domain Names",
+          "name": "domain_names",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated domain names associated with this organization"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Organization Fields",
+          "name": "organizationFieldsUi",
+          "placeholder": "Add Organization Field",
+          "description": "Values of custom fields in the organization's profile",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "organizationFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getOrganizationFields"
+                  },
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "IDs of tags applied to this organization. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "id",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Details about the organization, such as the address"
+        },
+        {
+          "displayName": "Domain Names",
+          "name": "domain_names",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated domain names associated with this organization"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Organization Fields",
+          "name": "organizationFieldsUi",
+          "placeholder": "Add Organization Field",
+          "description": "Values of custom fields in the organization's profile",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "organizationFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getOrganizationFields"
+                  },
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "IDs of tags applied to this organization. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "id",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getRelatedData"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "zendeskApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "zendeskOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "description",
+    "id",
+    "ticketType",
+    "id",
+    "id",
+    "id",
+    "id",
+    "id",
+    "ticketFieldId",
+    "name",
+    "id",
+    "id",
+    "id",
+    "id",
+    "id",
+    "name",
+    "id",
+    "id",
+    "id",
+    "id"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "jsonParameters",
+    "additionalFields",
+    "additionalFieldsJson",
+    "jsonParameters",
+    "updateFields",
+    "updateFieldsJson",
+    "returnAll",
+    "limit",
+    "options",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "description": "string",
+    "jsonParameters": "boolean",
+    "additionalFields": "collection",
+    "additionalFieldsJson": "json",
+    "id": "string",
+    "updateFields": "collection",
+    "updateFieldsJson": "json",
+    "ticketType": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "options": "collection",
+    "ticketFieldId": "string",
+    "name": "string",
+    "filters": "collection"
+  },
+  "hasVersions": false
+}

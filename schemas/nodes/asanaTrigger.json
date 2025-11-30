@@ -1,0 +1,92 @@
+{
+  "name": "asanaTrigger",
+  "displayName": "Asana Trigger",
+  "description": "Starts the workflow when Asana events occur.",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "accessToken",
+    "resource": "",
+    "workspace": ""
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "options": [
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The resource ID to subscribe to. The resource can be a task or project."
+    },
+    {
+      "name": "workspace",
+      "displayName": "Workspace Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "The workspace ID the resource is registered under. This is only required if you want to allow overriding existing webhooks. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "options": [],
+      "typeOptions": {
+        "loadOptionsMethod": "getWorkspaces"
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "asanaApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "asanaOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "resource"
+  ],
+  "optionalFields": [
+    "authentication",
+    "workspace"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "string",
+    "workspace": "options"
+  },
+  "hasVersions": false
+}

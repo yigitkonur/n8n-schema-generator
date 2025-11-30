@@ -1,0 +1,1413 @@
+{
+  "name": "odoo",
+  "displayName": "Odoo",
+  "description": "Consume Odoo API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "contact",
+    "customResource": "",
+    "fieldsToCreateOrUpdate": {},
+    "options": {},
+    "filterRequest": {},
+    "opportunityName": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "operation": "create",
+    "contactName": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "options": [
+        {
+          "name": "Contact",
+          "value": "contact"
+        },
+        {
+          "name": "Custom Resource",
+          "value": "custom"
+        },
+        {
+          "name": "Note",
+          "value": "note"
+        },
+        {
+          "name": "Opportunity",
+          "value": "opportunity"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "customResource",
+      "displayName": "Custom Resource Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getModels"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new item",
+          "action": "Create an item"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an item",
+          "action": "Delete an item"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an item",
+          "action": "Get an item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many items",
+          "action": "Get many items"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an item",
+          "action": "Update an item"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "fieldsToCreateOrUpdate",
+      "displayName": "Fields",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field Record:",
+          "name": "fields",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldName",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "typeOptions": {
+                "loadOptionsMethod": "getModelFields"
+              }
+            },
+            {
+              "displayName": "New Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add Field"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "customResourceId",
+      "displayName": "Custom Resource ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "custom"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "custom"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields to Include",
+          "name": "fieldsList",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getModelFields",
+            "loadOptionsDependsOn": [
+              "customResource"
+            ]
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "get"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "filterRequest",
+      "displayName": "Filters",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter request by applying filters",
+      "options": [
+        {
+          "name": "filter",
+          "displayName": "Filter",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldName",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "customResource"
+                ],
+                "loadOptionsMethod": "getModelFields"
+              }
+            },
+            {
+              "displayName": "Operator",
+              "name": "operator",
+              "type": "options",
+              "default": "equal",
+              "description": "Specify an operator",
+              "options": [
+                {
+                  "name": "!=",
+                  "value": "notEqual"
+                },
+                {
+                  "name": "<",
+                  "value": "lesserThen"
+                },
+                {
+                  "name": "<=",
+                  "value": "lesserOrEqual"
+                },
+                {
+                  "name": "=",
+                  "value": "equal"
+                },
+                {
+                  "name": ">",
+                  "value": "greaterThen"
+                },
+                {
+                  "name": ">=",
+                  "value": "greaterOrEqual"
+                },
+                {
+                  "name": "Child Of",
+                  "value": "childOf"
+                },
+                {
+                  "name": "In",
+                  "value": "in"
+                },
+                {
+                  "name": "Like",
+                  "value": "like"
+                },
+                {
+                  "name": "Not In",
+                  "value": "notIn"
+                }
+              ]
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Specify value for comparison"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add Filter"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "placeholder": "Add condition"
+    },
+    {
+      "name": "customResourceId",
+      "displayName": "Custom Resource ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsToCreateOrUpdate",
+      "displayName": "Update Fields",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field Record:",
+          "name": "fields",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldName",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "typeOptions": {
+                "loadOptionsMethod": "getModelFields"
+              }
+            },
+            {
+              "displayName": "New Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add Field"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new opportunity",
+          "action": "Create an opportunity"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an opportunity",
+          "action": "Delete an opportunity"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an opportunity",
+          "action": "Get an opportunity"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many opportunities",
+          "action": "Get many opportunities"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an opportunity",
+          "action": "Update an opportunity"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "opportunityName",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email",
+          "name": "email_from",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Expected Revenue",
+          "name": "expected_revenue",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Internal Notes",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "default": "1",
+          "options": [
+            {
+              "name": "1",
+              "value": "1"
+            },
+            {
+              "name": "2",
+              "value": "2"
+            },
+            {
+              "name": "3",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "displayName": "Probability",
+          "name": "probability",
+          "type": "number",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 100,
+            "minValue": 0
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields to Include",
+          "name": "fieldsList",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getModelFields"
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "get"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email",
+          "name": "email_from",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Expected Revenue",
+          "name": "expected_revenue",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Internal Notes",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "default": "1",
+          "options": [
+            {
+              "name": "1",
+              "value": "1"
+            },
+            {
+              "name": "2",
+              "value": "2"
+            },
+            {
+              "name": "3",
+              "value": "3"
+            }
+          ]
+        },
+        {
+          "displayName": "Probability",
+          "name": "probability",
+          "type": "number",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 100,
+            "minValue": 0
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new contact",
+          "action": "Create a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact",
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a contact",
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many contacts",
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a contact",
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactName",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Address",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "options": [
+            {
+              "name": "value",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Name or ID",
+                  "name": "country_id",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCountries"
+                  }
+                },
+                {
+                  "displayName": "State Name or ID",
+                  "name": "state_id",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getStates"
+                  }
+                },
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Street 2",
+                  "name": "street2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zip",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": ""
+        },
+        {
+          "displayName": "Internal Notes",
+          "name": "comment",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Job Position",
+          "name": "function",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Mobile",
+          "name": "mobile",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Tax ID",
+          "name": "vat",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields to Include",
+          "name": "fieldsList",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getModelFields"
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Address",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "options": [
+            {
+              "name": "value",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Name or ID",
+                  "name": "country_id",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCountries"
+                  }
+                },
+                {
+                  "displayName": "State Name or ID",
+                  "name": "state_id",
+                  "type": "options",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getStates"
+                  }
+                },
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Street 2",
+                  "name": "street2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zip",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": ""
+        },
+        {
+          "displayName": "Internal Notes",
+          "name": "comment",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Job Position",
+          "name": "function",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Mobile",
+          "name": "mobile",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Tax ID",
+          "name": "vat",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new note",
+          "action": "Create a note"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a note",
+          "action": "Delete a note"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a note",
+          "action": "Get a note"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many notes",
+          "action": "Get many notes"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a note",
+          "action": "Update a note"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "memo",
+      "displayName": "Memo",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      }
+    },
+    {
+      "name": "noteId",
+      "displayName": "Note ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields to Include",
+          "name": "fieldsList",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getModelFields"
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "get"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "noteId",
+      "displayName": "Note ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      }
+    },
+    {
+      "name": "memo",
+      "displayName": "Memo",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "odooApi",
+      "required": true,
+      "testedBy": "odooApiTest"
+    }
+  ],
+  "requiredFields": [
+    "customResourceId",
+    "customResourceId",
+    "opportunityName",
+    "opportunityId",
+    "opportunityId",
+    "contactName",
+    "contactId",
+    "contactId",
+    "memo",
+    "noteId",
+    "noteId",
+    "memo"
+  ],
+  "optionalFields": [
+    "resource",
+    "customResource",
+    "operation",
+    "fieldsToCreateOrUpdate",
+    "returnAll",
+    "limit",
+    "options",
+    "filterRequest",
+    "fieldsToCreateOrUpdate",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "options",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "options",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "customResource": "options",
+    "operation": "options",
+    "fieldsToCreateOrUpdate": "fixedCollection",
+    "customResourceId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "options": "collection",
+    "filterRequest": "fixedCollection",
+    "opportunityName": "string",
+    "additionalFields": "collection",
+    "opportunityId": "string",
+    "updateFields": "collection",
+    "contactName": "string",
+    "contactId": "string",
+    "memo": "string",
+    "noteId": "string"
+  },
+  "hasVersions": false
+}

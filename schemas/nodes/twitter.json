@@ -1,0 +1,792 @@
+{
+  "name": "twitter",
+  "displayName": "X (Formerly Twitter)",
+  "description": "Post, like, and search tweets, send messages, search users, and add users to lists",
+  "group": [
+    "output"
+  ],
+  "version": 2,
+  "defaults": {
+    "resource": "tweet",
+    "additionalFields": {},
+    "list": {
+      "__rl": true,
+      "mode": "id",
+      "value": ""
+    },
+    "operation": "create",
+    "text": "",
+    "noticeLocation": "",
+    "noticeAttachments": "",
+    "tweetDeleteId": {
+      "__rl": true,
+      "mode": "id",
+      "value": ""
+    },
+    "searchText": "",
+    "returnAll": false,
+    "limit": 50,
+    "me": false
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "tweet",
+      "options": [
+        {
+          "name": "Direct Message",
+          "value": "directMessage",
+          "description": "Send a direct message to a user"
+        },
+        {
+          "name": "List",
+          "value": "list",
+          "description": "Add a user to a list"
+        },
+        {
+          "name": "Tweet",
+          "value": "tweet",
+          "description": "Create, like, search, or delete a tweet"
+        },
+        {
+          "name": "User",
+          "value": "user",
+          "description": "Search users by username"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Send a direct message to a user",
+          "action": "Create Direct Message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "user",
+      "displayName": "User",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "username",
+        "value": ""
+      },
+      "required": true,
+      "description": "The user you want to send the message to",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      }
+    },
+    {
+      "name": "text",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The text of the direct message. URL encoding is required. Max length of 10,000 characters.",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Attachment ID",
+          "name": "attachments",
+          "type": "string",
+          "default": "",
+          "placeholder": "1664279886239010824",
+          "description": "The attachment ID to associate with the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add Member",
+          "value": "add",
+          "description": "Add a member to a list",
+          "action": "Add Member to List"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "required": true,
+      "description": "The list you want to add the user to",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "username",
+        "value": ""
+      },
+      "required": true,
+      "description": "The user you want to add to the list",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create, quote, or reply to a tweet",
+          "action": "Create Tweet"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a tweet",
+          "action": "Delete Tweet"
+        },
+        {
+          "name": "Like",
+          "value": "like",
+          "description": "Like a tweet",
+          "action": "Like Tweet"
+        },
+        {
+          "name": "Retweet",
+          "value": "retweet",
+          "description": "Retweet a tweet",
+          "action": "Retweet Tweet"
+        },
+        {
+          "name": "Search",
+          "value": "search",
+          "description": "Search for tweets from the last seven days",
+          "action": "Search Tweets"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "text",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The text of the status update. URLs must be encoded. Links wrapped with the t.co shortener will affect character count",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Location ID",
+          "name": "location",
+          "type": "string",
+          "placeholder": "4e696bef7e24d378",
+          "default": "",
+          "description": "Location information for the tweet"
+        },
+        {
+          "displayName": "Media ID",
+          "name": "attachments",
+          "type": "string",
+          "default": "",
+          "placeholder": "1664279886239010824",
+          "description": "The attachment ID to associate with the message"
+        },
+        {
+          "displayName": "Quote a Tweet",
+          "name": "inQuoteToStatusId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "id",
+            "value": ""
+          },
+          "description": "The tweet being quoted",
+          "modes": [
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "validation": [],
+              "placeholder": "e.g. 1187836157394112513",
+              "url": ""
+            },
+            {
+              "displayName": "By URL",
+              "name": "url",
+              "type": "string",
+              "validation": [],
+              "placeholder": "e.g. https://twitter.com/n8n_io/status/1187836157394112513",
+              "url": ""
+            }
+          ]
+        },
+        {
+          "displayName": "Reply to Tweet",
+          "name": "inReplyToStatusId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "id",
+            "value": ""
+          },
+          "description": "The tweet being replied to",
+          "modes": [
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "validation": [],
+              "placeholder": "e.g. 1187836157394112513",
+              "url": ""
+            },
+            {
+              "displayName": "By URL",
+              "name": "url",
+              "type": "string",
+              "validation": [],
+              "placeholder": "e.g. https://twitter.com/n8n_io/status/1187836157394112513",
+              "url": ""
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "noticeLocation",
+      "displayName": "Locations are not supported due to Twitter V2 API limitations",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/additionalFields.location": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "noticeAttachments",
+      "displayName": "Attachements are not supported due to Twitter V2 API limitations",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "/additionalFields.attachments": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "tweetDeleteId",
+      "displayName": "Tweet",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "required": true,
+      "description": "The tweet to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tweetId",
+      "displayName": "Tweet",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "required": true,
+      "description": "The tweet to like",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "like"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      }
+    },
+    {
+      "name": "searchText",
+      "displayName": "Search Term",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A UTF-8, URL-encoded search query of 500 characters maximum, including operators. Queries may additionally be limited by complexity. Check the searching examples <a href=\"https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators\">here</a>.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "placeholder": "e.g. automation"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Sort Order",
+          "name": "sortOrder",
+          "type": "options",
+          "options": [
+            {
+              "name": "Recent",
+              "value": "recency"
+            },
+            {
+              "name": "Relevant",
+              "value": "relevancy"
+            }
+          ],
+          "description": "The order in which to return results",
+          "default": "recency"
+        },
+        {
+          "displayName": "After",
+          "name": "startTime",
+          "type": "dateTime",
+          "default": "",
+          "description": "Tweets before this date will not be returned. This date must be within the last 7 days if you don't have Academic Research access."
+        },
+        {
+          "displayName": "Before",
+          "name": "endTime",
+          "type": "dateTime",
+          "default": "",
+          "description": "Tweets after this date will not be returned. This date must be within the last 7 days if you don't have Academic Research access."
+        },
+        {
+          "displayName": "Tweet Fields",
+          "name": "tweetFieldsObject",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Attachments",
+              "value": "attachments"
+            },
+            {
+              "name": "Author ID",
+              "value": "author_id"
+            },
+            {
+              "name": "Context Annotations",
+              "value": "context_annotations"
+            },
+            {
+              "name": "Conversation ID",
+              "value": "conversation_id"
+            },
+            {
+              "name": "Created At",
+              "value": "created_at"
+            },
+            {
+              "name": "Edit Controls",
+              "value": "edit_controls"
+            },
+            {
+              "name": "Entities",
+              "value": "entities"
+            },
+            {
+              "name": "Geo",
+              "value": "geo"
+            },
+            {
+              "name": "ID",
+              "value": "id"
+            },
+            {
+              "name": "In Reply To User ID",
+              "value": "in_reply_to_user_id"
+            },
+            {
+              "name": "Lang",
+              "value": "lang"
+            },
+            {
+              "name": "Non Public Metrics",
+              "value": "non_public_metrics"
+            },
+            {
+              "name": "Public Metrics",
+              "value": "public_metrics"
+            },
+            {
+              "name": "Organic Metrics",
+              "value": "organic_metrics"
+            },
+            {
+              "name": "Promoted Metrics",
+              "value": "promoted_metrics"
+            },
+            {
+              "name": "Possibly Sensitive",
+              "value": "possibly_sensitive"
+            },
+            {
+              "name": "Referenced Tweets",
+              "value": "referenced_tweets"
+            },
+            {
+              "name": "Reply Settings",
+              "value": "reply_settings"
+            },
+            {
+              "name": "Source",
+              "value": "source"
+            },
+            {
+              "name": "Text",
+              "value": "text"
+            },
+            {
+              "name": "Withheld",
+              "value": "withheld"
+            }
+          ],
+          "default": [],
+          "description": "The fields to add to each returned tweet object. Default fields are: ID, text, edit_history_tweet_ids."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "tweetId",
+      "displayName": "Tweet",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "required": true,
+      "description": "The tweet to retweet",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "searchUser",
+      "options": [
+        {
+          "name": "Get",
+          "value": "searchUser",
+          "description": "Retrieve a user by username",
+          "action": "Get User"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "user",
+      "displayName": "User",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "username",
+        "value": ""
+      },
+      "required": true,
+      "description": "The user you want to search",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        },
+        "hide": {
+          "me": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "me",
+      "displayName": "Me",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether you want to search the authenticated user",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "twitterOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "user",
+    "text",
+    "list",
+    "user",
+    "text",
+    "tweetDeleteId",
+    "tweetId",
+    "searchText",
+    "tweetId",
+    "user"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "operation",
+    "operation",
+    "additionalFields",
+    "noticeLocation",
+    "noticeAttachments",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "operation",
+    "me"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "user": "resourceLocator",
+    "text": "string",
+    "additionalFields": "collection",
+    "list": "resourceLocator",
+    "noticeLocation": "notice",
+    "noticeAttachments": "notice",
+    "tweetDeleteId": "resourceLocator",
+    "tweetId": "resourceLocator",
+    "searchText": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "me": "boolean"
+  },
+  "hasVersions": true,
+  "availableVersions": [
+    1,
+    2
+  ],
+  "defaultVersion": 2
+}

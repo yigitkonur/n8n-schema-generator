@@ -1,0 +1,887 @@
+{
+  "nodeType": "n8n-nodes-base.formTrigger",
+  "displayName": "n8n Form Trigger",
+  "version": [
+    2,
+    2.1,
+    2.2,
+    2.3
+  ],
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "formTitle"
+  ],
+  "optionalParameters": [
+    "authentication",
+    "path",
+    "formDescription",
+    "formFields",
+    "responseMode",
+    "responseMode",
+    "formNotice",
+    "addFormPage",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "basicAuth",
+          "none"
+        ]
+      }
+    },
+    {
+      "field": "path",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "formTitle",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "formDescription",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "formFields",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "fieldLabel": {
+                "type": "string",
+                "default": ""
+              },
+              "fieldName": {
+                "type": "string",
+                "default": ""
+              },
+              "fieldType": {
+                "type": "options",
+                "default": "text",
+                "enumValues": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ]
+              },
+              "elementName": {
+                "type": "string",
+                "default": ""
+              },
+              "placeholder": {
+                "type": "string",
+                "default": ""
+              },
+              "fieldValue": {
+                "type": "string",
+                "default": ""
+              },
+              "fieldOptions": {
+                "type": "fixedCollection",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "properties": {
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "option": {
+                        "type": "string",
+                        "default": ""
+                      }
+                    }
+                  }
+                },
+                "requiredProperties": []
+              },
+              "multiselectLegacyNotice": {
+                "type": "notice",
+                "default": ""
+              },
+              "multiselect": {
+                "type": "boolean",
+                "default": false
+              },
+              "limitSelection": {
+                "type": "options",
+                "default": "unlimited",
+                "enumValues": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "type": "number",
+                "default": 1,
+                "minValue": 1
+              },
+              "minSelections": {
+                "type": "number",
+                "default": 0,
+                "minValue": 0
+              },
+              "maxSelections": {
+                "type": "number",
+                "default": 1,
+                "minValue": 1
+              },
+              "html": {
+                "type": "string",
+                "default": "<!-- Your custom HTML here --->\n\n\n"
+              },
+              "multipleFiles": {
+                "type": "boolean",
+                "default": true
+              },
+              "acceptFileTypes": {
+                "type": "string",
+                "default": ""
+              },
+              "formatDate": {
+                "type": "notice",
+                "default": ""
+              },
+              "requiredField": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        },
+        "requiredProperties": [
+          "values.fieldLabel",
+          "values.fieldType",
+          "values.fieldOptions",
+          "values.fieldOptions",
+          "values.fieldOptions"
+        ]
+      }
+    },
+    {
+      "field": "responseMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "onReceived",
+        "enumValues": [
+          "onReceived",
+          "lastNode",
+          "responseNode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "onReceived",
+        "enumValues": [
+          "onReceived",
+          "lastNode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.2
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "formNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "addFormPage",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      }
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "none",
+    "path": "",
+    "formTitle": "",
+    "formDescription": "",
+    "formFields": {},
+    "responseMode": "onReceived",
+    "formNotice": "",
+    "addFormPage": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "path",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.2
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "formNotice",
+      "condition": {
+        "show": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseMode"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "formFields",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "fieldLabel",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "hide": {
+                "fieldType": [
+                  "hiddenField",
+                  "html"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldName",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "hiddenField"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldType",
+            "type": "options",
+            "required": true,
+            "constraints": {
+              "type": "options",
+              "default": "text",
+              "enumValues": [
+                "checkbox",
+                "html",
+                "date",
+                "dropdown",
+                "email",
+                "file",
+                "hiddenField",
+                "number",
+                "password",
+                "radio",
+                "text",
+                "textarea"
+              ]
+            }
+          },
+          {
+            "field": "elementName",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "html"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "placeholder",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "hide": {
+                "fieldType": [
+                  "dropdown",
+                  "date",
+                  "file",
+                  "html",
+                  "hiddenField",
+                  "radio",
+                  "checkbox"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "hiddenField"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldOptions",
+            "type": "fixedCollection",
+            "required": true,
+            "constraints": {
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "properties": {
+                "values": {
+                  "type": "object",
+                  "properties": {
+                    "option": {
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              },
+              "requiredProperties": []
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "dropdown"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldOptions",
+            "type": "fixedCollection",
+            "required": true,
+            "constraints": {
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "properties": {
+                "values": {
+                  "type": "object",
+                  "properties": {
+                    "option": {
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              },
+              "requiredProperties": []
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "checkbox"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "fieldOptions",
+            "type": "fixedCollection",
+            "required": true,
+            "constraints": {
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "properties": {
+                "values": {
+                  "type": "object",
+                  "properties": {
+                    "option": {
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              },
+              "requiredProperties": []
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "radio"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "multiselectLegacyNotice",
+            "type": "notice",
+            "required": false,
+            "constraints": {
+              "type": "notice",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "multiselect": [
+                  true
+                ],
+                "fieldType": [
+                  "dropdown"
+                ],
+                "@version": [
+                  {
+                    "_cnd": {
+                      "lt": 2.3
+                    }
+                  }
+                ]
+              }
+            },
+            "dependsOn": [
+              "multiselect",
+              "fieldType",
+              "@version"
+            ]
+          },
+          {
+            "field": "multiselect",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "dropdown"
+                ],
+                "@version": [
+                  {
+                    "_cnd": {
+                      "lt": 2.3
+                    }
+                  }
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType",
+              "@version"
+            ]
+          },
+          {
+            "field": "limitSelection",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "unlimited",
+              "enumValues": [
+                "exact",
+                "range",
+                "unlimited"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "checkbox"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "numberOfSelections",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "checkbox"
+                ],
+                "limitSelection": [
+                  "exact"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType",
+              "limitSelection"
+            ]
+          },
+          {
+            "field": "minSelections",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0,
+              "minValue": 0
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "checkbox"
+                ],
+                "limitSelection": [
+                  "range"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType",
+              "limitSelection"
+            ]
+          },
+          {
+            "field": "maxSelections",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "checkbox"
+                ],
+                "limitSelection": [
+                  "range"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType",
+              "limitSelection"
+            ]
+          },
+          {
+            "field": "html",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": "<!-- Your custom HTML here --->\n\n\n"
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "html"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "multipleFiles",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": true
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "file"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "acceptFileTypes",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "file"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "formatDate",
+            "type": "notice",
+            "required": false,
+            "constraints": {
+              "type": "notice",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "fieldType": [
+                  "date"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          },
+          {
+            "field": "requiredField",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            },
+            "displayOptions": {
+              "hide": {
+                "fieldType": [
+                  "html",
+                  "hiddenField"
+                ]
+              }
+            },
+            "dependsOn": [
+              "fieldType"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,525 @@
+{
+  "name": "demio",
+  "displayName": "Demio",
+  "description": "Consume the Demio API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "event",
+    "operation": "get",
+    "returnAll": false,
+    "limit": 100,
+    "filters": {},
+    "eventId": "",
+    "additionalFields": {},
+    "firstName": "",
+    "email": "",
+    "dateId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "event",
+      "options": [
+        {
+          "name": "Event",
+          "value": "event"
+        },
+        {
+          "name": "Report",
+          "value": "report"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an event",
+          "action": "Get an event"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many events",
+          "action": "Get many events"
+        },
+        {
+          "name": "Register",
+          "value": "register",
+          "description": "Register someone to an event",
+          "action": "Register an event"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Type",
+          "name": "type",
+          "type": "options",
+          "options": [
+            {
+              "name": "Automated",
+              "value": "automated"
+            },
+            {
+              "name": "Past",
+              "value": "past"
+            },
+            {
+              "name": "Upcoming",
+              "value": "upcoming"
+            }
+          ],
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "eventId",
+      "displayName": "Event ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "active",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to return only active dates in series"
+        },
+        {
+          "displayName": "Session ID",
+          "name": "date_id",
+          "type": "string",
+          "default": "",
+          "description": "Event Date ID"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "eventId",
+      "displayName": "Event Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getEvents"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      }
+    },
+    {
+      "name": "firstName",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The registrant's first name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The registrant's email address",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Company",
+          "name": "company",
+          "type": "string",
+          "default": "",
+          "description": "The value for the predefined Company field"
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Field",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "customFieldsValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field ID",
+                  "name": "fieldId",
+                  "type": "string",
+                  "default": "",
+                  "description": "Each custom field's unique identifier can be found within the Event's Registration block in the Customize tab"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "The value to set on custom field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Event Registration URL",
+          "name": "ref_url",
+          "type": "string",
+          "default": "",
+          "description": "Event Registration page URL. It can be useful when you do not know Event ID, but have Event link."
+        },
+        {
+          "displayName": "GDPR",
+          "name": "gdpr",
+          "type": "string",
+          "default": "",
+          "description": "The value for the predefined GDPR field"
+        },
+        {
+          "displayName": "Last Name",
+          "name": "last_name",
+          "type": "string",
+          "default": "",
+          "description": "The value for the predefined Last Name field"
+        },
+        {
+          "displayName": "Phone Number",
+          "name": "phone_number",
+          "type": "string",
+          "default": "",
+          "description": "The value for the predefined Phone Number field"
+        },
+        {
+          "displayName": "Session Name or ID",
+          "name": "date_id",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getEventSessions",
+            "loadOptionsDependsOn": [
+              "eventId"
+            ]
+          },
+          "default": "",
+          "description": "Event Session ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": "",
+          "description": "The value for the predefined Website field"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an event report",
+          "action": "Get a report"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "eventId",
+      "displayName": "Event Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getEvents"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dateId",
+      "displayName": "Session Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the session. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getEventSessions",
+        "loadOptionsDependsOn": [
+          "eventId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Attended",
+              "value": "attended"
+            },
+            {
+              "name": "Banned",
+              "value": "banned"
+            },
+            {
+              "name": "Completed",
+              "value": "completed"
+            },
+            {
+              "name": "Did Not Attend",
+              "value": "did-not-attend"
+            },
+            {
+              "name": "Left Early",
+              "value": "left-early"
+            }
+          ],
+          "default": "",
+          "description": "Filter results by participation status"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "demioApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "eventId",
+    "firstName",
+    "email",
+    "dateId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "additionalFields",
+    "eventId",
+    "additionalFields",
+    "operation",
+    "eventId",
+    "filters"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "eventId": "options",
+    "additionalFields": "collection",
+    "firstName": "string",
+    "email": "string",
+    "dateId": "options"
+  },
+  "hasVersions": false
+}

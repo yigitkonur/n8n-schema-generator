@@ -1,0 +1,136 @@
+{
+  "name": "getResponseTrigger",
+  "displayName": "GetResponse Trigger",
+  "description": "Starts the workflow when GetResponse events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "apiKey",
+    "events": [],
+    "listIds": [],
+    "options": {}
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiKey",
+      "options": [
+        {
+          "name": "API Key",
+          "value": "apiKey"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "events",
+      "displayName": "Events",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "options": [
+        {
+          "name": "Customer Subscribed",
+          "value": "subscribe",
+          "description": "Receive notifications when a customer is subscribed to a list"
+        },
+        {
+          "name": "Customer Unsubscribed",
+          "value": "unsubscribe",
+          "description": "Receive notifications when a customer is unsubscribed from a list"
+        },
+        {
+          "name": "Email Clicked",
+          "value": "click",
+          "description": "Receive notifications when a email is clicked"
+        },
+        {
+          "name": "Email Opened",
+          "value": "open",
+          "description": "Receive notifications when a email is opened"
+        },
+        {
+          "name": "Survey Submitted",
+          "value": "survey",
+          "description": "Receive notifications when a survey is submitted"
+        }
+      ]
+    },
+    {
+      "name": "listIds",
+      "displayName": "List Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delete Current Subscription",
+          "name": "delete",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to delete the current subscription"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "getResponseApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getResponseOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "events"
+  ],
+  "optionalFields": [
+    "authentication",
+    "listIds",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "events": "multiOptions",
+    "listIds": "multiOptions",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

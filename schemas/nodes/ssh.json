@@ -1,0 +1,295 @@
+{
+  "name": "ssh",
+  "displayName": "SSH",
+  "description": "Execute commands via SSH",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "password",
+    "resource": "command",
+    "operation": "execute",
+    "command": "",
+    "cwd": "/",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "password",
+      "options": [
+        {
+          "name": "Password",
+          "value": "password"
+        },
+        {
+          "name": "Private Key",
+          "value": "privateKey"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "command",
+      "options": [
+        {
+          "name": "Command",
+          "value": "command"
+        },
+        {
+          "name": "File",
+          "value": "file"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "execute",
+      "options": [
+        {
+          "name": "Execute",
+          "value": "execute",
+          "description": "Execute a command",
+          "action": "Execute a command"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "command"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "command",
+      "displayName": "Command",
+      "type": "string",
+      "default": "",
+      "description": "The command to be executed on a remote device",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "command"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "cwd",
+      "displayName": "Working Directory",
+      "type": "string",
+      "default": "/",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "command"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "upload",
+      "options": [
+        {
+          "name": "Download",
+          "value": "download",
+          "description": "Download a file",
+          "action": "Download a file"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload a file",
+          "action": "Upload a file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be uploaded"
+    },
+    {
+      "name": "path",
+      "displayName": "Target Directory",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The directory to upload the file to. The name of the file does not need to be specified, it's taken from the binary data file name. To override this behavior, set the parameter \"File Name\" under options.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "/home/user"
+    },
+    {
+      "name": "path",
+      "displayName": "Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to download. Has to contain the full path including file name.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "/home/user/invoice.txt"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "File Property",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Object property name which holds binary data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "description": "Overrides the binary data file name"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload",
+            "download"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "sshPassword",
+      "required": true,
+      "testedBy": "sshConnectionTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "password"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sshPrivateKey",
+      "required": true,
+      "testedBy": "sshConnectionTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "privateKey"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "cwd",
+    "binaryPropertyName",
+    "path",
+    "path",
+    "binaryPropertyName"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "command",
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "command": "string",
+    "cwd": "string",
+    "binaryPropertyName": "string",
+    "path": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

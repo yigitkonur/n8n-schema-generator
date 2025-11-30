@@ -1,0 +1,473 @@
+{
+  "nodeType": "n8n-nodes-base.npm",
+  "displayName": "Npm",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "packageName",
+    "packageVersion",
+    "query",
+    "limit",
+    "offset",
+    "operation",
+    "packageName",
+    "packageVersion",
+    "distTagName"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "package",
+        "enumValues": [
+          "package",
+          "distTag"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getMetadata",
+        "enumValues": [
+          "getMetadata",
+          "getVersions",
+          "search"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "packageName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "getMetadata",
+            "getVersions"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "packageVersion",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "latest"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "getMetadata"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 10,
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "offset",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 0,
+        "minValue": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getMany",
+        "enumValues": [
+          "getMany",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "packageName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "getMany",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "packageVersion",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "distTagName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "latest"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "package",
+    "operation": "getMetadata",
+    "packageName": "",
+    "packageVersion": "latest",
+    "query": "",
+    "limit": 10,
+    "offset": 0,
+    "distTagName": "latest"
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "packageName",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "getMetadata",
+            "getVersions"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "packageVersion",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "getMetadata"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "offset",
+      "condition": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "distTag"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "packageName",
+      "condition": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "getMany",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "packageVersion",
+      "condition": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "distTagName",
+      "condition": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "package": {
+      "operations": [
+        "getMetadata",
+        "getVersions",
+        "search"
+      ],
+      "fieldsPerOperation": {
+        "getMetadata": [
+          "packageName",
+          "packageVersion"
+        ],
+        "getVersions": [
+          "packageName"
+        ],
+        "search": [
+          "query",
+          "limit",
+          "offset"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

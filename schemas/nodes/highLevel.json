@@ -1,0 +1,2710 @@
+{
+  "name": "highLevel",
+  "displayName": "HighLevel",
+  "description": "Consume HighLevel API v2",
+  "group": [
+    "transform"
+  ],
+  "version": 2,
+  "defaults": {
+    "resource": "contact",
+    "operation": "create",
+    "contactCreateNotice": "",
+    "email": "",
+    "phone": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "filters": {},
+    "options": {},
+    "pipelineId": "",
+    "name": "",
+    "status": "open",
+    "title": "",
+    "dueDate": "",
+    "completed": false,
+    "locationId": "",
+    "startTime": "",
+    "startDate": "",
+    "endDate": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "required": true,
+      "options": [
+        {
+          "name": "Contact",
+          "value": "contact"
+        },
+        {
+          "name": "Opportunity",
+          "value": "opportunity"
+        },
+        {
+          "name": "Task",
+          "value": "task"
+        },
+        {
+          "name": "Calendar",
+          "value": "calendar"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create or Update",
+          "value": "create",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/contacts/upsert/"
+            },
+            "send": {
+              "preSend": [
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "contact"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Create or update a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/contacts/{{$parameter.contactId}}/"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"success\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/contacts/{{$parameter.contactId}}/"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "contact"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/contacts/"
+            },
+            "send": {
+              "preSend": [
+                null
+              ],
+              "paginate": true
+            }
+          },
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "routing": {
+            "request": {
+              "method": "PUT",
+              "url": "=/contacts/{{$parameter.contactId}}/"
+            },
+            "send": {
+              "preSend": [
+                null,
+                null
+              ]
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "contact"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactCreateNotice",
+      "displayName": "Create a new contact or update an existing one if email or phone matches (upsert)",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "description": "Email or Phone are required to create contact",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "name@email.com",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "email"
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "displayName": "Phone",
+      "type": "string",
+      "default": "",
+      "description": "Phone or Email are required to create contact. Phone number has to start with a valid <a href=\"https://en.wikipedia.org/wiki/List_of_country_calling_codes\">country code</a> leading with + sign.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "+491234567890",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "phone"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address1",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "address1"
+            }
+          }
+        },
+        {
+          "displayName": "City",
+          "name": "city",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "city"
+            }
+          }
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFields",
+          "placeholder": "Add Field",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "values",
+              "displayName": "Value",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "required": true,
+                  "type": "resourceLocator",
+                  "default": "",
+                  "description": "Choose from the list, or specify an ID using an expression",
+                  "modes": [
+                    {
+                      "displayName": "List",
+                      "name": "list",
+                      "type": "list",
+                      "typeOptions": {
+                        "searchListMethod": "searchCustomFields",
+                        "searchable": true
+                      }
+                    },
+                    {
+                      "displayName": "ID",
+                      "name": "id",
+                      "type": "string",
+                      "placeholder": "Enter Custom Field ID"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "type": "body",
+                      "property": "customFields",
+                      "value": "={{ $parent.values.map(field => ({ fieldId: { id: field.fieldId.id }, field_value: field.fieldValue })) }}"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "customFields"
+            }
+          }
+        },
+        {
+          "displayName": "Do Not Disturb",
+          "name": "dnd",
+          "description": "Whether automated/manual outbound messages are permitted to go out or not. True means NO outbound messages are permitted.",
+          "type": "boolean",
+          "default": false,
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "dnd"
+            }
+          }
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "firstName"
+            }
+          }
+        },
+        {
+          "displayName": "Last Name",
+          "name": "lastName",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "lastName"
+            }
+          }
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "e.g. John Deo",
+          "description": "The full name of the contact, will be overwritten by 'First Name' and 'Last Name' if set",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "name"
+            }
+          }
+        },
+        {
+          "displayName": "Postal Code",
+          "name": "postalCode",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "postalCode"
+            }
+          }
+        },
+        {
+          "displayName": "Source",
+          "name": "source",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. Public API",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "source"
+            }
+          }
+        },
+        {
+          "displayName": "State",
+          "name": "state",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "state"
+            }
+          }
+        },
+        {
+          "displayName": "Note",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "hint": "Comma separated list of tags, array of strings can be set in expression",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "tags"
+            }
+          }
+        },
+        {
+          "displayName": "Timezone",
+          "name": "timezone",
+          "placeholder": "Select Timezone",
+          "type": "resourceLocator",
+          "default": "",
+          "description": "Choose from the list, or specify a timezone using an expression",
+          "modes": [
+            {
+              "displayName": "List",
+              "name": "list",
+              "type": "list",
+              "typeOptions": {
+                "searchListMethod": "searchTimezones",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "Enter Timezone ID"
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "timezone"
+            }
+          }
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "website"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address1",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "address1"
+            }
+          }
+        },
+        {
+          "displayName": "City",
+          "name": "city",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "city"
+            }
+          }
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFields",
+          "placeholder": "Add Field",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "values",
+              "displayName": "Value",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "required": true,
+                  "type": "resourceLocator",
+                  "default": "",
+                  "description": "Choose from the list, or specify an ID using an expression",
+                  "modes": [
+                    {
+                      "displayName": "List",
+                      "name": "list",
+                      "type": "list",
+                      "typeOptions": {
+                        "searchListMethod": "searchCustomFields",
+                        "searchable": true
+                      }
+                    },
+                    {
+                      "displayName": "ID",
+                      "name": "id",
+                      "type": "string",
+                      "placeholder": "Enter Custom Field ID"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "type": "body",
+                      "property": "customFields",
+                      "value": "={{ $parent.values.map(field => ({ fieldId: { id: field.fieldId.id }, field_value: field.fieldValue })) }}"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "customFields"
+            }
+          }
+        },
+        {
+          "displayName": "Do Not Disturb",
+          "name": "dnd",
+          "description": "Whether automated/manual outbound messages are permitted to go out or not. True means NO outbound messages are permitted.",
+          "type": "boolean",
+          "default": false,
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "dnd"
+            }
+          }
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "email"
+            }
+          }
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "firstName"
+            }
+          }
+        },
+        {
+          "displayName": "Last Name",
+          "name": "lastName",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "lastName"
+            }
+          }
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "description": "The full name of the contact, will be overwritten by 'First Name' and 'Last Name' if set",
+          "default": "e.g. John Deo",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "name"
+            }
+          }
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": "",
+          "description": "Phone number has to start with a valid <a href=\"https://en.wikipedia.org/wiki/List_of_country_calling_codes\">country code</a> leading with + sign",
+          "placeholder": "+491234567890",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "phone"
+            }
+          }
+        },
+        {
+          "displayName": "Postal Code",
+          "name": "postalCode",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "postalCode"
+            }
+          }
+        },
+        {
+          "displayName": "State",
+          "name": "state",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "state"
+            }
+          }
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "hint": "Comma separated list of tags, array of strings can be set in expression",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "tags"
+            }
+          }
+        },
+        {
+          "displayName": "Timezone",
+          "name": "timezone",
+          "placeholder": "Select Timezone",
+          "type": "resourceLocator",
+          "default": "",
+          "description": "Choose from the list, or specify a timezone using an expression",
+          "modes": [
+            {
+              "displayName": "List",
+              "name": "list",
+              "type": "list",
+              "typeOptions": {
+                "searchListMethod": "searchTimezones",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "Enter Timezone ID"
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "timezone"
+            }
+          }
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "website"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "query",
+          "property": "limit"
+        },
+        "output": {
+          "maxResults": "={{$value}}"
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "description": "Query will search on these fields: Name, Phone, Email, Tags, and Company Name",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "query"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "options",
+          "options": [
+            {
+              "name": "Descending",
+              "value": "desc"
+            },
+            {
+              "name": "Ascending",
+              "value": "asc"
+            }
+          ],
+          "default": "desc",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "order"
+            }
+          }
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sortBy",
+          "type": "options",
+          "options": [
+            {
+              "name": "Date Added",
+              "value": "date_added"
+            },
+            {
+              "name": "Date Updated",
+              "value": "date_updated"
+            }
+          ],
+          "default": "date_added",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "sortBy"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "description": "Lookup Contact by Email. If Email is not found it will try to find a contact by phone.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "phone",
+      "displayName": "Phone",
+      "type": "string",
+      "default": "",
+      "description": "Lookup Contact by Phone. It will first try to find a contact by Email and than by Phone.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "routing": {
+            "send": {
+              "preSend": [
+                null,
+                null
+              ]
+            },
+            "request": {
+              "method": "POST",
+              "url": "/opportunities/"
+            }
+          },
+          "action": "Create an opportunity"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/opportunities/{{$parameter.opportunityId}}"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"success\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete an opportunity"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/opportunities/{{$parameter.opportunityId}}"
+            }
+          },
+          "action": "Get an opportunity"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/opportunities/search"
+            },
+            "send": {
+              "preSend": [
+                null
+              ],
+              "paginate": true
+            }
+          },
+          "action": "Get many opportunities"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "routing": {
+            "request": {
+              "method": "PUT",
+              "url": "=/opportunities/{{$parameter.opportunityId}}"
+            }
+          },
+          "action": "Update an opportunity"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "pipelineId",
+      "displayName": "Pipeline Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getPipelines"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "pipelineId"
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "hint": "There can only be one opportunity for each contact",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "contactId"
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "name"
+        }
+      }
+    },
+    {
+      "name": "status",
+      "displayName": "Status",
+      "type": "options",
+      "default": "open",
+      "required": true,
+      "options": [
+        {
+          "name": "Open",
+          "value": "open"
+        },
+        {
+          "name": "Won",
+          "value": "won"
+        },
+        {
+          "name": "Lost",
+          "value": "lost"
+        },
+        {
+          "name": "Abandoned",
+          "value": "abandoned"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "status"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "assignedTo"
+            }
+          }
+        },
+        {
+          "displayName": "Company Name",
+          "name": "companyName",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "companyName"
+            }
+          }
+        },
+        {
+          "displayName": "Monetary Value",
+          "name": "monetaryValue",
+          "type": "number",
+          "default": "",
+          "description": "Monetary value of lead opportunity",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "monetaryValue"
+            }
+          }
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "hint": "Comma separated list of tags, array of strings can be set in expression",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "tags"
+            }
+          }
+        },
+        {
+          "displayName": "Stage Name or ID",
+          "name": "stageId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "/pipelineId"
+            ],
+            "loadOptionsMethod": "getPipelineStages"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "pipelineStageId"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "hint": "You cannot update an opportunity's pipeline ID."
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "assignedTo"
+            }
+          }
+        },
+        {
+          "displayName": "Monetary Value",
+          "name": "monetaryValue",
+          "type": "number",
+          "default": "",
+          "description": "Monetary value of lead opportunity",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "monetaryValue"
+            }
+          }
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. John Deo",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "name"
+            }
+          }
+        },
+        {
+          "displayName": "Pipeline Name or ID",
+          "name": "pipelineId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getPipelines"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "pipelineId"
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Stage Name or ID",
+          "name": "stageId",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "hint": "Select 'Pipeline Name or ID' first to see stages",
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "pipelineId"
+            ],
+            "loadOptionsMethod": "getPipelineStages"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "pipelineStageId"
+            }
+          }
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Open",
+              "value": "open"
+            },
+            {
+              "name": "Won",
+              "value": "won"
+            },
+            {
+              "name": "Lost",
+              "value": "lost"
+            },
+            {
+              "name": "Abandoned",
+              "value": "abandoned"
+            }
+          ],
+          "default": "open",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "status"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "query",
+          "property": "limit"
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "assigned_to"
+            }
+          }
+        },
+        {
+          "displayName": "Campaign ID",
+          "name": "campaignId",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "campaignId"
+            }
+          }
+        },
+        {
+          "displayName": "End Date",
+          "name": "endDate",
+          "type": "dateTime",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "endDate",
+              "preSend": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Pipeline Name or ID",
+          "name": "pipelineId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getPipelines"
+          },
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "pipeline_id"
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Stage Name or ID",
+          "name": "stageId",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "hint": "Select 'Pipeline Name or ID' first to see stages",
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "pipelineId"
+            ],
+            "loadOptionsMethod": "getPipelineStages"
+          },
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "pipeline_stage_id"
+            }
+          }
+        },
+        {
+          "displayName": "Start Date",
+          "name": "startDate",
+          "type": "dateTime",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "date",
+              "preSend": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Open",
+              "value": "open"
+            },
+            {
+              "name": "Won",
+              "value": "won"
+            },
+            {
+              "name": "Lost",
+              "value": "lost"
+            },
+            {
+              "name": "Abandoned",
+              "value": "abandoned"
+            }
+          ],
+          "default": "open",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "status"
+            }
+          }
+        },
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "description": "Query will search on these fields: Name, Phone, Email, Tags, and Company Name",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "q"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/contacts/{{$parameter.contactId}}/tasks/"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create a task"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/contacts/{{$parameter.contactId}}/tasks/{{$parameter.taskId}}/"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"success\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete a task"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/contacts/{{$parameter.contactId}}/tasks/{{$parameter.taskId}}/"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get a task"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/contacts/{{$parameter.contactId}}/tasks/"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "tasks"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Get many tasks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "routing": {
+            "request": {
+              "method": "PUT",
+              "url": "=/contacts/{{$parameter.contactId}}/tasks/{{$parameter.taskId}}/"
+            },
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Update a task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Contact the task belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "title"
+        }
+      }
+    },
+    {
+      "name": "dueDate",
+      "displayName": "Due Date",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "dueDate",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "completed",
+      "displayName": "Completed",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "completed"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "assignedTo"
+            }
+          }
+        },
+        {
+          "displayName": "Body",
+          "name": "body",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "body"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Contact the task belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "options",
+          "default": "",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "assignedTo"
+            }
+          }
+        },
+        {
+          "displayName": "Completed",
+          "name": "completed",
+          "type": "boolean",
+          "default": false,
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "completed"
+            }
+          }
+        },
+        {
+          "displayName": "Body",
+          "name": "body",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "body"
+            }
+          }
+        },
+        {
+          "displayName": "Due Date",
+          "name": "dueDate",
+          "type": "dateTime",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "dueDate",
+              "preSend": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "title"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Contact the task belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Contact the task belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact Email or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Contact the task belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getContacts"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "query",
+          "property": "limit"
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "bookAppointment",
+      "options": [
+        {
+          "name": "Book Appointment",
+          "value": "bookAppointment",
+          "action": "Book appointment in a calendar",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/calendars/events/appointments"
+            }
+          }
+        },
+        {
+          "name": "Get Free Slots",
+          "value": "getFreeSlots",
+          "action": "Get free slots of a calendar",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/calendars/{{$parameter.calendarId}}/free-slots"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "calendarId",
+      "displayName": "Calendar ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "bookAppointment"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "calendarId"
+        }
+      }
+    },
+    {
+      "name": "locationId",
+      "displayName": "Location ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "bookAppointment"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "locationId"
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "bookAppointment"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "contactId"
+        }
+      }
+    },
+    {
+      "name": "startTime",
+      "displayName": "Start Time",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Example: 2021-06-23T03:30:00+05:30",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "bookAppointment"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "startTime"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "End Time",
+          "name": "endTime",
+          "type": "string",
+          "description": "Example: 2021-06-23T04:30:00+05:30",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "endTime"
+            }
+          }
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "title"
+            }
+          }
+        },
+        {
+          "displayName": "Appointment Status",
+          "name": "appointmentStatus",
+          "type": "options",
+          "default": "new",
+          "description": "The status of the appointment. Allowed values: new, confirmed, cancelled, showed, noshow, invalid.",
+          "options": [
+            {
+              "name": "Cancelled",
+              "value": "cancelled"
+            },
+            {
+              "name": "Confirmed",
+              "value": "confirmed"
+            },
+            {
+              "name": "Invalid",
+              "value": "invalid"
+            },
+            {
+              "name": "New",
+              "value": "new"
+            },
+            {
+              "name": "No Show",
+              "value": "noshow"
+            },
+            {
+              "name": "Showed",
+              "value": "showed"
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "appointmentStatus"
+            }
+          }
+        },
+        {
+          "displayName": "Assigned User ID",
+          "name": "assignedUserId",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "assignedUserId"
+            }
+          }
+        },
+        {
+          "displayName": "Address",
+          "name": "address",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "address"
+            }
+          }
+        },
+        {
+          "displayName": "Ignore Date Range",
+          "name": "ignoreDateRange",
+          "type": "boolean",
+          "default": false,
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "ignoreDateRange"
+            }
+          }
+        },
+        {
+          "displayName": "Notify",
+          "name": "toNotify",
+          "type": "boolean",
+          "default": true,
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "toNotify"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "bookAppointment"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "calendarId",
+      "displayName": "Calendar ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "getFreeSlots"
+          ]
+        }
+      }
+    },
+    {
+      "name": "startDate",
+      "displayName": "Start Date",
+      "type": "number",
+      "default": "",
+      "required": true,
+      "description": "The start date for fetching free calendar slots. Example: 1548898600000.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "getFreeSlots"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "query",
+          "property": "startDate"
+        }
+      }
+    },
+    {
+      "name": "endDate",
+      "displayName": "End Date",
+      "type": "number",
+      "default": "",
+      "required": true,
+      "description": "The end date for fetching free calendar slots. Example: 1601490599999.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "getFreeSlots"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "query",
+          "property": "endDate"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Timezone",
+          "name": "timezone",
+          "type": "string",
+          "default": "",
+          "description": "The timezone to use for the returned slots. Example: America/Chihuahua.",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "timezone"
+            }
+          }
+        },
+        {
+          "displayName": "User ID",
+          "name": "userId",
+          "type": "string",
+          "default": "",
+          "description": "User ID to filter the slots (optional)",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "userId"
+            }
+          }
+        },
+        {
+          "displayName": "User IDs",
+          "name": "userIds",
+          "type": "collection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "User IDs",
+              "name": "userIds",
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of user IDs to filter the slots",
+              "routing": {
+                "send": {
+                  "type": "query",
+                  "property": "userIds"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "displayName": "Apply Look Busy",
+          "name": "enableLookBusy",
+          "type": "boolean",
+          "default": false,
+          "description": "Apply Look Busy to the slots",
+          "routing": {
+            "send": {
+              "type": "query",
+              "property": "enableLookBusy"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "getFreeSlots"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "highLevelOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "contactId",
+    "contactId",
+    "contactId",
+    "contactId",
+    "name",
+    "status",
+    "opportunityId",
+    "opportunityId",
+    "opportunityId",
+    "contactId",
+    "title",
+    "dueDate",
+    "completed",
+    "contactId",
+    "taskId",
+    "contactId",
+    "taskId",
+    "contactId",
+    "taskId",
+    "contactId",
+    "calendarId",
+    "locationId",
+    "contactId",
+    "startTime",
+    "calendarId",
+    "startDate",
+    "endDate"
+  ],
+  "optionalFields": [
+    "operation",
+    "contactCreateNotice",
+    "email",
+    "phone",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "options",
+    "email",
+    "phone",
+    "operation",
+    "pipelineId",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "contactCreateNotice": "notice",
+    "email": "string",
+    "phone": "string",
+    "additionalFields": "collection",
+    "contactId": "string",
+    "updateFields": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "options": "collection",
+    "pipelineId": "options",
+    "name": "string",
+    "status": "options",
+    "opportunityId": "string",
+    "title": "string",
+    "dueDate": "dateTime",
+    "completed": "boolean",
+    "taskId": "string",
+    "calendarId": "string",
+    "locationId": "string",
+    "startTime": "string",
+    "startDate": "number",
+    "endDate": "number"
+  },
+  "hasVersions": false
+}

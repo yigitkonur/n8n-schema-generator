@@ -1,0 +1,1993 @@
+{
+  "nodeType": "n8n-nodes-base.googleAnalytics",
+  "displayName": "Google Analytics",
+  "version": 2,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "propertyType",
+    "propertyId",
+    "dateRange",
+    "startDate",
+    "endDate",
+    "metricsGA4",
+    "dimensionsGA4",
+    "returnAll",
+    "limit",
+    "simple",
+    "additionalFields",
+    "viewId",
+    "dateRange",
+    "startDate",
+    "endDate",
+    "metricsUA",
+    "dimensionsUA",
+    "returnAll",
+    "limit",
+    "simple",
+    "additionalFields",
+    "operation",
+    "viewId",
+    "userId",
+    "returnAll",
+    "limit",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "report",
+        "enumValues": [
+          "report",
+          "userActivity"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "propertyType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "ga4",
+        "enumValues": [
+          "ga4",
+          "universal"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "propertyId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dateRange",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "last7days",
+        "enumValues": [
+          "last7days",
+          "last30days",
+          "today",
+          "yesterday",
+          "lastCalendarWeek",
+          "lastCalendarMonth",
+          "custom"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "startDate",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "2025-11-22T00:00:00.000-08:00"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "dateRange": [
+            "custom"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dateRange",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "endDate",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "2025-11-29T00:00:00.000-08:00"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "dateRange": [
+            "custom"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dateRange",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "metricsGA4",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "metricValues": [
+            {
+              "listName": "totalUsers"
+            }
+          ]
+        },
+        "properties": {
+          "metricValues": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "type": "options",
+                "default": "totalUsers",
+                "enumValues": [
+                  "active1DayUsers",
+                  "active28DayUsers",
+                  "active7DayUsers",
+                  "checkouts",
+                  "eventCount",
+                  "screenPageViews",
+                  "userEngagementDuration",
+                  "sessions",
+                  "sessionsPerUser",
+                  "totalUsers",
+                  "other",
+                  "custom"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "default": "custom_metric"
+              },
+              "expression": {
+                "type": "string",
+                "default": ""
+              },
+              "invisible": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dimensionsGA4",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "dimensionValues": [
+            {
+              "listName": "date"
+            }
+          ]
+        },
+        "properties": {
+          "dimensionValues": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "type": "options",
+                "default": "date",
+                "enumValues": [
+                  "browser",
+                  "campaignName",
+                  "city",
+                  "country",
+                  "date",
+                  "deviceCategory",
+                  "itemName",
+                  "language",
+                  "pageLocation",
+                  "sourceMedium",
+                  "other"
+                ]
+              },
+              "name": {
+                "type": "options",
+                "default": "date"
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "viewId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dateRange",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "last7days",
+        "enumValues": [
+          "last7days",
+          "last30days",
+          "today",
+          "yesterday",
+          "lastCalendarWeek",
+          "lastCalendarMonth",
+          "custom"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "startDate",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "2025-11-22T00:00:00.000-08:00"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType",
+        "dateRange"
+      ]
+    },
+    {
+      "field": "endDate",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "2025-11-29T00:00:00.000-08:00"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType",
+        "dateRange"
+      ]
+    },
+    {
+      "field": "metricsUA",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "metricValues": [
+            {
+              "listName": "ga:users"
+            }
+          ]
+        },
+        "properties": {
+          "metricValues": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "type": "options",
+                "default": "ga:users",
+                "enumValues": [
+                  "ga:productCheckouts",
+                  "ga:totalEvents",
+                  "ga:pageviews",
+                  "ga:sessionDuration",
+                  "ga:sessions",
+                  "ga:sessionsPerUser",
+                  "ga:users",
+                  "other",
+                  "custom"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "default": "custom_metric"
+              },
+              "expression": {
+                "type": "string",
+                "default": ""
+              },
+              "formattingType": {
+                "type": "options",
+                "default": "INTEGER",
+                "enumValues": [
+                  "CURRENCY",
+                  "FLOAT",
+                  "INTEGER",
+                  "PERCENT",
+                  "TIME"
+                ]
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dimensionsUA",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "dimensionValues": [
+            {
+              "listName": "ga:date"
+            }
+          ]
+        },
+        "properties": {
+          "dimensionValues": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "type": "options",
+                "default": "ga:date",
+                "enumValues": [
+                  "ga:browser",
+                  "ga:campaign",
+                  "ga:city",
+                  "ga:country",
+                  "ga:date",
+                  "ga:deviceCategory",
+                  "ga:productName",
+                  "ga:language",
+                  "ga:pagePath",
+                  "ga:sourceMedium",
+                  "other"
+                ]
+              },
+              "name": {
+                "type": "options",
+                "default": "ga:date"
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "search",
+        "enumValues": [
+          "search"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "viewId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "userId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "report",
+    "operation": "get",
+    "propertyType": "ga4",
+    "propertyId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "dateRange": "last7days",
+    "metricsGA4": {
+      "metricValues": [
+        {
+          "listName": "totalUsers",
+          "expression": "",
+          "invisible": false
+        }
+      ]
+    },
+    "dimensionsGA4": {
+      "dimensionValues": [
+        {
+          "listName": "date",
+          "name": "date"
+        }
+      ]
+    },
+    "returnAll": false,
+    "limit": 50,
+    "simple": true,
+    "additionalFields": {},
+    "metricsUA": {
+      "metricValues": [
+        {
+          "listName": "ga:users",
+          "expression": "",
+          "formattingType": "INTEGER"
+        }
+      ]
+    },
+    "dimensionsUA": {
+      "dimensionValues": [
+        {
+          "listName": "ga:date",
+          "name": "ga:date"
+        }
+      ]
+    },
+    "userId": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "propertyType",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "propertyId",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dateRange",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "startDate",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "dateRange": [
+            "custom"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dateRange",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "endDate",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "dateRange": [
+            "custom"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dateRange",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "metricsGA4",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dimensionsGA4",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "viewId",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dateRange",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "startDate",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType",
+        "dateRange"
+      ]
+    },
+    {
+      "field": "endDate",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType",
+        "dateRange"
+      ]
+    },
+    {
+      "field": "metricsUA",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "dimensionsUA",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "propertyType"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "viewId",
+      "condition": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "userId",
+      "condition": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "report": {
+      "operations": [
+        "get"
+      ],
+      "fieldsPerOperation": {
+        "get": [
+          "propertyType",
+          "propertyId",
+          "dateRange",
+          "startDate",
+          "endDate",
+          "metricsGA4",
+          "dimensionsGA4",
+          "returnAll",
+          "limit",
+          "simple",
+          "additionalFields",
+          "viewId",
+          "dateRange",
+          "startDate",
+          "endDate",
+          "metricsUA",
+          "dimensionsUA",
+          "returnAll",
+          "limit",
+          "simple",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "metricsGA4",
+      "validOptions": [
+        "metricValues"
+      ],
+      "optionSchemas": {
+        "metricValues": [
+          {
+            "field": "listName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "totalUsers",
+              "enumValues": [
+                "active1DayUsers",
+                "active28DayUsers",
+                "active7DayUsers",
+                "checkouts",
+                "eventCount",
+                "screenPageViews",
+                "userEngagementDuration",
+                "sessions",
+                "sessionsPerUser",
+                "totalUsers",
+                "other",
+                "custom"
+              ]
+            }
+          },
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "totalUsers"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "other"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": "custom_metric"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "expression",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "invisible",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "dimensionsGA4",
+      "validOptions": [
+        "dimensionValues"
+      ],
+      "optionSchemas": {
+        "dimensionValues": [
+          {
+            "field": "listName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "date",
+              "enumValues": [
+                "browser",
+                "campaignName",
+                "city",
+                "country",
+                "date",
+                "deviceCategory",
+                "itemName",
+                "language",
+                "pageLocation",
+                "sourceMedium",
+                "other"
+              ]
+            }
+          },
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "date"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "other"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "metricsUA",
+      "validOptions": [
+        "metricValues"
+      ],
+      "optionSchemas": {
+        "metricValues": [
+          {
+            "field": "listName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ga:users",
+              "enumValues": [
+                "ga:productCheckouts",
+                "ga:totalEvents",
+                "ga:pageviews",
+                "ga:sessionDuration",
+                "ga:sessions",
+                "ga:sessionsPerUser",
+                "ga:users",
+                "other",
+                "custom"
+              ]
+            }
+          },
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ga:users"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "other"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": "custom_metric"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "expression",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          },
+          {
+            "field": "formattingType",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "INTEGER",
+              "enumValues": [
+                "CURRENCY",
+                "FLOAT",
+                "INTEGER",
+                "PERCENT",
+                "TIME"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "dimensionsUA",
+      "validOptions": [
+        "dimensionValues"
+      ],
+      "optionSchemas": {
+        "dimensionValues": [
+          {
+            "field": "listName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ga:date",
+              "enumValues": [
+                "ga:browser",
+                "ga:campaign",
+                "ga:city",
+                "ga:country",
+                "ga:date",
+                "ga:deviceCategory",
+                "ga:productName",
+                "ga:language",
+                "ga:pagePath",
+                "ga:sourceMedium",
+                "other"
+              ]
+            }
+          },
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ga:date"
+            },
+            "displayOptions": {
+              "show": {
+                "listName": [
+                  "other"
+                ]
+              }
+            },
+            "dependsOn": [
+              "listName"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

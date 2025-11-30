@@ -1,0 +1,693 @@
+{
+  "nodeType": "n8n-nodes-base.jenkins",
+  "displayName": "Jenkins",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "triggerParamsNotice",
+    "job",
+    "param",
+    "newJob",
+    "xml",
+    "createNotice",
+    "operation",
+    "reason",
+    "instanceNotice",
+    "operation",
+    "job",
+    "returnAll",
+    "limit"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "job",
+        "enumValues": [
+          "build",
+          "instance",
+          "job"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "trigger",
+        "enumValues": [
+          "copy",
+          "create",
+          "trigger",
+          "triggerParams"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "triggerParamsNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "triggerParams"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "job",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "trigger",
+            "triggerParams",
+            "copy"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "param",
+      "type": "fixedCollection",
+      "required": true,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "options",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "triggerParams"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "newJob",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "copy",
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "xml",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "createNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "safeRestart",
+        "enumValues": [
+          "cancelQuietDown",
+          "quietDown",
+          "restart",
+          "safeRestart",
+          "safeExit",
+          "exit"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "instance"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "reason",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "instance"
+          ],
+          "operation": [
+            "quietDown"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "instanceNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "instance"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getAll",
+        "enumValues": [
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "job",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "job",
+    "operation": "trigger",
+    "triggerParamsNotice": "",
+    "job": "",
+    "param": {},
+    "newJob": "",
+    "xml": "",
+    "createNotice": "",
+    "reason": "",
+    "instanceNotice": "",
+    "returnAll": false,
+    "limit": 50
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "triggerParamsNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "triggerParams"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "job",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "trigger",
+            "triggerParams",
+            "copy"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "param",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "triggerParams"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "newJob",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "copy",
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "xml",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "createNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "instance"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "reason",
+      "condition": {
+        "show": {
+          "resource": [
+            "instance"
+          ],
+          "operation": [
+            "quietDown"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "instanceNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "instance"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "job",
+      "condition": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "job": {
+      "operations": [
+        "copy",
+        "create",
+        "trigger",
+        "triggerParams"
+      ],
+      "fieldsPerOperation": {
+        "copy": [
+          "job",
+          "newJob"
+        ],
+        "create": [
+          "newJob",
+          "xml",
+          "createNotice"
+        ],
+        "trigger": [
+          "job"
+        ],
+        "triggerParams": [
+          "triggerParamsNotice",
+          "job",
+          "param"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "param",
+      "validOptions": [
+        "params"
+      ],
+      "optionSchemas": {
+        "params": [
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

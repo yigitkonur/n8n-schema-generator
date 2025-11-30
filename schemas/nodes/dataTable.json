@@ -1,0 +1,1027 @@
+{
+  "name": "dataTable",
+  "displayName": "Data table",
+  "description": "Permanently save data across workflow executions in a table",
+  "group": [
+    "input",
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "row",
+    "operation": "insert",
+    "dataTableId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "filters": {},
+    "options": {},
+    "columns": {
+      "mappingMode": "defineBelow",
+      "value": null
+    },
+    "returnAll": false,
+    "limit": 50
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "row",
+      "options": [
+        {
+          "name": "Row",
+          "value": "row"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "insert",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "deleteRows",
+          "description": "Delete row(s)",
+          "action": "Delete row(s)"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get row(s)",
+          "action": "Get row(s)"
+        },
+        {
+          "name": "If Row Exists",
+          "value": "rowExists",
+          "description": "Match input items that are in the data table",
+          "action": "If row exists"
+        },
+        {
+          "name": "If Row Does Not Exist",
+          "value": "rowNotExists",
+          "description": "Match input items that are not in the data table",
+          "action": "If row does not exist"
+        },
+        {
+          "name": "Insert",
+          "value": "insert",
+          "description": "Insert a new row",
+          "action": "Insert row"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update row(s) matching certain fields",
+          "action": "Update row(s)"
+        },
+        {
+          "name": "Upsert",
+          "value": "upsert",
+          "description": "Update row(s), or insert if there is no match",
+          "action": "Upsert row(s)"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "dataTableId",
+      "displayName": "Data table",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      }
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "deleteRows"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq"
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "deleteRows"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Dry Run",
+          "name": "dryRun",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the operation simulates and returns affected rows in their \"before\" and \"after\" states"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "deleteRows"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "dataTableId.value"
+        ],
+        "resourceMapper": {
+          "valuesLabel": "Values to insert",
+          "resourceMapperMethod": "getDataTables",
+          "mode": "add",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": true,
+          "hideNoDataError": true
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Optimize Bulk",
+          "name": "optimizeBulk",
+          "type": "boolean",
+          "default": false,
+          "noDataExpression": true,
+          "description": "Whether to improve bulk insert performance 5x by not returning inserted data"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq"
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "rowExists"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq",
+              "displayOptions": {
+                "show": {
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 0
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "rowExists"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "rowNotExists"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq",
+              "displayOptions": {
+                "show": {
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 0
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "rowNotExists"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq"
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "dataTableId.value"
+        ],
+        "resourceMapper": {
+          "valuesLabel": "Values to update",
+          "resourceMapperMethod": "getDataTables",
+          "mode": "add",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": true,
+          "hideNoDataError": true
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Dry Run",
+          "name": "dryRun",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the operation simulates and returns affected rows in their \"before\" and \"after\" states"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "matchType",
+      "displayName": "Must Match",
+      "type": "options",
+      "default": "anyCondition",
+      "options": [
+        {
+          "name": "Any Condition",
+          "value": "anyCondition"
+        },
+        {
+          "name": "All Conditions",
+          "value": "allConditions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Conditions",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Filter to decide which rows get",
+      "options": [
+        {
+          "displayName": "Conditions",
+          "name": "conditions",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "keyName",
+              "type": "options",
+              "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "dataTableId.value"
+                ],
+                "loadOptionsMethod": "getDataTableColumns"
+              },
+              "default": "id"
+            },
+            {
+              "displayName": "Condition",
+              "name": "condition",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "&keyName"
+                ],
+                "loadOptionsMethod": "getConditionsForColumn"
+              },
+              "default": "eq"
+            },
+            {
+              "displayName": "Value",
+              "name": "keyValue",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "isEmpty",
+                    "isNotEmpty",
+                    "isTrue",
+                    "isFalse"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "minRequiredFields": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "dataTableId.value"
+        ],
+        "resourceMapper": {
+          "valuesLabel": "Values to upsert",
+          "resourceMapperMethod": "getDataTables",
+          "mode": "add",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": true,
+          "hideNoDataError": true
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Dry Run",
+          "name": "dryRun",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the operation simulates and returns affected rows in their \"before\" and \"after\" states"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "dataTableId",
+    "columns",
+    "columns",
+    "columns"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "matchType",
+    "filters",
+    "options",
+    "options",
+    "matchType",
+    "filters",
+    "returnAll",
+    "limit",
+    "matchType",
+    "filters",
+    "matchType",
+    "filters",
+    "matchType",
+    "filters",
+    "options",
+    "matchType",
+    "filters",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "dataTableId": "resourceLocator",
+    "matchType": "options",
+    "filters": "fixedCollection",
+    "options": "collection",
+    "columns": "resourceMapper",
+    "returnAll": "boolean",
+    "limit": "number"
+  },
+  "hasVersions": false
+}

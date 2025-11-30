@@ -1,0 +1,1533 @@
+{
+  "nodeType": "n8n-nodes-base.sendGrid",
+  "displayName": "SendGrid",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [
+    "resource"
+  ],
+  "optionalParameters": [
+    "operation",
+    "returnAll",
+    "limit",
+    "name",
+    "listId",
+    "deleteContacts",
+    "listId",
+    "contactSample",
+    "listId",
+    "name",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "email",
+    "additionalFields",
+    "ids",
+    "deleteAll",
+    "by",
+    "contactId",
+    "email",
+    "operation",
+    "fromEmail",
+    "fromName",
+    "toEmail",
+    "subject",
+    "dynamicTemplate",
+    "contentType",
+    "contentValue",
+    "templateId",
+    "dynamicTemplateFields",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "list",
+        "enumValues": [
+          "contact",
+          "list",
+          "mail"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "deleteContacts",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactSample",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "upsert",
+        "enumValues": [
+          "upsert",
+          "delete",
+          "get",
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upsert"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "ids",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "deleteAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "deleteAll"
+      ]
+    },
+    {
+      "field": "deleteAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "by",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "id",
+        "enumValues": [
+          "id",
+          "email"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "id"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "by"
+      ]
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "by"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "send",
+        "enumValues": [
+          "send"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "fromEmail",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "fromName",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "toEmail",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "subject",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "dynamicTemplate",
+      "type": "boolean",
+      "required": true,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "contentType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "text/plain",
+        "enumValues": [
+          "text/plain",
+          "text/html"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "contentValue",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "templateId",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "dynamicTemplateFields",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "fields": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "list",
+    "operation": "create",
+    "name": "",
+    "deleteContacts": false,
+    "contactSample": false,
+    "filters": {},
+    "additionalFields": {},
+    "ids": "",
+    "deleteAll": false,
+    "by": "id",
+    "contactId": "",
+    "fromEmail": "",
+    "fromName": "",
+    "toEmail": "",
+    "subject": "",
+    "dynamicTemplate": false,
+    "contentType": "text/plain",
+    "contentValue": "",
+    "templateId": [],
+    "dynamicTemplateFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "name",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "deleteContacts",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactSample",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "listId",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "name",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "condition": {
+        "show": {
+          "operation": [
+            "upsert"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "ids",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "deleteAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "deleteAll"
+      ]
+    },
+    {
+      "field": "deleteAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "by",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "id"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "by"
+      ]
+    },
+    {
+      "field": "email",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "by"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "fromEmail",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "fromName",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "toEmail",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "subject",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "dynamicTemplate",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "contentType",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "contentValue",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "templateId",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "dynamicTemplateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dynamicTemplate"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "list": {
+      "operations": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "name"
+        ],
+        "delete": [
+          "listId",
+          "deleteContacts"
+        ],
+        "get": [
+          "listId",
+          "contactSample"
+        ],
+        "getAll": [
+          "returnAll",
+          "limit"
+        ],
+        "update": [
+          "listId",
+          "name"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "dynamicTemplateFields",
+      "validOptions": [
+        "fields"
+      ],
+      "optionSchemas": {
+        "fields": [
+          {
+            "field": "key",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

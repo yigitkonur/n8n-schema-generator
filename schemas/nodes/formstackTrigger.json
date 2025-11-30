@@ -1,0 +1,91 @@
+{
+  "name": "formstackTrigger",
+  "displayName": "Formstack Trigger",
+  "description": "Starts the workflow on a Formstack form submission.",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "accessToken",
+    "formId": "",
+    "simple": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "options": [
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "formId",
+      "displayName": "Form Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The Formstack form to monitor for new submissions. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getForms"
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "formstackApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "formstackOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "formId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "simple"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "formId": "options",
+    "simple": "boolean"
+  },
+  "hasVersions": false
+}

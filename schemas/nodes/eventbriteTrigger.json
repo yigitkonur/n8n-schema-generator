@@ -1,0 +1,181 @@
+{
+  "name": "eventbriteTrigger",
+  "displayName": "Eventbrite Trigger",
+  "description": "Handle Eventbrite events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "privateKey",
+    "organization": "",
+    "event": "",
+    "actions": [],
+    "resolveData": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "privateKey",
+      "options": [
+        {
+          "name": "Private Key",
+          "value": "privateKey"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "organization",
+      "displayName": "Organization Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The Eventbrite Organization to work on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getOrganizations"
+      }
+    },
+    {
+      "name": "event",
+      "displayName": "Event Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Limit the triggers to this event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "organization"
+        ],
+        "loadOptionsMethod": "getEvents"
+      }
+    },
+    {
+      "name": "actions",
+      "displayName": "Actions",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "One or more action to subscribe to",
+      "options": [
+        {
+          "name": "attendee.checked_in",
+          "value": "attendee.checked_in"
+        },
+        {
+          "name": "attendee.checked_out",
+          "value": "attendee.checked_out"
+        },
+        {
+          "name": "attendee.updated",
+          "value": "attendee.updated"
+        },
+        {
+          "name": "event.created",
+          "value": "event.created"
+        },
+        {
+          "name": "event.published",
+          "value": "event.published"
+        },
+        {
+          "name": "event.unpublished",
+          "value": "event.unpublished"
+        },
+        {
+          "name": "event.updated",
+          "value": "event.updated"
+        },
+        {
+          "name": "order.placed",
+          "value": "order.placed"
+        },
+        {
+          "name": "order.refunded",
+          "value": "order.refunded"
+        },
+        {
+          "name": "order.updated",
+          "value": "order.updated"
+        },
+        {
+          "name": "organizer.updated",
+          "value": "organizer.updated"
+        },
+        {
+          "name": "ticket_class.created",
+          "value": "ticket_class.created"
+        },
+        {
+          "name": "ticket_class.deleted",
+          "value": "ticket_class.deleted"
+        },
+        {
+          "name": "ticket_class.updated",
+          "value": "ticket_class.updated"
+        },
+        {
+          "name": "venue.updated",
+          "value": "venue.updated"
+        }
+      ]
+    },
+    {
+      "name": "resolveData",
+      "displayName": "Resolve Data",
+      "type": "boolean",
+      "default": true,
+      "description": "By default does the webhook-data only contain the URL to receive the object data manually. If this option gets activated, it will resolve the data automatically."
+    }
+  ],
+  "credentials": [
+    {
+      "name": "eventbriteApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "privateKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "eventbriteOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "organization",
+    "event",
+    "actions"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resolveData"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "organization": "options",
+    "event": "options",
+    "actions": "multiOptions",
+    "resolveData": "boolean"
+  },
+  "hasVersions": false
+}

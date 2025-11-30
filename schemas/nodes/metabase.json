@@ -1,0 +1,737 @@
+{
+  "name": "metabase",
+  "displayName": "Metabase",
+  "description": "Use the Metabase API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "questions",
+    "operation": "getAll",
+    "questionId": "",
+    "format": "csv",
+    "metricId": "",
+    "databaseId": "",
+    "engine": "postgres",
+    "host": "",
+    "name": "",
+    "port": 5432,
+    "user": "",
+    "password": "",
+    "dbName": "",
+    "filePath": "",
+    "fullSync": true,
+    "simple": true,
+    "alertId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "questions",
+      "options": [
+        {
+          "name": "Alert",
+          "value": "alerts"
+        },
+        {
+          "name": "Database",
+          "value": "databases"
+        },
+        {
+          "name": "Metric",
+          "value": "metrics"
+        },
+        {
+          "name": "Question",
+          "value": "questions"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific question",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "={{\"/api/card/\" + $parameter.questionId}}"
+            }
+          },
+          "action": "Get a questions"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many questions",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/api/card/"
+            }
+          },
+          "action": "Get many questions"
+        },
+        {
+          "name": "Result Data",
+          "value": "resultData",
+          "description": "Return the result of the question to a specific file format",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "={{\"/api/card/\" + $parameter.questionId + \"/query/\" + $parameter.format}}",
+              "returnFullResponse": true,
+              "encoding": "arraybuffer"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get the results from a question"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "questions"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "questionId",
+      "displayName": "Question ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "questions"
+          ],
+          "operation": [
+            "get",
+            "resultData"
+          ]
+        }
+      },
+      "placeholder": "0"
+    },
+    {
+      "name": "format",
+      "displayName": "Format",
+      "type": "options",
+      "default": "csv",
+      "required": true,
+      "options": [
+        {
+          "name": "CSV",
+          "value": "csv"
+        },
+        {
+          "name": "JSON",
+          "value": "json"
+        },
+        {
+          "name": "XLSX",
+          "value": "xlsx"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "questions"
+          ],
+          "operation": [
+            "resultData"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific metric",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "={{\"/api/metric/\" + $parameter.metricId}}",
+              "returnFullResponse": true
+            }
+          },
+          "action": "Get a metric"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many metrics",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/api/metric/"
+            }
+          },
+          "action": "Get many metrics"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metrics"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "metricId",
+      "displayName": "Metric ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metrics"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "0"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Add",
+          "value": "addNewDatasource",
+          "description": "Add a new datasource to the metabase instance",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/api/database"
+            }
+          },
+          "action": "Add a databases"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many databases",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/api/database/"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Get many databases"
+        },
+        {
+          "name": "Get Fields",
+          "value": "getFields",
+          "description": "Get fields from database",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "={{\"/api/database/\" + $parameter.databaseId + \"/fields\"}}"
+            }
+          },
+          "action": "Get Fields a databases"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "databaseId",
+      "displayName": "Database ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "getFields"
+          ]
+        }
+      },
+      "placeholder": "0"
+    },
+    {
+      "name": "engine",
+      "displayName": "Engine",
+      "type": "options",
+      "default": "postgres",
+      "required": true,
+      "options": [
+        {
+          "name": "H2",
+          "value": "h2"
+        },
+        {
+          "name": "MongoDB",
+          "value": "mongo"
+        },
+        {
+          "name": "Mysql",
+          "value": "mysql"
+        },
+        {
+          "name": "PostgreSQL",
+          "value": "postgres"
+        },
+        {
+          "name": "Redshift",
+          "value": "redshift"
+        },
+        {
+          "name": "Sqlite",
+          "value": "sqlite"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "placeholder": "PostgreSQL",
+      "routing": {
+        "send": {
+          "property": "engine",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "host",
+      "displayName": "Host",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "placeholder": "localhost:5432",
+      "routing": {
+        "send": {
+          "property": "details.host",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "placeholder": "Database 1",
+      "routing": {
+        "send": {
+          "property": "name",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "port",
+      "displayName": "Port",
+      "type": "number",
+      "default": 5432,
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "placeholder": "5432",
+      "routing": {
+        "send": {
+          "property": "details.port",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "user",
+      "displayName": "User",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "placeholder": "Admin",
+      "routing": {
+        "send": {
+          "property": "details.user",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "password",
+      "displayName": "Password",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "typeOptions": {
+        "password": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "placeholder": "password",
+      "routing": {
+        "send": {
+          "property": "details.password",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "dbName",
+      "displayName": "Database Name",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "placeholder": "Users",
+      "routing": {
+        "send": {
+          "property": "details.db",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "filePath",
+      "displayName": "File Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "h2",
+            "sqlite"
+          ]
+        }
+      },
+      "placeholder": "file:/Users/admin/Desktop/Users",
+      "routing": {
+        "send": {
+          "property": "details.db",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "fullSync",
+      "displayName": "Full Sync",
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "is_full_sync",
+          "type": "body"
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "setKeyValue",
+              "enabled": "={{$value}}",
+              "properties": {
+                "id": "={{$responseItem.id}}",
+                "name": "={{$responseItem.name}}",
+                "description": "={{$responseItem.description}}",
+                "engine": "={{$responseItem.engine}}",
+                "creator_id": "={{$responseItem.creator_id}}",
+                "timezone": "={{$responseItem.timezone}}",
+                "created_at": "={{$responseItem.created_at}}",
+                "updated_at": "={{$responseItem.updated_at}}",
+                "db": "={{$responseItem.details.db}}",
+                "user": "={{$responseItem.details.user}}",
+                "host": "={{$responseItem.details.host}}",
+                "port": "={{$responseItem.details.port}}",
+                "ssl": "={{$responseItem.details.ssl}}",
+                "is_full_sync": "={{$responseItem.details.is_full_sync}}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get specific alert",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "={{\"/api/alert/\" + $parameter.alertId}}"
+            }
+          },
+          "action": "Get an alert"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many alerts",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/api/alert/"
+            }
+          },
+          "action": "Get many alerts"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "alerts"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "alertId",
+      "displayName": "Alert ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "alerts"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "0"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "metabaseApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "questionId",
+    "format",
+    "metricId",
+    "databaseId",
+    "engine",
+    "host",
+    "name",
+    "port",
+    "user",
+    "password",
+    "filePath",
+    "fullSync",
+    "alertId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "operation",
+    "dbName",
+    "simple",
+    "operation"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "questionId": "string",
+    "format": "options",
+    "metricId": "string",
+    "databaseId": "string",
+    "engine": "options",
+    "host": "string",
+    "name": "string",
+    "port": "number",
+    "user": "string",
+    "password": "string",
+    "dbName": "string",
+    "filePath": "string",
+    "fullSync": "boolean",
+    "simple": "boolean",
+    "alertId": "string"
+  },
+  "hasVersions": false
+}

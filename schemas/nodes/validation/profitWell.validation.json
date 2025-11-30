@@ -1,0 +1,296 @@
+{
+  "nodeType": "n8n-nodes-base.profitWell",
+  "displayName": "ProfitWell",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "operation",
+    "type",
+    "month",
+    "simple",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "metric",
+        "enumValues": [
+          "company",
+          "metric"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getSetting",
+        "enumValues": [
+          "getSetting"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metric"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "type",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "daily",
+          "monthly"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "month",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ],
+          "type": [
+            "daily"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "type"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "metric",
+    "operation": "get",
+    "type": "",
+    "month": "",
+    "simple": true,
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "metric"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "type",
+      "condition": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "month",
+      "condition": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ],
+          "type": [
+            "daily"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "type"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "metric"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "company": {
+      "operations": [
+        "getSetting"
+      ],
+      "fieldsPerOperation": {}
+    }
+  },
+  "fixedCollections": []
+}

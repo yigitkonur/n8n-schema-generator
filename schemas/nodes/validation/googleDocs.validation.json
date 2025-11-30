@@ -1,0 +1,1812 @@
+{
+  "nodeType": "n8n-nodes-base.googleDocs",
+  "displayName": "Google Docs",
+  "version": [
+    1,
+    2
+  ],
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "authentication",
+    "resource",
+    "operation",
+    "driveId",
+    "folderId",
+    "title",
+    "documentURL",
+    "simple",
+    "documentURL",
+    "simple",
+    "actionsUi",
+    "updateFields"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "serviceAccount",
+        "enumValues": [
+          "serviceAccount",
+          "oAuth2"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "oAuth2",
+        "enumValues": [
+          "oAuth2",
+          "serviceAccount"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "document",
+        "enumValues": [
+          "document"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "get",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "driveId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "myDrive"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "folderId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "documentURL",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "documentURL",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "actionsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "actionFields": [
+            {
+              "object": "text",
+              "action": "insert",
+              "locationChoice": "endOfSegmentLocation",
+              "index": 0,
+              "text": ""
+            }
+          ]
+        },
+        "properties": {
+          "actionFields": {
+            "type": "object",
+            "properties": {
+              "object": {
+                "type": "options",
+                "default": "text",
+                "enumValues": [
+                  "footer",
+                  "header",
+                  "namedRange",
+                  "pageBreak",
+                  "paragraphBullets",
+                  "positionedObject",
+                  "table",
+                  "tableColumn",
+                  "tableRow",
+                  "text"
+                ]
+              },
+              "action": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "delete"
+                ]
+              },
+              "insertSegment": {
+                "type": "options",
+                "default": "body",
+                "enumValues": [
+                  "header",
+                  "body",
+                  "footer"
+                ]
+              },
+              "segmentId": {
+                "type": "string",
+                "default": ""
+              },
+              "index": {
+                "type": "number",
+                "default": 1,
+                "minValue": 1
+              },
+              "name": {
+                "type": "string",
+                "default": ""
+              },
+              "startIndex": {
+                "type": "number",
+                "default": 0
+              },
+              "endIndex": {
+                "type": "number",
+                "default": 0
+              },
+              "bulletPreset": {
+                "type": "options",
+                "default": "BULLET_DISC_CIRCLE_SQUARE",
+                "enumValues": [
+                  "BULLET_DISC_CIRCLE_SQUARE",
+                  "BULLET_CHECKBOX",
+                  "NUMBERED_DECIMAL_NESTED"
+                ]
+              },
+              "footerId": {
+                "type": "string",
+                "default": ""
+              },
+              "headerId": {
+                "type": "string",
+                "default": ""
+              },
+              "namedRangeReference": {
+                "type": "options",
+                "default": "namedRangeId",
+                "enumValues": [
+                  "namedRangeId",
+                  "name"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              },
+              "objectId": {
+                "type": "string",
+                "default": ""
+              },
+              "locationChoice": {
+                "type": "options",
+                "default": "endOfSegmentLocation",
+                "enumValues": [
+                  "endOfSegmentLocation",
+                  "location"
+                ]
+              },
+              "rows": {
+                "type": "number",
+                "default": 0
+              },
+              "columns": {
+                "type": "number",
+                "default": 0
+              },
+              "text": {
+                "type": "string",
+                "default": ""
+              },
+              "replaceText": {
+                "type": "string",
+                "default": ""
+              },
+              "matchCase": {
+                "type": "boolean",
+                "default": false
+              },
+              "insertPosition": {
+                "type": "options",
+                "default": true,
+                "enumValues": [
+                  false,
+                  true
+                ]
+              },
+              "rowIndex": {
+                "type": "number",
+                "default": 0
+              },
+              "columnIndex": {
+                "type": "number",
+                "default": 0
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "writeControlObject": {
+            "type": "object",
+            "properties": {
+              "control": {
+                "type": "options",
+                "default": "requiredRevisionId",
+                "enumValues": [
+                  "targetRevisionId",
+                  "requiredRevisionId"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "serviceAccount",
+    "resource": "document",
+    "operation": "create",
+    "driveId": "myDrive",
+    "folderId": "",
+    "title": "",
+    "actionsUi": {
+      "actionFields": [
+        {
+          "object": "text",
+          "action": "insert",
+          "name": "",
+          "bulletPreset": "BULLET_DISC_CIRCLE_SQUARE",
+          "footerId": "",
+          "headerId": "",
+          "namedRangeReference": "namedRangeId",
+          "objectId": "",
+          "insertSegment": "body",
+          "rows": 0,
+          "columns": 0,
+          "locationChoice": "endOfSegmentLocation",
+          "text": "",
+          "replaceText": "",
+          "matchCase": false,
+          "insertPosition": true,
+          "rowIndex": 0,
+          "columnIndex": 0
+        }
+      ]
+    },
+    "updateFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "authentication",
+      "condition": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "authentication",
+      "condition": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "driveId",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "folderId",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "title",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "documentURL",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "documentURL",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "actionsUi",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "document": {
+      "operations": [
+        "create",
+        "get",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "driveId",
+          "folderId",
+          "title"
+        ],
+        "get": [
+          "documentURL",
+          "simple"
+        ],
+        "update": [
+          "documentURL",
+          "simple",
+          "actionsUi",
+          "updateFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "actionsUi",
+      "validOptions": [
+        "actionFields"
+      ],
+      "optionSchemas": {
+        "actionFields": [
+          {
+            "field": "object",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "text",
+              "enumValues": [
+                "footer",
+                "header",
+                "namedRange",
+                "pageBreak",
+                "paragraphBullets",
+                "positionedObject",
+                "table",
+                "tableColumn",
+                "tableRow",
+                "text"
+              ]
+            }
+          },
+          {
+            "field": "action",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "replaceAll",
+                "insert"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "action",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "create",
+                "delete"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "footer",
+                  "header",
+                  "namedRange",
+                  "paragraphBullets"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "action",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "delete",
+                "insert"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "tableColumn",
+                  "tableRow"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "action",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "insert"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "pageBreak",
+                  "table"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "action",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "delete"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "positionedObject"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "insertSegment",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "body",
+              "enumValues": [
+                "header",
+                "body",
+                "footer"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "footer",
+                  "header",
+                  "paragraphBullets",
+                  "namedRange"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "segmentId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "footer",
+                  "header",
+                  "paragraphBullets",
+                  "namedRange"
+                ],
+                "action": [
+                  "create"
+                ]
+              },
+              "hide": {
+                "insertSegment": [
+                  "body"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action",
+              "insertSegment"
+            ]
+          },
+          {
+            "field": "index",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "footer",
+                  "header"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "startIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "endIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "bulletPreset",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "BULLET_DISC_CIRCLE_SQUARE",
+              "enumValues": [
+                "BULLET_DISC_CIRCLE_SQUARE",
+                "BULLET_CHECKBOX",
+                "NUMBERED_DECIMAL_NESTED"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "paragraphBullets"
+                ],
+                "action": [
+                  "create"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "footerId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "footer"
+                ],
+                "action": [
+                  "delete"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "headerId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "header"
+                ],
+                "action": [
+                  "delete"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "namedRangeReference",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "namedRangeId",
+              "enumValues": [
+                "namedRangeId",
+                "name"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "delete"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "delete"
+                ],
+                "namedRangeReference": [
+                  "namedRangeId"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action",
+              "namedRangeReference"
+            ]
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "namedRange"
+                ],
+                "action": [
+                  "delete"
+                ],
+                "namedRangeReference": [
+                  "name"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action",
+              "namedRangeReference"
+            ]
+          },
+          {
+            "field": "objectId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "positionedObject"
+                ],
+                "action": [
+                  "delete"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "insertSegment",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "body",
+              "enumValues": [
+                "header",
+                "body",
+                "footer"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "pageBreak",
+                  "table",
+                  "tableColumn",
+                  "tableRow",
+                  "text"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "segmentId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "pageBreak",
+                  "table",
+                  "tableColumn",
+                  "tableRow",
+                  "text"
+                ],
+                "action": [
+                  "insert"
+                ]
+              },
+              "hide": {
+                "insertSegment": [
+                  "body"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action",
+              "insertSegment"
+            ]
+          },
+          {
+            "field": "locationChoice",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "endOfSegmentLocation",
+              "enumValues": [
+                "endOfSegmentLocation",
+                "location"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "pageBreak"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "index",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "locationChoice": [
+                  "location"
+                ],
+                "object": [
+                  "pageBreak"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "locationChoice",
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "locationChoice",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "endOfSegmentLocation",
+              "enumValues": [
+                "endOfSegmentLocation",
+                "location"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "table"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "index",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "locationChoice": [
+                  "location"
+                ],
+                "object": [
+                  "table"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "locationChoice",
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "rows",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "table"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "columns",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "table"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "locationChoice",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "endOfSegmentLocation",
+              "enumValues": [
+                "endOfSegmentLocation",
+                "location"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "index",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "locationChoice": [
+                  "location"
+                ],
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "locationChoice",
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "text",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "text",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "replaceAll"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "replaceText",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "replaceAll"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "matchCase",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "text"
+                ],
+                "action": [
+                  "replaceAll"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "insertSegment",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "body",
+              "enumValues": [
+                "header",
+                "body",
+                "footer"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "paragraphBullets",
+                  "tableColumn",
+                  "tableRow"
+                ],
+                "action": [
+                  "delete"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "segmentId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "paragraphBullets",
+                  "tableColumn",
+                  "tableRow"
+                ],
+                "action": [
+                  "delete"
+                ]
+              },
+              "hide": {
+                "insertSegment": [
+                  "body"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action",
+              "insertSegment"
+            ]
+          },
+          {
+            "field": "startIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "paragraphBullets"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "endIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "paragraphBullets"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "insertPosition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": true,
+              "enumValues": [
+                false,
+                true
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "tableColumn",
+                  "tableRow"
+                ],
+                "action": [
+                  "insert"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object",
+              "action"
+            ]
+          },
+          {
+            "field": "index",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "tableColumn",
+                  "tableRow"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "rowIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "tableColumn",
+                  "tableRow"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          },
+          {
+            "field": "columnIndex",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0
+            },
+            "displayOptions": {
+              "show": {
+                "object": [
+                  "tableColumn",
+                  "tableRow"
+                ]
+              }
+            },
+            "dependsOn": [
+              "object"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "updateFields",
+      "validOptions": [
+        "writeControlObject"
+      ],
+      "optionSchemas": {
+        "writeControlObject": [
+          {
+            "field": "control",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "requiredRevisionId",
+              "enumValues": [
+                "targetRevisionId",
+                "requiredRevisionId"
+              ]
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

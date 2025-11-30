@@ -1,0 +1,3184 @@
+{
+  "name": "monicaCrm",
+  "displayName": "Monica CRM",
+  "description": "Consume the Monica CRM API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "contact",
+    "activityTypeId": "",
+    "contacts": "",
+    "summary": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "calledAt": "",
+    "operation": "create",
+    "firstName": "",
+    "genderId": "",
+    "filters": {},
+    "tagsToAdd": [],
+    "tagsToRemove": [],
+    "writtenAt": "",
+    "writtenByMe": true,
+    "messageId": "",
+    "post": "",
+    "body": "",
+    "frequencyType": "one_time",
+    "frequencyNumber": 0,
+    "initialDate": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "options": [
+        {
+          "name": "Activity",
+          "value": "activity"
+        },
+        {
+          "name": "Call",
+          "value": "call"
+        },
+        {
+          "name": "Contact",
+          "value": "contact"
+        },
+        {
+          "name": "Contact Field",
+          "value": "contactField"
+        },
+        {
+          "name": "Contact Tag",
+          "value": "contactTag"
+        },
+        {
+          "name": "Conversation",
+          "value": "conversation"
+        },
+        {
+          "name": "Conversation Message",
+          "value": "conversationMessage"
+        },
+        {
+          "name": "Journal Entry",
+          "value": "journalEntry"
+        },
+        {
+          "name": "Note",
+          "value": "note"
+        },
+        {
+          "name": "Reminder",
+          "value": "reminder"
+        },
+        {
+          "name": "Tag",
+          "value": "tag"
+        },
+        {
+          "name": "Task",
+          "value": "task"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an activity",
+          "action": "Create an activity"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an activity",
+          "action": "Delete an activity"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve an activity",
+          "action": "Get an activity"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many activities",
+          "action": "Get many activities"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an activity",
+          "action": "Update an activity"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "activityTypeId",
+      "displayName": "Activity Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getActivityTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contacts",
+      "displayName": "Contacts",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Comma-separated list of IDs of the contacts to associate the activity with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "happenedAt",
+      "displayName": "Happened At",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date when the activity happened",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "summary",
+      "displayName": "Summary",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Brief description of the activity - max 255 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description of the activity - max 100,000 characters"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "activityId",
+      "displayName": "Activity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the activity to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "activityId",
+      "displayName": "Activity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the activity to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "activityId",
+      "displayName": "Activity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the activity to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Activity Type Name or ID",
+          "name": "activity_type_id",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsMethod": "getActivityTypes"
+          }
+        },
+        {
+          "displayName": "Contacts",
+          "name": "contacts",
+          "description": "IDs of the contacts to associate the activity with",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description to add more details on the activity - max 100,000 characters"
+        },
+        {
+          "displayName": "Happened At",
+          "name": "happened_at",
+          "description": "Date when the activity happened",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Summary",
+          "name": "summary",
+          "description": "Brief description of the activity - max 255 characters",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a call",
+          "action": "Create a call"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a call",
+          "action": "Delete a call"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a call",
+          "action": "Get a call"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many calls",
+          "action": "Get many calls"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a call",
+          "action": "Update a call"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the call with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "calledAt",
+      "displayName": "Called At",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date when the call happened",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "content",
+      "displayName": "Description",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Description of the call - max 100,000 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "callId",
+      "displayName": "Call ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the call to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "callId",
+      "displayName": "Call ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the call to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "callId",
+      "displayName": "Call ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the call to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Called At",
+          "name": "calledAt",
+          "description": "Date when the call happened",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Contact ID",
+          "name": "contactId",
+          "description": "ID of the contact to associate the call with",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Description",
+          "name": "content",
+          "description": "Description of the call - max 100,000 characters",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a contact",
+          "action": "Create a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact",
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a contact",
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many contacts",
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a contact",
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "firstName",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "genderId",
+      "displayName": "Gender Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getGenders"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Birthdate",
+          "name": "birthdate",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Deceased Date",
+          "name": "deceasedDate",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Is Deceased",
+          "name": "isDeceased",
+          "description": "Whether the contact has passed away",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Last Name",
+          "name": "last_name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Nickname",
+          "name": "nickname",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Type",
+          "name": "is_partial",
+          "type": "options",
+          "default": false,
+          "options": [
+            {
+              "name": "Real",
+              "value": false,
+              "description": "Contact with their own contact sheet"
+            },
+            {
+              "name": "Partial",
+              "value": true,
+              "description": "Contact without their own contact sheet"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Search Term",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "description": "Search term to filter results by"
+        },
+        {
+          "displayName": "Sort",
+          "name": "sort",
+          "type": "options",
+          "options": [
+            {
+              "name": "Ascended Created At",
+              "value": "created_at"
+            },
+            {
+              "name": "Descended Created At",
+              "value": "-created_at"
+            },
+            {
+              "name": "Ascended Updated At",
+              "value": "updated_at"
+            },
+            {
+              "name": "Descended Updated At",
+              "value": "-updated_at"
+            }
+          ],
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Birthdate",
+          "name": "birthdate",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Deceased Date",
+          "name": "deceased_date",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "First Name",
+          "name": "first_name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Gender Name or ID",
+          "name": "gender_id",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsMethod": "getGenders"
+          }
+        },
+        {
+          "displayName": "Is Deceased",
+          "name": "is_deceased",
+          "description": "Whether the contact has passed away",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Last Name",
+          "name": "last_name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Nickname",
+          "name": "nickname",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Type",
+          "name": "is_partial",
+          "type": "options",
+          "default": false,
+          "options": [
+            {
+              "name": "Real",
+              "value": false,
+              "description": "Contact with their own contact sheet"
+            },
+            {
+              "name": "Partial",
+              "value": true,
+              "description": "Contact without their own contact sheet"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a contact field",
+          "action": "Create a contact field"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact field",
+          "action": "Delete a contact field"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a contact field",
+          "action": "Get a contact field"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a contact field",
+          "action": "Update a contact field"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the contact field with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldTypeId",
+      "displayName": "Contact Field Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getContactFieldTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "data",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Content of the contact field - max 255 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldId",
+      "displayName": "Contact Field ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contactField to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldId",
+      "displayName": "Contact Field ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact field to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact whose fields to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the contact field with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldId",
+      "displayName": "Contact Field ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact field to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldTypeId",
+      "displayName": "Contact Field Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getContactFieldTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "data",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Content of the contact field - max 255 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "action": "Add a tag to a contact"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "action": "Remove a tag from a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to add a tag to",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagsToAdd",
+      "displayName": "Tag Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "Tags to add to the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getTagsToAdd"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to remove the tag from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagsToRemove",
+      "displayName": "Tag Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "Tags to remove from the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getTagsToRemove"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a conversation",
+          "action": "Create a conversation"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a conversation",
+          "action": "Delete a conversation"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a conversation",
+          "action": "Get a conversation"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a conversation",
+          "action": "Update a conversation"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the conversation with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldTypeId",
+      "displayName": "Contact Field Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getContactFieldTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "happenedAt",
+      "displayName": "Happened At",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date when the conversation happened",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "conversationId",
+      "displayName": "Conversation ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the conversation to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "conversationId",
+      "displayName": "Conversation ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the conversation to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "conversationId",
+      "displayName": "Conversation ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the conversation to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactFieldTypeId",
+      "displayName": "Contact Field Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getContactFieldTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "happenedAt",
+      "displayName": "Happened At",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date when the conversation happened",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add a message to a conversation",
+          "action": "Add a message to a conversation"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a message in a conversation",
+          "action": "Update a message in a conversation"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "conversationId",
+      "displayName": "Conversation ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact whose conversation",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "content",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Content of the message",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "writtenAt",
+      "displayName": "Written At",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date when the message was written",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "writtenByMe",
+      "displayName": "Written By",
+      "type": "options",
+      "default": true,
+      "required": true,
+      "description": "Author of the message",
+      "options": [
+        {
+          "name": "User",
+          "value": true
+        },
+        {
+          "name": "Contact",
+          "value": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "messageId",
+      "displayName": "Message ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the message to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "conversationId",
+      "displayName": "Conversation ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the conversation whose message to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Contact ID",
+          "name": "contact_id",
+          "description": "ID of the contact to associate the conversationMessage with",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Content",
+          "name": "content",
+          "description": "Content of the message",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Written At",
+          "name": "written_at",
+          "description": "Date when the message was written",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Written By",
+          "name": "written_by_me",
+          "description": "Author of the message",
+          "type": "options",
+          "default": true,
+          "options": [
+            {
+              "name": "User",
+              "value": true
+            },
+            {
+              "name": "Contact",
+              "value": false
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a journal entry",
+          "action": "Create a journal entry"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a journal entry",
+          "action": "Delete a journal entry"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a journal entry",
+          "action": "Get a journal entry"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many journal entries",
+          "action": "Get many journal entries"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a journal entry",
+          "action": "Update a journal entry"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the journal entry - max 250 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "post",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Content of the journal entry - max 100,000 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "journalId",
+      "displayName": "Journal Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the journal entry to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "journalId",
+      "displayName": "Journal Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the journal entry to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "journalId",
+      "displayName": "Journal Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the journal entry to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Content",
+          "name": "post",
+          "description": "Content of the journal entry - max 100,000 characters",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "description": "Title of the journal entry - max 250 characters",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a note",
+          "action": "Create a note"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a note",
+          "action": "Delete a note"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a note",
+          "action": "Get a note"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many notes",
+          "action": "Get many notes"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a note",
+          "action": "Update a note"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the note with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "body",
+      "displayName": "Body",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Body of the note - max 100,000 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Is Favorited",
+          "name": "isFavorited",
+          "description": "Whether the note has been favorited",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "noteId",
+      "displayName": "Note ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the note to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "noteId",
+      "displayName": "Note ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the note to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "noteId",
+      "displayName": "Note ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the note to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Body",
+          "name": "body",
+          "description": "Body of the note - max 100,000 characters",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Contact ID",
+          "name": "contact_id",
+          "description": "ID of the contact to associate the note with",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Is Favorited",
+          "name": "is_favorited",
+          "description": "Whether the note has been favorited",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a reminder",
+          "action": "Create a reminder"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a reminder",
+          "action": "Delete a reminder"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a reminder",
+          "action": "Get a reminder"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many reminders",
+          "action": "Get many reminders"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a reminder",
+          "action": "Update a reminder"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "description": "ID of the contact to associate the reminder with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "frequencyType",
+      "displayName": "Frequency Type",
+      "type": "options",
+      "default": "one_time",
+      "required": true,
+      "description": "Type of frequency of the reminder",
+      "options": [
+        {
+          "name": "Once",
+          "value": "one_time"
+        },
+        {
+          "name": "Weekly",
+          "value": "week"
+        },
+        {
+          "name": "Monthly",
+          "value": "month"
+        },
+        {
+          "name": "Yearly",
+          "value": "year"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "frequencyNumber",
+      "displayName": "Recurring Interval",
+      "type": "number",
+      "default": 0,
+      "description": "Interval for the reminder",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "frequencyType": [
+            "week",
+            "month",
+            "year"
+          ]
+        }
+      }
+    },
+    {
+      "name": "initialDate",
+      "displayName": "Initial Date",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "Date of the reminder",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the reminder - max 100,000 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description about the reminder - Max 100,000 characters"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "reminderId",
+      "displayName": "Reminder ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the reminder to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "reminderId",
+      "displayName": "Reminder ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the reminder to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "reminderId",
+      "displayName": "Reminder ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the reminder to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Contact ID",
+          "name": "contact_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the contact to associate the reminder with"
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description about the reminder - Max 100,000 characters"
+        },
+        {
+          "displayName": "Frequency Type",
+          "name": "frequency_type",
+          "description": "Frequency of the reminder",
+          "type": "options",
+          "default": "one_time",
+          "options": [
+            {
+              "name": "One Time",
+              "value": "one_time"
+            },
+            {
+              "name": "Week",
+              "value": "week"
+            },
+            {
+              "name": "Month",
+              "value": "month"
+            },
+            {
+              "name": "Year",
+              "value": "year"
+            }
+          ]
+        },
+        {
+          "displayName": "Initial Date",
+          "name": "initial_data",
+          "description": "Date of the reminder",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Recurring Interval",
+          "name": "frequency_number",
+          "type": "number",
+          "default": 0,
+          "description": "Interval for the reminder",
+          "displayOptions": {
+            "show": {
+              "frequency_type": [
+                "week",
+                "month",
+                "year"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "description": "Title of the reminder - max 100,000 characters",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a tag",
+          "action": "Create a tag"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a tag",
+          "action": "Delete a tag"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a tag",
+          "action": "Get a tag"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many tags",
+          "action": "Get many tags"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a tag",
+          "action": "Update a tag"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the tag - max 250 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagId",
+      "displayName": "Tag ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the tag to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagId",
+      "displayName": "Tag ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the tag to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "tagId",
+      "displayName": "Tag ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the tag to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the tag - max 250 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a task",
+          "action": "Create a task"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a task",
+          "action": "Delete a task"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a task",
+          "action": "Get a task"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many tasks",
+          "action": "Get many tasks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a task",
+          "action": "Update a task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the contact to associate the task with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the task entry - max 250 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description of the task - max 100,000 characters"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Contact ID",
+          "name": "contactId",
+          "description": "ID of the contact to associate the task with",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Completed",
+          "name": "completed",
+          "description": "Whether the task has been completed",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "Description of the task - max 100,000 characters"
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "description": "Title of the task entry - max 250 characters",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "monicaCrmApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "activityTypeId",
+    "contacts",
+    "happenedAt",
+    "summary",
+    "activityId",
+    "activityId",
+    "activityId",
+    "contactId",
+    "calledAt",
+    "content",
+    "callId",
+    "callId",
+    "callId",
+    "firstName",
+    "genderId",
+    "contactId",
+    "contactId",
+    "contactId",
+    "contactId",
+    "contactFieldTypeId",
+    "data",
+    "contactFieldId",
+    "contactFieldId",
+    "contactId",
+    "contactId",
+    "contactFieldId",
+    "contactFieldTypeId",
+    "data",
+    "contactId",
+    "tagsToAdd",
+    "contactId",
+    "tagsToRemove",
+    "contactId",
+    "contactFieldTypeId",
+    "happenedAt",
+    "conversationId",
+    "conversationId",
+    "conversationId",
+    "contactFieldTypeId",
+    "happenedAt",
+    "conversationId",
+    "content",
+    "writtenAt",
+    "writtenByMe",
+    "messageId",
+    "conversationId",
+    "title",
+    "post",
+    "journalId",
+    "journalId",
+    "journalId",
+    "contactId",
+    "body",
+    "noteId",
+    "noteId",
+    "noteId",
+    "frequencyType",
+    "initialDate",
+    "title",
+    "reminderId",
+    "reminderId",
+    "reminderId",
+    "name",
+    "tagId",
+    "tagId",
+    "tagId",
+    "name",
+    "contactId",
+    "title",
+    "taskId",
+    "taskId",
+    "taskId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "operation",
+    "operation",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "contactId",
+    "frequencyNumber",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "activityTypeId": "options",
+    "contacts": "string",
+    "happenedAt": "dateTime",
+    "summary": "string",
+    "additionalFields": "collection",
+    "activityId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateFields": "collection",
+    "contactId": "string",
+    "calledAt": "dateTime",
+    "content": "string",
+    "callId": "string",
+    "firstName": "string",
+    "genderId": "options",
+    "filters": "collection",
+    "contactFieldTypeId": "options",
+    "data": "string",
+    "contactFieldId": "string",
+    "tagsToAdd": "multiOptions",
+    "tagsToRemove": "multiOptions",
+    "conversationId": "string",
+    "writtenAt": "dateTime",
+    "writtenByMe": "options",
+    "messageId": "string",
+    "title": "string",
+    "post": "string",
+    "journalId": "string",
+    "body": "string",
+    "noteId": "string",
+    "frequencyType": "options",
+    "frequencyNumber": "number",
+    "initialDate": "dateTime",
+    "reminderId": "string",
+    "name": "string",
+    "tagId": "string",
+    "taskId": "string"
+  },
+  "hasVersions": false
+}

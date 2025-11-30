@@ -1,0 +1,166 @@
+{
+  "name": "seaTableTrigger",
+  "displayName": "SeaTable Trigger",
+  "description": "Starts the workflow when SeaTable events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 2,
+  "defaults": {
+    "event": "newRow",
+    "tableName": "",
+    "viewName": "",
+    "assetColumn": "",
+    "options": {},
+    "notice": ""
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "event",
+      "displayName": "Event",
+      "type": "options",
+      "default": "newRow",
+      "options": [
+        {
+          "name": "New Row",
+          "value": "newRow",
+          "description": "Trigger on newly created rows"
+        },
+        {
+          "name": "New or Updated Row",
+          "value": "updatedRow",
+          "description": "Trigger has recently created or modified rows"
+        },
+        {
+          "name": "New Signature",
+          "value": "newAsset",
+          "description": "Trigger on new signatures"
+        }
+      ]
+    },
+    {
+      "name": "tableName",
+      "displayName": "Table Name",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of SeaTable table to access. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getTableNames"
+      }
+    },
+    {
+      "name": "viewName",
+      "displayName": "View Name",
+      "type": "options",
+      "default": "",
+      "description": "The name of SeaTable view to access. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "tableName"
+        ],
+        "loadOptionsMethod": "getTableViews"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "newRow",
+            "updatedRow"
+          ]
+        }
+      }
+    },
+    {
+      "name": "assetColumn",
+      "displayName": "Signature Column",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Select the digital-signature column that should be tracked. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "tableName"
+        ],
+        "loadOptionsMethod": "getSignatureColumns"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "newAsset"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Simplify",
+          "name": "simple",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of the raw data"
+        },
+        {
+          "displayName": "Return Column Names",
+          "name": "convert",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return the column keys (false) or the column names (true)",
+          "displayOptions": {
+            "show": {
+              "/event": [
+                "newRow",
+                "updatedRow"
+              ]
+            }
+          }
+        }
+      ],
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "notice",
+      "displayName": "\"Fetch Test Event\" returns max. three items of the last hour.",
+      "type": "notice",
+      "default": ""
+    }
+  ],
+  "credentials": [
+    {
+      "name": "seaTableApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "tableName",
+    "assetColumn"
+  ],
+  "optionalFields": [
+    "event",
+    "viewName",
+    "options",
+    "notice"
+  ],
+  "parameterTypes": {
+    "event": "options",
+    "tableName": "options",
+    "viewName": "options",
+    "assetColumn": "options",
+    "options": "collection",
+    "notice": "notice"
+  },
+  "hasVersions": true,
+  "availableVersions": [
+    1,
+    2
+  ],
+  "defaultVersion": 2
+}

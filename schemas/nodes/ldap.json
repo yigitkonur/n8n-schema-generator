@@ -1,0 +1,606 @@
+{
+  "name": "ldap",
+  "displayName": "Ldap",
+  "description": "Interact with LDAP servers",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "operation": "search",
+    "nodeDebug": false,
+    "id": [],
+    "value": "",
+    "targetDn": "",
+    "attributes": {},
+    "baseDN": "",
+    "searchFor": [],
+    "customFilter": "(objectclass=*)",
+    "attribute": [],
+    "searchText": "",
+    "returnAll": false,
+    "limit": 50,
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "search",
+      "options": [
+        {
+          "name": "Compare",
+          "value": "compare",
+          "description": "Compare an attribute",
+          "action": "Compare an attribute"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new entry",
+          "action": "Create a new entry"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an entry",
+          "action": "Delete an entry"
+        },
+        {
+          "name": "Rename",
+          "value": "rename",
+          "description": "Rename the DN of an existing entry",
+          "action": "Rename the DN of an existing entry"
+        },
+        {
+          "name": "Search",
+          "value": "search",
+          "description": "Search LDAP",
+          "action": "Search LDAP"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update attributes",
+          "action": "Update attributes"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "nodeDebug",
+      "displayName": "Debug",
+      "type": "boolean",
+      "default": false,
+      "noDataExpression": true
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to compare",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to create",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to delete",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to rename",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "placeholder": "e.g. cn=john,ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to modify",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "modify"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "dn",
+      "displayName": "DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the entry to update",
+      "typeOptions": {
+        "alwaysOpenEditWindow": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "id",
+      "displayName": "Attribute ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the attribute to compare",
+      "typeOptions": {
+        "loadOptionsMethod": "getAttributesForDn"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "description": "The value to compare",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      }
+    },
+    {
+      "name": "targetDn",
+      "displayName": "New DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The new distinguished name for the entry",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "placeholder": "e.g. cn=nathan,ou=users,dc=n8n,dc=io"
+    },
+    {
+      "name": "attributes",
+      "displayName": "Attributes",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Attributes to add to the entry",
+      "options": [
+        {
+          "name": "attribute",
+          "displayName": "Attribute",
+          "values": [
+            {
+              "displayName": "Attribute ID",
+              "name": "id",
+              "type": "string",
+              "default": "",
+              "description": "The ID of the attribute to add",
+              "required": true
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value of the attribute to set"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Attributes"
+    },
+    {
+      "name": "attributes",
+      "displayName": "Update Attributes",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Update entry attributes",
+      "options": [
+        {
+          "name": "add",
+          "displayName": "Add",
+          "values": [
+            {
+              "displayName": "Attribute ID",
+              "name": "id",
+              "type": "string",
+              "default": "",
+              "description": "The ID of the attribute to add",
+              "required": true
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value of the attribute to set"
+            }
+          ]
+        },
+        {
+          "name": "replace",
+          "displayName": "Replace",
+          "values": [
+            {
+              "displayName": "Attribute ID",
+              "name": "id",
+              "type": "string",
+              "default": "",
+              "description": "The ID of the attribute to replace",
+              "required": true
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value of the attribute to replace"
+            }
+          ]
+        },
+        {
+          "name": "delete",
+          "displayName": "Remove",
+          "values": [
+            {
+              "displayName": "Attribute ID",
+              "name": "id",
+              "type": "string",
+              "default": "",
+              "description": "The ID of the attribute to remove",
+              "required": true
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value of the attribute to remove"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Update Attributes"
+    },
+    {
+      "name": "baseDN",
+      "displayName": "Base DN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The distinguished name of the subtree to search in",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "e.g. ou=users, dc=n8n, dc=io"
+    },
+    {
+      "name": "searchFor",
+      "displayName": "Search For",
+      "type": "options",
+      "default": [],
+      "description": "Directory object class to search for",
+      "typeOptions": {
+        "loadOptionsMethod": "getObjectClasses"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "customFilter",
+      "displayName": "Custom Filter",
+      "type": "string",
+      "default": "(objectclass=*)",
+      "description": "Custom LDAP filter. Escape these chars * ( ) \\ with a backslash \"\\\".",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "searchFor": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "attribute",
+      "displayName": "Attribute",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "Attribute to search for",
+      "typeOptions": {
+        "loadOptionsMethod": "getAttributes"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "searchText",
+      "displayName": "Search Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Text to search for, Use * for a wildcard",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Attribute Names or IDs",
+          "name": "attributes",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getAttributes"
+          },
+          "default": [],
+          "description": "Comma-separated list of attributes to return. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Page Size",
+          "name": "pageSize",
+          "type": "number",
+          "default": 1000,
+          "typeOptions": {
+            "minValue": 0
+          },
+          "description": "Maximum number of results to request at one time. Set to 0 to disable paging."
+        },
+        {
+          "displayName": "Scope",
+          "name": "scope",
+          "default": "sub",
+          "description": "The set of entries at or below the BaseDN that may be considered potential matches",
+          "type": "options",
+          "options": [
+            {
+              "name": "Base Object",
+              "value": "base"
+            },
+            {
+              "name": "Single Level",
+              "value": "one"
+            },
+            {
+              "name": "Whole Subtree",
+              "value": "sub"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "ldap",
+      "required": true,
+      "testedBy": "ldapConnectionTest"
+    }
+  ],
+  "requiredFields": [
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "id",
+    "targetDn",
+    "baseDN",
+    "attribute",
+    "searchText"
+  ],
+  "optionalFields": [
+    "operation",
+    "nodeDebug",
+    "value",
+    "attributes",
+    "attributes",
+    "searchFor",
+    "customFilter",
+    "returnAll",
+    "limit",
+    "options"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "nodeDebug": "boolean",
+    "dn": "string",
+    "id": "options",
+    "value": "string",
+    "targetDn": "string",
+    "attributes": "fixedCollection",
+    "baseDN": "string",
+    "searchFor": "options",
+    "customFilter": "string",
+    "attribute": "options",
+    "searchText": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

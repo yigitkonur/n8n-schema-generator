@@ -1,0 +1,707 @@
+{
+  "name": "awsElb",
+  "displayName": "AWS ELB",
+  "description": "Sends data to AWS ELB API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "resource": "loadBalancer",
+    "operation": "create",
+    "ipAddressType": "ipv4",
+    "name": "",
+    "schema": "internet-facing",
+    "type": "application",
+    "subnets": [],
+    "additionalFields": {},
+    "filters": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "loadBalancer",
+      "options": [
+        {
+          "name": "Listener Certificate",
+          "value": "listenerCertificate"
+        },
+        {
+          "name": "Load Balancer",
+          "value": "loadBalancer"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a load balancer",
+          "action": "Create a load balancer"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a load balancer",
+          "action": "Delete a load balancer"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a load balancer",
+          "action": "Get a load balancer"
+        },
+        {
+          "name": "Get Many",
+          "value": "getMany",
+          "description": "Get many load balancers",
+          "action": "Get many load balancers"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "ipAddressType",
+      "displayName": "IP Address Type",
+      "type": "options",
+      "default": "ipv4",
+      "required": true,
+      "description": "The type of IP addresses used by the subnets for your load balancer",
+      "options": [
+        {
+          "name": "Ipv4",
+          "value": "ipv4"
+        },
+        {
+          "name": "Dualstack",
+          "value": "dualstack"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "This name must be unique per region per account, can have a maximum of 32 characters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "schema",
+      "displayName": "Schema",
+      "type": "options",
+      "default": "internet-facing",
+      "required": true,
+      "options": [
+        {
+          "name": "Internal",
+          "value": "internal"
+        },
+        {
+          "name": "Internet Facing",
+          "value": "internet-facing"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "application",
+      "required": true,
+      "options": [
+        {
+          "name": "Application",
+          "value": "application"
+        },
+        {
+          "name": "Network",
+          "value": "network"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "subnets",
+      "displayName": "Subnet ID Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getSubnets"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Security Group IDs",
+          "name": "securityGroups",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getSecurityGroups"
+          },
+          "default": []
+        },
+        {
+          "displayName": "Tags",
+          "name": "tagsUi",
+          "placeholder": "Add Tag",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "tagValues",
+              "displayName": "Tag",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "The key of the tag"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "The value of the tag"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "loadBalancer"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "loadBalancerId",
+      "displayName": "Load Balancer ARN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "maxValue": 400,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Names",
+          "name": "names",
+          "type": "string",
+          "default": "",
+          "description": "The names of the load balancers. Multiples can be defined separated by comma."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "loadBalancer"
+          ],
+          "returnAll": [
+            true
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "loadBalancerId",
+      "displayName": "Load Balancer ARN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of loadBalancer to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener",
+          "action": "Add a listener certificate"
+        },
+        {
+          "name": "Get Many",
+          "value": "getMany",
+          "description": "Get many listener certificates",
+          "action": "Get many listener certificates"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove the specified certificate from the certificate list for the specified HTTPS or TLS listener",
+          "action": "Remove a listener certificate"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "loadBalancerId",
+      "displayName": "Load Balancer ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listenerId",
+      "displayName": "Listener ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancerListeners",
+        "loadOptionsDependsOn": [
+          "loadBalancerId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "certificateId",
+      "displayName": "Certificate ARN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "loadBalancerId",
+      "displayName": "Load Balancer ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listenerId",
+      "displayName": "Listener ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancerListeners",
+        "loadOptionsDependsOn": [
+          "loadBalancerId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "maxValue": 400,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "loadBalancerId",
+      "displayName": "Load Balancer ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listenerId",
+      "displayName": "Listener ARN Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLoadBalancerListeners",
+        "loadOptionsDependsOn": [
+          "loadBalancerId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "certificateId",
+      "displayName": "Certificate ARN",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular loadBalancer",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "ipAddressType",
+    "name",
+    "schema",
+    "type",
+    "subnets",
+    "loadBalancerId",
+    "loadBalancerId",
+    "loadBalancerId",
+    "listenerId",
+    "certificateId",
+    "loadBalancerId",
+    "listenerId",
+    "loadBalancerId",
+    "listenerId",
+    "certificateId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "ipAddressType": "options",
+    "name": "string",
+    "schema": "options",
+    "type": "options",
+    "subnets": "multiOptions",
+    "additionalFields": "collection",
+    "loadBalancerId": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "listenerId": "options",
+    "certificateId": "string"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,220 @@
+{
+  "required": [
+    "nodes",
+    "connections"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique workflow identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Workflow name"
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Whether the workflow is active"
+    },
+    "nodes": {
+      "type": "array",
+      "description": "Array of workflow nodes",
+      "items": {
+        "type": "object",
+        "description": "Node instance"
+      }
+    },
+    "connections": {
+      "type": "object",
+      "description": "Map of node connections"
+    },
+    "settings": {
+      "type": "object",
+      "description": "Workflow settings",
+      "properties": {
+        "saveManualExecutions": {
+          "type": "boolean",
+          "description": "Save manual runs"
+        },
+        "saveDataErrorExecution": {
+          "type": "string",
+          "description": "Save on error behavior"
+        },
+        "saveDataSuccessExecution": {
+          "type": "string",
+          "description": "Save on success behavior"
+        },
+        "saveExecutionProgress": {
+          "type": "boolean",
+          "description": "Save execution progress"
+        },
+        "executionTimeout": {
+          "type": "number",
+          "description": "Timeout in seconds"
+        },
+        "errorWorkflow": {
+          "type": "string",
+          "description": "Error workflow ID"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Workflow timezone"
+        },
+        "executionOrder": {
+          "type": "string",
+          "description": "Execution order (v0 or v1)"
+        }
+      }
+    },
+    "staticData": {
+      "type": "object",
+      "description": "Persistent workflow data"
+    },
+    "pinData": {
+      "type": "object",
+      "description": "Pinned node data for testing"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Workflow tags",
+      "items": {
+        "type": "object",
+        "description": "Tag object"
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Workflow metadata",
+      "properties": {
+        "instanceId": {
+          "type": "string",
+          "description": "n8n instance ID"
+        }
+      }
+    }
+  },
+  "nodeSchema": {
+    "required": [
+      "type",
+      "typeVersion",
+      "position",
+      "parameters"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique node identifier (UUID)"
+      },
+      "name": {
+        "type": "string",
+        "description": "Node display name (must be unique in workflow)"
+      },
+      "type": {
+        "type": "string",
+        "description": "Node type (e.g., n8n-nodes-base.httpRequest)"
+      },
+      "typeVersion": {
+        "type": "number",
+        "description": "Node type version"
+      },
+      "position": {
+        "type": "array",
+        "description": "Node position [x, y] on canvas",
+        "items": {
+          "type": "number",
+          "description": "Coordinate value"
+        }
+      },
+      "parameters": {
+        "type": "object",
+        "description": "Node-specific parameters"
+      },
+      "credentials": {
+        "type": "object",
+        "description": "Credential references"
+      },
+      "disabled": {
+        "type": "boolean",
+        "description": "Whether node is disabled"
+      },
+      "notes": {
+        "type": "string",
+        "description": "Node notes/comments"
+      },
+      "notesInFlow": {
+        "type": "boolean",
+        "description": "Show notes in flow"
+      },
+      "retryOnFail": {
+        "type": "boolean",
+        "description": "Retry on failure"
+      },
+      "maxTries": {
+        "type": "number",
+        "description": "Max retry attempts"
+      },
+      "waitBetweenTries": {
+        "type": "number",
+        "description": "Wait between retries (ms)"
+      },
+      "alwaysOutputData": {
+        "type": "boolean",
+        "description": "Always output data"
+      },
+      "executeOnce": {
+        "type": "boolean",
+        "description": "Execute once for all items"
+      },
+      "continueOnFail": {
+        "type": "boolean",
+        "description": "Continue on failure"
+      },
+      "onError": {
+        "type": "string",
+        "description": "Error handling mode"
+      },
+      "webhookId": {
+        "type": "string",
+        "description": "Webhook identifier"
+      }
+    }
+  },
+  "connectionSchema": {
+    "type": "object",
+    "description": "Node connection mapping. Keys are source node names.",
+    "properties": {
+      "[nodeName]": {
+        "type": "object",
+        "description": "Connections from this node",
+        "properties": {
+          "main": {
+            "type": "array",
+            "description": "Array of output connections (one array per output)",
+            "items": {
+              "type": "array",
+              "description": "Connections for this output",
+              "items": {
+                "type": "object",
+                "description": "Single connection",
+                "properties": {
+                  "node": {
+                    "type": "string",
+                    "description": "Target node name"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Connection type (main)"
+                  },
+                  "index": {
+                    "type": "number",
+                    "description": "Target input index"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

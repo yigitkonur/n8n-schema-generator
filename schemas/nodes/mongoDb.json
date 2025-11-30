@@ -1,0 +1,524 @@
+{
+  "name": "mongoDb",
+  "displayName": "MongoDB",
+  "description": "Find, insert and update documents in MongoDB",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "defaults": {
+    "resource": "document",
+    "operation": "find",
+    "collection": "",
+    "options": {},
+    "query": "{}",
+    "updateKey": "id",
+    "upsert": false,
+    "indexName": "",
+    "indexNameRequired": "",
+    "indexDefinition": "{}",
+    "indexType": "vectorSearch"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "document",
+      "options": [
+        {
+          "name": "Search Index",
+          "value": "searchIndexes"
+        },
+        {
+          "name": "Document",
+          "value": "document"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "find",
+      "options": [
+        {
+          "name": "Aggregate",
+          "value": "aggregate",
+          "description": "Aggregate documents",
+          "action": "Aggregate documents"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete documents",
+          "action": "Delete documents"
+        },
+        {
+          "name": "Find",
+          "value": "find",
+          "description": "Find documents",
+          "action": "Find documents"
+        },
+        {
+          "name": "Find And Replace",
+          "value": "findOneAndReplace",
+          "description": "Find and replace documents",
+          "action": "Find and replace documents"
+        },
+        {
+          "name": "Find And Update",
+          "value": "findOneAndUpdate",
+          "description": "Find and update documents",
+          "action": "Find and update documents"
+        },
+        {
+          "name": "Insert",
+          "value": "insert",
+          "description": "Insert documents",
+          "action": "Insert documents"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update documents",
+          "action": "Update documents"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "createSearchIndex",
+      "options": [
+        {
+          "name": "Create",
+          "value": "createSearchIndex",
+          "action": "Create Search Index"
+        },
+        {
+          "name": "Drop",
+          "value": "dropSearchIndex",
+          "action": "Drop Search Index"
+        },
+        {
+          "name": "List",
+          "value": "listSearchIndexes",
+          "action": "List Search Indexes"
+        },
+        {
+          "name": "Update",
+          "value": "updateSearchIndex",
+          "action": "Update Search Index"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "MongoDB Collection"
+    },
+    {
+      "name": "query",
+      "displayName": "Query",
+      "type": "json",
+      "default": "",
+      "required": true,
+      "description": "MongoDB aggregation pipeline query in JSON format",
+      "typeOptions": {
+        "alwaysOpenEditWindow": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "aggregate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "[{ \"$match\": { \"$gt\": \"1950-01-01\" }, ... }]",
+      "hint": "Learn more about aggregation pipeline <a href=\"https://docs.mongodb.com/manual/core/aggregation-pipeline/\">here</a>"
+    },
+    {
+      "name": "query",
+      "displayName": "Delete Query (JSON Format)",
+      "type": "json",
+      "default": "{}",
+      "required": true,
+      "description": "MongoDB Delete query",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "{ \"birth\": { \"$gt\": \"1950-01-01\" } }"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "description": "Add query options",
+      "options": [
+        {
+          "displayName": "Limit",
+          "name": "limit",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1
+          },
+          "default": 0,
+          "description": "Use limit to specify the maximum number of documents or 0 for unlimited documents"
+        },
+        {
+          "displayName": "Skip",
+          "name": "skip",
+          "type": "number",
+          "default": 0,
+          "description": "The number of documents to skip in the results set"
+        },
+        {
+          "displayName": "Sort (JSON Format)",
+          "name": "sort",
+          "type": "json",
+          "typeOptions": {
+            "rows": 2
+          },
+          "default": "{}",
+          "placeholder": "{ \"field\": -1 }",
+          "description": "A JSON that defines the sort order of the result set"
+        },
+        {
+          "displayName": "Projection (JSON Format)",
+          "name": "projection",
+          "type": "json",
+          "typeOptions": {
+            "rows": 4
+          },
+          "default": "{}",
+          "placeholder": "{ \"_id\": 0, \"field\": 1 }",
+          "description": "A JSON that defines a selection of fields to retrieve or exclude from the result set"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "query",
+      "displayName": "Query (JSON Format)",
+      "type": "json",
+      "default": "{}",
+      "required": true,
+      "description": "MongoDB Find query",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "{ \"birth\": { \"$gt\": \"1950-01-01\" } }"
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of the fields to be included into the new document",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "name,description"
+    },
+    {
+      "name": "updateKey",
+      "displayName": "Update Key",
+      "type": "string",
+      "default": "id",
+      "required": true,
+      "description": "Name of the property which decides which rows in the database should be updated. Normally that would be \"id\".",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fields",
+      "displayName": "Fields",
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of the fields to be included into the new document",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "name,description"
+    },
+    {
+      "name": "upsert",
+      "displayName": "Upsert",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to perform an insert if no documents match the update key",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Date Fields",
+          "name": "dateFields",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated list of fields that will be parsed as Mongo Date type"
+        },
+        {
+          "displayName": "Use Dot Notation",
+          "name": "useDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use dot notation to access date fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "insert",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "indexName",
+      "displayName": "Index Name",
+      "type": "string",
+      "default": "",
+      "description": "If provided, only lists indexes with the specified name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "listSearchIndexes"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      }
+    },
+    {
+      "name": "indexNameRequired",
+      "displayName": "Index Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the search index",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "dropSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      }
+    },
+    {
+      "name": "indexDefinition",
+      "displayName": "Index Definition",
+      "type": "json",
+      "default": "{}",
+      "required": true,
+      "description": "The search index definition",
+      "typeOptions": {
+        "alwaysOpenEditWindow": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "placeholder": "{ \"type\": \"vectorSearch\", \"definition\": {} }",
+      "hint": "Learn more about search index definitions <a href=\"https://www.mongodb.com/docs/atlas/atlas-search/index-definitions/\">here</a>"
+    },
+    {
+      "name": "indexType",
+      "displayName": "Index Type",
+      "type": "options",
+      "default": "vectorSearch",
+      "required": true,
+      "description": "The search index index type",
+      "options": [
+        {
+          "value": "vectorSearch",
+          "name": "Vector Search"
+        },
+        {
+          "name": "Search",
+          "value": "search"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mongoDb",
+      "required": true,
+      "testedBy": "mongoDbCredentialTest"
+    }
+  ],
+  "requiredFields": [
+    "collection",
+    "query",
+    "query",
+    "query",
+    "updateKey",
+    "indexNameRequired",
+    "indexDefinition",
+    "indexType"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "options",
+    "fields",
+    "fields",
+    "upsert",
+    "options",
+    "indexName"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "collection": "string",
+    "query": "json",
+    "options": "collection",
+    "fields": "string",
+    "updateKey": "string",
+    "upsert": "boolean",
+    "indexName": "string",
+    "indexNameRequired": "string",
+    "indexDefinition": "json",
+    "indexType": "options"
+  },
+  "hasVersions": false
+}

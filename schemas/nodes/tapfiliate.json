@@ -1,0 +1,945 @@
+{
+  "name": "tapfiliate",
+  "displayName": "Tapfiliate",
+  "description": "Consume Tapfiliate API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "affiliate",
+    "operation": "create",
+    "email": "",
+    "firstname": "",
+    "lastname": "",
+    "additionalFields": {},
+    "filters": {},
+    "metadataUi": {},
+    "value": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "affiliate",
+      "required": true,
+      "options": [
+        {
+          "name": "Affiliate",
+          "value": "affiliate"
+        },
+        {
+          "name": "Affiliate Metadata",
+          "value": "affiliateMetadata"
+        },
+        {
+          "name": "Program Affiliate",
+          "value": "programAffiliate"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an affiliate",
+          "action": "Create an affiliate"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an affiliate",
+          "action": "Delete an affiliate"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an affiliate by ID",
+          "action": "Get an affiliate"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many affiliates",
+          "action": "Get many affiliates"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The affiliate’s email",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "firstname",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The affiliate’s firstname",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "lastname",
+      "displayName": "Last Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The affiliate’s lastname",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "addressUi",
+          "placeholder": "Address",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "addressValues",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "Line 1",
+                  "name": "address",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 2",
+                  "name": "address_two",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Code",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "The country’s ISO_3166-1 code. <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1\">Codes</a>."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Company Name",
+          "name": "companyName",
+          "type": "string",
+          "default": "",
+          "description": "The affiliate’s company data"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Affiliate Group ID",
+          "name": "affiliate_group_id",
+          "type": "string",
+          "default": "",
+          "description": "Retrieves affiliates for a certain affiliate group"
+        },
+        {
+          "displayName": "Click ID",
+          "name": "click_id",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "description": "An email address,"
+        },
+        {
+          "displayName": "Parent ID",
+          "name": "parentId",
+          "type": "string",
+          "default": "",
+          "description": "Retrieves children for a certain parent affiliate"
+        },
+        {
+          "displayName": "Referral Code",
+          "name": "referral_code",
+          "type": "string",
+          "default": "",
+          "description": "An affiliate’s referral code. This corresponds to the value of ref= in their referral link."
+        },
+        {
+          "displayName": "Source ID",
+          "name": "source_id",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add metadata to affiliate",
+          "action": "Add metadata to an affiliate"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove metadata from affiliate",
+          "action": "Remove metadata from an affiliate"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update affiliate's metadata",
+          "action": "Update metadata for an affiliate"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "metadataUi",
+      "displayName": "Metadata",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "Meta data",
+      "options": [
+        {
+          "name": "metadataValues",
+          "displayName": "Metadata",
+          "values": [
+            {
+              "displayName": "Key",
+              "name": "key",
+              "type": "string",
+              "default": "",
+              "description": "Name of the metadata key to add"
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value to set for the metadata key"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "placeholder": "Add Metadata"
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "key",
+      "displayName": "Key",
+      "type": "string",
+      "default": "",
+      "description": "Name of the metadata key to remove",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "key",
+      "displayName": "Key",
+      "type": "string",
+      "default": "",
+      "description": "Name of the metadata key to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "description": "Value to set for the metadata key",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add affiliate to program",
+          "action": "Add a program affiliate"
+        },
+        {
+          "name": "Approve",
+          "value": "approve",
+          "description": "Approve an affiliate for a program",
+          "action": "Approve a program affiliate"
+        },
+        {
+          "name": "Disapprove",
+          "value": "disapprove",
+          "description": "Disapprove an affiliate",
+          "action": "Disapprove a program affiliate"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an affiliate in a program",
+          "action": "Get a program affiliate"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many affiliates in program",
+          "action": "Get many program affiliates"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "programId",
+      "displayName": "Program Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPrograms"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Approved",
+          "name": "approved",
+          "type": "boolean",
+          "default": true,
+          "description": "An optional approval status"
+        },
+        {
+          "displayName": "Coupon",
+          "name": "coupon",
+          "type": "string",
+          "default": "",
+          "description": "An optional coupon for this affiliate"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "programId",
+      "displayName": "Program Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPrograms"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "approve"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "approve"
+          ]
+        }
+      }
+    },
+    {
+      "name": "programId",
+      "displayName": "Program Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPrograms"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "disapprove"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "disapprove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "programId",
+      "displayName": "Program Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPrograms"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "affiliateId",
+      "displayName": "Affiliate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the affiliate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "programId",
+      "displayName": "Program Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPrograms"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Affiliate Group ID",
+          "name": "affiliate_group_id",
+          "type": "string",
+          "default": "",
+          "description": "Retrieves affiliates for a certain affiliate group"
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "description": "An email address"
+        },
+        {
+          "displayName": "Parent ID",
+          "name": "parentId",
+          "type": "string",
+          "default": "",
+          "description": "Retrieves children for a certain parent affiliate"
+        },
+        {
+          "displayName": "Source ID",
+          "name": "source_id",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "tapfiliateApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "email",
+    "firstname",
+    "lastname",
+    "affiliateId",
+    "affiliateId",
+    "affiliateId",
+    "affiliateId",
+    "affiliateId",
+    "programId",
+    "affiliateId",
+    "programId",
+    "affiliateId",
+    "programId"
+  ],
+  "optionalFields": [
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "metadataUi",
+    "key",
+    "key",
+    "value",
+    "operation",
+    "additionalFields",
+    "programId",
+    "affiliateId",
+    "programId",
+    "affiliateId",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "email": "string",
+    "firstname": "string",
+    "lastname": "string",
+    "additionalFields": "collection",
+    "affiliateId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "metadataUi": "fixedCollection",
+    "key": "string",
+    "value": "string",
+    "programId": "options"
+  },
+  "hasVersions": false
+}

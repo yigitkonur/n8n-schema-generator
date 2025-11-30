@@ -1,0 +1,70 @@
+{
+  "nodeType": "n8n-nodes-base.twilioTrigger",
+  "displayName": "Twilio Trigger",
+  "version": [
+    1
+  ],
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "updates"
+  ],
+  "optionalParameters": [
+    "callTriggerNotice"
+  ],
+  "validationRules": [
+    {
+      "field": "updates",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "com.twilio.messaging.inbound-message.received",
+          "com.twilio.voice.insights.call-summary.complete"
+        ]
+      }
+    },
+    {
+      "field": "callTriggerNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "updates": [
+            "com.twilio.voice.insights.call-summary.complete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "updates"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "updates": [],
+    "callTriggerNotice": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "callTriggerNotice",
+      "condition": {
+        "show": {
+          "updates": [
+            "com.twilio.voice.insights.call-summary.complete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "updates"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

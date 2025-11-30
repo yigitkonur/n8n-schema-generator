@@ -1,0 +1,114 @@
+{
+  "name": "acuitySchedulingTrigger",
+  "displayName": "Acuity Scheduling Trigger",
+  "description": "Handle Acuity Scheduling events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "apiKey",
+    "event": "",
+    "resolveData": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiKey",
+      "options": [
+        {
+          "name": "API Key",
+          "value": "apiKey"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "event",
+      "displayName": "Event",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "options": [
+        {
+          "name": "appointment.canceled",
+          "value": "appointment.canceled",
+          "description": "Is called whenever an appointment is canceled"
+        },
+        {
+          "name": "appointment.changed",
+          "value": "appointment.changed",
+          "description": "Is called when the appointment is changed in any way"
+        },
+        {
+          "name": "appointment.rescheduled",
+          "value": "appointment.rescheduled",
+          "description": "Is called when the appointment is rescheduled to a new time"
+        },
+        {
+          "name": "appointment.scheduled",
+          "value": "appointment.scheduled",
+          "description": "Is called once when an appointment is initially booked"
+        },
+        {
+          "name": "order.completed",
+          "value": "order.completed",
+          "description": "Is called when an order is completed"
+        }
+      ]
+    },
+    {
+      "name": "resolveData",
+      "displayName": "Resolve Data",
+      "type": "boolean",
+      "default": true,
+      "description": "By default does the webhook-data only contain the ID of the object. If this option gets activated, it will resolve the data automatically."
+    }
+  ],
+  "credentials": [
+    {
+      "name": "acuitySchedulingApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "acuitySchedulingOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "event"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resolveData"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "event": "options",
+    "resolveData": "boolean"
+  },
+  "hasVersions": false
+}

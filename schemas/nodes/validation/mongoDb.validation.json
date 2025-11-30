@@ -1,0 +1,751 @@
+{
+  "nodeType": "n8n-nodes-base.mongoDb",
+  "displayName": "MongoDB",
+  "version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [
+    "collection"
+  ],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "operation",
+    "query",
+    "query",
+    "options",
+    "query",
+    "fields",
+    "updateKey",
+    "fields",
+    "upsert",
+    "options",
+    "indexName",
+    "indexNameRequired",
+    "indexDefinition",
+    "indexType"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "document",
+        "enumValues": [
+          "searchIndexes",
+          "document"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "find",
+        "enumValues": [
+          "aggregate",
+          "delete",
+          "find",
+          "findOneAndReplace",
+          "findOneAndUpdate",
+          "insert",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "createSearchIndex",
+        "enumValues": [
+          "createSearchIndex",
+          "dropSearchIndex",
+          "listSearchIndexes",
+          "updateSearchIndex"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "collection",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "query",
+      "type": "json",
+      "required": true,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "aggregate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "json",
+      "required": true,
+      "constraints": {
+        "type": "json",
+        "default": "{}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "json",
+      "required": true,
+      "constraints": {
+        "type": "json",
+        "default": "{}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateKey",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "id"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "upsert",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "insert",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexName",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "listSearchIndexes"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexNameRequired",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "dropSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexDefinition",
+      "type": "json",
+      "required": true,
+      "constraints": {
+        "type": "json",
+        "default": "{}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexType",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "vectorSearch",
+        "enumValues": [
+          "vectorSearch",
+          "search"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "document",
+    "operation": "find",
+    "collection": "",
+    "options": {},
+    "query": "{}",
+    "updateKey": "id",
+    "upsert": false,
+    "indexName": "",
+    "indexNameRequired": "",
+    "indexDefinition": "{}",
+    "indexType": "vectorSearch"
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "operation": [
+            "aggregate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "condition": {
+        "show": {
+          "operation": [
+            "insert"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateKey",
+      "condition": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "condition": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "upsert",
+      "condition": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "update",
+            "insert",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexName",
+      "condition": {
+        "show": {
+          "operation": [
+            "listSearchIndexes"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexNameRequired",
+      "condition": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "dropSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexDefinition",
+      "condition": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "indexType",
+      "condition": {
+        "show": {
+          "operation": [
+            "createSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "document": {
+      "operations": [
+        "aggregate",
+        "delete",
+        "find",
+        "findOneAndReplace",
+        "findOneAndUpdate",
+        "insert",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "aggregate": [
+          "query"
+        ],
+        "delete": [
+          "query"
+        ],
+        "find": [
+          "options",
+          "query"
+        ],
+        "findOneAndReplace": [
+          "updateKey",
+          "fields",
+          "upsert",
+          "options"
+        ],
+        "findOneAndUpdate": [
+          "updateKey",
+          "fields",
+          "upsert",
+          "options"
+        ],
+        "insert": [
+          "fields",
+          "options"
+        ],
+        "update": [
+          "updateKey",
+          "fields",
+          "upsert",
+          "options"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

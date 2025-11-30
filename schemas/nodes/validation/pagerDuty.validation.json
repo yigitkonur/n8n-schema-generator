@@ -1,0 +1,1354 @@
+{
+  "nodeType": "n8n-nodes-base.pagerDuty",
+  "displayName": "PagerDuty",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "resource",
+    "operation",
+    "title",
+    "serviceId",
+    "email",
+    "additionalFields",
+    "conferenceBridgeUi",
+    "incidentId",
+    "returnAll",
+    "limit",
+    "options",
+    "incidentId",
+    "email",
+    "updateFields",
+    "conferenceBridgeUi",
+    "operation",
+    "incidentId",
+    "content",
+    "email",
+    "incidentId",
+    "returnAll",
+    "limit",
+    "operation",
+    "logEntryId",
+    "returnAll",
+    "limit",
+    "options",
+    "operation",
+    "userId"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "apiToken",
+        "enumValues": [
+          "apiToken",
+          "oAuth2"
+        ]
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "incident",
+        "enumValues": [
+          "incident",
+          "incidentNote",
+          "logEntry",
+          "user"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "serviceId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "conferenceBridgeUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conferenceBridgeValues": {
+            "type": "object",
+            "properties": {
+              "conferenceNumber": {
+                "type": "string",
+                "default": ""
+              },
+              "conferenceUrl": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incident"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incident"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "conferenceBridgeUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conferenceBridgeValues": {
+            "type": "object",
+            "properties": {
+              "conferenceNumber": {
+                "type": "string",
+                "default": ""
+              },
+              "conferenceUrl": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "content",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incidentNote"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incidentNote"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get",
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "logEntryId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "logEntry"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "logEntry"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "userId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "apiToken",
+    "resource": "incident",
+    "operation": "create",
+    "title": "",
+    "serviceId": "",
+    "email": "",
+    "additionalFields": {},
+    "conferenceBridgeUi": {},
+    "options": {},
+    "updateFields": {},
+    "content": "",
+    "logEntryId": "",
+    "userId": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "title",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "serviceId",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "conferenceBridgeUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incident"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incident"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "conferenceBridgeUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "incident"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "condition": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "content",
+      "condition": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "email",
+      "condition": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "incidentId",
+      "condition": {
+        "show": {
+          "resource": [
+            "incidentNote"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incidentNote"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "incidentNote"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "logEntryId",
+      "condition": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "logEntry"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "logEntry"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "logEntry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "userId",
+      "condition": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "incident": {
+      "operations": [
+        "create",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "title",
+          "serviceId",
+          "email",
+          "additionalFields",
+          "conferenceBridgeUi"
+        ],
+        "get": [
+          "incidentId"
+        ],
+        "getAll": [
+          "returnAll",
+          "limit",
+          "options"
+        ],
+        "update": [
+          "incidentId",
+          "email",
+          "updateFields",
+          "conferenceBridgeUi"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "conferenceBridgeUi",
+      "validOptions": [
+        "conferenceBridgeValues"
+      ],
+      "optionSchemas": {
+        "conferenceBridgeValues": [
+          {
+            "field": "conferenceNumber",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "conferenceUrl",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "conferenceBridgeUi",
+      "validOptions": [
+        "conferenceBridgeValues"
+      ],
+      "optionSchemas": {
+        "conferenceBridgeValues": [
+          {
+            "field": "conferenceNumber",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "conferenceUrl",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

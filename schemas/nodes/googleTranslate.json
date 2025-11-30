@@ -1,0 +1,184 @@
+{
+  "name": "googleTranslate",
+  "displayName": "Google Translate",
+  "description": "Translate data using Google Translate",
+  "group": [
+    "input",
+    "output"
+  ],
+  "version": [
+    1,
+    2
+  ],
+  "defaults": {
+    "authentication": "serviceAccount",
+    "resource": "language",
+    "operation": "translate",
+    "text": "",
+    "translateTo": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "serviceAccount",
+      "options": [
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "oAuth2",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "language",
+      "options": [
+        {
+          "name": "Language",
+          "value": "language"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "translate",
+      "options": [
+        {
+          "name": "Translate",
+          "value": "translate",
+          "description": "Translate data",
+          "action": "Translate a language"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "language"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "text",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The input text to translate",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "translate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "translateTo",
+      "displayName": "Translate To",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The language to use for translation of the input text, set to one of the language codes listed in <a href=\"https://cloud.google.com/translate/docs/languages\">Language Support</a>. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLanguages"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "translate"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleTranslateOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "text",
+    "translateTo"
+  ],
+  "optionalFields": [
+    "authentication",
+    "authentication",
+    "resource",
+    "operation"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "text": "string",
+    "translateTo": "options"
+  },
+  "hasVersions": false
+}

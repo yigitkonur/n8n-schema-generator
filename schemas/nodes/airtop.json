@@ -1,0 +1,3334 @@
+{
+  "name": "airtop",
+  "displayName": "Airtop",
+  "description": "Scrape and control any site with Airtop",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "resource": "session",
+    "webhookUrl": "",
+    "agentParameters": "{}",
+    "awaitExecution": true,
+    "timeout": 600,
+    "operation": "create",
+    "profileName": "",
+    "saveProfileOnTermination": false,
+    "record": false,
+    "timeoutMinutes": 10,
+    "proxy": "none",
+    "proxyConfig": {
+      "country": "US",
+      "sticky": true
+    },
+    "proxyUrl": "",
+    "additionalFields": {},
+    "notice": "This operation will save the profile on session termination",
+    "getLiveView": false,
+    "includeNavigationBar": false,
+    "screenResolution": "",
+    "disableResize": false,
+    "outputImageAsBinary": false,
+    "outputBinaryFile": false,
+    "returnAll": false,
+    "limit": 10,
+    "sessionIds": "",
+    "outputSingleItem": true,
+    "fileName": "",
+    "fileType": "customer_upload",
+    "source": "url",
+    "binaryPropertyName": "data",
+    "triggerFileInputParameter": true,
+    "sessionMode": "existing",
+    "autoTerminateSession": true,
+    "clickType": "click",
+    "formData": "",
+    "scrollingMode": "automatic",
+    "scrollToElement": "",
+    "scrollToEdge": {},
+    "scrollBy": {},
+    "scrollWithin": "",
+    "text": "",
+    "pressEnterKey": false
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "session",
+      "options": [
+        {
+          "name": "Agent",
+          "value": "agent"
+        },
+        {
+          "name": "Extraction",
+          "value": "extraction"
+        },
+        {
+          "name": "File",
+          "value": "file"
+        },
+        {
+          "name": "Interaction",
+          "value": "interaction"
+        },
+        {
+          "name": "Session",
+          "value": "session"
+        },
+        {
+          "name": "Window",
+          "value": "window"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "run",
+      "options": [
+        {
+          "name": "Run",
+          "value": "run",
+          "description": "Run an Airtop agent",
+          "action": "Run an agent"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "webhookUrl",
+      "displayName": "Webhook URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Webhook URL to invoke the Airtop agent. Visit <a href=\"https://portal.airtop.ai/agents\" target=\"_blank\">Airtop Agents</a> for more information.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "name": "agentParameters",
+      "displayName": "Parameters",
+      "type": "json",
+      "default": "{}",
+      "required": true,
+      "description": "Agent's input parameters in JSON format. Visit <a href=\"https://portal.airtop.ai/agents\" target=\"_blank\">Airtop Agents</a> for more information.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awaitExecution",
+      "displayName": "Await Agent",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to wait for the agent to complete its execution",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      }
+    },
+    {
+      "name": "timeout",
+      "displayName": "Timeout",
+      "type": "number",
+      "default": 600,
+      "description": "Timeout in seconds to wait for the agent to finish",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ],
+          "awaitExecution": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create Session",
+          "value": "create",
+          "description": "Create an Airtop browser session",
+          "action": "Create a session"
+        },
+        {
+          "name": "Save Profile on Termination",
+          "value": "save",
+          "description": "Save in a profile changes made in your browsing session such as cookies and local storage",
+          "action": "Save a profile on session termination"
+        },
+        {
+          "name": "Terminate Session",
+          "value": "terminate",
+          "description": "Terminate a session",
+          "action": "Terminate a session"
+        },
+        {
+          "name": "Wait for Download",
+          "value": "waitForDownload",
+          "description": "Wait for a file download to become available",
+          "action": "Wait for a download"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "profileName",
+      "displayName": "Profile Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the Airtop profile to load or create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. my-x-profile",
+      "hint": "<a href=\"https://docs.airtop.ai/guides/how-to/saving-a-profile\" target=\"_blank\">Learn more</a> about Airtop profiles"
+    },
+    {
+      "name": "saveProfileOnTermination",
+      "displayName": "Save Profile",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to automatically save the <a href=\"https://docs.airtop.ai/guides/how-to/saving-a-profile\" target=\"_blank\">Airtop profile</a> for this session upon termination",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "record",
+      "displayName": "Record Session",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to record the browser session. <a href=\"https://docs.airtop.ai/guides/how-to/recording-a-session\" target=\"_blank\">More details</a>.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "timeoutMinutes",
+      "displayName": "Idle Timeout",
+      "type": "number",
+      "default": 10,
+      "description": "Minutes to wait before the session is terminated due to inactivity",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "proxy",
+      "displayName": "Proxy",
+      "type": "options",
+      "default": "none",
+      "description": "Choose how to configure the proxy for this session",
+      "options": [
+        {
+          "name": "None",
+          "value": "none",
+          "description": "No proxy will be used"
+        },
+        {
+          "name": "Integrated",
+          "value": "integrated",
+          "description": "Use Airtop-provided proxy"
+        },
+        {
+          "name": "Proxy URL",
+          "value": "proxyUrl",
+          "description": "Use a proxy URL to configure the proxy"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "proxyConfig",
+      "displayName": "Proxy Configuration",
+      "type": "collection",
+      "default": {
+        "country": "US",
+        "sticky": true
+      },
+      "description": "The Airtop-provided configuration to use for the proxy",
+      "options": [
+        {
+          "displayName": "Country",
+          "name": "country",
+          "type": "options",
+          "default": "US",
+          "description": "The country to use for the proxy. Not all countries are guaranteed to provide a proxy. Learn more <a href=\"https://docs.airtop.ai/api-reference/airtop-api/sessions/create#request.body.configuration.proxy.Proxy.Airtop-Proxy-Configuration.country\" target=\"_blank\">here</a>.",
+          "options": [
+            {
+              "name": "Afghanistan",
+              "value": "AF"
+            },
+            {
+              "name": "Aland Islands",
+              "value": "AX"
+            },
+            {
+              "name": "Albania",
+              "value": "AL"
+            },
+            {
+              "name": "Algeria",
+              "value": "DZ"
+            },
+            {
+              "name": "American Samoa",
+              "value": "AS"
+            },
+            {
+              "name": "Andorra",
+              "value": "AD"
+            },
+            {
+              "name": "Angola",
+              "value": "AO"
+            },
+            {
+              "name": "Anguilla",
+              "value": "AI"
+            },
+            {
+              "name": "Antarctica",
+              "value": "AQ"
+            },
+            {
+              "name": "Antigua and Barbuda",
+              "value": "AG"
+            },
+            {
+              "name": "Argentina",
+              "value": "AR"
+            },
+            {
+              "name": "Armenia",
+              "value": "AM"
+            },
+            {
+              "name": "Aruba",
+              "value": "AW"
+            },
+            {
+              "name": "Australia",
+              "value": "AU"
+            },
+            {
+              "name": "Austria",
+              "value": "AT"
+            },
+            {
+              "name": "Azerbaijan",
+              "value": "AZ"
+            },
+            {
+              "name": "Bahamas",
+              "value": "BS"
+            },
+            {
+              "name": "Bahrain",
+              "value": "BH"
+            },
+            {
+              "name": "Bangladesh",
+              "value": "BD"
+            },
+            {
+              "name": "Barbados",
+              "value": "BB"
+            },
+            {
+              "name": "Belarus",
+              "value": "BY"
+            },
+            {
+              "name": "Belgium",
+              "value": "BE"
+            },
+            {
+              "name": "Belize",
+              "value": "BZ"
+            },
+            {
+              "name": "Benin",
+              "value": "BJ"
+            },
+            {
+              "name": "Bermuda",
+              "value": "BM"
+            },
+            {
+              "name": "Bhutan",
+              "value": "BT"
+            },
+            {
+              "name": "Bolivia, Plurinational State Of",
+              "value": "BO"
+            },
+            {
+              "name": "Bonaire, Sint Eustatius and Saba",
+              "value": "BQ"
+            },
+            {
+              "name": "Bosnia and Herzegovina",
+              "value": "BA"
+            },
+            {
+              "name": "Botswana",
+              "value": "BW"
+            },
+            {
+              "name": "Bouvet Island",
+              "value": "BV"
+            },
+            {
+              "name": "Brazil",
+              "value": "BR"
+            },
+            {
+              "name": "British Indian Ocean Territory",
+              "value": "IO"
+            },
+            {
+              "name": "Brunei Darussalam",
+              "value": "BN"
+            },
+            {
+              "name": "Bulgaria",
+              "value": "BG"
+            },
+            {
+              "name": "Burkina Faso",
+              "value": "BF"
+            },
+            {
+              "name": "Burundi",
+              "value": "BI"
+            },
+            {
+              "name": "Cabo Verde",
+              "value": "CV"
+            },
+            {
+              "name": "Cambodia",
+              "value": "KH"
+            },
+            {
+              "name": "Cameroon",
+              "value": "CM"
+            },
+            {
+              "name": "Canada",
+              "value": "CA"
+            },
+            {
+              "name": "Cayman Islands",
+              "value": "KY"
+            },
+            {
+              "name": "Central African Republic",
+              "value": "CF"
+            },
+            {
+              "name": "Chad",
+              "value": "TD"
+            },
+            {
+              "name": "Chile",
+              "value": "CL"
+            },
+            {
+              "name": "China",
+              "value": "CN"
+            },
+            {
+              "name": "Christmas Island",
+              "value": "CX"
+            },
+            {
+              "name": "Cocos (Keeling) Islands",
+              "value": "CC"
+            },
+            {
+              "name": "Colombia",
+              "value": "CO"
+            },
+            {
+              "name": "Comoros",
+              "value": "KM"
+            },
+            {
+              "name": "Congo",
+              "value": "CG"
+            },
+            {
+              "name": "Congo, Democratic Republic of The",
+              "value": "CD"
+            },
+            {
+              "name": "Cook Islands",
+              "value": "CK"
+            },
+            {
+              "name": "Costa Rica",
+              "value": "CR"
+            },
+            {
+              "name": "Cote d'Ivoire",
+              "value": "CI"
+            },
+            {
+              "name": "Croatia",
+              "value": "HR"
+            },
+            {
+              "name": "Cuba",
+              "value": "CU"
+            },
+            {
+              "name": "Curaçao",
+              "value": "CW"
+            },
+            {
+              "name": "Cyprus",
+              "value": "CY"
+            },
+            {
+              "name": "Czechia",
+              "value": "CZ"
+            },
+            {
+              "name": "Denmark",
+              "value": "DK"
+            },
+            {
+              "name": "Djibouti",
+              "value": "DJ"
+            },
+            {
+              "name": "Dominica",
+              "value": "DM"
+            },
+            {
+              "name": "Dominican Republic",
+              "value": "DO"
+            },
+            {
+              "name": "Ecuador",
+              "value": "EC"
+            },
+            {
+              "name": "Egypt",
+              "value": "EG"
+            },
+            {
+              "name": "El Salvador",
+              "value": "SV"
+            },
+            {
+              "name": "Equatorial Guinea",
+              "value": "GQ"
+            },
+            {
+              "name": "Eritrea",
+              "value": "ER"
+            },
+            {
+              "name": "Estonia",
+              "value": "EE"
+            },
+            {
+              "name": "Eswatini",
+              "value": "SZ"
+            },
+            {
+              "name": "Ethiopia",
+              "value": "ET"
+            },
+            {
+              "name": "Falkland Islands (Malvinas)",
+              "value": "FK"
+            },
+            {
+              "name": "Faroe Islands",
+              "value": "FO"
+            },
+            {
+              "name": "Fiji",
+              "value": "FJ"
+            },
+            {
+              "name": "Finland",
+              "value": "FI"
+            },
+            {
+              "name": "France",
+              "value": "FR"
+            },
+            {
+              "name": "French Guiana",
+              "value": "GF"
+            },
+            {
+              "name": "French Polynesia",
+              "value": "PF"
+            },
+            {
+              "name": "French Southern Territories",
+              "value": "TF"
+            },
+            {
+              "name": "Gabon",
+              "value": "GA"
+            },
+            {
+              "name": "Gambia",
+              "value": "GM"
+            },
+            {
+              "name": "Georgia",
+              "value": "GE"
+            },
+            {
+              "name": "Germany",
+              "value": "DE"
+            },
+            {
+              "name": "Ghana",
+              "value": "GH"
+            },
+            {
+              "name": "Gibraltar",
+              "value": "GI"
+            },
+            {
+              "name": "Greece",
+              "value": "GR"
+            },
+            {
+              "name": "Greenland",
+              "value": "GL"
+            },
+            {
+              "name": "Grenada",
+              "value": "GD"
+            },
+            {
+              "name": "Guadeloupe",
+              "value": "GP"
+            },
+            {
+              "name": "Guam",
+              "value": "GU"
+            },
+            {
+              "name": "Guatemala",
+              "value": "GT"
+            },
+            {
+              "name": "Guernsey",
+              "value": "GG"
+            },
+            {
+              "name": "Guinea",
+              "value": "GN"
+            },
+            {
+              "name": "Guinea-Bissau",
+              "value": "GW"
+            },
+            {
+              "name": "Guyana",
+              "value": "GY"
+            },
+            {
+              "name": "Haiti",
+              "value": "HT"
+            },
+            {
+              "name": "Heard Island and McDonald Islands",
+              "value": "HM"
+            },
+            {
+              "name": "Holy See",
+              "value": "VA"
+            },
+            {
+              "name": "Honduras",
+              "value": "HN"
+            },
+            {
+              "name": "Hong Kong",
+              "value": "HK"
+            },
+            {
+              "name": "Hungary",
+              "value": "HU"
+            },
+            {
+              "name": "Iceland",
+              "value": "IS"
+            },
+            {
+              "name": "India",
+              "value": "IN"
+            },
+            {
+              "name": "Indonesia",
+              "value": "ID"
+            },
+            {
+              "name": "Iran, Islamic Republic Of",
+              "value": "IR"
+            },
+            {
+              "name": "Iraq",
+              "value": "IQ"
+            },
+            {
+              "name": "Ireland",
+              "value": "IE"
+            },
+            {
+              "name": "Isle of Man",
+              "value": "IM"
+            },
+            {
+              "name": "Israel",
+              "value": "IL"
+            },
+            {
+              "name": "Italy",
+              "value": "IT"
+            },
+            {
+              "name": "Jamaica",
+              "value": "JM"
+            },
+            {
+              "name": "Japan",
+              "value": "JP"
+            },
+            {
+              "name": "Jersey",
+              "value": "JE"
+            },
+            {
+              "name": "Jordan",
+              "value": "JO"
+            },
+            {
+              "name": "Kazakhstan",
+              "value": "KZ"
+            },
+            {
+              "name": "Kenya",
+              "value": "KE"
+            },
+            {
+              "name": "Kiribati",
+              "value": "KI"
+            },
+            {
+              "name": "Korea, Democratic People's Republic Of",
+              "value": "KP"
+            },
+            {
+              "name": "Korea, Republic Of",
+              "value": "KR"
+            },
+            {
+              "name": "Kuwait",
+              "value": "KW"
+            },
+            {
+              "name": "Kyrgyzstan",
+              "value": "KG"
+            },
+            {
+              "name": "Lao People's Democratic Republic",
+              "value": "LA"
+            },
+            {
+              "name": "Latvia",
+              "value": "LV"
+            },
+            {
+              "name": "Lebanon",
+              "value": "LB"
+            },
+            {
+              "name": "Lesotho",
+              "value": "LS"
+            },
+            {
+              "name": "Liberia",
+              "value": "LR"
+            },
+            {
+              "name": "Libya",
+              "value": "LY"
+            },
+            {
+              "name": "Liechtenstein",
+              "value": "LI"
+            },
+            {
+              "name": "Lithuania",
+              "value": "LT"
+            },
+            {
+              "name": "Luxembourg",
+              "value": "LU"
+            },
+            {
+              "name": "Macao",
+              "value": "MO"
+            },
+            {
+              "name": "Madagascar",
+              "value": "MG"
+            },
+            {
+              "name": "Malawi",
+              "value": "MW"
+            },
+            {
+              "name": "Malaysia",
+              "value": "MY"
+            },
+            {
+              "name": "Maldives",
+              "value": "MV"
+            },
+            {
+              "name": "Mali",
+              "value": "ML"
+            },
+            {
+              "name": "Malta",
+              "value": "MT"
+            },
+            {
+              "name": "Marshall Islands",
+              "value": "MH"
+            },
+            {
+              "name": "Martinique",
+              "value": "MQ"
+            },
+            {
+              "name": "Mauritania",
+              "value": "MR"
+            },
+            {
+              "name": "Mauritius",
+              "value": "MU"
+            },
+            {
+              "name": "Mayotte",
+              "value": "YT"
+            },
+            {
+              "name": "Mexico",
+              "value": "MX"
+            },
+            {
+              "name": "Micronesia, Federated States Of",
+              "value": "FM"
+            },
+            {
+              "name": "Moldova, Republic Of",
+              "value": "MD"
+            },
+            {
+              "name": "Monaco",
+              "value": "MC"
+            },
+            {
+              "name": "Mongolia",
+              "value": "MN"
+            },
+            {
+              "name": "Montenegro",
+              "value": "ME"
+            },
+            {
+              "name": "Montserrat",
+              "value": "MS"
+            },
+            {
+              "name": "Morocco",
+              "value": "MA"
+            },
+            {
+              "name": "Mozambique",
+              "value": "MZ"
+            },
+            {
+              "name": "Myanmar",
+              "value": "MM"
+            },
+            {
+              "name": "Namibia",
+              "value": "NA"
+            },
+            {
+              "name": "Nauru",
+              "value": "NR"
+            },
+            {
+              "name": "Nepal",
+              "value": "NP"
+            },
+            {
+              "name": "Netherlands, Kingdom of The",
+              "value": "NL"
+            },
+            {
+              "name": "New Caledonia",
+              "value": "NC"
+            },
+            {
+              "name": "New Zealand",
+              "value": "NZ"
+            },
+            {
+              "name": "Nicaragua",
+              "value": "NI"
+            },
+            {
+              "name": "Niger",
+              "value": "NE"
+            },
+            {
+              "name": "Nigeria",
+              "value": "NG"
+            },
+            {
+              "name": "Niue",
+              "value": "NU"
+            },
+            {
+              "name": "Norfolk Island",
+              "value": "NF"
+            },
+            {
+              "name": "North Macedonia",
+              "value": "MK"
+            },
+            {
+              "name": "Northern Mariana Islands",
+              "value": "MP"
+            },
+            {
+              "name": "Norway",
+              "value": "NO"
+            },
+            {
+              "name": "Oman",
+              "value": "OM"
+            },
+            {
+              "name": "Pakistan",
+              "value": "PK"
+            },
+            {
+              "name": "Palau",
+              "value": "PW"
+            },
+            {
+              "name": "Palestine, State Of",
+              "value": "PS"
+            },
+            {
+              "name": "Panama",
+              "value": "PA"
+            },
+            {
+              "name": "Papua New Guinea",
+              "value": "PG"
+            },
+            {
+              "name": "Paraguay",
+              "value": "PY"
+            },
+            {
+              "name": "Peru",
+              "value": "PE"
+            },
+            {
+              "name": "Philippines",
+              "value": "PH"
+            },
+            {
+              "name": "Pitcairn",
+              "value": "PN"
+            },
+            {
+              "name": "Poland",
+              "value": "PL"
+            },
+            {
+              "name": "Portugal",
+              "value": "PT"
+            },
+            {
+              "name": "Puerto Rico",
+              "value": "PR"
+            },
+            {
+              "name": "Qatar",
+              "value": "QA"
+            },
+            {
+              "name": "Réunion",
+              "value": "RE"
+            },
+            {
+              "name": "Romania",
+              "value": "RO"
+            },
+            {
+              "name": "Russian Federation",
+              "value": "RU"
+            },
+            {
+              "name": "Rwanda",
+              "value": "RW"
+            },
+            {
+              "name": "Saint Barthelemy",
+              "value": "BL"
+            },
+            {
+              "name": "Saint Helena, Ascension and Tristan Da Cunha",
+              "value": "SH"
+            },
+            {
+              "name": "Saint Kitts and Nevis",
+              "value": "KN"
+            },
+            {
+              "name": "Saint Lucia",
+              "value": "LC"
+            },
+            {
+              "name": "Saint Martin (French Part)",
+              "value": "MF"
+            },
+            {
+              "name": "Saint Pierre and Miquelon",
+              "value": "PM"
+            },
+            {
+              "name": "Saint Vincent and the Grenadines",
+              "value": "VC"
+            },
+            {
+              "name": "Samoa",
+              "value": "WS"
+            },
+            {
+              "name": "San Marino",
+              "value": "SM"
+            },
+            {
+              "name": "Sao Tome and Principe",
+              "value": "ST"
+            },
+            {
+              "name": "Saudi Arabia",
+              "value": "SA"
+            },
+            {
+              "name": "Senegal",
+              "value": "SN"
+            },
+            {
+              "name": "Serbia",
+              "value": "RS"
+            },
+            {
+              "name": "Seychelles",
+              "value": "SC"
+            },
+            {
+              "name": "Sierra Leone",
+              "value": "SL"
+            },
+            {
+              "name": "Singapore",
+              "value": "SG"
+            },
+            {
+              "name": "Sint Maarten (Dutch Part)",
+              "value": "SX"
+            },
+            {
+              "name": "Slovakia",
+              "value": "SK"
+            },
+            {
+              "name": "Slovenia",
+              "value": "SI"
+            },
+            {
+              "name": "Solomon Islands",
+              "value": "SB"
+            },
+            {
+              "name": "Somalia",
+              "value": "SO"
+            },
+            {
+              "name": "South Africa",
+              "value": "ZA"
+            },
+            {
+              "name": "South Georgia and the South Sandwich Islands",
+              "value": "GS"
+            },
+            {
+              "name": "South Sudan",
+              "value": "SS"
+            },
+            {
+              "name": "Spain",
+              "value": "ES"
+            },
+            {
+              "name": "Sri Lanka",
+              "value": "LK"
+            },
+            {
+              "name": "Sudan",
+              "value": "SD"
+            },
+            {
+              "name": "Suriname",
+              "value": "SR"
+            },
+            {
+              "name": "Svalbard and Jan Mayen",
+              "value": "SJ"
+            },
+            {
+              "name": "Sweden",
+              "value": "SE"
+            },
+            {
+              "name": "Switzerland",
+              "value": "CH"
+            },
+            {
+              "name": "Syrian Arab Republic",
+              "value": "SY"
+            },
+            {
+              "name": "Taiwan, Province of China",
+              "value": "TW"
+            },
+            {
+              "name": "Tajikistan",
+              "value": "TJ"
+            },
+            {
+              "name": "Tanzania, United Republic Of",
+              "value": "TZ"
+            },
+            {
+              "name": "Thailand",
+              "value": "TH"
+            },
+            {
+              "name": "Timor-Leste",
+              "value": "TL"
+            },
+            {
+              "name": "Togo",
+              "value": "TG"
+            },
+            {
+              "name": "Tokelau",
+              "value": "TK"
+            },
+            {
+              "name": "Tonga",
+              "value": "TO"
+            },
+            {
+              "name": "Trinidad and Tobago",
+              "value": "TT"
+            },
+            {
+              "name": "Tunisia",
+              "value": "TN"
+            },
+            {
+              "name": "Turkey",
+              "value": "TR"
+            },
+            {
+              "name": "Turkmenistan",
+              "value": "TM"
+            },
+            {
+              "name": "Turks and Caicos Islands",
+              "value": "TC"
+            },
+            {
+              "name": "Tuvalu",
+              "value": "TV"
+            },
+            {
+              "name": "Uganda",
+              "value": "UG"
+            },
+            {
+              "name": "Ukraine",
+              "value": "UA"
+            },
+            {
+              "name": "United Arab Emirates",
+              "value": "AE"
+            },
+            {
+              "name": "United Kingdom of Great Britain and Northern Ireland",
+              "value": "GB"
+            },
+            {
+              "name": "United States Minor Outlying Islands",
+              "value": "UM"
+            },
+            {
+              "name": "United States of America",
+              "value": "US"
+            },
+            {
+              "name": "Uruguay",
+              "value": "UY"
+            },
+            {
+              "name": "Uzbekistan",
+              "value": "UZ"
+            },
+            {
+              "name": "Vanuatu",
+              "value": "VU"
+            },
+            {
+              "name": "Venezuela, Bolivarian Republic Of",
+              "value": "VE"
+            },
+            {
+              "name": "Viet Nam",
+              "value": "VN"
+            },
+            {
+              "name": "Virgin Islands (British)",
+              "value": "VG"
+            },
+            {
+              "name": "Virgin Islands (U.S.)",
+              "value": "VI"
+            },
+            {
+              "name": "Wallis and Futuna",
+              "value": "WF"
+            },
+            {
+              "name": "Western Sahara",
+              "value": "EH"
+            },
+            {
+              "name": "Yemen",
+              "value": "YE"
+            },
+            {
+              "name": "Zambia",
+              "value": "ZM"
+            },
+            {
+              "name": "Zimbabwe",
+              "value": "ZW"
+            }
+          ]
+        },
+        {
+          "displayName": "Keep Same IP",
+          "name": "sticky",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to try to maintain the same IP address for the duration of the session. Airtop can guarantee that the same IP address will be available for up to a maximum of 30 minutes."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "integrated"
+          ]
+        }
+      },
+      "placeholder": "Add Attribute"
+    },
+    {
+      "name": "proxyUrl",
+      "displayName": "Proxy URL",
+      "type": "string",
+      "default": "",
+      "description": "The URL of the proxy to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "proxyUrl"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Auto Solve Captchas",
+          "name": "solveCaptcha",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to automatically solve <a href=\"https://docs.airtop.ai/guides/how-to/solving-captchas\" target=\"_blank\">captcha challenges</a>"
+        },
+        {
+          "displayName": "Extension IDs",
+          "name": "extensionIds",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. extId1, extId2, ...",
+          "description": "Comma-separated extension IDs from the Google Web Store to be loaded into the session. Learn more <a href=\"https://docs.airtop.ai/guides/how-to/using-chrome-extensions\" target=\"_blank\">here</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "notice",
+      "displayName": "Note: This operation is not needed if you enabled 'Save Profile' in the 'Create Session' operation",
+      "type": "notice",
+      "default": "This operation will save the profile on session termination",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      }
+    },
+    {
+      "name": "profileName",
+      "displayName": "Profile Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the <a href=\"https://docs.airtop.ai/guides/how-to/saving-a-profile\" target=\"_blank\">Profile</a> to save",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "save"
+          ]
+        }
+      },
+      "placeholder": "e.g. my-x-profile",
+      "hint": "Name of the profile you want to save. Must consist only of alphanumeric characters and hyphens \"-\""
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "terminate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "waitForDownload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Timeout",
+          "description": "Time in seconds to wait for the download to become available",
+          "name": "timeout",
+          "type": "number",
+          "default": 30
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "waitForDownload"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Close Window",
+          "value": "close",
+          "description": "Close a window inside a session",
+          "action": "Close a window"
+        },
+        {
+          "name": "Create a New Browser Window",
+          "value": "create",
+          "description": "Create a new browser window inside a session. Can load a URL when created.",
+          "action": "Create a window"
+        },
+        {
+          "name": "Get Live View",
+          "value": "getLiveView",
+          "description": "Get information about a browser window, including the live view URL",
+          "action": "Get live view"
+        },
+        {
+          "name": "List Windows",
+          "value": "list",
+          "description": "List all browser windows in a session",
+          "action": "List windows"
+        },
+        {
+          "name": "Load URL",
+          "value": "load",
+          "description": "Load a URL in an existing window",
+          "action": "Load a page"
+        },
+        {
+          "name": "Take Screenshot",
+          "value": "takeScreenshot",
+          "description": "Take a screenshot of the current window",
+          "action": "Take screenshot"
+        }
+      ],
+      "typeOptions": {
+        "sortable": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windowId",
+      "displayName": "Window ID",
+      "type": "string",
+      "default": "={{ $json[\"windowId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session#windows\" target=\"_blank\">Window</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "close",
+            "takeScreenshot",
+            "load",
+            "getLiveView"
+          ]
+        }
+      }
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "description": "Initial URL to load in the window. Defaults to https://www.google.com.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. https://google.com"
+    },
+    {
+      "name": "getLiveView",
+      "displayName": "Get Live View",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to get the URL of the window's <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-live-view\" target=\"_blank\">Live View</a>",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "includeNavigationBar",
+      "displayName": "Include Navigation Bar",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to include the navigation bar in the Live View. When enabled, the navigation bar will be visible allowing you to navigate between pages.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "screenResolution",
+      "displayName": "Screen Resolution",
+      "type": "string",
+      "default": "",
+      "description": "The screen resolution of the Live View. Setting a resolution will force the window to open at that specific size.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      },
+      "placeholder": "e.g. 1280x720"
+    },
+    {
+      "name": "disableResize",
+      "displayName": "Disable Resize",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to disable the window from being resized in the Live View",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Wait Until",
+          "name": "waitUntil",
+          "type": "options",
+          "description": "Wait until the specified loading event occurs",
+          "default": "load",
+          "options": [
+            {
+              "name": "Load",
+              "value": "load",
+              "description": "Wait until the page dom and its assets have loaded"
+            },
+            {
+              "name": "DOM Content Loaded",
+              "value": "domContentLoaded",
+              "description": "Wait until the page DOM has loaded"
+            },
+            {
+              "name": "Complete",
+              "value": "complete",
+              "description": "Wait until all iframes in the page have loaded"
+            },
+            {
+              "name": "No Wait",
+              "value": "noWait",
+              "description": "Do not wait for any loading event and it will return immediately"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Navigation Bar",
+          "name": "includeNavigationBar",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the navigation bar in the Live View. When enabled, the navigation bar will be visible allowing you to navigate between pages."
+        },
+        {
+          "displayName": "Screen Resolution",
+          "name": "screenResolution",
+          "type": "string",
+          "default": "",
+          "description": "The screen resolution of the Live View. Setting a resolution will force the window to open at that specific size.",
+          "placeholder": "e.g. 1280x720"
+        },
+        {
+          "displayName": "Disable Resize",
+          "name": "disableResize",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disable the window from being resized in the Live View"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "getLiveView"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL to load in the window",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      },
+      "placeholder": "e.g. https://google.com"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Wait Until",
+          "name": "waitUntil",
+          "type": "options",
+          "default": "load",
+          "description": "Wait until the specified loading event occurs. Defaults to 'Fully Loaded'.",
+          "options": [
+            {
+              "name": "Complete",
+              "value": "complete",
+              "description": "Wait until the page and all it's iframes have loaded it's dom and assets"
+            },
+            {
+              "name": "DOM Only Loaded",
+              "value": "domContentLoaded",
+              "description": "Wait until the dom has loaded"
+            },
+            {
+              "name": "Fully Loaded",
+              "value": "load",
+              "description": "Wait until the page dom and it's assets have loaded"
+            },
+            {
+              "name": "No Wait",
+              "value": "noWait",
+              "description": "Do not wait for any loading event and will return immediately"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "outputImageAsBinary",
+      "displayName": "Output Binary Image",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to output the image as a binary file instead of a base64 encoded string",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "takeScreenshot"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getMany",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "deleteFile",
+          "description": "Delete an uploaded file",
+          "action": "Delete a file"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a details of an uploaded file",
+          "action": "Get a file"
+        },
+        {
+          "name": "Get Many",
+          "value": "getMany",
+          "description": "Get details of multiple uploaded files",
+          "action": "Get many files"
+        },
+        {
+          "name": "Load",
+          "value": "load",
+          "description": "Load a file into a session",
+          "action": "Load a file"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload a file into a session",
+          "action": "Upload a file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "fileId",
+      "displayName": "File ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the file to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "deleteFile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileId",
+      "displayName": "File ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the file to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "outputBinaryFile",
+      "displayName": "Output Binary File",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to output the file in binary format if the file is ready for download",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 10,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionIds",
+      "displayName": "Session IDs",
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated list of <a href=\"https://docs.airtop.ai/api-reference/airtop-api/sessions/create\" target=\"_blank\">Session IDs</a> to filter files by. When empty, all files from all sessions will be returned.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "placeholder": "e.g. 6aac6f73-bd89-4a76-ab32-5a6c422e8b0b, a13c6f73-bd89-4a76-ab32-5a6c422e8224"
+    },
+    {
+      "name": "outputSingleItem",
+      "displayName": "Output Files in Single Item",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to output one item containing all files or output each file as a separate item",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The session ID to load the file into",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windowId",
+      "displayName": "Window ID",
+      "type": "string",
+      "default": "={{ $json[\"windowId\"] }}",
+      "required": true,
+      "description": "The window ID to trigger the file input in",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileId",
+      "displayName": "File ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the file to load into the session",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "name": "elementDescription",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "description": "Optional description of the file input to interact with",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      },
+      "placeholder": "e.g. the file upload selection box"
+    },
+    {
+      "name": "includeHiddenElements",
+      "displayName": "Include Hidden Elements",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to include hidden elements in the interaction",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The session ID to load the file into",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windowId",
+      "displayName": "Window ID",
+      "type": "string",
+      "default": "={{ $json[\"windowId\"] }}",
+      "required": true,
+      "description": "The window ID to trigger the file input in",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name for the file to upload. For a session, all files loaded should have <b>unique names</b>.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileType",
+      "displayName": "File Type",
+      "type": "options",
+      "default": "customer_upload",
+      "description": "Choose the type of file to upload. Defaults to 'Customer Upload'.",
+      "options": [
+        {
+          "name": "Browser Download",
+          "value": "browser_download"
+        },
+        {
+          "name": "Screenshot",
+          "value": "screenshot"
+        },
+        {
+          "name": "Video",
+          "value": "video"
+        },
+        {
+          "name": "Customer Upload",
+          "value": "customer_upload"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "source",
+      "displayName": "Source",
+      "type": "options",
+      "default": "url",
+      "description": "Source of the file to upload",
+      "options": [
+        {
+          "name": "URL",
+          "value": "url"
+        },
+        {
+          "name": "Binary",
+          "value": "binary"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Binary Property",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the binary property containing the file data",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "binary"
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL from where to fetch the file to upload",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "url"
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "triggerFileInputParameter",
+      "displayName": "Trigger File Input",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to automatically trigger the file input dialog in the current window. If disabled, the file will only be uploaded to the session without opening the file input dialog.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "elementDescription",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "description": "Optional description of the file input to interact with",
+      "displayOptions": {
+        "show": {
+          "triggerFileInputParameter": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "e.g. the file upload selection box"
+    },
+    {
+      "name": "includeHiddenElements",
+      "displayName": "Include Hidden Elements",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to include hidden elements in the interaction",
+      "displayOptions": {
+        "show": {
+          "triggerFileInputParameter": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getPaginated",
+      "options": [
+        {
+          "name": "Query Page",
+          "value": "query",
+          "description": "Query a page to extract data or ask a question given the data on the page",
+          "action": "Query page"
+        },
+        {
+          "name": "Query Page with Pagination",
+          "value": "getPaginated",
+          "description": "Extract content from paginated or dynamically loaded pages",
+          "action": "Query page with pagination"
+        },
+        {
+          "name": "Smart Scrape",
+          "value": "scrape",
+          "description": "Scrape a page and return the data as markdown",
+          "action": "Smart scrape page"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "sessionMode",
+      "displayName": "Session Mode",
+      "type": "options",
+      "default": "existing",
+      "description": "Choose between creating a new session or using an existing one",
+      "options": [
+        {
+          "name": "Automatically Create Session",
+          "description": "Automatically create a new session and window for this operation",
+          "value": "new"
+        },
+        {
+          "name": "Use Existing Session",
+          "description": "Use an existing session and window for this operation",
+          "value": "existing"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated",
+            "query",
+            "scrape"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "existing"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windowId",
+      "displayName": "Window ID",
+      "type": "string",
+      "default": "={{ $json[\"windowId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session#windows\" target=\"_blank\">Window</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "existing"
+          ]
+        }
+      }
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL to load in the window",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      },
+      "placeholder": "e.g. https://google.com"
+    },
+    {
+      "name": "profileName",
+      "displayName": "Profile Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the Airtop profile to load or create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      },
+      "placeholder": "e.g. my-x-profile",
+      "hint": "<a href=\"https://docs.airtop.ai/guides/how-to/saving-a-profile\" target=\"_blank\">Learn more</a> about Airtop profiles"
+    },
+    {
+      "name": "autoTerminateSession",
+      "displayName": "Auto-Terminate Session",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to terminate the session after the operation is complete. When disabled, you must manually terminate the session. By default, idle sessions timeout after 10 minutes",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      }
+    },
+    {
+      "name": "prompt",
+      "displayName": "Prompt",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The prompt to extract data from the pages",
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated"
+          ]
+        }
+      },
+      "placeholder": "e.g. Extract all the product names and prices"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "JSON Output Schema",
+          "name": "outputSchema",
+          "description": "JSON schema defining the structure of the output",
+          "hint": "If you want to force your output to be JSON, provide a valid JSON schema describing the output. You can generate one automatically in the <a href=\"https://portal.airtop.ai/\" target=\"_blank\">Airtop API Playground</a>.",
+          "type": "json",
+          "default": ""
+        },
+        {
+          "displayName": "Parse JSON Output",
+          "name": "parseJsonOutput",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to parse the model's response to JSON in the output. Requires the 'JSON Output Schema' parameter to be set."
+        },
+        {
+          "displayName": "Interaction Mode",
+          "name": "interactionMode",
+          "type": "options",
+          "default": "auto",
+          "description": "The strategy for interacting with the page",
+          "options": [
+            {
+              "name": "Auto",
+              "description": "Automatically choose the most cost-effective mode",
+              "value": "auto"
+            },
+            {
+              "name": "Accurate",
+              "description": "Prioritize accuracy over cost",
+              "value": "accurate"
+            },
+            {
+              "name": "Cost Efficient",
+              "description": "Minimize costs while ensuring effectiveness",
+              "value": "cost-efficient"
+            }
+          ]
+        },
+        {
+          "displayName": "Pagination Mode",
+          "name": "paginationMode",
+          "type": "options",
+          "default": "auto",
+          "description": "The pagination approach to use",
+          "options": [
+            {
+              "name": "Auto",
+              "description": "Look for pagination links first, then try infinite scrolling",
+              "value": "auto"
+            },
+            {
+              "name": "Paginated",
+              "description": "Only use pagination links",
+              "value": "paginated"
+            },
+            {
+              "name": "Infinite Scroll",
+              "description": "Scroll the page to load more content",
+              "value": "infinite-scroll"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "prompt",
+      "displayName": "Prompt",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The prompt to query the page content",
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "e.g. Is there a login form in this page?"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "JSON Output Schema",
+          "name": "outputSchema",
+          "description": "JSON schema defining the structure of the output",
+          "hint": "If you want to force your output to be JSON, provide a valid JSON schema describing the output. You can generate one automatically in the <a href=\"https://portal.airtop.ai/\" target=\"_blank\">Airtop API Playground</a>.",
+          "type": "json",
+          "default": ""
+        },
+        {
+          "displayName": "Parse JSON Output",
+          "name": "parseJsonOutput",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to parse the model's response to JSON in the output. Requires the 'JSON Output Schema' parameter to be set."
+        },
+        {
+          "displayName": "Include Visual Analysis",
+          "name": "includeVisualAnalysis",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to analyze the web page visually when fulfilling the request"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "click",
+      "options": [
+        {
+          "name": "Click an Element",
+          "value": "click",
+          "description": "Execute a click on an element given a description",
+          "action": "Click an element"
+        },
+        {
+          "name": "Fill Form",
+          "value": "fill",
+          "description": "Fill a form with the provided information",
+          "action": "Fill form"
+        },
+        {
+          "name": "Hover on an Element",
+          "value": "hover",
+          "description": "Execute a hover action on an element given a description",
+          "action": "Hover on an element"
+        },
+        {
+          "name": "Scroll",
+          "value": "scroll",
+          "description": "Execute a scroll action on the page",
+          "action": "Scroll on page"
+        },
+        {
+          "name": "Type",
+          "value": "type",
+          "description": "Execute a Type action on an element given a description",
+          "action": "Type text"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "sessionId",
+      "displayName": "Session ID",
+      "type": "string",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      }
+    },
+    {
+      "name": "windowId",
+      "displayName": "Window ID",
+      "type": "string",
+      "default": "={{ $json[\"windowId\"] }}",
+      "required": true,
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session#windows\" target=\"_blank\">Window</a> to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      }
+    },
+    {
+      "name": "elementDescription",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A specific description of the element to execute the interaction on",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click"
+          ]
+        }
+      },
+      "placeholder": "e.g. the green \"save\" button at the top of the page"
+    },
+    {
+      "name": "clickType",
+      "displayName": "Click Type",
+      "type": "options",
+      "default": "click",
+      "description": "The type of click to perform. Defaults to left click.",
+      "options": [
+        {
+          "name": "Left Click",
+          "value": "click"
+        },
+        {
+          "name": "Double Click",
+          "value": "doubleClick"
+        },
+        {
+          "name": "Right Click",
+          "value": "rightClick"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click"
+          ]
+        }
+      }
+    },
+    {
+      "name": "formData",
+      "displayName": "Form Data",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The information to fill into the form written in natural language",
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "fill"
+          ]
+        }
+      },
+      "placeholder": "e.g. \"Name: John Doe, Email: john.doe@example.com\""
+    },
+    {
+      "name": "elementDescription",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A specific description of the element to execute the interaction on",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "hover"
+          ]
+        }
+      },
+      "placeholder": "e.g. the rounded user profile image at the top right of the page"
+    },
+    {
+      "name": "scrollingMode",
+      "displayName": "Scroll Mode",
+      "type": "options",
+      "default": "automatic",
+      "required": true,
+      "description": "Choose the mode of scrolling",
+      "options": [
+        {
+          "name": "Automatic",
+          "value": "automatic",
+          "description": "Describe with natural language the element to scroll to"
+        },
+        {
+          "name": "Manual",
+          "value": "manual",
+          "description": "Define the direction and amount to scroll by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "scrollToElement",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A natural language description of the element to scroll to",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "automatic"
+          ]
+        }
+      },
+      "placeholder": "e.g. the page section titled \"Contact Us\""
+    },
+    {
+      "name": "scrollToEdge",
+      "displayName": "Scroll To Edge",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "The direction to scroll to. When 'Scroll By' is defined, 'Scroll To Edge' action will be executed first, then 'Scroll By' action.",
+      "options": [
+        {
+          "displayName": "Page Edges",
+          "name": "edgeValues",
+          "values": [
+            {
+              "displayName": "Vertically",
+              "name": "yAxis",
+              "type": "options",
+              "default": "",
+              "options": [
+                {
+                  "name": "Empty",
+                  "value": ""
+                },
+                {
+                  "name": "Top",
+                  "value": "top"
+                },
+                {
+                  "name": "Bottom",
+                  "value": "bottom"
+                }
+              ]
+            },
+            {
+              "displayName": "Horizontally",
+              "name": "xAxis",
+              "type": "options",
+              "default": "",
+              "options": [
+                {
+                  "name": "Empty",
+                  "value": ""
+                },
+                {
+                  "name": "Left",
+                  "value": "left"
+                },
+                {
+                  "name": "Right",
+                  "value": "right"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      },
+      "placeholder": "Add Edge Direction"
+    },
+    {
+      "name": "scrollBy",
+      "displayName": "Scroll By",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "The amount to scroll by. When 'Scroll To Edge' is defined, 'Scroll By' action will be executed after 'Scroll To Edge'.",
+      "options": [
+        {
+          "name": "scrollValues",
+          "displayName": "Scroll Values",
+          "description": "The amount in pixels or percentage to scroll by",
+          "values": [
+            {
+              "displayName": "Vertically",
+              "name": "yAxis",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. 200px, 50%, -100px"
+            },
+            {
+              "displayName": "Horizontally",
+              "name": "xAxis",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. 50px, 10%, -200px"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      },
+      "placeholder": "Add Scroll Amount"
+    },
+    {
+      "name": "scrollWithin",
+      "displayName": "Scrollable Area",
+      "type": "string",
+      "default": "",
+      "description": "Scroll within an element on the page",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      },
+      "placeholder": "e.g. the left sidebar"
+    },
+    {
+      "name": "text",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The text to type into the browser window",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      },
+      "placeholder": "e.g. email@example.com"
+    },
+    {
+      "name": "pressEnterKey",
+      "displayName": "Press Enter Key",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to press the Enter key after typing the text",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      }
+    },
+    {
+      "name": "elementDescription",
+      "displayName": "Element Description",
+      "type": "string",
+      "default": "",
+      "description": "A specific description of the element to execute the interaction on",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      },
+      "placeholder": "e.g. the search box at the top of the page"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Visual Scope",
+          "name": "visualScope",
+          "type": "options",
+          "default": "auto",
+          "description": "Defines the strategy for visual analysis of the current window",
+          "options": [
+            {
+              "name": "Auto",
+              "description": "Provides the simplest out-of-the-box experience for most web pages",
+              "value": "auto"
+            },
+            {
+              "name": "Viewport",
+              "description": "For analysis of the current browser view only",
+              "value": "viewport"
+            },
+            {
+              "name": "Page",
+              "description": "For analysis of the entire page",
+              "value": "page"
+            },
+            {
+              "name": "Scan",
+              "description": "For a full page analysis on sites that have compatibility issues with 'Page' mode",
+              "value": "scan"
+            }
+          ]
+        },
+        {
+          "displayName": "Wait Until Event After Navigation",
+          "name": "waitForNavigation",
+          "type": "options",
+          "default": "load",
+          "description": "The condition to wait for the navigation to complete after an interaction (click, type or hover). Defaults to 'Fully Loaded'.",
+          "options": [
+            {
+              "name": "Fully Loaded (Slower)",
+              "value": "load"
+            },
+            {
+              "name": "DOM Only Loaded (Faster)",
+              "value": "domcontentloaded"
+            },
+            {
+              "name": "All Network Activity Has Stopped",
+              "value": "networkidle0"
+            },
+            {
+              "name": "Most Network Activity Has Stopped",
+              "value": "networkidle2"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click",
+            "hover",
+            "type",
+            "scroll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "airtopApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "webhookUrl",
+    "agentParameters",
+    "sessionId",
+    "profileName",
+    "sessionId",
+    "sessionId",
+    "sessionId",
+    "windowId",
+    "url",
+    "fileId",
+    "fileId",
+    "sessionId",
+    "windowId",
+    "fileId",
+    "sessionId",
+    "windowId",
+    "fileName",
+    "binaryPropertyName",
+    "url",
+    "sessionId",
+    "windowId",
+    "url",
+    "prompt",
+    "prompt",
+    "sessionId",
+    "windowId",
+    "elementDescription",
+    "formData",
+    "elementDescription",
+    "scrollingMode",
+    "scrollToElement",
+    "text"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "awaitExecution",
+    "timeout",
+    "operation",
+    "profileName",
+    "saveProfileOnTermination",
+    "record",
+    "timeoutMinutes",
+    "proxy",
+    "proxyConfig",
+    "proxyUrl",
+    "additionalFields",
+    "notice",
+    "additionalFields",
+    "operation",
+    "url",
+    "getLiveView",
+    "includeNavigationBar",
+    "screenResolution",
+    "disableResize",
+    "additionalFields",
+    "additionalFields",
+    "additionalFields",
+    "outputImageAsBinary",
+    "operation",
+    "outputBinaryFile",
+    "returnAll",
+    "limit",
+    "sessionIds",
+    "outputSingleItem",
+    "elementDescription",
+    "includeHiddenElements",
+    "fileType",
+    "source",
+    "triggerFileInputParameter",
+    "elementDescription",
+    "includeHiddenElements",
+    "operation",
+    "sessionMode",
+    "profileName",
+    "autoTerminateSession",
+    "additionalFields",
+    "additionalFields",
+    "operation",
+    "clickType",
+    "scrollToEdge",
+    "scrollBy",
+    "scrollWithin",
+    "pressEnterKey",
+    "elementDescription",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "webhookUrl": "string",
+    "agentParameters": "json",
+    "awaitExecution": "boolean",
+    "timeout": "number",
+    "profileName": "string",
+    "saveProfileOnTermination": "boolean",
+    "record": "boolean",
+    "timeoutMinutes": "number",
+    "proxy": "options",
+    "proxyConfig": "collection",
+    "proxyUrl": "string",
+    "additionalFields": "collection",
+    "notice": "notice",
+    "sessionId": "string",
+    "windowId": "string",
+    "url": "string",
+    "getLiveView": "boolean",
+    "includeNavigationBar": "boolean",
+    "screenResolution": "string",
+    "disableResize": "boolean",
+    "outputImageAsBinary": "boolean",
+    "fileId": "string",
+    "outputBinaryFile": "boolean",
+    "returnAll": "boolean",
+    "limit": "number",
+    "sessionIds": "string",
+    "outputSingleItem": "boolean",
+    "elementDescription": "string",
+    "includeHiddenElements": "boolean",
+    "fileName": "string",
+    "fileType": "options",
+    "source": "options",
+    "binaryPropertyName": "string",
+    "triggerFileInputParameter": "boolean",
+    "sessionMode": "options",
+    "autoTerminateSession": "boolean",
+    "prompt": "string",
+    "clickType": "options",
+    "formData": "string",
+    "scrollingMode": "options",
+    "scrollToElement": "string",
+    "scrollToEdge": "fixedCollection",
+    "scrollBy": "fixedCollection",
+    "scrollWithin": "string",
+    "text": "string",
+    "pressEnterKey": "boolean"
+  },
+  "hasVersions": false
+}

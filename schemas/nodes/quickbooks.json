@@ -1,0 +1,5478 @@
+{
+  "name": "quickbooks",
+  "displayName": "QuickBooks Online",
+  "description": "Consume the QuickBooks Online API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "customer",
+    "VendorRef": [],
+    "Line": [],
+    "additionalFields": {},
+    "filters": {},
+    "updateFields": {},
+    "operation": "get",
+    "customerId": "",
+    "FamilyName": "",
+    "GivenName": "",
+    "itemId": "",
+    "TotalAmt": 0,
+    "purchaseId": "",
+    "simple": true
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "customer",
+      "options": [
+        {
+          "name": "Bill",
+          "value": "bill"
+        },
+        {
+          "name": "Customer",
+          "value": "customer"
+        },
+        {
+          "name": "Employee",
+          "value": "employee"
+        },
+        {
+          "name": "Estimate",
+          "value": "estimate"
+        },
+        {
+          "name": "Invoice",
+          "value": "invoice"
+        },
+        {
+          "name": "Item",
+          "value": "item"
+        },
+        {
+          "name": "Payment",
+          "value": "payment"
+        },
+        {
+          "name": "Purchase",
+          "value": "purchase"
+        },
+        {
+          "name": "Transaction",
+          "value": "transaction"
+        },
+        {
+          "name": "Vendor",
+          "value": "vendor"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a bill"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a bill"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a bill"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many bills"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a bill"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "VendorRef",
+      "displayName": "For Vendor Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the vendor who the bill is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getVendors"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Line",
+      "displayName": "Line",
+      "type": "collection",
+      "default": {},
+      "description": "Individual line item of a transaction",
+      "options": [
+        {
+          "displayName": "Account ID",
+          "name": "accountId",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Amount",
+          "name": "Amount",
+          "description": "Monetary amount of the line item",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Description",
+          "name": "Description",
+          "description": "Textual description of the line item",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Detail Type",
+          "name": "DetailType",
+          "type": "options",
+          "default": "ItemBasedExpenseLineDetail",
+          "options": [
+            {
+              "name": "Account-Based Expense Line Detail",
+              "value": "AccountBasedExpenseLineDetail"
+            },
+            {
+              "name": "Item-Based Expense Line Detail",
+              "value": "ItemBasedExpenseLineDetail"
+            }
+          ]
+        },
+        {
+          "displayName": "Item Name or ID",
+          "name": "itemId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getItems"
+          }
+        },
+        {
+          "displayName": "Position",
+          "name": "LineNum",
+          "description": "Position of the line item relative to others",
+          "type": "number",
+          "default": 1
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Line Item Property"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Accounts Payable Account",
+          "name": "APAccountRef",
+          "placeholder": "Add APA Fields",
+          "description": "Accounts Payable account to which the bill will be credited",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "ID",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Due Date",
+          "name": "DueDate",
+          "description": "Date when the payment of the transaction is due",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Sales Term",
+          "name": "SalesTermRef",
+          "description": "Sales term associated with the transaction",
+          "placeholder": "Add Sales Term Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "ID",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Total Amount",
+          "name": "TotalAmt",
+          "description": "Total amount of the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "billId",
+      "displayName": "Bill ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bill to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "billId",
+      "displayName": "Bill ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bill to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting bills. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "billId",
+      "displayName": "Bill ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bill to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Accounts Payable Account",
+          "name": "APAccountRef",
+          "placeholder": "Add APA Fields",
+          "description": "Accounts Payable account to which the bill will be credited",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "ID",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Due Date",
+          "name": "DueDate",
+          "description": "Date when the payment of the transaction is due",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Sales Term",
+          "name": "SalesTermRef",
+          "description": "Sales term associated with the transaction",
+          "placeholder": "Add Sales Term Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "ID",
+                  "name": "value",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a customer"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a customer"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many customers"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a customer"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "displayName",
+      "displayName": "Display Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The display name of the customer to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the customer is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "Open balance amount or amount unpaid by the customer",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Balance With Jobs",
+          "name": "BalanceWithJobs",
+          "description": "Cumulative open balance amount for the customer (or job) and all its sub-jobs",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Bill With Parent",
+          "name": "BillWithParent",
+          "description": "Whether to bill this customer together with its parent",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Company Name",
+          "name": "CompanyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Family Name",
+          "name": "FamilyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Fully Qualified Name",
+          "name": "FullyQualifiedName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Given Name",
+          "name": "GivenName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Preferred Delivery Method",
+          "name": "PreferredDeliveryMethod",
+          "type": "options",
+          "default": "Print",
+          "options": [
+            {
+              "name": "Print",
+              "value": "Print"
+            },
+            {
+              "name": "Email",
+              "value": "Email"
+            },
+            {
+              "name": "None",
+              "value": "None"
+            }
+          ]
+        },
+        {
+          "displayName": "Primary Email Address",
+          "name": "PrimaryEmailAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the customer as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Taxable",
+          "name": "Taxable",
+          "description": "Whether transactions for this customer are taxable",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "customerId",
+      "displayName": "Customer ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the customer to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting customers. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "customerId",
+      "displayName": "Customer ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the customer to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the customer is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "Open balance amount or amount unpaid by the customer",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Balance With Jobs",
+          "name": "BalanceWithJobs",
+          "description": "Cumulative open balance amount for the customer (or job) and all its sub-jobs",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Bill With Parent",
+          "name": "BillWithParent",
+          "description": "Whether to bill this customer together with its parent",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Company Name",
+          "name": "CompanyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Family Name",
+          "name": "FamilyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Fully Qualified Name",
+          "name": "FullyQualifiedName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Given Name",
+          "name": "GivenName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Preferred Delivery Method",
+          "name": "PreferredDeliveryMethod",
+          "type": "options",
+          "default": "Print",
+          "options": [
+            {
+              "name": "Print",
+              "value": "Print"
+            },
+            {
+              "name": "Email",
+              "value": "Email"
+            },
+            {
+              "name": "None",
+              "value": "None"
+            }
+          ]
+        },
+        {
+          "displayName": "Primary Email Address",
+          "name": "PrimaryEmailAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the customer as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Taxable",
+          "name": "Taxable",
+          "description": "Whether transactions for this customer are taxable",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an employee"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an employee"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many employees"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update an employee"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "FamilyName",
+      "displayName": "Family Name",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GivenName",
+      "displayName": "Given Name",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Billable Time",
+          "name": "BillableTime",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Display Name",
+          "name": "DisplayName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the employee as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Social Security Number",
+          "name": "SSN",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "employeeId",
+      "displayName": "Employee ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the employee to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting employees. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "employeeId",
+      "displayName": "Employee ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the employee to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Billable Time",
+          "name": "BillableTime",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Display Name",
+          "name": "DisplayName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the employee as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Social Security Number",
+          "name": "SSN",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an estimate"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete an estimate"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an estimate"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many estimates"
+        },
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send an estimate"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update an estimate"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "CustomerRef",
+      "displayName": "For Customer Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the customer who the estimate is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCustomers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Line",
+      "displayName": "Line",
+      "type": "collection",
+      "default": {},
+      "description": "Individual line item of a transaction",
+      "options": [
+        {
+          "displayName": "Amount",
+          "name": "Amount",
+          "description": "Monetary amount of the line item",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Description",
+          "name": "Description",
+          "description": "Textual description of the line item",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Detail Type",
+          "name": "DetailType",
+          "type": "options",
+          "default": "SalesItemLineDetail",
+          "options": [
+            {
+              "name": "Sales Item Line Detail",
+              "value": "SalesItemLineDetail"
+            }
+          ]
+        },
+        {
+          "displayName": "Item Name or ID",
+          "name": "itemId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getItems"
+          }
+        },
+        {
+          "displayName": "Position",
+          "name": "LineNum",
+          "description": "Position of the line item relative to others",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "displayName": "Tax Code Ref Name or ID",
+          "name": "TaxCodeRef",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getTaxCodeRefs"
+          }
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Line Item Property"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Apply Tax After Discount",
+          "name": "ApplyTaxAfterDiscount",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Billing Email",
+          "name": "BillEmail",
+          "description": "E-mail address to which the estimate will be sent",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "CustomFields",
+          "placeholder": "Add Custom Fields",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Field",
+              "name": "Field",
+              "values": [
+                {
+                  "displayName": "Field Definition Name or ID",
+                  "name": "DefinitionId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "StringValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Customer Memo",
+          "name": "CustomerMemo",
+          "description": "User-entered message to the customer. This message is visible to end user on their transactions.",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Document Number",
+          "name": "DocNumber",
+          "description": "Reference number for the transaction",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Email Status",
+          "name": "EmailStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Send",
+              "value": "NeedToSend"
+            },
+            {
+              "name": "Email Sent",
+              "value": "EmailSent"
+            }
+          ]
+        },
+        {
+          "displayName": "Print Status",
+          "name": "PrintStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Print",
+              "value": "NeedToPrint"
+            },
+            {
+              "name": "PrintComplete",
+              "value": "PrintComplete"
+            }
+          ]
+        },
+        {
+          "displayName": "Shipping Address",
+          "name": "ShipAddr",
+          "placeholder": "Add Shippping Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Total Amount",
+          "name": "TotalAmt",
+          "description": "Total amount of the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Total Tax",
+          "name": "TotalTax",
+          "description": "Total amount of tax incurred",
+          "type": "number",
+          "default": 0
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "estimateId",
+      "displayName": "Estimate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the estimate to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "estimateId",
+      "displayName": "Estimate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the estimate to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download the estimate as a PDF file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the file that will be downloaded",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "placeholder": "data.pdf"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting estimates. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "estimateId",
+      "displayName": "Estimate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the estimate to send",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email of the recipient of the estimate",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "estimateId",
+      "displayName": "Estimate ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the estimate to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Apply Tax After Discount",
+          "name": "ApplyTaxAfterDiscount",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Billing Email",
+          "name": "BillEmail",
+          "description": "E-mail address to which the estimate will be sent",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "CustomFields",
+          "placeholder": "Add Custom Fields",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Field",
+              "name": "Field",
+              "values": [
+                {
+                  "displayName": "Field Definition Name or ID",
+                  "name": "DefinitionId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "StringValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Customer Memo",
+          "name": "CustomerMemo",
+          "description": "User-entered message to the customer. This message is visible to end user on their transactions.",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Document Number",
+          "name": "DocNumber",
+          "description": "Reference number for the transaction",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Email Status",
+          "name": "EmailStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Send",
+              "value": "NeedToSend"
+            },
+            {
+              "name": "Email Sent",
+              "value": "EmailSent"
+            }
+          ]
+        },
+        {
+          "displayName": "Print Status",
+          "name": "PrintStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Print",
+              "value": "NeedToPrint"
+            },
+            {
+              "name": "PrintComplete",
+              "value": "PrintComplete"
+            }
+          ]
+        },
+        {
+          "displayName": "Shipping Address",
+          "name": "ShipAddr",
+          "placeholder": "Add Shippping Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an invoice"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete an invoice"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an invoice"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many invoices"
+        },
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send an invoice"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update an invoice"
+        },
+        {
+          "name": "Void",
+          "value": "void",
+          "action": "Void an invoice"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "CustomerRef",
+      "displayName": "For Customer Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the customer who the invoice is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCustomers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Line",
+      "displayName": "Line",
+      "type": "collection",
+      "default": {},
+      "description": "Individual line item of a transaction",
+      "options": [
+        {
+          "displayName": "Amount",
+          "name": "Amount",
+          "description": "Monetary amount of the line item",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Description",
+          "name": "Description",
+          "description": "Textual description of the line item",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Detail Type",
+          "name": "DetailType",
+          "type": "options",
+          "default": "SalesItemLineDetail",
+          "options": [
+            {
+              "name": "Sales Item Line Detail",
+              "value": "SalesItemLineDetail"
+            }
+          ]
+        },
+        {
+          "displayName": "Item Name or ID",
+          "name": "itemId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getItems"
+          }
+        },
+        {
+          "displayName": "Position",
+          "name": "LineNum",
+          "description": "Position of the line item relative to others",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "displayName": "Tax Code Ref Name or ID",
+          "name": "TaxCodeRef",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "typeOptions": {
+            "loadOptionsMethod": "getTaxCodeRefs"
+          }
+        },
+        {
+          "displayName": "Quantity",
+          "name": "Qty",
+          "description": "Number of units of the line item",
+          "type": "number",
+          "default": 0
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Line Item Property"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Billing Email",
+          "name": "BillEmail",
+          "description": "E-mail address to which the invoice will be sent",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Customer Memo",
+          "name": "CustomerMemo",
+          "description": "User-entered message to the customer. This message is visible to end user on their transactions.",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "CustomFields",
+          "placeholder": "Add Custom Fields",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Field",
+              "name": "Field",
+              "values": [
+                {
+                  "displayName": "Field Definition Name or ID",
+                  "name": "DefinitionId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "StringValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Document Number",
+          "name": "DocNumber",
+          "description": "Reference number for the transaction",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Due Date",
+          "name": "DueDate",
+          "description": "Date when the payment of the transaction is due",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Email Status",
+          "name": "EmailStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Send",
+              "value": "NeedToSend"
+            },
+            {
+              "name": "Email Sent",
+              "value": "EmailSent"
+            }
+          ]
+        },
+        {
+          "displayName": "Print Status",
+          "name": "PrintStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Print",
+              "value": "NeedToPrint"
+            },
+            {
+              "name": "PrintComplete",
+              "value": "PrintComplete"
+            }
+          ]
+        },
+        {
+          "displayName": "Shipping Address",
+          "name": "ShipAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Total Amount",
+          "name": "TotalAmt",
+          "description": "Total amount of the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "invoiceId",
+      "displayName": "Invoice ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the invoice to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "invoiceId",
+      "displayName": "Invoice ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the invoice to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download the invoice as a PDF file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the file that will be downloaded",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "placeholder": "data.pdf"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting invoices. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "invoiceId",
+      "displayName": "Invoice ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the invoice to send",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email of the recipient of the invoice",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "invoiceId",
+      "displayName": "Invoice ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the invoice to void",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "void"
+          ]
+        }
+      }
+    },
+    {
+      "name": "invoiceId",
+      "displayName": "Invoice ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the invoice to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Billing Email",
+          "name": "BillEmail",
+          "description": "E-mail address to which the invoice will be sent",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Customer Memo",
+          "name": "CustomerMemo",
+          "description": "User-entered message to the customer. This message is visible to end user on their transactions.",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "CustomFields",
+          "placeholder": "Add Custom Fields",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Field",
+              "name": "Field",
+              "values": [
+                {
+                  "displayName": "Field Definition Name or ID",
+                  "name": "DefinitionId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "StringValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Document Number",
+          "name": "DocNumber",
+          "description": "Reference number for the transaction",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Due Date",
+          "name": "DueDate",
+          "description": "Date when the payment of the transaction is due",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Email Status",
+          "name": "EmailStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Send",
+              "value": "NeedToSend"
+            },
+            {
+              "name": "Email Sent",
+              "value": "EmailSent"
+            }
+          ]
+        },
+        {
+          "displayName": "Print Status",
+          "name": "PrintStatus",
+          "type": "options",
+          "default": "NotSet",
+          "options": [
+            {
+              "name": "Not Set",
+              "value": "NotSet"
+            },
+            {
+              "name": "Need To Print",
+              "value": "NeedToPrint"
+            },
+            {
+              "name": "PrintComplete",
+              "value": "PrintComplete"
+            }
+          ]
+        },
+        {
+          "displayName": "Shipping Address",
+          "name": "ShipAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many items"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "itemId",
+      "displayName": "Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the item to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting items. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a payment"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a payment"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a payment"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many payments"
+        },
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send a payment"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a payment"
+        },
+        {
+          "name": "Void",
+          "value": "void",
+          "action": "Void a payment"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "CustomerRef",
+      "displayName": "For Customer Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the customer who the payment is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCustomers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "TotalAmt",
+      "displayName": "Total Amount",
+      "type": "number",
+      "default": 0,
+      "description": "Total amount of the transaction",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "paymentId",
+      "displayName": "Payment ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the payment to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "paymentId",
+      "displayName": "Payment ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the payment to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download estimate as PDF file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the file that will be downloaded",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "placeholder": "data.pdf"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting payments. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "paymentId",
+      "displayName": "Payment ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the payment to send",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email of the recipient of the payment",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "paymentId",
+      "displayName": "Payment ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the payment to void",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "void"
+          ]
+        }
+      }
+    },
+    {
+      "name": "paymentId",
+      "displayName": "Payment ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the payment to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Transaction Date",
+          "name": "TxnDate",
+          "description": "Date when the transaction occurred",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a purchase"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many purchases"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "purchaseId",
+      "displayName": "Purchase ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the purchase to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting purchases. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getReport",
+      "options": [
+        {
+          "name": "Get Report",
+          "value": "getReport",
+          "action": "Get a report"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "transaction"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "transaction"
+          ],
+          "operation": [
+            "getReport"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Accounts Payable Paid",
+          "name": "appaid",
+          "type": "options",
+          "default": "All",
+          "options": [
+            {
+              "name": "All",
+              "value": "All"
+            },
+            {
+              "name": "Paid",
+              "value": "Paid"
+            },
+            {
+              "name": "Unpaid",
+              "value": "Unpaid"
+            }
+          ]
+        },
+        {
+          "displayName": "Accounts Receivable Paid",
+          "name": "arpaid",
+          "type": "options",
+          "default": "All",
+          "options": [
+            {
+              "name": "All",
+              "value": "All"
+            },
+            {
+              "name": "Paid",
+              "value": "Paid"
+            },
+            {
+              "name": "Unpaid",
+              "value": "Unpaid"
+            }
+          ]
+        },
+        {
+          "displayName": "Cleared Status",
+          "name": "cleared",
+          "type": "options",
+          "default": "Reconciled",
+          "options": [
+            {
+              "name": "Cleared",
+              "value": "Cleared"
+            },
+            {
+              "name": "Uncleared",
+              "value": "Uncleared"
+            },
+            {
+              "name": "Reconciled",
+              "value": "Reconciled"
+            },
+            {
+              "name": "Deposited",
+              "value": "Deposited"
+            }
+          ]
+        },
+        {
+          "displayName": "Columns",
+          "name": "columns",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Columns to return",
+          "options": [
+            {
+              "name": "Account Name",
+              "value": "account_name"
+            },
+            {
+              "name": "Created By",
+              "value": "create_by"
+            },
+            {
+              "name": "Create Date",
+              "value": "create_date"
+            },
+            {
+              "name": "Customer Message",
+              "value": "cust_msg"
+            },
+            {
+              "name": "Department Name",
+              "value": "dept_name"
+            },
+            {
+              "name": "Due Date",
+              "value": "due_date"
+            },
+            {
+              "name": "Document Number",
+              "value": "doc_num"
+            },
+            {
+              "name": "Invoice Date",
+              "value": "inv_date"
+            },
+            {
+              "name": "Is Account Payable Paid",
+              "value": "is_ap_paid"
+            },
+            {
+              "name": "Is Cleared",
+              "value": "is_cleared"
+            },
+            {
+              "name": "Last Modified By",
+              "value": "last_mod_by"
+            },
+            {
+              "name": "Memo",
+              "value": "memo"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "Other Account",
+              "value": "other_account"
+            },
+            {
+              "name": "Payment Method",
+              "value": "pmt_mthod"
+            },
+            {
+              "name": "Posting",
+              "value": "is_no_post"
+            },
+            {
+              "name": "Printed Status",
+              "value": "printed"
+            },
+            {
+              "name": "Sales Customer 1",
+              "value": "sales_cust1"
+            },
+            {
+              "name": "Sales Customer 2",
+              "value": "sales_cust2"
+            },
+            {
+              "name": "Sales Customer 3",
+              "value": "sales_cust3"
+            },
+            {
+              "name": "Term Name",
+              "value": "term_name"
+            },
+            {
+              "name": "Tracking Number",
+              "value": "tracking_num"
+            },
+            {
+              "name": "Transaction Date",
+              "value": "tx_date"
+            },
+            {
+              "name": "Transaction Type",
+              "value": "txn_type"
+            }
+          ]
+        },
+        {
+          "displayName": "Customer Names or IDs",
+          "name": "customer",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Customer to filter results by. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "typeOptions": {
+            "loadOptionsMethod": "getCustomers"
+          }
+        },
+        {
+          "displayName": "Date Range (Custom)",
+          "name": "dateRangeCustom",
+          "placeholder": "Add Date Range",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Date Range Properties",
+              "name": "dateRangeCustomProperties",
+              "values": [
+                {
+                  "displayName": "Start Date",
+                  "name": "start_date",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "Start date of the date range to filter results by"
+                },
+                {
+                  "displayName": "End Date",
+                  "name": "end_date",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "End date of the date range to filter results by"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range (Predefined)",
+          "name": "date_macro",
+          "type": "options",
+          "default": "This Month",
+          "description": "Predefined date range to filter results by",
+          "options": [
+            {
+              "name": "Today",
+              "value": "Today"
+            },
+            {
+              "name": "Yesterday",
+              "value": "Yesterday"
+            },
+            {
+              "name": "This Week",
+              "value": "This Week"
+            },
+            {
+              "name": "Last Week",
+              "value": "Last Week"
+            },
+            {
+              "name": "This Week-to-Date",
+              "value": "This Week-to-Date"
+            },
+            {
+              "name": "Last Week-to-Date",
+              "value": "Last Week-to-Date"
+            },
+            {
+              "name": "Next Week",
+              "value": "Next Week"
+            },
+            {
+              "name": "Next 4 Weeks",
+              "value": "Next 4 Weeks"
+            },
+            {
+              "name": "This Month",
+              "value": "This Month"
+            },
+            {
+              "name": "Last Month",
+              "value": "Last Month"
+            },
+            {
+              "name": "This Month-to-Date",
+              "value": "This Month-to-Date"
+            },
+            {
+              "name": "Last Month-to-Date",
+              "value": "Last Month-to-Date"
+            },
+            {
+              "name": "Next Month",
+              "value": "Next Month"
+            },
+            {
+              "name": "This Fiscal Quarter",
+              "value": "This Fiscal Quarter"
+            },
+            {
+              "name": "Last Fiscal Quarter",
+              "value": "Last Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Quarter-to-Date",
+              "value": "This Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Last Fiscal Quarter-to-Date",
+              "value": "Last Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Next Fiscal Quarter",
+              "value": "Next Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Year",
+              "value": "This Fiscal Year"
+            },
+            {
+              "name": "Last Fiscal Year",
+              "value": "Last Fiscal Year"
+            },
+            {
+              "name": "This Fiscal Year-to-Date",
+              "value": "This Fiscal Year-to-Date"
+            },
+            {
+              "name": "Last Fiscal Year-to-Date",
+              "value": "Last Fiscal Year-to-Date"
+            },
+            {
+              "name": "Next Fiscal Year",
+              "value": "Next Fiscal Year"
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range for Creation Date (Custom)",
+          "name": "dateRangeCreationCustom",
+          "placeholder": "Add Creation Date Range",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Creation Date Range Properties",
+              "name": "dateRangeCreationCustomProperties",
+              "values": [
+                {
+                  "displayName": "Start Creation Date",
+                  "name": "start_createdate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "Start date of the account creation date range to filter results by"
+                },
+                {
+                  "displayName": "End Creation Date",
+                  "name": "end_createdate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "End date of the account creation date range to filter results by"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range for Creation Date (Predefined)",
+          "name": "createdate_macro",
+          "type": "options",
+          "default": "This Month",
+          "options": [
+            {
+              "name": "Today",
+              "value": "Today"
+            },
+            {
+              "name": "Yesterday",
+              "value": "Yesterday"
+            },
+            {
+              "name": "This Week",
+              "value": "This Week"
+            },
+            {
+              "name": "Last Week",
+              "value": "Last Week"
+            },
+            {
+              "name": "This Week-to-Date",
+              "value": "This Week-to-Date"
+            },
+            {
+              "name": "Last Week-to-Date",
+              "value": "Last Week-to-Date"
+            },
+            {
+              "name": "Next Week",
+              "value": "Next Week"
+            },
+            {
+              "name": "Next 4 Weeks",
+              "value": "Next 4 Weeks"
+            },
+            {
+              "name": "This Month",
+              "value": "This Month"
+            },
+            {
+              "name": "Last Month",
+              "value": "Last Month"
+            },
+            {
+              "name": "This Month-to-Date",
+              "value": "This Month-to-Date"
+            },
+            {
+              "name": "Last Month-to-Date",
+              "value": "Last Month-to-Date"
+            },
+            {
+              "name": "Next Month",
+              "value": "Next Month"
+            },
+            {
+              "name": "This Fiscal Quarter",
+              "value": "This Fiscal Quarter"
+            },
+            {
+              "name": "Last Fiscal Quarter",
+              "value": "Last Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Quarter-to-Date",
+              "value": "This Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Last Fiscal Quarter-to-Date",
+              "value": "Last Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Next Fiscal Quarter",
+              "value": "Next Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Year",
+              "value": "This Fiscal Year"
+            },
+            {
+              "name": "Last Fiscal Year",
+              "value": "Last Fiscal Year"
+            },
+            {
+              "name": "This Fiscal Year-to-Date",
+              "value": "This Fiscal Year-to-Date"
+            },
+            {
+              "name": "Last Fiscal Year-to-Date",
+              "value": "Last Fiscal Year-to-Date"
+            },
+            {
+              "name": "Next Fiscal Year",
+              "value": "Next Fiscal Year"
+            }
+          ],
+          "description": "Predefined report account creation date range"
+        },
+        {
+          "displayName": "Date Range for Due Date (Custom)",
+          "name": "dateRangeDueCustom",
+          "placeholder": "Add Due Date Range",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Due Date Range Properties",
+              "name": "dateRangeDueCustomProperties",
+              "values": [
+                {
+                  "displayName": "Start Due Date",
+                  "name": "start_duedate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "Start date of the due date range to filter results by"
+                },
+                {
+                  "displayName": "End Due Date",
+                  "name": "end_duedate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "End date of the due date range to filter results by"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range for Due Date (Predefined)",
+          "name": "duedate_macro",
+          "type": "options",
+          "default": "This Month",
+          "description": "Predefined due date range to filter results by",
+          "options": [
+            {
+              "name": "Today",
+              "value": "Today"
+            },
+            {
+              "name": "Yesterday",
+              "value": "Yesterday"
+            },
+            {
+              "name": "This Week",
+              "value": "This Week"
+            },
+            {
+              "name": "Last Week",
+              "value": "Last Week"
+            },
+            {
+              "name": "This Week-to-Date",
+              "value": "This Week-to-Date"
+            },
+            {
+              "name": "Last Week-to-Date",
+              "value": "Last Week-to-Date"
+            },
+            {
+              "name": "Next Week",
+              "value": "Next Week"
+            },
+            {
+              "name": "Next 4 Weeks",
+              "value": "Next 4 Weeks"
+            },
+            {
+              "name": "This Month",
+              "value": "This Month"
+            },
+            {
+              "name": "Last Month",
+              "value": "Last Month"
+            },
+            {
+              "name": "This Month-to-Date",
+              "value": "This Month-to-Date"
+            },
+            {
+              "name": "Last Month-to-Date",
+              "value": "Last Month-to-Date"
+            },
+            {
+              "name": "Next Month",
+              "value": "Next Month"
+            },
+            {
+              "name": "This Fiscal Quarter",
+              "value": "This Fiscal Quarter"
+            },
+            {
+              "name": "Last Fiscal Quarter",
+              "value": "Last Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Quarter-to-Date",
+              "value": "This Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Last Fiscal Quarter-to-Date",
+              "value": "Last Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Next Fiscal Quarter",
+              "value": "Next Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Year",
+              "value": "This Fiscal Year"
+            },
+            {
+              "name": "Last Fiscal Year",
+              "value": "Last Fiscal Year"
+            },
+            {
+              "name": "This Fiscal Year-to-Date",
+              "value": "This Fiscal Year-to-Date"
+            },
+            {
+              "name": "Last Fiscal Year-to-Date",
+              "value": "Last Fiscal Year-to-Date"
+            },
+            {
+              "name": "Next Fiscal Year",
+              "value": "Next Fiscal Year"
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range for Modification Date (Custom)",
+          "name": "dateRangeModificationCustom",
+          "placeholder": "Add Modification Date Range",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Modification Date Range Properties",
+              "name": "dateRangeModificationCustomProperties",
+              "values": [
+                {
+                  "displayName": "Start Modification Date",
+                  "name": "start_moddate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "Start date of the account modification date range to filter results by"
+                },
+                {
+                  "displayName": "End Modification Date",
+                  "name": "end_moddate",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "End date of the account modification date range to filter results by"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Date Range for Modification Date (Predefined)",
+          "name": "moddate_macro",
+          "type": "options",
+          "default": "This Month",
+          "description": "Predefined account modifiction date range to filter results by",
+          "options": [
+            {
+              "name": "Today",
+              "value": "Today"
+            },
+            {
+              "name": "Yesterday",
+              "value": "Yesterday"
+            },
+            {
+              "name": "This Week",
+              "value": "This Week"
+            },
+            {
+              "name": "Last Week",
+              "value": "Last Week"
+            },
+            {
+              "name": "This Week-to-Date",
+              "value": "This Week-to-Date"
+            },
+            {
+              "name": "Last Week-to-Date",
+              "value": "Last Week-to-Date"
+            },
+            {
+              "name": "Next Week",
+              "value": "Next Week"
+            },
+            {
+              "name": "Next 4 Weeks",
+              "value": "Next 4 Weeks"
+            },
+            {
+              "name": "This Month",
+              "value": "This Month"
+            },
+            {
+              "name": "Last Month",
+              "value": "Last Month"
+            },
+            {
+              "name": "This Month-to-Date",
+              "value": "This Month-to-Date"
+            },
+            {
+              "name": "Last Month-to-Date",
+              "value": "Last Month-to-Date"
+            },
+            {
+              "name": "Next Month",
+              "value": "Next Month"
+            },
+            {
+              "name": "This Fiscal Quarter",
+              "value": "This Fiscal Quarter"
+            },
+            {
+              "name": "Last Fiscal Quarter",
+              "value": "Last Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Quarter-to-Date",
+              "value": "This Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Last Fiscal Quarter-to-Date",
+              "value": "Last Fiscal Quarter-to-Date"
+            },
+            {
+              "name": "Next Fiscal Quarter",
+              "value": "Next Fiscal Quarter"
+            },
+            {
+              "name": "This Fiscal Year",
+              "value": "This Fiscal Year"
+            },
+            {
+              "name": "Last Fiscal Year",
+              "value": "Last Fiscal Year"
+            },
+            {
+              "name": "This Fiscal Year-to-Date",
+              "value": "This Fiscal Year-to-Date"
+            },
+            {
+              "name": "Last Fiscal Year-to-Date",
+              "value": "Last Fiscal Year-to-Date"
+            },
+            {
+              "name": "Next Fiscal Year",
+              "value": "Next Fiscal Year"
+            }
+          ]
+        },
+        {
+          "displayName": "Department Names or IDs",
+          "name": "department",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Department to filter results by. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "typeOptions": {
+            "loadOptionsMethod": "getDepartments"
+          }
+        },
+        {
+          "displayName": "Document Number",
+          "name": "docnum",
+          "type": "string",
+          "default": "",
+          "description": "Transaction document number to filter results by"
+        },
+        {
+          "displayName": "Group By",
+          "name": "group_by",
+          "default": "Account",
+          "type": "options",
+          "description": "Transaction field to group results by",
+          "options": [
+            {
+              "name": "Account",
+              "value": "Account"
+            },
+            {
+              "name": "Customer",
+              "value": "Customer"
+            },
+            {
+              "name": "Day",
+              "value": "Day"
+            },
+            {
+              "name": "Employee",
+              "value": "Employee"
+            },
+            {
+              "name": "Location",
+              "value": "Location"
+            },
+            {
+              "name": "Month",
+              "value": "Month"
+            },
+            {
+              "name": "Name",
+              "value": "Name"
+            },
+            {
+              "name": "None",
+              "value": "None"
+            },
+            {
+              "name": "Payment Method",
+              "value": "Payment Method"
+            },
+            {
+              "name": "Quarter",
+              "value": "Quarter"
+            },
+            {
+              "name": "Transaction Type",
+              "value": "Transaction Type"
+            },
+            {
+              "name": "Vendor",
+              "value": "Vendor"
+            },
+            {
+              "name": "Week",
+              "value": "Week"
+            },
+            {
+              "name": "Year",
+              "value": "Year"
+            }
+          ]
+        },
+        {
+          "displayName": "Memo Names or IDs",
+          "name": "memo",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Memo to filter results by. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "typeOptions": {
+            "loadOptionsMethod": "getMemos"
+          }
+        },
+        {
+          "displayName": "Payment Method",
+          "name": "payment_Method",
+          "type": "options",
+          "default": "Cash",
+          "description": "Payment method to filter results by",
+          "options": [
+            {
+              "name": "American Express",
+              "value": "American Express"
+            },
+            {
+              "name": "Cash",
+              "value": "Cash"
+            },
+            {
+              "name": "Check",
+              "value": "Check"
+            },
+            {
+              "name": "Dinners Club",
+              "value": "Dinners Club"
+            },
+            {
+              "name": "Discover",
+              "value": "Discover"
+            },
+            {
+              "name": "Master Card",
+              "value": "Master Card"
+            },
+            {
+              "name": "Visa",
+              "value": "Visa"
+            }
+          ]
+        },
+        {
+          "displayName": "Printed Status",
+          "name": "printed",
+          "type": "options",
+          "default": "Printed",
+          "description": "Printed state to filter results by",
+          "options": [
+            {
+              "name": "Printed",
+              "value": "Printed"
+            },
+            {
+              "name": "To Be Printed",
+              "value": "To_be_printed"
+            }
+          ]
+        },
+        {
+          "displayName": "Quick Zoom URL",
+          "name": "qzurl",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether Quick Zoom URL information should be generated"
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sort_by",
+          "type": "options",
+          "default": "account_name",
+          "description": "Column to sort results by",
+          "options": [
+            {
+              "name": "Account Name",
+              "value": "account_name"
+            },
+            {
+              "name": "Created By",
+              "value": "create_by"
+            },
+            {
+              "name": "Create Date",
+              "value": "create_date"
+            },
+            {
+              "name": "Customer Message",
+              "value": "cust_msg"
+            },
+            {
+              "name": "Department Name",
+              "value": "dept_name"
+            },
+            {
+              "name": "Due Date",
+              "value": "due_date"
+            },
+            {
+              "name": "Document Number",
+              "value": "doc_num"
+            },
+            {
+              "name": "Invoice Date",
+              "value": "inv_date"
+            },
+            {
+              "name": "Is Account Payable Paid",
+              "value": "is_ap_paid"
+            },
+            {
+              "name": "Is Cleared",
+              "value": "is_cleared"
+            },
+            {
+              "name": "Last Modified By",
+              "value": "last_mod_by"
+            },
+            {
+              "name": "Memo",
+              "value": "memo"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "Other Account",
+              "value": "other_account"
+            },
+            {
+              "name": "Payment Method",
+              "value": "pmt_mthod"
+            },
+            {
+              "name": "Posting",
+              "value": "is_no_post"
+            },
+            {
+              "name": "Printed Status",
+              "value": "printed"
+            },
+            {
+              "name": "Sales Customer 1",
+              "value": "sales_cust1"
+            },
+            {
+              "name": "Sales Customer 2",
+              "value": "sales_cust2"
+            },
+            {
+              "name": "Sales Customer 3",
+              "value": "sales_cust3"
+            },
+            {
+              "name": "Term Name",
+              "value": "term_name"
+            },
+            {
+              "name": "Tracking Number",
+              "value": "tracking_num"
+            },
+            {
+              "name": "Transaction Date",
+              "value": "tx_date"
+            },
+            {
+              "name": "Transaction Type",
+              "value": "txn_type"
+            }
+          ]
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sort_order",
+          "type": "options",
+          "default": "Ascend",
+          "options": [
+            {
+              "name": "Ascend",
+              "value": "Ascend"
+            },
+            {
+              "name": "Descend",
+              "value": "Descend"
+            }
+          ]
+        },
+        {
+          "displayName": "Source Account Type",
+          "name": "source_account_type",
+          "default": "Bank",
+          "type": "options",
+          "description": "Account type to filter results by",
+          "options": [
+            {
+              "name": "Accounts Payable",
+              "value": "AccountsPayable"
+            },
+            {
+              "name": "Accounts Receivable",
+              "value": "AccountsReceivable"
+            },
+            {
+              "name": "Bank",
+              "value": "Bank"
+            },
+            {
+              "name": "Cost Of Goods Sold",
+              "value": "CostOfGoodsSold"
+            },
+            {
+              "name": "Credit Card",
+              "value": "CreditCard"
+            },
+            {
+              "name": "Equity",
+              "value": "Equity"
+            },
+            {
+              "name": "Expense",
+              "value": "Expense"
+            },
+            {
+              "name": "Fixed Asset",
+              "value": "FixedAsset"
+            },
+            {
+              "name": "Income",
+              "value": "Income"
+            },
+            {
+              "name": "Long Term Liability",
+              "value": "LongTermLiability"
+            },
+            {
+              "name": "Non Posting",
+              "value": "NonPosting"
+            },
+            {
+              "name": "Other Asset",
+              "value": "OtherAsset"
+            },
+            {
+              "name": "Other Current Asset",
+              "value": "OtherCurrentAsset"
+            },
+            {
+              "name": "Other Current Liability",
+              "value": "OtherCurrentLiability"
+            },
+            {
+              "name": "Other Expense",
+              "value": "OtherExpense"
+            },
+            {
+              "name": "Other Income",
+              "value": "OtherIncome"
+            }
+          ]
+        },
+        {
+          "displayName": "Term Names or IDs",
+          "name": "term",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Term to filter results by. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "typeOptions": {
+            "loadOptionsMethod": "getTerms"
+          }
+        },
+        {
+          "displayName": "Transaction Amount",
+          "name": "bothamount",
+          "type": "number",
+          "default": 0,
+          "typeOptions": {
+            "numberPrecision": 2
+          },
+          "description": "Monetary amount to filter results by"
+        },
+        {
+          "displayName": "Transaction Type",
+          "name": "transaction_type",
+          "type": "options",
+          "default": "CreditCardCharge",
+          "description": "Transaction type to filter results by",
+          "options": [
+            {
+              "name": "Bill",
+              "value": "Bill"
+            },
+            {
+              "name": "Bill Payment Check",
+              "value": "BillPaymentCheck"
+            },
+            {
+              "name": "Bill Payment Credit Card",
+              "value": "BillPaymentCreditCard"
+            },
+            {
+              "name": "Billable Charge",
+              "value": "BillableCharge"
+            },
+            {
+              "name": "Cash Purchase",
+              "value": "CashPurchase"
+            },
+            {
+              "name": "Charge",
+              "value": "Charge"
+            },
+            {
+              "name": "Check",
+              "value": "Check"
+            },
+            {
+              "name": "Credit",
+              "value": "Credit"
+            },
+            {
+              "name": "Credit Card Charge",
+              "value": "CreditCardCharge"
+            },
+            {
+              "name": "Credit Card Credit",
+              "value": "CreditCardCredit"
+            },
+            {
+              "name": "Credit Memo",
+              "value": "CreditMemo"
+            },
+            {
+              "name": "Credit Refund",
+              "value": "CreditRefund"
+            },
+            {
+              "name": "Deposit",
+              "value": "Deposit"
+            },
+            {
+              "name": "Estimate",
+              "value": "Estimate"
+            },
+            {
+              "name": "Global Tax Adjustment",
+              "value": "GlobalTaxAdjustment"
+            },
+            {
+              "name": "Global Tax Payment",
+              "value": "GlobalTaxPayment"
+            },
+            {
+              "name": "Inventory Quantity Adjustment",
+              "value": "InventoryQuantityAdjustment"
+            },
+            {
+              "name": "Invoice",
+              "value": "Invoice"
+            },
+            {
+              "name": "Journal Entry",
+              "value": "JournalEntry"
+            },
+            {
+              "name": "Purchase Order",
+              "value": "PurchaseOrder"
+            },
+            {
+              "name": "Receive Payment",
+              "value": "ReceivePayment"
+            },
+            {
+              "name": "Sales Receipt",
+              "value": "SalesReceipt"
+            },
+            {
+              "name": "Service  Tax  Defer",
+              "value": "Service Tax Defer"
+            },
+            {
+              "name": "Service  Tax  Gross  Adjustment",
+              "value": "Service Tax Gross Adjustment"
+            },
+            {
+              "name": "Service  Tax  Partial  Utilisation",
+              "value": "Service Tax Partial Utilisation"
+            },
+            {
+              "name": "Service  Tax  Refund",
+              "value": "Service Tax Refund"
+            },
+            {
+              "name": "Service  Tax  Reversal",
+              "value": "Service Tax Reversal"
+            },
+            {
+              "name": "Statement",
+              "value": "Statement"
+            },
+            {
+              "name": "Time Activity",
+              "value": "TimeActivity"
+            },
+            {
+              "name": "Transfer",
+              "value": "Transfer"
+            },
+            {
+              "name": "Vendor Credit",
+              "value": "VendorCredit"
+            }
+          ]
+        },
+        {
+          "displayName": "Vendor Names or IDs",
+          "name": "vendor",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Vendor to filter results by. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "typeOptions": {
+            "loadOptionsMethod": "getVendors"
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "transaction"
+          ],
+          "operation": [
+            "getReport"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a vendor"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a vendor"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many vendors"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a vendor"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "displayName",
+      "displayName": "Display Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The display name of the vendor to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Account Number",
+          "name": "AcctNum",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Company Name",
+          "name": "CompanyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Family Name",
+          "name": "FamilyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Given Name",
+          "name": "GivenName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Email Address",
+          "name": "PrimaryEmailAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the vendor as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Vendor 1099",
+          "name": "Vendor1099",
+          "description": "Whether the vendor is an independent contractor, given a 1099-MISC form at the end of the year",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "vendorId",
+      "displayName": "Vendor ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the vendor to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "placeholder": "WHERE Metadata.LastUpdatedTime > '2021-01-01'",
+          "description": "The condition for selecting vendors. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "vendorId",
+      "displayName": "Vendor ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the vendor to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Account Number",
+          "name": "AcctNum",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Active",
+          "name": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Balance",
+          "name": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Billing Address",
+          "name": "BillAddr",
+          "placeholder": "Add Billing Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Details",
+              "name": "details",
+              "values": [
+                {
+                  "displayName": "City",
+                  "name": "City",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Line 1",
+                  "name": "Line1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "PostalCode",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Latitude",
+                  "name": "Lat",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Longitude",
+                  "name": "Long",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country Subdivision Code",
+                  "name": "CountrySubDivisionCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Company Name",
+          "name": "CompanyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Family Name",
+          "name": "FamilyName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Given Name",
+          "name": "GivenName",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Email Address",
+          "name": "PrimaryEmailAddr",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Primary Phone",
+          "name": "PrimaryPhone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Print-On-Check Name",
+          "name": "PrintOnCheckName",
+          "description": "Name of the vendor as printed on a check",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Vendor 1099",
+          "name": "Vendor1099",
+          "description": "Whether the vendor is an independent contractor, given a 1099-MISC form at the end of the year",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "quickBooksOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "VendorRef",
+    "billId",
+    "billId",
+    "billId",
+    "updateFields",
+    "displayName",
+    "customerId",
+    "customerId",
+    "updateFields",
+    "employeeId",
+    "employeeId",
+    "updateFields",
+    "CustomerRef",
+    "estimateId",
+    "estimateId",
+    "download",
+    "binaryProperty",
+    "fileName",
+    "estimateId",
+    "email",
+    "estimateId",
+    "updateFields",
+    "CustomerRef",
+    "invoiceId",
+    "invoiceId",
+    "download",
+    "binaryProperty",
+    "fileName",
+    "invoiceId",
+    "email",
+    "invoiceId",
+    "invoiceId",
+    "updateFields",
+    "itemId",
+    "CustomerRef",
+    "paymentId",
+    "paymentId",
+    "download",
+    "binaryProperty",
+    "fileName",
+    "paymentId",
+    "email",
+    "paymentId",
+    "paymentId",
+    "updateFields",
+    "purchaseId",
+    "displayName",
+    "vendorId",
+    "vendorId",
+    "updateFields"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "Line",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "FamilyName",
+    "GivenName",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "Line",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "Line",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "TotalAmt",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "simple",
+    "filters",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "VendorRef": "options",
+    "Line": "collection",
+    "additionalFields": "collection",
+    "billId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "updateFields": "collection",
+    "displayName": "string",
+    "customerId": "string",
+    "FamilyName": "string",
+    "GivenName": "string",
+    "employeeId": "string",
+    "CustomerRef": "options",
+    "estimateId": "string",
+    "download": "boolean",
+    "binaryProperty": "string",
+    "fileName": "string",
+    "email": "string",
+    "invoiceId": "string",
+    "itemId": "string",
+    "TotalAmt": "number",
+    "paymentId": "string",
+    "purchaseId": "string",
+    "simple": "boolean",
+    "vendorId": "string"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,587 @@
+{
+  "name": "googleBigQuery",
+  "displayName": "Google BigQuery",
+  "description": "Consume Google BigQuery API",
+  "group": [
+    "input"
+  ],
+  "version": [
+    2,
+    2.1
+  ],
+  "defaults": {
+    "authentication": "oAuth2",
+    "resource": "database",
+    "operation": "executeQuery",
+    "projectId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "datasetId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "tableId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "sqlQuery": "",
+    "options": {},
+    "dataMode": "autoMap",
+    "info": "",
+    "fieldsUi": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "oAuth2",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "hidden",
+      "default": "database",
+      "options": [
+        {
+          "name": "Database",
+          "value": "database"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "executeQuery",
+      "options": [
+        {
+          "name": "Execute Query",
+          "value": "executeQuery",
+          "description": "Execute a SQL query",
+          "action": "Execute a SQL query"
+        },
+        {
+          "name": "Insert",
+          "value": "insert",
+          "description": "Insert rows in a table",
+          "action": "Insert rows in a table"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Projects to which you have been granted any project role",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery",
+            "insert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "datasetId",
+      "displayName": "Dataset",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "tableId",
+      "displayName": "Table",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sqlQuery",
+      "displayName": "SQL Query",
+      "type": "string",
+      "default": "",
+      "description": "SQL query to execute, you can find more information <a href=\"https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax\" target=\"_blank\">here</a>. Standard SQL syntax used by default, but you can also use Legacy SQL syntax by using optinon 'Use Legacy SQL'.",
+      "typeOptions": {
+        "editor": "sqlEditor"
+      },
+      "displayOptions": {
+        "hide": {
+          "/options.useLegacySql": [
+            true
+          ]
+        },
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "placeholder": "SELECT * FROM dataset.table LIMIT 100",
+      "noDataExpression": true
+    },
+    {
+      "name": "sqlQuery",
+      "displayName": "SQL Query",
+      "type": "string",
+      "default": "",
+      "description": "SQL query to execute, you can find more information about Legacy SQL syntax <a href=\"https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax\" target=\"_blank\">here</a>",
+      "typeOptions": {
+        "editor": "sqlEditor"
+      },
+      "displayOptions": {
+        "show": {
+          "/options.useLegacySql": [
+            true
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "placeholder": "SELECT * FROM [project:dataset.table] LIMIT 100;",
+      "hint": "Legacy SQL syntax",
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Default Dataset Name or ID",
+          "name": "defaultDataset",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getDatasets",
+            "loadOptionsDependsOn": [
+              "projectId.value"
+            ]
+          },
+          "default": "",
+          "description": "If not set, all table names in the query string must be qualified in the format 'datasetId.tableId'. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Dry Run",
+          "name": "dryRun",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether set to true BigQuery doesn't run the job. Instead, if the query is valid, BigQuery returns statistics about the job such as how many bytes would be processed. If the query is invalid, an error returns."
+        },
+        {
+          "displayName": "Include Schema in Output",
+          "name": "includeSchema",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the schema in the output. If set to true, the output will contain key '_schema' with the schema of the table.",
+          "displayOptions": {
+            "hide": {
+              "rawOutput": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Location (Region)",
+          "name": "location",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. europe-west3",
+          "description": "Location or the region where data would be stored and processed. Pricing for storage and analysis is also defined by location of data and reservations, more information <a href=\"https://cloud.google.com/bigquery/docs/locations\" target=\"_blank\">here</a>."
+        },
+        {
+          "displayName": "Maximum Bytes Billed",
+          "name": "maximumBytesBilled",
+          "type": "string",
+          "default": "",
+          "description": "Limits the bytes billed for this query. Queries with bytes billed above this limit will fail (without incurring a charge). String in <a href=\"https://developers.google.com/discovery/v1/type-format?utm_source=cloud.google.com&utm_medium=referral\" target=\"_blank\">Int64Value</a> format"
+        },
+        {
+          "displayName": "Max Results Per Page",
+          "name": "maxResults",
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum number of results to return per page of results. This is particularly useful when dealing with large datasets. It will not affect the total number of results returned, e.g. rows in a table. You can use LIMIT in your SQL query to limit the number of rows returned."
+        },
+        {
+          "displayName": "Timeout",
+          "name": "timeoutMs",
+          "type": "number",
+          "default": 10000,
+          "hint": "How long to wait for the query to complete, in milliseconds",
+          "description": "Specifies the maximum amount of time, in milliseconds, that the client is willing to wait for the query to complete. Be aware that the call is not guaranteed to wait for the specified timeout; it typically returns after around 200 seconds (200,000 milliseconds), even if the query is not complete."
+        },
+        {
+          "displayName": "Raw Output",
+          "name": "rawOutput",
+          "type": "boolean",
+          "default": false,
+          "displayOptions": {
+            "hide": {
+              "dryRun": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Use Legacy SQL",
+          "name": "useLegacySql",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use BigQuery's legacy SQL dialect for this query. If set to false, the query will use BigQuery's standard SQL."
+        },
+        {
+          "displayName": "Return Integers as Numbers",
+          "name": "returnAsNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether all integer values will be returned as numbers. If set to false, all integer values will be returned as strings."
+        },
+        {
+          "displayName": "Query Parameters (Named)",
+          "name": "queryParameters",
+          "type": "fixedCollection",
+          "description": "Use <a href=\"https://cloud.google.com/bigquery/docs/parameterized-queries#using_structs_in_parameterized_queries\" target=\"_blank\">parameterized queries</a> to prevent SQL injections. Positional arguments are not supported at the moment. This feature won't be available when using legacy SQL.",
+          "displayOptions": {
+            "hide": {
+              "/options.useLegacySql": [
+                true
+              ]
+            }
+          },
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Parameter",
+          "default": {
+            "namedParameters": [
+              {
+                "name": "",
+                "value": ""
+              }
+            ]
+          },
+          "options": [
+            {
+              "name": "namedParameters",
+              "displayName": "Named Parameter",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the parameter"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "The substitute value. It must be a string. Arrays, dates and struct types mentioned in <a href=\"https://cloud.google.com/bigquery/docs/parameterized-queries#using_structs_in_parameterized_queries\" target=\"_blank\">the official documentation</a> are not yet supported."
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "autoMap",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "options": [
+        {
+          "name": "Auto-Map Input Data",
+          "value": "autoMap",
+          "description": "Use when node input properties match destination field names"
+        },
+        {
+          "name": "Map Each Field Below",
+          "value": "define",
+          "description": "Set the value for each destination field"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "info",
+      "displayName": "In this mode, make sure the incoming data fields are named the same as the columns in BigQuery. (Use an 'Edit Fields' node before this node to change them if required.)",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMap"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Fields to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldId",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "projectId.value",
+                  "datasetId.value",
+                  "tableId.value"
+                ],
+                "loadOptionsMethod": "getSchema"
+              },
+              "default": ""
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Field",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "define"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Batch Size",
+          "name": "batchSize",
+          "type": "number",
+          "default": 100,
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Ignore Unknown Values",
+          "name": "ignoreUnknownValues",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to gnore row values that do not match the schema"
+        },
+        {
+          "displayName": "Skip Invalid Rows",
+          "name": "skipInvalidRows",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip rows with values that do not match the schema"
+        },
+        {
+          "displayName": "Template Suffix",
+          "name": "templateSuffix",
+          "type": "string",
+          "default": "",
+          "description": "Create a new table based on the destination table and insert rows into the new table. The new table will be named <code>{destinationTable}{templateSuffix}</code>"
+        },
+        {
+          "displayName": "Trace ID",
+          "name": "traceId",
+          "type": "string",
+          "default": "",
+          "description": "Unique ID for the request, for debugging only. It is case-sensitive, limited to up to 36 ASCII characters. A UUID is recommended."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleBigQueryOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "projectId",
+    "datasetId",
+    "tableId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "sqlQuery",
+    "sqlQuery",
+    "options",
+    "dataMode",
+    "info",
+    "fieldsUi",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "hidden",
+    "operation": "options",
+    "projectId": "resourceLocator",
+    "datasetId": "resourceLocator",
+    "tableId": "resourceLocator",
+    "sqlQuery": "string",
+    "options": "collection",
+    "dataMode": "options",
+    "info": "notice",
+    "fieldsUi": "fixedCollection"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,932 @@
+{
+  "nodeType": "n8n-nodes-base.googleContacts",
+  "displayName": "Google Contacts",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "familyName",
+    "givenName",
+    "additionalFields",
+    "contactId",
+    "contactId",
+    "fields",
+    "rawData",
+    "returnAll",
+    "limit",
+    "fields",
+    "useQuery",
+    "query",
+    "rawData",
+    "options",
+    "contactId",
+    "fields",
+    "updateFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "contact",
+        "enumValues": [
+          "contact"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "familyName",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "givenName",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "type": "multiOptions",
+      "required": false,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "*",
+          "addresses",
+          "biographies",
+          "birthdays",
+          "coverPhotos",
+          "emailAddresses",
+          "events",
+          "genders",
+          "imClients",
+          "interests",
+          "locales",
+          "memberships",
+          "metadata",
+          "names",
+          "nicknames",
+          "occupations",
+          "organizations",
+          "phoneNumbers",
+          "photos",
+          "relations",
+          "residences",
+          "sipAddresses",
+          "skills",
+          "urls",
+          "userDefined"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "rawData",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "fields",
+      "type": "multiOptions",
+      "required": false,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "*",
+          "addresses",
+          "biographies",
+          "birthdays",
+          "coverPhotos",
+          "emailAddresses",
+          "events",
+          "genders",
+          "imClients",
+          "interests",
+          "locales",
+          "memberships",
+          "metadata",
+          "names",
+          "nicknames",
+          "occupations",
+          "organizations",
+          "phoneNumbers",
+          "photos",
+          "relations",
+          "residences",
+          "sipAddresses",
+          "skills",
+          "urls",
+          "userDefined"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "useQuery",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "useQuery"
+      ]
+    },
+    {
+      "field": "rawData",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "useQuery"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "type": "multiOptions",
+      "required": false,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "*",
+          "addresses",
+          "biographies",
+          "birthdays",
+          "coverPhotos",
+          "emailAddresses",
+          "events",
+          "genders",
+          "imClients",
+          "interests",
+          "locales",
+          "memberships",
+          "metadata",
+          "names",
+          "nicknames",
+          "occupations",
+          "organizations",
+          "phoneNumbers",
+          "photos",
+          "relations",
+          "residences",
+          "sipAddresses",
+          "skills",
+          "urls",
+          "userDefined"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "contact",
+    "operation": "create",
+    "familyName": "",
+    "givenName": "",
+    "additionalFields": {},
+    "returnAll": false,
+    "limit": 100,
+    "useQuery": false,
+    "query": "",
+    "options": {},
+    "updateFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "familyName",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "givenName",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "rawData",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "fields",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "useQuery",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "useQuery"
+      ]
+    },
+    {
+      "field": "rawData",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "useQuery"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "fields",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "contact": {
+      "operations": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "familyName",
+          "givenName",
+          "additionalFields"
+        ],
+        "delete": [
+          "contactId"
+        ],
+        "get": [
+          "contactId",
+          "fields",
+          "rawData"
+        ],
+        "getAll": [
+          "returnAll",
+          "limit",
+          "fields",
+          "useQuery",
+          "query",
+          "rawData",
+          "options"
+        ],
+        "update": [
+          "contactId",
+          "fields",
+          "updateFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

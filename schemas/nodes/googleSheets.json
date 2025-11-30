@@ -1,0 +1,2433 @@
+{
+  "name": "googleSheets",
+  "displayName": "Google Sheets",
+  "description": "Read, update and write data to Google Sheets",
+  "group": [
+    "input",
+    "output"
+  ],
+  "version": [
+    3,
+    4,
+    4.1,
+    4.2,
+    4.3,
+    4.4,
+    4.5,
+    4.6,
+    4.7
+  ],
+  "defaults": {
+    "preBuiltAgentsCalloutGoogleSheets": "",
+    "authentication": "oAuth2",
+    "resource": "sheet",
+    "operation": "read",
+    "documentId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "sheetName": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "autoMapNotice": "",
+    "fieldsUi": {},
+    "options": {},
+    "clear": "wholeSheet",
+    "keepFirstRow": false,
+    "rowsToDelete": 1,
+    "columnsToDelete": 1,
+    "range": "A:F",
+    "toDelete": "rows",
+    "filtersUI": {},
+    "sheetsUi": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "preBuiltAgentsCalloutGoogleSheets",
+      "displayName": "Manage tasks in Google Sheets using our pre-built",
+      "type": "callout",
+      "default": "",
+      "typeOptions": {
+        "calloutAction": {
+          "label": "Task management agent",
+          "icon": "bot",
+          "type": "openSampleWorkflowTemplate",
+          "templateId": "task_management_agent_with_google_sheets"
+        }
+      }
+    },
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "oAuth2",
+      "options": [
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        },
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "sheet",
+      "options": [
+        {
+          "name": "Document",
+          "value": "spreadsheet"
+        },
+        {
+          "name": "Sheet Within Document",
+          "value": "sheet"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "read",
+      "options": [
+        {
+          "name": "Append or Update Row",
+          "value": "appendOrUpdate",
+          "description": "Append a new row or update an existing one (upsert)",
+          "action": "Append or update row in sheet"
+        },
+        {
+          "name": "Append Row",
+          "value": "append",
+          "description": "Create a new row in a sheet",
+          "action": "Append row in sheet"
+        },
+        {
+          "name": "Clear",
+          "value": "clear",
+          "description": "Delete all the contents or a part of a sheet",
+          "action": "Clear sheet"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new sheet",
+          "action": "Create sheet"
+        },
+        {
+          "name": "Delete",
+          "value": "remove",
+          "description": "Permanently delete a sheet",
+          "action": "Delete sheet"
+        },
+        {
+          "name": "Delete Rows or Columns",
+          "value": "delete",
+          "description": "Delete columns or rows from a sheet",
+          "action": "Delete rows or columns from sheet"
+        },
+        {
+          "name": "Get Row(s)",
+          "value": "read",
+          "description": "Retrieve one or more rows from a sheet",
+          "action": "Get row(s) in sheet"
+        },
+        {
+          "name": "Update Row",
+          "value": "update",
+          "description": "Update an existing row in a sheet",
+          "action": "Update row in sheet"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sheetName",
+      "displayName": "Sheet",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "documentId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append",
+            "appendOrUpdate",
+            "clear",
+            "delete",
+            "read",
+            "remove",
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "defineBelow",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties match destination column names"
+        },
+        {
+          "name": "Map Each Column Below",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column"
+        },
+        {
+          "name": "Nothing",
+          "value": "nothing",
+          "description": "Do not send anything"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "autoMapNotice",
+      "displayName": "In this mode, make sure the incoming data is named the same as the columns in your Sheet. (Use an 'Edit Fields' node before this node to change it if required.)",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "append"
+          ],
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Fields to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "fieldValues",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldId",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "sheetName.value"
+                ],
+                "loadOptionsMethod": "getSheetHeaderRowAndSkipEmpty"
+              },
+              "default": ""
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Field to Send",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "add",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Cell Format",
+          "name": "cellFormat",
+          "type": "options",
+          "options": [
+            {
+              "name": "Let Google Sheets format",
+              "value": "USER_ENTERED",
+              "description": "Cells are styled as if you typed the values into Google Sheets directly"
+            },
+            {
+              "name": "Let n8n format",
+              "value": "RAW",
+              "description": "Cells have the same types as the input data"
+            }
+          ],
+          "default": "USER_ENTERED",
+          "description": "Determines how data should be interpreted"
+        },
+        {
+          "displayName": "Data Location on Sheet",
+          "name": "locationDefine",
+          "type": "fixedCollection",
+          "placeholder": "Select Range",
+          "default": {
+            "values": {}
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Header Row",
+                  "name": "headerRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 1,
+                  "description": "Index of the row which contains the keys. Starts at 1. The incoming node data is matched to the keys for assignment. The matching is case sensitive."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/dataMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/columns.mappingMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        },
+        {
+          "displayName": "Minimise API Calls",
+          "name": "useAppend",
+          "type": "boolean",
+          "default": false,
+          "hint": "Use if your sheet has no gaps between rows or columns",
+          "description": "Whether to use append instead of update(default), this is more efficient but in some cases data might be misaligned"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "clear",
+      "displayName": "Clear",
+      "type": "options",
+      "default": "wholeSheet",
+      "description": "What to clear",
+      "options": [
+        {
+          "name": "Whole Sheet",
+          "value": "wholeSheet"
+        },
+        {
+          "name": "Specific Rows",
+          "value": "specificRows"
+        },
+        {
+          "name": "Specific Columns",
+          "value": "specificColumns"
+        },
+        {
+          "name": "Specific Range",
+          "value": "specificRange"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "keepFirstRow",
+      "displayName": "Keep First Row",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "wholeSheet"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "startIndex",
+      "displayName": "Start Row Number",
+      "type": "number",
+      "default": 1,
+      "description": "The row number to delete from, The first row is 1",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "rowsToDelete",
+      "displayName": "Number of Rows to Delete",
+      "type": "number",
+      "default": 1,
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "startIndex",
+      "displayName": "Start Column",
+      "type": "string",
+      "default": "A",
+      "description": "The column to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificColumns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "columnsToDelete",
+      "displayName": "Number of Columns to Delete",
+      "type": "number",
+      "default": 1,
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificColumns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "range",
+      "displayName": "Range",
+      "type": "string",
+      "default": "A:F",
+      "required": true,
+      "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details. If it contains multiple sheets it can also be added like this: \"MySheet!A:F\"",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRange"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "n8n-sheet",
+      "required": true,
+      "description": "The name of the sheet",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Hidden",
+          "name": "hidden",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the sheet is hidden in the UI, false if it's visible"
+        },
+        {
+          "displayName": "Right To Left",
+          "name": "rightToLeft",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the sheet is an RTL sheet instead of an LTR sheet"
+        },
+        {
+          "displayName": "Sheet ID",
+          "name": "sheetId",
+          "type": "number",
+          "default": 0,
+          "description": "The ID of the sheet. Must be non-negative. This field cannot be changed once set."
+        },
+        {
+          "displayName": "Sheet Index",
+          "name": "index",
+          "type": "number",
+          "default": 0,
+          "description": "The index of the sheet within the spreadsheet"
+        },
+        {
+          "displayName": "Tab Color",
+          "name": "tabColor",
+          "type": "color",
+          "default": "0aa55c",
+          "description": "The color of the tab in the UI"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "toDelete",
+      "displayName": "To Delete",
+      "type": "options",
+      "default": "rows",
+      "description": "What to delete",
+      "options": [
+        {
+          "name": "Rows",
+          "value": "rows",
+          "description": "Rows to delete"
+        },
+        {
+          "name": "Columns",
+          "value": "columns",
+          "description": "Columns to delete"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "startIndex",
+      "displayName": "Start Row Number",
+      "type": "number",
+      "default": 2,
+      "description": "The row number to delete from, The first row is 2",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "rows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "numberToDelete",
+      "displayName": "Number of Rows to Delete",
+      "type": "number",
+      "default": 1,
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "rows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "startIndex",
+      "displayName": "Start Column",
+      "type": "string",
+      "default": "A",
+      "description": "The column to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "numberToDelete",
+      "displayName": "Number of Columns to Delete",
+      "type": "number",
+      "default": 1,
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "filtersUI",
+      "displayName": "Filters",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Filter",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "lookupColumn",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "sheetName.value"
+                ],
+                "loadOptionsMethod": "getSheetHeaderRowWithGeneratedColumnNames"
+              },
+              "default": "",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>"
+            },
+            {
+              "displayName": "Value",
+              "name": "lookupValue",
+              "type": "string",
+              "default": "",
+              "hint": "The column must have this value to be matched"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Filter",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "combineFilters",
+      "displayName": "Combine Filters",
+      "type": "options",
+      "default": "OR",
+      "description": "How to combine the conditions defined in \"Filters\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "options": [
+        {
+          "name": "AND",
+          "value": "AND",
+          "description": "Only rows that meet all the conditions are selected"
+        },
+        {
+          "name": "OR",
+          "value": "OR",
+          "description": "Rows that meet at least one condition are selected"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 4.3
+              }
+            }
+          ],
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "combineFilters",
+      "displayName": "Combine Filters",
+      "type": "options",
+      "default": "AND",
+      "description": "How to combine the conditions defined in \"Filters\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "options": [
+        {
+          "name": "AND",
+          "value": "AND",
+          "description": "Only rows that meet all the conditions are selected"
+        },
+        {
+          "name": "OR",
+          "value": "OR",
+          "description": "Rows that meet at least one condition are selected"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.3
+              }
+            }
+          ],
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Data Location on Sheet",
+          "name": "dataLocationOnSheet",
+          "type": "fixedCollection",
+          "placeholder": "Select Range",
+          "default": {
+            "values": {
+              "rangeDefinition": "detectAutomatically"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Range Definition",
+                  "name": "rangeDefinition",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Detect Automatically",
+                      "value": "detectAutomatically",
+                      "description": "Automatically detect the data range"
+                    },
+                    {
+                      "name": "Specify Range (A1 Notation)",
+                      "value": "specifyRangeA1",
+                      "description": "Manually specify the data range"
+                    },
+                    {
+                      "name": "Specify Range (Rows)",
+                      "value": "specifyRange",
+                      "description": "Manually specify the data range"
+                    }
+                  ],
+                  "default": ""
+                },
+                {
+                  "displayName": "Read Rows Until",
+                  "name": "readRowsUntil",
+                  "type": "options",
+                  "default": "lastRowInSheet",
+                  "options": [
+                    {
+                      "name": "First Empty Row",
+                      "value": "firstEmptyRow"
+                    },
+                    {
+                      "name": "Last Row In Sheet",
+                      "value": "lastRowInSheet"
+                    }
+                  ],
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "detectAutomatically"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "Header Row",
+                  "name": "headerRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 1,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of the row which contains the column names",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "First Data Row",
+                  "name": "firstDataRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 2,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of first row which contains the actual data",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "Range",
+                  "name": "range",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "A:Z",
+                  "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details.",
+                  "hint": "You can specify both the rows and the columns, e.g. C4:E7",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRangeA1"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Output Formatting",
+          "name": "outputFormatting",
+          "type": "fixedCollection",
+          "placeholder": "Add Formatting",
+          "default": {
+            "values": {
+              "general": "UNFORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "General Formatting",
+                  "name": "general",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Values (unformatted)",
+                      "value": "UNFORMATTED_VALUE",
+                      "description": "Numbers stay as numbers, but any currency signs or special formatting is lost"
+                    },
+                    {
+                      "name": "Values (formatted)",
+                      "value": "FORMATTED_VALUE",
+                      "description": "Numbers are turned to text, and displayed as in Google Sheets (e.g. with commas or currency signs)"
+                    },
+                    {
+                      "name": "Formulas",
+                      "value": "FORMULA"
+                    }
+                  ],
+                  "default": "",
+                  "description": "Determines how values should be rendered in the output"
+                },
+                {
+                  "displayName": "Date Formatting",
+                  "name": "date",
+                  "type": "options",
+                  "default": "",
+                  "options": [
+                    {
+                      "name": "Formatted Text",
+                      "value": "FORMATTED_STRING",
+                      "description": "As displayed in Google Sheets, e.g. '01/01/2022'"
+                    },
+                    {
+                      "name": "Serial Number",
+                      "value": "SERIAL_NUMBER",
+                      "description": "A number representing the number of days since Dec 30, 1899"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Return only First Matching Row",
+          "name": "returnFirstMatch",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to select the first row of the sheet or the first matching row (if filters are set)",
+          "displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 4.5
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "When Filter Has Multiple Matches",
+          "name": "returnAllMatches",
+          "type": "options",
+          "default": "returnFirstMatch",
+          "options": [
+            {
+              "name": "Return First Match",
+              "value": "returnFirstMatch",
+              "description": "Return only the first match"
+            },
+            {
+              "name": "Return All Matches",
+              "value": "returnAllMatches",
+              "description": "Return all values that match"
+            }
+          ],
+          "description": "By default only the first result gets returned, Set to \"Return All Matches\" to get multiple matches",
+          "displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "lt": 4.5
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "defineBelow",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties match destination column names"
+        },
+        {
+          "name": "Map Each Column Below",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column"
+        },
+        {
+          "name": "Nothing",
+          "value": "nothing",
+          "description": "Do not send anything"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "columnToMatchOn",
+      "displayName": "Column to match on",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "loadOptionsMethod": "getSheetHeaderRowAndSkipEmpty"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "hint": "Used to find the correct row to update. Doesn't get changed."
+    },
+    {
+      "name": "valueToMatchOn",
+      "displayName": "Value of Column to Match On",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Values to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "sheetName.value",
+                  "columnToMatchOn"
+                ],
+                "loadOptionsMethod": "getSheetHeaderRowAndAddColumn"
+              },
+              "default": ""
+            },
+            {
+              "displayName": "Column Name",
+              "name": "columnName",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "column": [
+                    "newColumn"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "update",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false,
+          "allowEmptyValues": true
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.7
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "update",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "between": {
+                  "from": 4,
+                  "to": 4.6
+                }
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Cell Format",
+          "name": "cellFormat",
+          "type": "options",
+          "options": [
+            {
+              "name": "Let Google Sheets format",
+              "value": "USER_ENTERED",
+              "description": "Cells are styled as if you typed the values into Google Sheets directly"
+            },
+            {
+              "name": "Let n8n format",
+              "value": "RAW",
+              "description": "Cells have the same types as the input data"
+            }
+          ],
+          "default": "USER_ENTERED",
+          "description": "Determines how data should be interpreted"
+        },
+        {
+          "displayName": "Data Location on Sheet",
+          "name": "locationDefine",
+          "type": "fixedCollection",
+          "placeholder": "Select Range",
+          "default": {
+            "values": {}
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Header Row",
+                  "name": "headerRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 1,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of the row which contains the column names"
+                },
+                {
+                  "displayName": "First Data Row",
+                  "name": "firstDataRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 2,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of first row which contains the actual data"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/dataMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/columns.mappingMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "defineBelow",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties match destination column names"
+        },
+        {
+          "name": "Map Each Column Below",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column"
+        },
+        {
+          "name": "Nothing",
+          "value": "nothing",
+          "description": "Do not send anything"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "columnToMatchOn",
+      "displayName": "Column to match on",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "loadOptionsMethod": "getSheetHeaderRowAndSkipEmpty"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "hint": "Used to find the correct row to update. Doesn't get changed."
+    },
+    {
+      "name": "valueToMatchOn",
+      "displayName": "Value of Column to Match On",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Values to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "sheetName.value",
+                  "columnToMatchOn"
+                ],
+                "loadOptionsMethod": "getSheetHeaderRowAndAddColumn"
+              },
+              "default": ""
+            },
+            {
+              "displayName": "Column Name",
+              "name": "columnName",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "column": [
+                    "newColumn"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "upsert",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false,
+          "allowEmptyValues": true
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.7
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "sheetName.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "upsert",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "between": {
+                  "from": 4,
+                  "to": 4.6
+                }
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Cell Format",
+          "name": "cellFormat",
+          "type": "options",
+          "options": [
+            {
+              "name": "Let Google Sheets format",
+              "value": "USER_ENTERED",
+              "description": "Cells are styled as if you typed the values into Google Sheets directly"
+            },
+            {
+              "name": "Let n8n format",
+              "value": "RAW",
+              "description": "Cells have the same types as the input data"
+            }
+          ],
+          "default": "USER_ENTERED",
+          "description": "Determines how data should be interpreted"
+        },
+        {
+          "displayName": "Data Location on Sheet",
+          "name": "locationDefine",
+          "type": "fixedCollection",
+          "placeholder": "Select Range",
+          "default": {
+            "values": {}
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Header Row",
+                  "name": "headerRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 1,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of the row which contains the column names"
+                },
+                {
+                  "displayName": "First Data Row",
+                  "name": "firstDataRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 2,
+                  "description": "Index is relative to the set 'Range', first row index is 1",
+                  "hint": "Index of first row which contains the actual data"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/dataMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        },
+        {
+          "displayName": "Handling extra fields in input",
+          "name": "handlingExtraData",
+          "type": "options",
+          "options": [
+            {
+              "name": "Insert in New Column(s)",
+              "value": "insertInNewColumn",
+              "description": "Create a new column for extra data"
+            },
+            {
+              "name": "Ignore Them",
+              "value": "ignoreIt",
+              "description": "Ignore extra data"
+            },
+            {
+              "name": "Error",
+              "value": "error",
+              "description": "Throw an error"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/columns.mappingMode": [
+                "autoMapInputData"
+              ]
+            }
+          },
+          "default": "insertInNewColumn",
+          "description": "What do to with fields that don't match any columns in the Google Sheet"
+        },
+        {
+          "displayName": "Minimise API Calls",
+          "name": "useAppend",
+          "type": "boolean",
+          "default": false,
+          "hint": "Use if your sheet has no gaps between rows or columns",
+          "description": "Whether to use append instead of update(default), this is more efficient but in some cases data might be misaligned"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a spreadsheet",
+          "action": "Create spreadsheet"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteSpreadsheet",
+          "description": "Delete a spreadsheet",
+          "action": "Delete spreadsheet"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "description": "The title of the spreadsheet",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sheetsUi",
+      "displayName": "Sheets",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "name": "sheetValues",
+          "displayName": "Sheet",
+          "values": [
+            {
+              "displayName": "Title",
+              "name": "title",
+              "type": "string",
+              "default": "",
+              "description": "Title of the property to create"
+            },
+            {
+              "displayName": "Hidden",
+              "name": "hidden",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the Sheet should be hidden in the UI"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Sheet"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Locale",
+          "name": "locale",
+          "type": "string",
+          "default": "",
+          "placeholder": "en_US",
+          "description": "The locale of the spreadsheet in one of the following formats:\n\t\t\t\t<ul>\n\t\t\t\t\t<li>en (639-1)</li>\n\t\t\t\t\t<li>fil (639-2 if no 639-1 format exists)</li>\n\t\t\t\t\t<li>en_US (combination of ISO language an country)</li>\n\t\t\t\t<ul>"
+        },
+        {
+          "displayName": "Recalculation Interval",
+          "name": "autoRecalc",
+          "type": "options",
+          "options": [
+            {
+              "name": "Default",
+              "value": "",
+              "description": "Default value"
+            },
+            {
+              "name": "On Change",
+              "value": "ON_CHANGE",
+              "description": "Volatile functions are updated on every change"
+            },
+            {
+              "name": "Minute",
+              "value": "MINUTE",
+              "description": "Volatile functions are updated on every change and every minute"
+            },
+            {
+              "name": "Hour",
+              "value": "HOUR",
+              "description": "Volatile functions are updated on every change and hourly"
+            }
+          ],
+          "default": "",
+          "description": "Cell recalculation interval options"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "deleteSpreadsheet"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      },
+      "testedBy": "googleApiCredentialTest"
+    },
+    {
+      "name": "googleSheetsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "documentId",
+    "sheetName",
+    "columns",
+    "range",
+    "title",
+    "columns",
+    "columns",
+    "columns",
+    "columns",
+    "documentId"
+  ],
+  "optionalFields": [
+    "preBuiltAgentsCalloutGoogleSheets",
+    "authentication",
+    "resource",
+    "operation",
+    "dataMode",
+    "autoMapNotice",
+    "fieldsUi",
+    "options",
+    "clear",
+    "keepFirstRow",
+    "startIndex",
+    "rowsToDelete",
+    "startIndex",
+    "columnsToDelete",
+    "options",
+    "toDelete",
+    "startIndex",
+    "numberToDelete",
+    "startIndex",
+    "numberToDelete",
+    "filtersUI",
+    "combineFilters",
+    "combineFilters",
+    "options",
+    "dataMode",
+    "columnToMatchOn",
+    "valueToMatchOn",
+    "fieldsUi",
+    "options",
+    "dataMode",
+    "columnToMatchOn",
+    "valueToMatchOn",
+    "fieldsUi",
+    "options",
+    "operation",
+    "title",
+    "sheetsUi",
+    "options"
+  ],
+  "parameterTypes": {
+    "preBuiltAgentsCalloutGoogleSheets": "callout",
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "documentId": "resourceLocator",
+    "sheetName": "resourceLocator",
+    "dataMode": "options",
+    "autoMapNotice": "notice",
+    "fieldsUi": "fixedCollection",
+    "columns": "resourceMapper",
+    "options": "collection",
+    "clear": "options",
+    "keepFirstRow": "boolean",
+    "startIndex": "string",
+    "rowsToDelete": "number",
+    "columnsToDelete": "number",
+    "range": "string",
+    "title": "string",
+    "toDelete": "options",
+    "numberToDelete": "number",
+    "filtersUI": "fixedCollection",
+    "combineFilters": "options",
+    "columnToMatchOn": "options",
+    "valueToMatchOn": "string",
+    "sheetsUi": "fixedCollection"
+  },
+  "hasVersions": false
+}

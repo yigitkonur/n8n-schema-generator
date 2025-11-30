@@ -1,0 +1,2643 @@
+{
+  "name": "microsoftTeams",
+  "displayName": "Microsoft Teams",
+  "description": "Consume Microsoft Teams API",
+  "group": [
+    "input"
+  ],
+  "version": 2,
+  "defaults": {
+    "resource": "channel",
+    "operation": "create",
+    "teamId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "name": "",
+    "options": {},
+    "messageId": "",
+    "responseType": "approval",
+    "defineForm": "fields",
+    "jsonOutput": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+    "formFields": {},
+    "approvalOptions": {},
+    "bucketId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "title": "",
+    "tasksFor": "member",
+    "updateFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "channel",
+      "options": [
+        {
+          "name": "Channel",
+          "value": "channel"
+        },
+        {
+          "name": "Channel Message",
+          "value": "channelMessage"
+        },
+        {
+          "name": "Chat Message",
+          "value": "chatMessage"
+        },
+        {
+          "name": "Task",
+          "value": "task"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a channel",
+          "action": "Create channel"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteChannel",
+          "description": "Delete a channel",
+          "action": "Delete channel"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a channel",
+          "action": "Get channel"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many channels",
+          "action": "Get many channels"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a channel",
+          "action": "Update channel"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "New Channel Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the new channel you want to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New Channel"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The description of the channel",
+          "typeOptions": {
+            "rows": 2
+          }
+        },
+        {
+          "displayName": "Type",
+          "name": "type",
+          "type": "options",
+          "options": [
+            {
+              "name": "Private",
+              "value": "private"
+            },
+            {
+              "name": "Standard",
+              "value": "standard"
+            }
+          ],
+          "default": "standard",
+          "description": "Standard: Accessible to everyone on the team. Private: Accessible only to a specific group of people within the team."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "deleteChannel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the channel from the list, by URL, or by ID (the ID is the \"threadId\" in the URL)",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "teamId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "deleteChannel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the channel from the list, by URL, or by ID (the ID is the \"threadId\" in the URL)",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "teamId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the channel from the list, by URL, or by ID (the ID is the \"threadId\" in the URL)",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "teamId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the channel",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New Channel name"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The description of the channel",
+          "typeOptions": {
+            "rows": 2
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a message in a channel",
+          "action": "Create message"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many messages from a channel",
+          "action": "Get many messages"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the channel from the list, by URL, or by ID (the ID is the \"threadId\" in the URL)",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "teamId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contentType",
+      "displayName": "Content Type",
+      "type": "options",
+      "default": "text",
+      "required": true,
+      "description": "Whether the message is plain text or HTML",
+      "options": [
+        {
+          "name": "Text",
+          "value": "text"
+        },
+        {
+          "name": "HTML",
+          "value": "html"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The content of the message to be sent",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Link to Workflow",
+          "name": "includeLinkToWorkflow",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to append a link to this workflow at the end of the message. This is helpful if you have many workflows sending messages."
+        },
+        {
+          "displayName": "Reply to ID",
+          "name": "makeReply",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. 1673348720590",
+          "description": "An optional ID of the message you want to reply to. The message ID is the number before \"?tenantId\" in the message URL."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the team from the list, by URL, or by ID (the ID is the \"groupId\" parameter in the URL you get from \"Get a link to the team\")",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the channel from the list, by URL, or by ID (the ID is the \"threadId\" in the URL)",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "teamId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "channelMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a message in a chat",
+          "action": "Create chat message"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a message from a chat",
+          "action": "Get chat message"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many messages from a chat",
+          "action": "Get many chat messages"
+        },
+        {
+          "name": "Send and Wait for Response",
+          "value": "sendAndWait",
+          "description": "Send a message and wait for response",
+          "action": "Send message and wait for response"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "chatId",
+      "displayName": "Chat",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the chat from the list, by URL, or by ID (find the chat ID after \"conversations/\" in the URL)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contentType",
+      "displayName": "Content Type",
+      "type": "options",
+      "default": "text",
+      "required": true,
+      "description": "Whether the message is plain text or HTML",
+      "options": [
+        {
+          "name": "Text",
+          "value": "text"
+        },
+        {
+          "name": "HTML",
+          "value": "html"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The content of the message to be sent",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "description": "Other options to set",
+      "options": [
+        {
+          "displayName": "Include Link to Workflow",
+          "name": "includeLinkToWorkflow",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to append a link to this workflow at the end of the message. This is helpful if you have many workflows sending messages."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "chatId",
+      "displayName": "Chat",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the chat from the list, by URL, or by ID (find the chat ID after \"conversations/\" in the URL)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "messageId",
+      "displayName": "Message ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the message to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "e.g. 1673355049064"
+    },
+    {
+      "name": "chatId",
+      "displayName": "Chat",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the chat from the list, by URL, or by ID (find the chat ID after \"conversations/\" in the URL)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "chatId",
+      "displayName": "Chat",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the chat from the list, by URL, or by ID (find the chat ID after \"conversations/\" in the URL)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      }
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseType",
+      "displayName": "Response Type",
+      "type": "options",
+      "default": "approval",
+      "options": [
+        {
+          "name": "Approval",
+          "value": "approval",
+          "description": "User can approve/disapprove from within the message"
+        },
+        {
+          "name": "Free Text",
+          "value": "freeText",
+          "description": "User can submit a response via a form"
+        },
+        {
+          "name": "Custom Form",
+          "value": "customForm",
+          "description": "User can submit a response via a custom form"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      }
+    },
+    {
+      "name": "defineForm",
+      "displayName": "Define Form",
+      "type": "options",
+      "default": "fields",
+      "options": [
+        {
+          "name": "Using Fields Below",
+          "value": "fields"
+        },
+        {
+          "name": "Using JSON",
+          "value": "json"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "jsonOutput",
+      "displayName": "Form Fields",
+      "type": "json",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "hint": "<a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.form/\" target=\"_blank\">See docs</a> for field syntax"
+    },
+    {
+      "name": "formFields",
+      "displayName": "Form Elements",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Field Name",
+              "name": "fieldLabel",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. What is your name?",
+              "description": "Label that appears above the input field",
+              "required": true,
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "hiddenField",
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Name",
+              "name": "fieldName",
+              "description": "The name of the field, used in input attributes and referenced by the workflow",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Element Type",
+              "name": "fieldType",
+              "type": "options",
+              "default": "text",
+              "description": "The type of field to add to the form",
+              "options": [
+                {
+                  "name": "Checkboxes",
+                  "value": "checkbox"
+                },
+                {
+                  "name": "Custom HTML",
+                  "value": "html"
+                },
+                {
+                  "name": "Date",
+                  "value": "date"
+                },
+                {
+                  "name": "Dropdown",
+                  "value": "dropdown"
+                },
+                {
+                  "name": "Email",
+                  "value": "email"
+                },
+                {
+                  "name": "File",
+                  "value": "file"
+                },
+                {
+                  "name": "Hidden Field",
+                  "value": "hiddenField"
+                },
+                {
+                  "name": "Number",
+                  "value": "number"
+                },
+                {
+                  "name": "Password",
+                  "value": "password"
+                },
+                {
+                  "name": "Radio Buttons",
+                  "value": "radio"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                },
+                {
+                  "name": "Textarea",
+                  "value": "textarea"
+                }
+              ],
+              "required": true
+            },
+            {
+              "displayName": "Element Name",
+              "name": "elementName",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. content-section",
+              "description": "Optional field. It can be used to include the html in the output.",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Placeholder",
+              "name": "placeholder",
+              "description": "Sample text to display inside the field",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "dropdown",
+                    "date",
+                    "file",
+                    "html",
+                    "hiddenField",
+                    "radio",
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Options",
+              "name": "fieldOptions",
+              "placeholder": "Add Field Option",
+              "description": "List of options that can be selected from the dropdown",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Option",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Checkboxes",
+              "name": "fieldOptions",
+              "placeholder": "Add Checkbox",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Checkbox Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Radio Buttons",
+              "name": "fieldOptions",
+              "placeholder": "Add Radio Button",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "radio"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Radio Button Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Multiple Choice is a legacy option, please use Checkboxes or Radio Buttons field type instead",
+              "name": "multiselectLegacyNotice",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "multiselect": [
+                    true
+                  ],
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Choice",
+              "name": "multiselect",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to allow the user to select multiple options from the dropdown list",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Limit Selection",
+              "name": "limitSelection",
+              "type": "options",
+              "default": "unlimited",
+              "options": [
+                {
+                  "name": "Exact Number",
+                  "value": "exact"
+                },
+                {
+                  "name": "Range",
+                  "value": "range"
+                },
+                {
+                  "name": "Unlimited",
+                  "value": "unlimited"
+                }
+              ],
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Number of Selections",
+              "name": "numberOfSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "exact"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Minimum Selections",
+              "name": "minSelections",
+              "type": "number",
+              "default": 0,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 0
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Maximum Selections",
+              "name": "maxSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "HTML",
+              "name": "html",
+              "typeOptions": {
+                "editor": "htmlEditor"
+              },
+              "type": "string",
+              "noDataExpression": true,
+              "default": "<!-- Your custom HTML here --->\n\n\n",
+              "description": "HTML elements to display on the form page",
+              "hint": "Does not accept <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> or <code>&lt;input&gt;</code> tags",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Files",
+              "name": "multipleFiles",
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to allow the user to select multiple files from the file input or just one",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Accepted File Types",
+              "name": "acceptFileTypes",
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of allowed file extensions",
+              "hint": "Leave empty to allow all file types",
+              "placeholder": "e.g. .jpg, .png",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "The displayed date is formatted based on the locale of the user's browser",
+              "name": "formatDate",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "date"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Required Field",
+              "name": "requiredField",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to require the user to enter a value for this field before submitting the form",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "html",
+                    "hiddenField"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add Form Element"
+    },
+    {
+      "name": "approvalOptions",
+      "displayName": "Approval Options",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Type of Approval",
+              "name": "approvalType",
+              "type": "options",
+              "placeholder": "Add option",
+              "default": "single",
+              "options": [
+                {
+                  "name": "Approve Only",
+                  "value": "single"
+                },
+                {
+                  "name": "Approve and Disapprove",
+                  "value": "double"
+                }
+              ]
+            },
+            {
+              "displayName": "Approve Button Label",
+              "name": "approveLabel",
+              "type": "string",
+              "default": "✓ Approve",
+              "displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Disapprove Button Label",
+              "name": "disapproveLabel",
+              "type": "string",
+              "default": "✗ Decline",
+              "displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Limit Wait Time",
+          "name": "limitWaitTime",
+          "type": "fixedCollection",
+          "description": "Whether the workflow will automatically resume execution after the specified limit type",
+          "default": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Limit Type",
+                  "name": "limitType",
+                  "type": "options",
+                  "default": "afterTimeInterval",
+                  "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+                  "options": [
+                    {
+                      "name": "After Time Interval",
+                      "description": "Waits for a certain amount of time",
+                      "value": "afterTimeInterval"
+                    },
+                    {
+                      "name": "At Specified Time",
+                      "description": "Waits until the set date and time to continue",
+                      "value": "atSpecifiedTime"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Amount",
+                  "name": "resumeAmount",
+                  "type": "number",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "typeOptions": {
+                    "minValue": 0,
+                    "numberPrecision": 2
+                  },
+                  "default": 1,
+                  "description": "The time to wait"
+                },
+                {
+                  "displayName": "Unit",
+                  "name": "resumeUnit",
+                  "type": "options",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "options": [
+                    {
+                      "name": "Minutes",
+                      "value": "minutes"
+                    },
+                    {
+                      "name": "Hours",
+                      "value": "hours"
+                    },
+                    {
+                      "name": "Days",
+                      "value": "days"
+                    }
+                  ],
+                  "default": "hours",
+                  "description": "Unit of the interval value"
+                },
+                {
+                  "displayName": "Max Date and Time",
+                  "name": "maxDateAndTime",
+                  "type": "dateTime",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "atSpecifiedTime"
+                      ]
+                    }
+                  },
+                  "default": "",
+                  "description": "Continue execution after the specified date and time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the phrase \"This message was sent automatically with n8n\" to the end of the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Message Button Label",
+          "name": "messageButtonLabel",
+          "type": "string",
+          "default": "Respond"
+        },
+        {
+          "displayName": "Response Form Title",
+          "name": "responseFormTitle",
+          "description": "Title of the form that the user can access to provide their response",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Response Form Description",
+          "name": "responseFormDescription",
+          "description": "Description of the form that the user can access to provide their response",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Response Form Button Label",
+          "name": "responseFormButtonLabel",
+          "type": "string",
+          "default": "Submit"
+        },
+        {
+          "displayName": "Response Form Custom Styling",
+          "name": "responseFormCustomCss",
+          "type": "string",
+          "typeOptions": {
+            "rows": 10,
+            "editor": "cssEditor"
+          },
+          "default": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}",
+          "description": "Override default styling of the response form with CSS"
+        },
+        {
+          "displayName": "Limit Wait Time",
+          "name": "limitWaitTime",
+          "type": "fixedCollection",
+          "description": "Whether the workflow will automatically resume execution after the specified limit type",
+          "default": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Limit Type",
+                  "name": "limitType",
+                  "type": "options",
+                  "default": "afterTimeInterval",
+                  "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+                  "options": [
+                    {
+                      "name": "After Time Interval",
+                      "description": "Waits for a certain amount of time",
+                      "value": "afterTimeInterval"
+                    },
+                    {
+                      "name": "At Specified Time",
+                      "description": "Waits until the set date and time to continue",
+                      "value": "atSpecifiedTime"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Amount",
+                  "name": "resumeAmount",
+                  "type": "number",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "typeOptions": {
+                    "minValue": 0,
+                    "numberPrecision": 2
+                  },
+                  "default": 1,
+                  "description": "The time to wait"
+                },
+                {
+                  "displayName": "Unit",
+                  "name": "resumeUnit",
+                  "type": "options",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "options": [
+                    {
+                      "name": "Minutes",
+                      "value": "minutes"
+                    },
+                    {
+                      "name": "Hours",
+                      "value": "hours"
+                    },
+                    {
+                      "name": "Days",
+                      "value": "days"
+                    }
+                  ],
+                  "default": "hours",
+                  "description": "Unit of the interval value"
+                },
+                {
+                  "displayName": "Max Date and Time",
+                  "name": "maxDateAndTime",
+                  "type": "dateTime",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "atSpecifiedTime"
+                      ]
+                    }
+                  },
+                  "default": "",
+                  "description": "Continue execution after the specified date and time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the phrase \"This message was sent automatically with n8n\" to the end of the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "freeText",
+            "customForm"
+          ],
+          "resource": [
+            "chatMessage"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a task",
+          "action": "Create task"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteTask",
+          "description": "Delete a task",
+          "action": "Delete task"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a task",
+          "action": "Get task"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many tasks",
+          "action": "Get many tasks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a task",
+          "action": "Update task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "groupId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "groupSource"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "planId",
+      "displayName": "Plan",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The plan for the task to belong to",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "groupId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "bucketId",
+      "displayName": "Bucket",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The bucket for the task to belong to",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "planId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the task",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. new task"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "groupId.balue"
+            ]
+          },
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a Member...",
+              "typeOptions": {
+                "searchListMethod": "getMembers",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "7e2f1174-e8ee-4859-b8b1-a8d1cc63d276",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})[ \t]*",
+                    "errorMessage": "Not a valid Microsoft Teams Team ID"
+                  }
+                }
+              ],
+              "extractValue": {
+                "type": "regex",
+                "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})"
+              }
+            }
+          ],
+          "description": "Who the task should be assigned to"
+        },
+        {
+          "displayName": "Due Date Time",
+          "name": "dueDateTime",
+          "type": "string",
+          "validateType": "dateTime",
+          "default": "",
+          "description": "Date and time at which the task is due. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time."
+        },
+        {
+          "displayName": "Percent Complete",
+          "name": "percentComplete",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 0,
+            "maxValue": 100
+          },
+          "default": 0,
+          "placeholder": "e.g. 75",
+          "description": "Percentage of task completion. When set to 100, the task is considered completed."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the task to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "deleteTask"
+          ]
+        }
+      },
+      "placeholder": "e.g. h3ufgLvXPkSRzYm-zO5cY5gANtBQ"
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the task to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "e.g. h3ufgLvXPkSRzYm-zO5cY5gANtBQ"
+    },
+    {
+      "name": "tasksFor",
+      "displayName": "Tasks For",
+      "type": "options",
+      "default": "member",
+      "required": true,
+      "description": "Whether to retrieve the tasks for a user or for a plan",
+      "options": [
+        {
+          "name": "Group Member",
+          "value": "member",
+          "description": "Tasks assigned to group member"
+        },
+        {
+          "name": "Plan",
+          "value": "plan",
+          "description": "Tasks in group plan"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "groupId",
+      "displayName": "Team",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "groupSource"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "planId",
+      "displayName": "Plan",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The plan for the task to belong to",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "groupId.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "tasksFor": [
+            "plan"
+          ],
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the task to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. h3ufgLvXPkSRzYm-zO5cY5gANtBQ"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned To",
+          "name": "assignedTo",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "updateFields.groupId.value"
+            ]
+          },
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a Member...",
+              "typeOptions": {
+                "searchListMethod": "getMembers",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "7e2f1174-e8ee-4859-b8b1-a8d1cc63d276",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})[ \t]*",
+                    "errorMessage": "Not a valid Microsoft Teams Team ID"
+                  }
+                }
+              ],
+              "extractValue": {
+                "type": "regex",
+                "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})"
+              }
+            }
+          ],
+          "description": "Who the task should be assigned to",
+          "hint": "Select 'Team' from options first",
+          "required": false
+        },
+        {
+          "displayName": "Bucket",
+          "name": "bucketId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "required": false,
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "updateFields.planId.value"
+            ]
+          },
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a Bucket...",
+              "typeOptions": {
+                "searchListMethod": "getBuckets",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "rl1HYb0cUEiHPc7zgB_KWWUAA7Of"
+            }
+          ],
+          "description": "The bucket for the task to belong to"
+        },
+        {
+          "displayName": "Due Date Time",
+          "name": "dueDateTime",
+          "type": "string",
+          "validateType": "dateTime",
+          "default": "",
+          "description": "Date and time at which the task is due. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time."
+        },
+        {
+          "displayName": "Team",
+          "name": "groupId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "required": false,
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "/groupSource"
+            ]
+          },
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a Team...",
+              "typeOptions": {
+                "searchListMethod": "getGroups",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "12f0ca7d-b77f-4c4e-93d2-5cbdb4f464c6",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})[ \t]*",
+                    "errorMessage": "Not a valid Microsoft Teams Team ID"
+                  }
+                }
+              ],
+              "extractValue": {
+                "type": "regex",
+                "regex": "^([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})"
+              }
+            }
+          ]
+        },
+        {
+          "displayName": "Percent Complete",
+          "name": "percentComplete",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 0,
+            "maxValue": 100
+          },
+          "default": 0,
+          "placeholder": "e.g. 75",
+          "description": "Percentage of task completion. When set to 100, the task is considered completed."
+        },
+        {
+          "displayName": "Plan",
+          "name": "planId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "required": false,
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "updateFields.groupId.value"
+            ]
+          },
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a Plan...",
+              "typeOptions": {
+                "searchListMethod": "getPlans",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "rl1HYb0cUEiHPc7zgB_KWWUAA7Of"
+            }
+          ],
+          "description": "The plan for the task to belong to",
+          "hint": "Select 'Team' from options first"
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. my task",
+          "description": "Title of the task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "microsoftTeamsOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "teamId",
+    "name",
+    "teamId",
+    "channelId",
+    "teamId",
+    "channelId",
+    "teamId",
+    "teamId",
+    "channelId",
+    "teamId",
+    "channelId",
+    "contentType",
+    "message",
+    "teamId",
+    "channelId",
+    "chatId",
+    "contentType",
+    "message",
+    "chatId",
+    "messageId",
+    "chatId",
+    "chatId",
+    "message",
+    "groupId",
+    "planId",
+    "bucketId",
+    "title",
+    "taskId",
+    "taskId",
+    "tasksFor",
+    "groupId",
+    "planId",
+    "taskId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "options",
+    "returnAll",
+    "limit",
+    "name",
+    "options",
+    "operation",
+    "options",
+    "returnAll",
+    "limit",
+    "operation",
+    "options",
+    "returnAll",
+    "limit",
+    "responseType",
+    "defineForm",
+    "jsonOutput",
+    "formFields",
+    "approvalOptions",
+    "options",
+    "options",
+    "operation",
+    "options",
+    "returnAll",
+    "limit",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "teamId": "resourceLocator",
+    "name": "string",
+    "options": "collection",
+    "channelId": "resourceLocator",
+    "returnAll": "boolean",
+    "limit": "number",
+    "contentType": "options",
+    "message": "string",
+    "chatId": "resourceLocator",
+    "messageId": "string",
+    "responseType": "options",
+    "defineForm": "options",
+    "jsonOutput": "json",
+    "formFields": "fixedCollection",
+    "approvalOptions": "fixedCollection",
+    "groupId": "resourceLocator",
+    "planId": "resourceLocator",
+    "bucketId": "resourceLocator",
+    "title": "string",
+    "taskId": "string",
+    "tasksFor": "options",
+    "updateFields": "collection"
+  },
+  "hasVersions": false
+}

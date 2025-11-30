@@ -1,0 +1,2616 @@
+{
+  "name": "youTube",
+  "displayName": "YouTube",
+  "description": "Consume YouTube API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "channel",
+    "operation": "getAll",
+    "part": [
+      "*"
+    ],
+    "returnAll": false,
+    "limit": 25,
+    "filters": {},
+    "options": {},
+    "updateFields": {},
+    "rating": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "channel",
+      "options": [
+        {
+          "name": "Channel",
+          "value": "channel"
+        },
+        {
+          "name": "Playlist",
+          "value": "playlist"
+        },
+        {
+          "name": "Playlist Item",
+          "value": "playlistItem"
+        },
+        {
+          "name": "Video",
+          "value": "video"
+        },
+        {
+          "name": "Video Category",
+          "value": "videoCategory"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a channel",
+          "action": "Get a channel"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many channels",
+          "action": "Get many channels"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a channel",
+          "action": "Update a channel"
+        },
+        {
+          "name": "Upload Banner",
+          "value": "uploadBanner",
+          "description": "Upload a channel banner",
+          "action": "Upload a channel banner"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more channel resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Branding Settings",
+          "value": "brandingSettings"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "Content Owner Details",
+          "value": "contentOwnerDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Localizations",
+          "value": "localizations"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Statistics",
+          "value": "statistics"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        },
+        {
+          "name": "Topic Details",
+          "value": "topicDetails"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 25,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channel"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Category ID",
+          "name": "categoryId",
+          "type": "string",
+          "default": "",
+          "description": "The categoryId parameter specifies a YouTube guide category, thereby requesting YouTube channels associated with that category"
+        },
+        {
+          "displayName": "For Username",
+          "name": "forUsername",
+          "type": "string",
+          "default": "",
+          "description": "The forUsername parameter specifies a YouTube username, thereby requesting the channel associated with that username"
+        },
+        {
+          "displayName": "ID",
+          "name": "id",
+          "type": "string",
+          "default": "",
+          "description": "The ID parameter specifies a comma-separated list of the YouTube channel ID(s) for the resource(s) that are being retrieved. In a channel resource, the ID property specifies the channel's YouTube channel ID."
+        },
+        {
+          "displayName": "Managed By Me",
+          "name": "managedByMe",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to instruct the API to only return channels managed by the content owner that the onBehalfOfContentOwner parameter specifies"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Language Code",
+          "name": "h1",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "The hl parameter instructs the API to retrieve localized resource metadata for a specific application language that the YouTube website supports. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the channel",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more channel resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Branding Settings",
+          "value": "brandingSettings"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "Content Owner Details",
+          "value": "contentOwnerDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Localizations",
+          "value": "localizations"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Statistics",
+          "value": "statistics"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        },
+        {
+          "name": "Topic Details",
+          "value": "topicDetails"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branding Settings",
+          "name": "brandingSettingsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "description": "Encapsulates information about the branding of the channel",
+          "placeholder": "Add Branding Settings",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "options": [
+            {
+              "name": "channelSettingsValues",
+              "displayName": "Channel Settings",
+              "values": [
+                {
+                  "displayName": "Channel",
+                  "name": "channel",
+                  "type": "collection",
+                  "default": {},
+                  "placeholder": "Add Channel Settings",
+                  "typeOptions": {
+                    "multipleValues": false
+                  },
+                  "options": [
+                    {
+                      "displayName": "Country",
+                      "name": "country",
+                      "type": "string",
+                      "default": "",
+                      "description": "The country with which the channel is associated. Update this property to set the value of the snippet.country property."
+                    },
+                    {
+                      "displayName": "Description",
+                      "name": "description",
+                      "type": "string",
+                      "default": "",
+                      "description": "The channel description, which appears in the channel information box on your channel page. The property's value has a maximum length of 1000 characters."
+                    },
+                    {
+                      "displayName": "Default Language",
+                      "name": "defaultLanguage",
+                      "type": "string",
+                      "default": "",
+                      "description": "The content tab that users should display by default when viewers arrive at your channel page"
+                    },
+                    {
+                      "displayName": "Default Tab",
+                      "name": "defaultTab",
+                      "type": "string",
+                      "default": "The content tab that users should display by default when viewers arrive at your channel page."
+                    },
+                    {
+                      "displayName": "Featured Channels Title",
+                      "name": "featuredChannelsTitle",
+                      "type": "string",
+                      "default": "",
+                      "description": "The title that displays above the featured channels module. The title has a maximum length of 30 characters."
+                    },
+                    {
+                      "displayName": "Featured Channels Urls",
+                      "name": "featuredChannelsUrls",
+                      "type": "string",
+                      "typeOptions": {
+                        "multipleValues": true
+                      },
+                      "description": "A list of up to 100 channels that you would like to link to from the featured channels module. The property value is a list of YouTube channel ID values, each of which uniquely identifies a channel.",
+                      "default": []
+                    },
+                    {
+                      "displayName": "Keywords",
+                      "name": "keywords",
+                      "type": "string",
+                      "placeholder": "tech,news",
+                      "description": "Keywords associated with your channel. The value is a space-separated list of strings.",
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Moderate Comments",
+                      "name": "moderateComments",
+                      "type": "boolean",
+                      "description": "Whether user-submitted comments left on the channel page need to be approved by the channel owner to be publicly visible",
+                      "default": false
+                    },
+                    {
+                      "displayName": "Profile Color",
+                      "name": "profileColor",
+                      "type": "string",
+                      "default": "",
+                      "description": "A prominent color that complements the channel's content"
+                    },
+                    {
+                      "displayName": "Show Related Channels",
+                      "name": "showRelatedChannels",
+                      "type": "boolean",
+                      "description": "Whether YouTube should show an algorithmically generated list of related channels on your channel page",
+                      "default": false
+                    },
+                    {
+                      "displayName": "Show Browse View",
+                      "name": "showBrowseView",
+                      "type": "boolean",
+                      "description": "Whether the channel page should display content in a browse or feed view",
+                      "default": false
+                    },
+                    {
+                      "displayName": "Tracking Analytics AccountId",
+                      "name": "trackingAnalyticsAccountId",
+                      "type": "string",
+                      "description": "The ID for a Google Analytics account that you want to use to track and measure traffic to your channel",
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Unsubscribed Trailer",
+                      "name": "unsubscribedTrailer",
+                      "type": "string",
+                      "description": "The video that should play in the featured video module in the channel page's browse view for unsubscribed viewers",
+                      "default": ""
+                    }
+                  ]
+                }
+              ],
+              "description": "The channel object encapsulates branding properties of the channel page"
+            },
+            {
+              "name": "imageSettingsValues",
+              "displayName": "Image Settings",
+              "values": [
+                {
+                  "displayName": "Image",
+                  "name": "image",
+                  "type": "collection",
+                  "default": {},
+                  "placeholder": "Add Channel Settings",
+                  "description": "The image object encapsulates information about images that display on the channel's channel page or video watch pages",
+                  "typeOptions": {
+                    "multipleValues": false
+                  },
+                  "options": [
+                    {
+                      "displayName": "Banner External Url",
+                      "name": "bannerExternalUrl",
+                      "type": "string",
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Tracking Image Url",
+                      "name": "trackingImageUrl",
+                      "type": "string",
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Watch Icon Image Url",
+                      "name": "watchIconImageUrl",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "statusValue",
+              "displayName": "Status",
+              "values": [
+                {
+                  "displayName": "Status",
+                  "name": "status",
+                  "type": "collection",
+                  "default": {},
+                  "placeholder": "Add Status",
+                  "typeOptions": {
+                    "multipleValues": false
+                  },
+                  "options": [
+                    {
+                      "displayName": "Self Declared Made For Kids",
+                      "name": "selfDeclaredMadeForKids",
+                      "type": "boolean",
+                      "default": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the channel",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "uploadBanner"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "uploadBanner"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be uploaded"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a playlist",
+          "action": "Create a playlist"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a playlist",
+          "action": "Delete a playlist"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a playlist",
+          "action": "Get a playlist"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many playlists",
+          "action": "Get many playlists"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a playlist",
+          "action": "Update a playlist"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The playlist's title",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The playlist's description"
+        },
+        {
+          "displayName": "Privacy Status",
+          "name": "privacyStatus",
+          "type": "options",
+          "options": [
+            {
+              "name": "Private",
+              "value": "private"
+            },
+            {
+              "name": "Public",
+              "value": "public"
+            },
+            {
+              "name": "Unlisted",
+              "value": "unlisted"
+            }
+          ],
+          "default": "",
+          "description": "The playlist's privacy status"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Keyword tags associated with the playlist. Mulplie can be defined separated by comma."
+        },
+        {
+          "displayName": "Default Language Name or ID",
+          "name": "defaultLanguage",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "The language of the text in the playlist resource's title and description properties. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "On Behalf Of Content Owner Channel",
+          "name": "onBehalfOfContentOwnerChannel",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which a video is being added. This parameter is required when a request specifies a value for the onBehalfOfContentOwner parameter, and it can only be used in conjunction with that parameter."
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistId",
+      "displayName": "Playlist ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more playlist resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Localizations",
+          "value": "localizations"
+        },
+        {
+          "name": "Player",
+          "value": "player"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        },
+        {
+          "displayName": "On Behalf Of Content Owner Channel",
+          "name": "onBehalfOfContentOwnerChannel",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which a video is being added"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistId",
+      "displayName": "Playlist ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more playlist resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Localizations",
+          "value": "localizations"
+        },
+        {
+          "name": "Player",
+          "value": "player"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 25,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlist"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Channel ID",
+          "name": "channelId",
+          "type": "string",
+          "default": "",
+          "description": "This value indicates that the API should only return the specified channel's playlists"
+        },
+        {
+          "displayName": "ID",
+          "name": "id",
+          "type": "string",
+          "default": "",
+          "description": "The ID parameter specifies a comma-separated list of the YouTube playlist ID(s) for the resource(s) that are being retrieved. In a playlist resource, the ID property specifies the playlist's YouTube playlist ID."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner Channel",
+          "name": "onBehalfOfContentOwnerChannel",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which a video is being added. This parameter is required when a request specifies a value for the onBehalfOfContentOwner parameter, and it can only be used in conjunction with that parameter."
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistId",
+      "displayName": "Playlist ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The playlist's title",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The playlist's title",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Default Language Name or ID",
+          "name": "defaultLanguage",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "The language of the text in the playlist resource's title and description properties. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The playlist's description"
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        },
+        {
+          "displayName": "Privacy Status",
+          "name": "privacyStatus",
+          "type": "options",
+          "options": [
+            {
+              "name": "Private",
+              "value": "private"
+            },
+            {
+              "name": "Public",
+              "value": "public"
+            },
+            {
+              "name": "Unlisted",
+              "value": "unlisted"
+            }
+          ],
+          "default": "",
+          "description": "The playlist's privacy status"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Keyword tags associated with the playlist. Mulplie can be defined separated by comma."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "playlist"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add an item to a playlist",
+          "action": "Add a playlist item"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a item from a playlist",
+          "action": "Delete a playlist item"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a playlist's item",
+          "action": "Get a playlist item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many playlist items",
+          "action": "Get many playlist items"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "playlistId",
+      "displayName": "Playlist Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getPlaylists"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "videoId",
+      "displayName": "Video ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "End At",
+          "name": "endAt",
+          "type": "dateTime",
+          "default": "",
+          "description": "The time, measured in seconds from the start of the video, when the video should stop playing"
+        },
+        {
+          "displayName": "Note",
+          "name": "note",
+          "type": "string",
+          "default": "",
+          "description": "A user-generated note for this item. The property value has a maximum length of 280 characters."
+        },
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        },
+        {
+          "displayName": "Position",
+          "name": "position",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 0
+          },
+          "default": "",
+          "description": "The order in which the item appears in the playlist. The value uses a zero-based index, so the first item has a position of 0, the second item has a position of 1, and so forth."
+        },
+        {
+          "displayName": "Start At",
+          "name": "startAt",
+          "type": "dateTime",
+          "default": "",
+          "description": "The time, measured in seconds from the start of the video, when the video should start playing"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistItemId",
+      "displayName": "Playlist Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistItemId",
+      "displayName": "Playlist Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "playlistId",
+      "displayName": "Playlist Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getPlaylists"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more playlistItem resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 25,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a video",
+          "action": "Delete a video"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a video",
+          "action": "Get a video"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many videos",
+          "action": "Get many videos"
+        },
+        {
+          "name": "Rate",
+          "value": "rate",
+          "description": "Rate a video",
+          "action": "Rate a video"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a video",
+          "action": "Update a video"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload a video",
+          "action": "Upload a video"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "regionCode",
+      "displayName": "Region Code",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCountriesCodes"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "categoryId",
+      "displayName": "Category Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getVideoCategories",
+        "loadOptionsDependsOn": [
+          "regionCode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be uploaded"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Default Language Name or ID",
+          "name": "defaultLanguage",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "The language of the text in the playlist resource's title and description properties. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The playlist's description"
+        },
+        {
+          "displayName": "Embeddable",
+          "name": "embeddable",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the video can be embedded on another website"
+        },
+        {
+          "displayName": "License",
+          "name": "license",
+          "type": "options",
+          "options": [
+            {
+              "name": "Creative Common",
+              "value": "creativeCommon"
+            },
+            {
+              "name": "Youtube",
+              "value": "youtube"
+            }
+          ],
+          "default": "",
+          "description": "The video's license"
+        },
+        {
+          "displayName": "Notify Subscribers",
+          "name": "notifySubscribers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether YouTube should send a notification about the new video to users who subscribe to the video's channel"
+        },
+        {
+          "displayName": "Privacy Status",
+          "name": "privacyStatus",
+          "type": "options",
+          "options": [
+            {
+              "name": "Private",
+              "value": "private"
+            },
+            {
+              "name": "Public",
+              "value": "public"
+            },
+            {
+              "name": "Unlisted",
+              "value": "unlisted"
+            }
+          ],
+          "default": "",
+          "description": "The playlist's privacy status"
+        },
+        {
+          "displayName": "Public Stats Viewable",
+          "name": "publicStatsViewable",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the extended video statistics on the video's watch page are publicly viewable"
+        },
+        {
+          "displayName": "Publish At",
+          "name": "publishAt",
+          "type": "dateTime",
+          "default": "",
+          "description": "If you set a value for this property, you must also set the status.privacyStatus property to private"
+        },
+        {
+          "displayName": "Recording Date",
+          "name": "recordingDate",
+          "type": "dateTime",
+          "default": "",
+          "description": "The date and time when the video was recorded"
+        },
+        {
+          "displayName": "Self Declared Made For Kids",
+          "name": "selfDeclaredMadeForKids",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the video is designated as child-directed, and it contains the current \"made for kids\" status of the video"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Keyword tags associated with the playlist. Mulplie can be defined separated by comma."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "videoId",
+      "displayName": "Video ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the video",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "videoId",
+      "displayName": "Video ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "part",
+      "displayName": "Fields",
+      "type": "multiOptions",
+      "default": [
+        "*"
+      ],
+      "required": true,
+      "description": "The fields parameter specifies a comma-separated list of one or more video resource properties that the API response will include",
+      "options": [
+        {
+          "name": "*",
+          "value": "*"
+        },
+        {
+          "name": "Content Details",
+          "value": "contentDetails"
+        },
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Live Streaming Details",
+          "value": "liveStreamingDetails"
+        },
+        {
+          "name": "Localizations",
+          "value": "localizations"
+        },
+        {
+          "name": "Player",
+          "value": "player"
+        },
+        {
+          "name": "Recording Details",
+          "value": "recordingDetails"
+        },
+        {
+          "name": "Snippet",
+          "value": "snippet"
+        },
+        {
+          "name": "Statistics",
+          "value": "statistics"
+        },
+        {
+          "name": "Status",
+          "value": "status"
+        },
+        {
+          "name": "Topic Details",
+          "value": "topicDetails"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "On Behalf Of Content Owner",
+          "name": "onBehalfOfContentOwner",
+          "type": "string",
+          "default": "",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 25,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Channel ID",
+          "name": "channelId",
+          "type": "string",
+          "default": "",
+          "description": "The channelId parameter indicates that the API response should only contain resources created by the channel"
+        },
+        {
+          "displayName": "For Developer",
+          "name": "forDeveloper",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to restrict the search to only retrieve videos uploaded via the developer's application or website"
+        },
+        {
+          "displayName": "Published After",
+          "name": "publishedAfter",
+          "type": "dateTime",
+          "default": "",
+          "description": "The publishedAfter parameter indicates that the API response should only contain resources created at or after the specified time"
+        },
+        {
+          "displayName": "Published Before",
+          "name": "publishedBefore",
+          "type": "dateTime",
+          "default": "",
+          "description": "The publishedBefore parameter indicates that the API response should only contain resources created before or at the specified time"
+        },
+        {
+          "displayName": "Query",
+          "name": "q",
+          "type": "string",
+          "default": "",
+          "description": "The q parameter specifies the query term to search for"
+        },
+        {
+          "displayName": "Region Code",
+          "name": "regionCode",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getCountriesCodes"
+          },
+          "default": "",
+          "description": "The regionCode parameter instructs the API to select a video chart available in the specified region. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Related To Video ID",
+          "name": "relatedToVideoId",
+          "type": "string",
+          "default": "",
+          "description": "The relatedToVideoId parameter retrieves a list of videos that are related to the video that the parameter value identifies"
+        },
+        {
+          "displayName": "Video Category ID",
+          "name": "videoCategoryId",
+          "type": "string",
+          "default": "",
+          "description": "The videoCategoryId parameter identifies the video category for which the chart should be retrieved"
+        },
+        {
+          "displayName": "Video Syndicated",
+          "name": "videoSyndicated",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to restrict a search to only videos that can be played outside youtube.com"
+        },
+        {
+          "displayName": "Video Type",
+          "name": "videoType",
+          "type": "options",
+          "options": [
+            {
+              "name": "Any",
+              "value": "any"
+            },
+            {
+              "name": "Episode",
+              "value": "episode"
+            },
+            {
+              "name": "Movie",
+              "value": "movie"
+            }
+          ],
+          "default": "",
+          "description": "The videoType parameter lets you restrict a search to a particular type of videos"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "options",
+          "options": [
+            {
+              "name": "Date",
+              "value": "date"
+            },
+            {
+              "name": "Relevance",
+              "value": "relevance"
+            }
+          ],
+          "default": "relevance"
+        },
+        {
+          "displayName": "Safe Search",
+          "name": "safeSearch",
+          "type": "options",
+          "options": [
+            {
+              "name": "Moderate",
+              "value": "moderate",
+              "description": "YouTube will filter some content from search results and, at the least, will filter content that is restricted in your locale"
+            },
+            {
+              "name": "None",
+              "value": "none",
+              "description": "YouTube will not filter the search result set"
+            },
+            {
+              "name": "Strict",
+              "value": "strict",
+              "description": "YouTube will try to exclude all restricted content from the search result set"
+            }
+          ],
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "videoId",
+      "displayName": "Video ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "rating",
+      "displayName": "Rating",
+      "type": "options",
+      "default": "",
+      "options": [
+        {
+          "name": "Dislike",
+          "value": "dislike",
+          "description": "Records that the authenticated user disliked the video"
+        },
+        {
+          "name": "Like",
+          "value": "like",
+          "description": "Records that the authenticated user liked the video"
+        },
+        {
+          "name": "None",
+          "value": "none",
+          "description": "Removes any rating that the authenticated user had previously set for the video"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "videoId",
+      "displayName": "Video ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "regionCode",
+      "displayName": "Region Code",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCountriesCodes"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "categoryId",
+      "displayName": "Category Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getVideoCategories",
+        "loadOptionsDependsOn": [
+          "regionCode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Default Language Name or ID",
+          "name": "defaultLanguage",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "The language of the text in the playlist resource's title and description properties. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "The playlist's description"
+        },
+        {
+          "displayName": "Embeddable",
+          "name": "embeddable",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the video can be embedded on another website"
+        },
+        {
+          "displayName": "License",
+          "name": "license",
+          "type": "options",
+          "options": [
+            {
+              "name": "Creative Common",
+              "value": "creativeCommon"
+            },
+            {
+              "name": "Youtube",
+              "value": "youtube"
+            }
+          ],
+          "default": "",
+          "description": "The video's license"
+        },
+        {
+          "displayName": "Notify Subscribers",
+          "name": "notifySubscribers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether YouTube should send a notification about the new video to users who subscribe to the video's channel"
+        },
+        {
+          "displayName": "Privacy Status",
+          "name": "privacyStatus",
+          "type": "options",
+          "options": [
+            {
+              "name": "Private",
+              "value": "private"
+            },
+            {
+              "name": "Public",
+              "value": "public"
+            },
+            {
+              "name": "Unlisted",
+              "value": "unlistef"
+            }
+          ],
+          "default": "",
+          "description": "The playlist's privacy status"
+        },
+        {
+          "displayName": "Public Stats Viewable",
+          "name": "publicStatsViewable",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the extended video statistics on the video's watch page are publicly viewable"
+        },
+        {
+          "displayName": "Publish At",
+          "name": "publishAt",
+          "type": "dateTime",
+          "default": "",
+          "description": "If you set a value for this property, you must also set the status.privacyStatus property to private"
+        },
+        {
+          "displayName": "Recording Date",
+          "name": "recordingDate",
+          "type": "dateTime",
+          "default": "",
+          "description": "The date and time when the video was recorded"
+        },
+        {
+          "displayName": "Self Declared Made For Kids",
+          "name": "selfDeclaredMadeForKids",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the video is designated as child-directed, and it contains the current \"made for kids\" status of the video"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Keyword tags associated with the playlist. Mulplie can be defined separated by comma."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve many video categories",
+          "action": "Get many video categories"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "regionCode",
+      "displayName": "Region Code",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCountriesCodes"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 25,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 50
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "youTubeOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "part",
+    "channelId",
+    "part",
+    "channelId",
+    "channelId",
+    "binaryProperty",
+    "title",
+    "playlistId",
+    "part",
+    "playlistId",
+    "part",
+    "playlistId",
+    "title",
+    "playlistId",
+    "videoId",
+    "playlistItemId",
+    "part",
+    "playlistItemId",
+    "playlistId",
+    "part",
+    "title",
+    "binaryProperty",
+    "videoId",
+    "videoId",
+    "part",
+    "videoId",
+    "videoId",
+    "title",
+    "regionCode"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "options",
+    "updateFields",
+    "operation",
+    "options",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "filters",
+    "options",
+    "updateFields",
+    "operation",
+    "options",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "operation",
+    "regionCode",
+    "categoryId",
+    "options",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "filters",
+    "options",
+    "rating",
+    "regionCode",
+    "categoryId",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "part": "multiOptions",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "options": "collection",
+    "channelId": "string",
+    "updateFields": "collection",
+    "binaryProperty": "string",
+    "title": "string",
+    "playlistId": "options",
+    "videoId": "string",
+    "playlistItemId": "string",
+    "regionCode": "options",
+    "categoryId": "options",
+    "rating": "options"
+  },
+  "hasVersions": false
+}

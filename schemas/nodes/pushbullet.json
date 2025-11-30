@@ -1,0 +1,459 @@
+{
+  "name": "pushbullet",
+  "displayName": "Pushbullet",
+  "description": "Consume Pushbullet API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "push",
+    "operation": "create",
+    "type": "note",
+    "title": "",
+    "body": "",
+    "url": "",
+    "binaryPropertyName": "data",
+    "target": "default",
+    "returnAll": false,
+    "limit": 100,
+    "filters": {},
+    "dismissed": false
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "push",
+      "options": [
+        {
+          "name": "Push",
+          "value": "push"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a push",
+          "action": "Create a push"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a push",
+          "action": "Delete a push"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many pushes",
+          "action": "Get many pushes"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a push",
+          "action": "Update a push"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "note",
+      "required": true,
+      "options": [
+        {
+          "name": "File",
+          "value": "file"
+        },
+        {
+          "name": "Link",
+          "value": "link"
+        },
+        {
+          "name": "Note",
+          "value": "note"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the push",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "note",
+            "link"
+          ]
+        }
+      }
+    },
+    {
+      "name": "body",
+      "displayName": "Body",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Body of the push",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "note",
+            "link",
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL of the push",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "link"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "file"
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be written"
+    },
+    {
+      "name": "target",
+      "displayName": "Target",
+      "type": "options",
+      "default": "default",
+      "required": true,
+      "description": "Define the medium that will be used to send the push",
+      "options": [
+        {
+          "name": "Channel Tag",
+          "value": "channel_tag",
+          "description": "Send the push to all subscribers to your channel that has this tag"
+        },
+        {
+          "name": "Default",
+          "value": "default",
+          "description": "Broadcast it to all of the user's devices"
+        },
+        {
+          "name": "Device ID",
+          "value": "device_iden",
+          "description": "Send the push to a specific device"
+        },
+        {
+          "name": "Email",
+          "value": "email",
+          "description": "Send the push to this email address"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The value to be set depending on the target selected. For example, if the target selected is email then this field would take the email address of the person you are trying to send the push to.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "target": [
+            "default",
+            "device_iden"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getDevices"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "target": [
+            "device_iden"
+          ]
+        }
+      }
+    },
+    {
+      "name": "pushId",
+      "displayName": "Push ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "push"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "push"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active",
+          "name": "active",
+          "type": "boolean",
+          "default": false,
+          "description": "Don't return deleted pushes"
+        },
+        {
+          "displayName": "Modified After",
+          "name": "modified_after",
+          "type": "dateTime",
+          "default": "",
+          "description": "Request pushes modified after this timestamp"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "pushId",
+      "displayName": "Push ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dismissed",
+      "displayName": "Dismissed",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to mark a push as having been dismissed by the user, will cause any notifications for the push to be hidden if possible",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "pushbulletOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "type",
+    "title",
+    "body",
+    "url",
+    "binaryPropertyName",
+    "target",
+    "value",
+    "value",
+    "pushId",
+    "pushId",
+    "dismissed"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "type": "options",
+    "title": "string",
+    "body": "string",
+    "url": "string",
+    "binaryPropertyName": "string",
+    "target": "options",
+    "value": "options",
+    "pushId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "dismissed": "boolean"
+  },
+  "hasVersions": false
+}

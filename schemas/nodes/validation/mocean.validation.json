@@ -1,0 +1,325 @@
+{
+  "nodeType": "n8n-nodes-base.mocean",
+  "displayName": "Mocean",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "from",
+    "to",
+    "language",
+    "message",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "sms",
+        "enumValues": [
+          "sms",
+          "voice"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "send",
+        "enumValues": [
+          "send"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "from",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "to",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "language",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "en-US",
+        "enumValues": [
+          "cmn-CN",
+          "en-GB",
+          "en-US",
+          "ja-JP",
+          "ko-KR"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "message",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "sms",
+    "operation": "send",
+    "from": "",
+    "to": "",
+    "language": "en-US",
+    "message": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "from",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "to",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "language",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "message",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "sms": {
+      "operations": [
+        "send"
+      ],
+      "fieldsPerOperation": {
+        "send": [
+          "from",
+          "to",
+          "message",
+          "options"
+        ]
+      }
+    },
+    "voice": {
+      "operations": [
+        "send"
+      ],
+      "fieldsPerOperation": {
+        "send": [
+          "from",
+          "to",
+          "language",
+          "message"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

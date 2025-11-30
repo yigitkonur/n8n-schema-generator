@@ -1,0 +1,103 @@
+{
+  "name": "notionTrigger",
+  "displayName": "Notion Trigger",
+  "description": "Starts the workflow when Notion events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "event": "pageAddedToDatabase",
+    "notionNotice": "",
+    "databaseId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "simple": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "event",
+      "displayName": "Event",
+      "type": "options",
+      "default": "pageAddedToDatabase",
+      "required": true,
+      "options": [
+        {
+          "name": "Page Added to Database",
+          "value": "pageAddedToDatabase"
+        },
+        {
+          "name": "Page Updated in Database",
+          "value": "pagedUpdatedInDatabase"
+        }
+      ]
+    },
+    {
+      "name": "notionNotice",
+      "displayName": "In Notion, make sure to <a href=\"https://www.notion.so/help/add-and-manage-connections-with-the-api\" target=\"_blank\">add your connection</a> to the pages you want to access.",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "databaseId",
+      "displayName": "Database",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Notion Database to operate on",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "notionApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "event",
+    "databaseId"
+  ],
+  "optionalFields": [
+    "notionNotice",
+    "simple"
+  ],
+  "parameterTypes": {
+    "event": "options",
+    "notionNotice": "notice",
+    "databaseId": "resourceLocator",
+    "simple": "boolean"
+  },
+  "hasVersions": false
+}

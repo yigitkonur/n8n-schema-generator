@@ -1,0 +1,420 @@
+{
+  "nodeType": "n8n-nodes-base.circleCi",
+  "displayName": "CircleCI",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "vcs",
+    "projectSlug",
+    "pipelineNumber",
+    "returnAll",
+    "limit",
+    "filters",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "pipeline",
+        "enumValues": [
+          "pipeline"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get",
+          "getAll",
+          "trigger"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "vcs",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "bitbucket",
+          "github"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "projectSlug",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "pipelineNumber",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 1,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "trigger"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "pipeline",
+    "operation": "get",
+    "vcs": "",
+    "projectSlug": "",
+    "pipelineNumber": 1,
+    "returnAll": false,
+    "limit": 100,
+    "filters": {},
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "vcs",
+      "condition": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "projectSlug",
+      "condition": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "pipelineNumber",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "trigger"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "pipeline": {
+      "operations": [
+        "get",
+        "getAll",
+        "trigger"
+      ],
+      "fieldsPerOperation": {
+        "get": [
+          "vcs",
+          "projectSlug",
+          "pipelineNumber"
+        ],
+        "getAll": [
+          "vcs",
+          "projectSlug",
+          "returnAll",
+          "limit",
+          "filters"
+        ],
+        "trigger": [
+          "vcs",
+          "projectSlug",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

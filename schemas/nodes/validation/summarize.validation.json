@@ -1,0 +1,343 @@
+{
+  "nodeType": "n8n-nodes-base.summarize",
+  "displayName": "Summarize",
+  "version": [
+    1,
+    1.1
+  ],
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "fieldsToSummarize",
+    "fieldsToSplitBy",
+    "fieldsToSplitBy",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "fieldsToSummarize",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {
+          "values": [
+            {
+              "aggregation": "count",
+              "field": ""
+            }
+          ]
+        },
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "aggregation": {
+                "type": "options",
+                "default": "count",
+                "enumValues": [
+                  "append",
+                  "average",
+                  "concatenate",
+                  "count",
+                  "countUnique",
+                  "max",
+                  "min",
+                  "sum"
+                ]
+              },
+              "field": {
+                "type": "string",
+                "default": ""
+              },
+              "includeEmpty": {
+                "type": "boolean",
+                "default": false
+              },
+              "separateBy": {
+                "type": "options",
+                "default": ",",
+                "enumValues": [
+                  ",",
+                  ", ",
+                  "\n",
+                  "",
+                  " ",
+                  "other"
+                ]
+              },
+              "customSeparator": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      }
+    },
+    {
+      "field": "fieldsToSplitBy",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "hide": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        }
+      },
+      "dependsOn": [
+        "/options.outputFormat"
+      ]
+    },
+    {
+      "field": "fieldsToSplitBy",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        }
+      },
+      "dependsOn": [
+        "/options.outputFormat"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "fieldsToSummarize": {
+      "values": [
+        {
+          "aggregation": "count",
+          "field": "",
+          "includeEmpty": false,
+          "separateBy": ",",
+          "customSeparator": ""
+        }
+      ]
+    },
+    "fieldsToSplitBy": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "fieldsToSplitBy",
+      "condition": {
+        "hide": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "/options.outputFormat"
+      ]
+    },
+    {
+      "field": "fieldsToSplitBy",
+      "condition": {
+        "show": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "/options.outputFormat"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "fieldsToSummarize",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "aggregation",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "count",
+              "enumValues": [
+                "append",
+                "average",
+                "concatenate",
+                "count",
+                "countUnique",
+                "max",
+                "min",
+                "sum"
+              ]
+            }
+          },
+          {
+            "field": "field",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "hide": {
+                "aggregation": [
+                  "average",
+                  "sum",
+                  "countUnique",
+                  "count",
+                  "max",
+                  "min"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation"
+            ]
+          },
+          {
+            "field": "field",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "aggregation": [
+                  "average",
+                  "sum"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation"
+            ]
+          },
+          {
+            "field": "field",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "aggregation": [
+                  "countUnique",
+                  "count",
+                  "max",
+                  "min"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation"
+            ]
+          },
+          {
+            "field": "includeEmpty",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            },
+            "displayOptions": {
+              "show": {
+                "aggregation": [
+                  "append",
+                  "concatenate",
+                  "count",
+                  "countUnique"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation"
+            ]
+          },
+          {
+            "field": "separateBy",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ",",
+              "enumValues": [
+                ",",
+                ", ",
+                "\n",
+                "",
+                " ",
+                "other"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "aggregation": [
+                  "concatenate"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation"
+            ]
+          },
+          {
+            "field": "customSeparator",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "aggregation": [
+                  "concatenate"
+                ],
+                "separateBy": [
+                  "other"
+                ]
+              }
+            },
+            "dependsOn": [
+              "aggregation",
+              "separateBy"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

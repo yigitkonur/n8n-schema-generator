@@ -1,0 +1,2799 @@
+{
+  "nodeType": "n8n-nodes-base.agileCrm",
+  "displayName": "Agile CRM",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "contactId",
+    "returnAll",
+    "limit",
+    "filterType",
+    "matchType",
+    "simple",
+    "filters",
+    "jsonNotice",
+    "filterJson",
+    "options",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields",
+    "contactId",
+    "contactId",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields",
+    "operation",
+    "companyId",
+    "returnAll",
+    "limit",
+    "filterType",
+    "matchType",
+    "simple",
+    "filters",
+    "jsonNotice",
+    "filterJson",
+    "options",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields",
+    "companyId",
+    "companyId",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields",
+    "operation",
+    "dealId",
+    "limit",
+    "returnAll",
+    "closeDate",
+    "expectedValue",
+    "milestone",
+    "name",
+    "probability",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields",
+    "dealId",
+    "dealId",
+    "jsonParameters",
+    "additionalFieldsJson",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "contact",
+        "enumValues": [
+          "company",
+          "contact",
+          "deal"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 20,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "none",
+          "manual",
+          "json"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "anyFilter",
+        "enumValues": [
+          "anyFilter",
+          "allFilters"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "default": ""
+              },
+              "condition_type": {
+                "type": "options",
+                "default": "EQUALS",
+                "enumValues": [
+                  "AFTER",
+                  "BEFORE",
+                  "BETWEEN",
+                  "EQUALS",
+                  "LAST",
+                  "NOTEQUALS",
+                  "ON"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              },
+              "value2": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterJson",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "contactId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "companyId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 20,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "none",
+          "manual",
+          "json"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "anyFilter",
+        "enumValues": [
+          "anyFilter",
+          "allFilters"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "default": ""
+              },
+              "condition_type": {
+                "type": "options",
+                "default": "EQUALS",
+                "enumValues": [
+                  "AFTER",
+                  "BEFORE",
+                  "BETWEEN",
+                  "EQUALS",
+                  "LAST",
+                  "NOTEQUALS",
+                  "ON"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              },
+              "value2": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterJson",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "companyId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "companyId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "dealId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 20,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "closeDate",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "expectedValue",
+      "type": "number",
+      "required": true,
+      "constraints": {
+        "type": "number",
+        "default": 1,
+        "minValue": 0,
+        "maxValue": 1000000000000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "milestone",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "probability",
+      "type": "number",
+      "required": true,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 0,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "dealId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dealId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "contact",
+    "operation": "get",
+    "contactId": "",
+    "filters": {},
+    "options": {},
+    "additionalFields": {},
+    "closeDate": "",
+    "expectedValue": 1,
+    "milestone": "",
+    "name": "",
+    "probability": 50
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "contactId",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "companyId",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "companyId",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "companyId",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "dealId",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "closeDate",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "expectedValue",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "milestone",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "name",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "probability",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "dealId",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dealId",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFieldsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "contact": {
+      "operations": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "jsonParameters",
+          "additionalFieldsJson",
+          "additionalFields"
+        ],
+        "delete": [
+          "contactId"
+        ],
+        "get": [
+          "contactId"
+        ],
+        "getAll": [
+          "returnAll",
+          "limit",
+          "filterType",
+          "matchType",
+          "simple",
+          "filters",
+          "jsonNotice",
+          "filterJson",
+          "options"
+        ],
+        "update": [
+          "contactId",
+          "jsonParameters",
+          "additionalFieldsJson",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "field",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition_type",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "EQUALS",
+              "enumValues": [
+                "AFTER",
+                "BEFORE",
+                "BETWEEN",
+                "EQUALS",
+                "LAST",
+                "NOTEQUALS",
+                "ON"
+              ]
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value2",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "condition_type": [
+                  "BETWEEN"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition_type"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "field",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition_type",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "EQUALS",
+              "enumValues": [
+                "AFTER",
+                "BEFORE",
+                "BETWEEN",
+                "EQUALS",
+                "LAST",
+                "NOTEQUALS",
+                "ON"
+              ]
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value2",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "show": {
+                "condition_type": [
+                  "BETWEEN"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition_type"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

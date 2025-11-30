@@ -1,0 +1,503 @@
+{
+  "nodeType": "n8n-nodes-base.netlify",
+  "displayName": "Netlify",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [
+    "resource"
+  ],
+  "optionalParameters": [
+    "operation",
+    "siteId",
+    "deployId",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "operation",
+    "siteId",
+    "returnAll",
+    "limit"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "deploy",
+        "enumValues": [
+          "deploy",
+          "site"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getAll",
+        "enumValues": [
+          "cancel",
+          "create",
+          "get",
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "siteId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "create",
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "deployId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "cancel"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "delete",
+        "enumValues": [
+          "delete",
+          "get",
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "siteId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "deploy",
+    "operation": "getAll",
+    "siteId": "",
+    "deployId": "",
+    "returnAll": false,
+    "limit": 50,
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "deploy"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "siteId",
+      "condition": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "create",
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "deployId",
+      "condition": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "cancel"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "siteId",
+      "condition": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "deploy": {
+      "operations": [
+        "cancel",
+        "create",
+        "get",
+        "getAll"
+      ],
+      "fieldsPerOperation": {
+        "cancel": [
+          "deployId"
+        ],
+        "create": [
+          "siteId",
+          "additionalFields"
+        ],
+        "get": [
+          "siteId",
+          "deployId"
+        ],
+        "getAll": [
+          "siteId",
+          "returnAll",
+          "limit"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

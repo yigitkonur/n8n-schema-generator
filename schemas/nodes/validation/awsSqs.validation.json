@@ -1,0 +1,220 @@
+{
+  "nodeType": "n8n-nodes-base.awsSqs",
+  "displayName": "AWS SQS",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "operation",
+    "queue",
+    "queueType",
+    "sendInputData",
+    "message",
+    "messageGroupId",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "iam",
+        "enumValues": [
+          "iam",
+          "assumeRole"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "sendMessage",
+        "enumValues": [
+          "sendMessage"
+        ]
+      }
+    },
+    {
+      "field": "queue",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "queueType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "standard",
+        "enumValues": [
+          "fifo",
+          "standard"
+        ]
+      }
+    },
+    {
+      "field": "sendInputData",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    {
+      "field": "message",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ],
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "sendInputData"
+      ]
+    },
+    {
+      "field": "messageGroupId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "queueType": [
+            "fifo"
+          ]
+        }
+      },
+      "dependsOn": [
+        "queueType"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "iam",
+    "operation": "sendMessage",
+    "queue": "",
+    "queueType": "standard",
+    "sendInputData": true,
+    "message": "",
+    "messageGroupId": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "queue",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "message",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ],
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "sendInputData"
+      ]
+    },
+    {
+      "field": "messageGroupId",
+      "condition": {
+        "show": {
+          "queueType": [
+            "fifo"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "queueType"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

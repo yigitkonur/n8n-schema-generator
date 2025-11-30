@@ -1,0 +1,427 @@
+{
+  "name": "ftp",
+  "displayName": "FTP",
+  "description": "Transfer files via FTP or SFTP",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "protocol": "ftp",
+    "operation": "download",
+    "options": {},
+    "path": "",
+    "binaryPropertyName": "data",
+    "oldPath": "",
+    "newPath": "",
+    "binaryData": true,
+    "fileContent": "",
+    "recursive": false
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "protocol",
+      "displayName": "Protocol",
+      "type": "options",
+      "default": "ftp",
+      "description": "File transfer protocol",
+      "options": [
+        {
+          "name": "FTP",
+          "value": "ftp"
+        },
+        {
+          "name": "SFTP",
+          "value": "sftp"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "download",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a file/folder",
+          "action": "Delete a file or folder"
+        },
+        {
+          "name": "Download",
+          "value": "download",
+          "description": "Download a file",
+          "action": "Download a file"
+        },
+        {
+          "name": "List",
+          "value": "list",
+          "description": "List folder content",
+          "action": "List folder content"
+        },
+        {
+          "name": "Rename",
+          "value": "rename",
+          "description": "Rename/move oldPath to newPath",
+          "action": "Rename / move a file or folder"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload a file",
+          "action": "Upload a file"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "path",
+      "displayName": "Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to delete. Has to contain the full path.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/documents/file-to-delete.txt"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Folder",
+          "name": "folder",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether folders can be deleted"
+        },
+        {
+          "displayName": "Recursive",
+          "displayOptions": {
+            "show": {
+              "folder": [
+                true
+              ]
+            }
+          },
+          "name": "recursive",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove all files and directories in target directory"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "path",
+      "displayName": "Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to download. Has to contain the full path.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/documents/file-to-download.txt"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Enable Concurrent Reads",
+          "name": "enableConcurrentReads",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable concurrent reads for downloading files"
+        },
+        {
+          "displayName": "Max Concurrent Reads",
+          "name": "maxConcurrentReads",
+          "type": "number",
+          "default": 5,
+          "displayOptions": {
+            "show": {
+              "enableConcurrentReads": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Chunk Size",
+          "name": "chunkSize",
+          "type": "number",
+          "default": 64,
+          "description": "Size of each chunk in KB to download, Not all servers support this",
+          "displayOptions": {
+            "show": {
+              "enableConcurrentReads": [
+                true
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "oldPath",
+      "displayName": "Old Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/documents/old-file.txt"
+    },
+    {
+      "name": "newPath",
+      "displayName": "New Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/documents/new-file.txt"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Create Directories",
+          "name": "createDirectories",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to recursively create destination directory when renaming an existing file or folder"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "path",
+      "displayName": "Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to upload. Has to contain the full path.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/documents/file-to-upload.txt"
+    },
+    {
+      "name": "binaryData",
+      "displayName": "Binary File",
+      "type": "boolean",
+      "default": true,
+      "description": "The text content of the file to upload",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be written"
+    },
+    {
+      "name": "fileContent",
+      "displayName": "File Content",
+      "type": "string",
+      "default": "",
+      "description": "The text content of the file to upload",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "path",
+      "displayName": "Path",
+      "type": "string",
+      "default": "/",
+      "required": true,
+      "description": "Path of directory to list contents of",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "e.g. /public/folder"
+    },
+    {
+      "name": "recursive",
+      "displayName": "Recursive",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to return object representing all directories / objects recursively found within SFTP server",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "ftp",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "protocol": [
+            "ftp"
+          ]
+        }
+      },
+      "testedBy": "ftpConnectionTest"
+    },
+    {
+      "name": "sftp",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "protocol": [
+            "sftp"
+          ]
+        }
+      },
+      "testedBy": "sftpConnectionTest"
+    }
+  ],
+  "requiredFields": [
+    "path",
+    "path",
+    "binaryPropertyName",
+    "oldPath",
+    "newPath",
+    "path",
+    "binaryPropertyName",
+    "path",
+    "recursive"
+  ],
+  "optionalFields": [
+    "protocol",
+    "operation",
+    "options",
+    "options",
+    "options",
+    "binaryData",
+    "fileContent"
+  ],
+  "parameterTypes": {
+    "protocol": "options",
+    "operation": "options",
+    "path": "string",
+    "options": "collection",
+    "binaryPropertyName": "string",
+    "oldPath": "string",
+    "newPath": "string",
+    "binaryData": "boolean",
+    "fileContent": "string",
+    "recursive": "boolean"
+  },
+  "hasVersions": false
+}

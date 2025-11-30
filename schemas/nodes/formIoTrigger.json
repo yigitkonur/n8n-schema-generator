@@ -1,0 +1,91 @@
+{
+  "name": "formIoTrigger",
+  "displayName": "Form.io Trigger",
+  "description": "Handle form.io events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "projectId": "",
+    "formId": "",
+    "events": [],
+    "simple": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      }
+    },
+    {
+      "name": "formId",
+      "displayName": "Form Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "projectId"
+        ],
+        "loadOptionsMethod": "getForms"
+      }
+    },
+    {
+      "name": "events",
+      "displayName": "Trigger Events",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "options": [
+        {
+          "name": "Submission Created",
+          "value": "create"
+        },
+        {
+          "name": "Submission Updated",
+          "value": "update"
+        }
+      ]
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "formIoApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "projectId",
+    "formId",
+    "events"
+  ],
+  "optionalFields": [
+    "simple"
+  ],
+  "parameterTypes": {
+    "projectId": "options",
+    "formId": "options",
+    "events": "multiOptions",
+    "simple": "boolean"
+  },
+  "hasVersions": false
+}

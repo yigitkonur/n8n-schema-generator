@@ -1,0 +1,422 @@
+{
+  "nodeType": "n8n-nodes-base.rabbitmq",
+  "displayName": "RabbitMQ",
+  "version": [
+    1,
+    1.1
+  ],
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "operation",
+    "operation",
+    "deleteMessage",
+    "mode",
+    "queue",
+    "exchange",
+    "exchangeType",
+    "routingKey",
+    "sendInputData",
+    "message",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "hidden",
+      "required": false,
+      "constraints": {
+        "type": "hidden",
+        "default": "sendMessage"
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "sendMessage",
+        "enumValues": [
+          "sendMessage",
+          "deleteMessage"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "deleteMessage",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "mode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "queue",
+        "enumValues": [
+          "queue",
+          "exchange"
+        ]
+      },
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "queue",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "queue"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "mode",
+        "operation"
+      ]
+    },
+    {
+      "field": "exchange",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOn": [
+        "mode"
+      ]
+    },
+    {
+      "field": "exchangeType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "fanout",
+        "enumValues": [
+          "direct",
+          "topic",
+          "headers",
+          "fanout"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOn": [
+        "mode"
+      ]
+    },
+    {
+      "field": "routingKey",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOn": [
+        "mode"
+      ]
+    },
+    {
+      "field": "sendInputData",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "message",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "sendInputData"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "sendMessage",
+    "deleteMessage": "",
+    "mode": "queue",
+    "queue": "",
+    "exchange": "",
+    "exchangeType": "fanout",
+    "routingKey": "",
+    "sendInputData": true,
+    "message": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "deleteMessage",
+      "condition": {
+        "show": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "mode",
+      "condition": {
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "queue",
+      "condition": {
+        "show": {
+          "mode": [
+            "queue"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "mode",
+        "operation"
+      ]
+    },
+    {
+      "field": "exchange",
+      "condition": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "mode"
+      ]
+    },
+    {
+      "field": "exchangeType",
+      "condition": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "mode"
+      ]
+    },
+    {
+      "field": "routingKey",
+      "condition": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "mode"
+      ]
+    },
+    {
+      "field": "sendInputData",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "message",
+      "condition": {
+        "show": {
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "sendInputData"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

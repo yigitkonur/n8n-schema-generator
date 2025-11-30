@@ -1,0 +1,1670 @@
+{
+  "name": "azureStorage",
+  "displayName": "Azure Storage",
+  "description": "Interact with Azure Storage API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "sharedKey",
+    "resource": "container",
+    "blobCreate": "",
+    "from": "binary",
+    "binaryPropertyName": "data",
+    "url": "",
+    "options": {},
+    "operation": "getAll",
+    "containerCreate": "",
+    "returnAll": false,
+    "limit": 50
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "sharedKey",
+      "options": [
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Shared Key",
+          "value": "sharedKey"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "container",
+      "options": [
+        {
+          "name": "Blob",
+          "value": "blob"
+        },
+        {
+          "name": "Container",
+          "value": "container"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new blob or replace an existing one",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "PUT",
+              "url": "=/{{ $parameter[\"container\"] }}/{{ $parameter[\"blobCreate\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Create blob"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a blob",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "DELETE",
+              "url": "=/{{ $parameter[\"container\"] }}/{{ $parameter[\"blob\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Delete blob"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific blob",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "url": "=/{{ $parameter[\"container\"] }}/{{ $parameter[\"blob\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              },
+              "encoding": "arraybuffer"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get blob"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of blobs",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "qs": {
+                "restype": "container",
+                "comp": "list"
+              },
+              "url": "=/{{ $parameter[\"container\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get many blobs"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Container to create or replace a blob in",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "blobCreate",
+      "displayName": "Blob Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the new or existing blob",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. myblob"
+    },
+    {
+      "name": "from",
+      "displayName": "From",
+      "type": "options",
+      "default": "binary",
+      "required": true,
+      "options": [
+        {
+          "name": "Binary",
+          "value": "binary"
+        },
+        {
+          "name": "URL",
+          "value": "url"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Binary Contents",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the input binary field containing the file to be written",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ],
+          "from": [
+            "binary"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL where to read of the blob contents from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ],
+          "from": [
+            "url"
+          ]
+        }
+      },
+      "placeholder": "e.g. https://example.com/image.jpg",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Access Tier",
+          "name": "accessTier",
+          "description": "The tier to be set on the blob. For detailed information about block blob tiering, see <a href=\"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview\">Hot, cool, and archive storage tiers</a>.",
+          "default": "Hot",
+          "options": [
+            {
+              "name": "Archive",
+              "value": "Archive"
+            },
+            {
+              "name": "Cold",
+              "value": "Cold"
+            },
+            {
+              "name": "Cool",
+              "value": "Cool"
+            },
+            {
+              "name": "Hot",
+              "value": "Hot"
+            }
+          ],
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-access-tier": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Blob Type",
+          "name": "blobType",
+          "description": "Specifies the type of blob to create: block, page, or append blob",
+          "default": "BlockBlob",
+          "displayOptions": {
+            "show": {
+              "/from": [
+                "binary"
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-type": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "options",
+          "options": [
+            {
+              "name": "Block Blob",
+              "value": "BlockBlob"
+            },
+            {
+              "name": "Page Blob",
+              "value": "PageBlob"
+            },
+            {
+              "name": "Append Blob",
+              "value": "AppendBlob"
+            }
+          ],
+          "validateType": "string"
+        },
+        {
+          "displayName": "Cache Control",
+          "name": "cacheControl",
+          "description": "Sets the blob's cache control value",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-cache-control": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Content CRC64",
+          "name": "contentCrc64",
+          "description": "CRC64 hash of the blob content to verify its integrity during transport",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-content-crc64": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Content Encoding",
+          "name": "contentEncoding",
+          "description": "Sets the blob's content encoding",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-content-encoding": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Content Language",
+          "name": "contentLanguage",
+          "description": "Sets the blob's content language",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-content-language": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Content MD5",
+          "name": "contentMd5",
+          "description": "Sets the blob's MD5 hash for integrity verification",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-content-md5": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Content Type",
+          "name": "contentType",
+          "description": "Sets the blob's content type",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-content-type": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Encryption Context",
+          "name": "encryptionContext",
+          "description": "If the value is set it will set blob system metadata. Max length-1024. Valid only when Hierarchical Namespace is enabled for the account.",
+          "default": "",
+          "displayOptions": {
+            "show": {
+              "/from": [
+                "binary"
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-encryption-context": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Encryption Scope",
+          "name": "encryptionScope",
+          "description": "Indicates the encryption scope for encrypting the request contents",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-encryption-scope": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Expiry Option",
+          "name": "expiryOption",
+          "description": "Specifies the expiration date option for the request. This header is valid for accounts with hierarchical namespace enabled.",
+          "default": "Absolute",
+          "options": [
+            {
+              "name": "Expire",
+              "value": "Absolute",
+              "description": "Expiry Time must be specified"
+            },
+            {
+              "name": "Never Expire",
+              "value": "NeverExpire",
+              "description": "Sets the blob to never expire or removes the current expiration date"
+            }
+          ],
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-expiry-option": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Expiry Time",
+          "name": "expiryTime",
+          "description": "Specifies the time when the blob is set to expire as an absolute time",
+          "default": "",
+          "displayOptions": {
+            "hide": {
+              "/options.expiryOption": [
+                "NeverExpire"
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-expiry-time": "={{ $value ? DateTime.fromISO($value).format(\"EEE, dd MMM yyyy HH:mm:ss ZZZ\") : undefined }}"
+              }
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Filename",
+          "name": "filename",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-content-disposition": "={{ $value ? 'attachment; filename=\"' + $value + '\"' : undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Immutability Policy Date",
+          "name": "immutabilityPolicyUntilDate",
+          "description": "Specifies the retention-until date to be set on the blob. This is the date until which the blob can be protected from being modified or deleted.",
+          "default": "",
+          "displayOptions": {
+            "show": {
+              "/from": [
+                "binary"
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-immutability-policy-until-date": "={{ $value ? DateTime.fromISO($value).format(\"EEE, dd MMM yyyy HH:mm:ss ZZZ\") : undefined }}"
+              }
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Immutability Policy Mode",
+          "name": "immutabilityPolicyMode",
+          "description": "Specifies the immutability policy mode to be set on the blob",
+          "default": "unlocked",
+          "displayOptions": {
+            "show": {
+              "/from": [
+                "binary"
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "Locked",
+              "value": "locked",
+              "description": "Users are prohibited from modifying the policy"
+            },
+            {
+              "name": "Unlocked",
+              "value": "unlocked",
+              "description": "Users can change the policy by increasing or decreasing the retention-until date"
+            }
+          ],
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-immutability-policy-mode": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Lease ID",
+          "name": "leaseId",
+          "description": "Required if the blob has an active lease",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-lease-id": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Legal Hold",
+          "name": "legalHold",
+          "description": "Whether to set a legal hold on the blob",
+          "default": false,
+          "displayOptions": {
+            "show": {
+              "/from": [
+                "binary"
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-legal-hold": "={{ $value?.toString() || undefined }}"
+              }
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        },
+        {
+          "displayName": "Metadata",
+          "name": "metadata",
+          "default": [],
+          "description": "A name-value pair to associate with the blob as metadata",
+          "options": [
+            {
+              "name": "metadataValues",
+              "displayName": "Metadata",
+              "values": [
+                {
+                  "displayName": "Field Name",
+                  "name": "fieldName",
+                  "default": "",
+                  "description": "Names must adhere to the naming rules for <a href=\"https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/\">C# identifiers</a>",
+                  "type": "string"
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "default": "",
+                  "type": "string"
+                }
+              ]
+            }
+          ],
+          "placeholder": "Add metadata",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          }
+        },
+        {
+          "displayName": "Origin",
+          "name": "origin",
+          "description": "Specifies the origin from which the request is issued. The presence of this header results in cross-origin resource sharing (CORS) headers on the response. For more information, see <a href=\"https://learn.microsoft.com/en-us/rest/api/storageservices/cross-origin-resource-sharing--cors--support-for-the-azure-storage-services\">CORS support for the Azure Storage services</a>.",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "origin": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "description": "Sets the given tags on the blob",
+          "default": [],
+          "options": [
+            {
+              "name": "tagValues",
+              "displayName": "Tag",
+              "values": [
+                {
+                  "displayName": "Tag Name",
+                  "name": "tagName",
+                  "default": "",
+                  "type": "string"
+                },
+                {
+                  "displayName": "Tag Value",
+                  "name": "tagValue",
+                  "default": "",
+                  "type": "string"
+                }
+              ]
+            }
+          ],
+          "placeholder": "Add tag",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Container to delete a blob from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "blob",
+      "displayName": "Blob",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Blob to be deleted",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Lease ID",
+          "name": "leaseId",
+          "description": "Required if the blob has an active lease",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-lease-id": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Container to get a blob from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "blob",
+      "displayName": "Blob",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Blob to get",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Lease ID",
+          "name": "leaseId",
+          "description": "If this header is specified, the operation is performed only if both of the following conditions are met: <ul><li>The blob's lease is currently active.</li><li>The lease ID that's specified in the request matches the lease ID of the blob.</li></ul>",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-lease-id": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Origin",
+          "name": "origin",
+          "description": "Specifies the origin from which the request is issued. The presence of this header results in cross-origin resource sharing (CORS) headers on the response.",
+          "default": "",
+          "routing": {
+            "request": {
+              "headers": {
+                "origin": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        },
+        {
+          "displayName": "Simplify",
+          "name": "simplify",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of the raw data"
+        },
+        {
+          "displayName": "UPN",
+          "name": "upn",
+          "description": "Whether the user identity values that are returned in the response will be transformed from Microsoft Entra object IDs to User Principal Names. If the value is false, they're returned as Microsoft Entra object IDs. Valid for accounts with hierarchical namespace enabled.",
+          "default": false,
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-upn": "={{ $value?.toString() || undefined }}"
+              }
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Container to get blobs from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {}
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "maxresults",
+          "type": "query",
+          "value": "={{ $value }}"
+        },
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "default": [],
+          "description": "The fields to add to the output",
+          "options": [
+            {
+              "name": "Copy",
+              "value": "copy",
+              "description": "Specifies that metadata related to any current or previous Copy Blob operation should be included in the response"
+            },
+            {
+              "name": "Deleted",
+              "value": "deleted",
+              "description": "Specifies that soft-deleted blobs should be included in the response"
+            },
+            {
+              "name": "Deleted with Versions",
+              "value": "deletedwithversions",
+              "description": "Specifies that deleted blobs with any versions (active or deleted) should be included in the response. Items permanently deleted appear until processed by garbage collection."
+            },
+            {
+              "name": "Immutability Policy",
+              "value": "immutabilitypolicy",
+              "description": "Specifies that the enumeration should include the immutability policy until date, and the immutability policy mode of the blobs"
+            },
+            {
+              "name": "Legal Hold",
+              "value": "legalhold",
+              "description": "Specifies that the enumeration should include the legal hold of blobs"
+            },
+            {
+              "name": "Metadata",
+              "value": "metadata",
+              "description": "Specifies that blob metadata be returned in the response"
+            },
+            {
+              "name": "Permissions",
+              "value": "permissions",
+              "description": "Includes the owner, group, permissions, and access control list for the listed blobs or directories. Supported only for accounts with a hierarchical namespace enabled."
+            },
+            {
+              "name": "Snapshots",
+              "value": "snapshots",
+              "description": "Specifies that snapshots should be included in the enumeration. Snapshots are listed from oldest to newest in the response."
+            },
+            {
+              "name": "Tags",
+              "value": "tags",
+              "description": "Specifies that user-defined, blob index tags should be included in the response"
+            },
+            {
+              "name": "Uncommitted Blobs",
+              "value": "uncommittedblobs",
+              "description": "Specifies that blobs for which blocks have been uploaded, but which haven't been committed"
+            },
+            {
+              "name": "Versions",
+              "value": "versions",
+              "description": "Specifies that versions of blobs should be included in the enumeration"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "include",
+              "type": "query",
+              "value": "={{ $value.join(\",\") || undefined }}"
+            }
+          },
+          "type": "multiOptions"
+        },
+        {
+          "displayName": "Filter",
+          "name": "filter",
+          "default": [],
+          "description": "The type of datasets to be returned",
+          "options": [
+            {
+              "name": "Deleted",
+              "value": "deleted",
+              "description": "Only for accounts enabled with hierarchical namespace. When included, the list only contains soft-deleted blobs. POSIX ACL authorization fallback is not supported for listing soft-deleted blobs."
+            },
+            {
+              "name": "Files",
+              "value": "files",
+              "description": "Only for accounts enabled with hierarchical namespace. When included, the list only contains files."
+            },
+            {
+              "name": "Directories",
+              "value": "directories",
+              "description": "Only for accounts enabled with hierarchical namespace. When included, the list only contains directories."
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "showonly",
+              "type": "query",
+              "value": "={{ $value.join(\",\") || undefined }}"
+            }
+          },
+          "type": "multiOptions"
+        },
+        {
+          "displayName": "Simplify",
+          "name": "simplify",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of the raw data"
+        },
+        {
+          "displayName": "UPN",
+          "name": "upn",
+          "description": "Whether the user identity values that are returned in the response will be transformed from Microsoft Entra object IDs to User Principal Names. If the value is false, they're returned as Microsoft Entra object IDs. Valid for accounts with hierarchical namespace enabled.",
+          "default": false,
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-upn": "={{ $value?.toString() || undefined }}"
+              }
+            }
+          },
+          "type": "boolean",
+          "validateType": "boolean"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a container",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "PUT",
+              "qs": {
+                "restype": "container"
+              },
+              "url": "=/{{ $parameter[\"containerCreate\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Create container"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a container",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "DELETE",
+              "qs": {
+                "restype": "container"
+              },
+              "url": "=/{{ $parameter[\"container\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Delete container"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific container",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "qs": {
+                "restype": "container"
+              },
+              "url": "=/{{ $parameter[\"container\"] }}",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get container"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of containers",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "qs": {
+                "comp": "list"
+              },
+              "url": "/",
+              "headers": {
+                "x-ms-date": "={{ new Date().toUTCString() }}",
+                "x-ms-version": "2021-12-02"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get many container"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "containerCreate",
+      "displayName": "Container Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the new container",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. mycontainer",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Access Level",
+          "name": "accessLevel",
+          "default": "",
+          "options": [
+            {
+              "name": "Blob",
+              "value": "blob",
+              "description": "Specifies public read access for blobs. Blob data within this container can be read via anonymous request, but container data isn't available. Clients can't enumerate blobs within the container via anonymous request."
+            },
+            {
+              "name": "Container",
+              "value": "container",
+              "description": "Specifies full public read access for container and blob data. Clients can enumerate blobs within the container via anonymous request, but they can't enumerate containers within the storage account."
+            },
+            {
+              "name": "Private",
+              "value": "",
+              "description": "Container data is private to the account owner"
+            }
+          ],
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-blob-public-access": "={{ $value || undefined }}"
+              }
+            }
+          },
+          "type": "options",
+          "validateType": "options"
+        },
+        {
+          "displayName": "Metadata",
+          "name": "metadata",
+          "default": [],
+          "description": "A name-value pair to associate with the container as metadata",
+          "options": [
+            {
+              "name": "metadataValues",
+              "displayName": "Metadata",
+              "values": [
+                {
+                  "displayName": "Field Name",
+                  "name": "fieldName",
+                  "default": "",
+                  "description": "Names must adhere to the naming rules for <a href=\"https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/\">C# identifiers</a>",
+                  "type": "string"
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "default": "",
+                  "type": "string"
+                }
+              ]
+            }
+          ],
+          "placeholder": "Add metadata",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container to get",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Simplify",
+          "name": "simplify",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of the raw data"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {}
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "maxresults",
+          "type": "query",
+          "value": "={{ $value }}"
+        },
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "default": [],
+          "description": "The fields to add to the output",
+          "options": [
+            {
+              "name": "Metadata",
+              "value": "metadata"
+            },
+            {
+              "name": "Deleted",
+              "value": "deleted"
+            },
+            {
+              "name": "System",
+              "value": "system"
+            }
+          ],
+          "routing": {
+            "send": {
+              "property": "include",
+              "type": "query",
+              "value": "={{ $value.join(\",\") || undefined }}"
+            }
+          },
+          "type": "multiOptions"
+        },
+        {
+          "displayName": "Filter",
+          "name": "filter",
+          "default": "",
+          "description": "Filters the results to return only containers with a name that begins with the specified prefix",
+          "placeholder": "e.g. mycontainer",
+          "routing": {
+            "send": {
+              "property": "prefix",
+              "type": "query",
+              "value": "={{ $value ? $value : undefined }}"
+            }
+          },
+          "type": "string",
+          "validateType": "string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "azureStorageOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "azureStorageSharedKeyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "sharedKey"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "container",
+    "blobCreate",
+    "from",
+    "binaryPropertyName",
+    "url",
+    "container",
+    "blob",
+    "container",
+    "blob",
+    "container",
+    "containerCreate",
+    "container",
+    "container"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "options",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "operation",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "container": "resourceLocator",
+    "blobCreate": "string",
+    "from": "options",
+    "binaryPropertyName": "string",
+    "url": "string",
+    "options": "collection",
+    "blob": "resourceLocator",
+    "returnAll": "boolean",
+    "limit": "number",
+    "containerCreate": "string"
+  },
+  "hasVersions": false
+}

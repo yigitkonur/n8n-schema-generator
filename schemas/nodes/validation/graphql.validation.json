@@ -1,0 +1,379 @@
+{
+  "nodeType": "n8n-nodes-base.graphql",
+  "displayName": "GraphQL",
+  "version": [
+    1,
+    1.1
+  ],
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [
+    "endpoint",
+    "query"
+  ],
+  "optionalParameters": [
+    "authentication",
+    "requestMethod",
+    "allowUnauthorizedCerts",
+    "requestFormat",
+    "requestFormat",
+    "variables",
+    "operationName",
+    "responseFormat",
+    "dataPropertyName",
+    "headerParametersUi"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "basicAuth",
+          "customAuth",
+          "digestAuth",
+          "headerAuth",
+          "none",
+          "oAuth1",
+          "oAuth2",
+          "queryAuth"
+        ]
+      }
+    },
+    {
+      "field": "requestMethod",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "POST",
+        "enumValues": [
+          "GET",
+          "POST"
+        ]
+      }
+    },
+    {
+      "field": "endpoint",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "allowUnauthorizedCerts",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    {
+      "field": "requestFormat",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "graphql",
+        "enumValues": [
+          "graphql",
+          "json"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOn": [
+        "requestMethod",
+        "@version"
+      ]
+    },
+    {
+      "field": "requestFormat",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "json",
+        "enumValues": [
+          "json",
+          "graphql"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "requestMethod",
+        "@version"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "variables",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      },
+      "dependsOn": [
+        "requestFormat",
+        "requestMethod"
+      ]
+    },
+    {
+      "field": "operationName",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      },
+      "dependsOn": [
+        "requestFormat",
+        "requestMethod"
+      ]
+    },
+    {
+      "field": "responseFormat",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "json",
+        "enumValues": [
+          "json",
+          "string"
+        ]
+      }
+    },
+    {
+      "field": "dataPropertyName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      },
+      "displayOptions": {
+        "show": {
+          "responseFormat": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseFormat"
+      ]
+    },
+    {
+      "field": "headerParametersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "parameter": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "none",
+    "requestMethod": "POST",
+    "endpoint": "",
+    "allowUnauthorizedCerts": false,
+    "requestFormat": "graphql",
+    "query": "",
+    "variables": "",
+    "operationName": "",
+    "responseFormat": "json",
+    "dataPropertyName": "data",
+    "headerParametersUi": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "requestFormat",
+      "condition": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "requestMethod",
+        "@version"
+      ]
+    },
+    {
+      "field": "requestFormat",
+      "condition": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "requestMethod",
+        "@version"
+      ]
+    },
+    {
+      "field": "variables",
+      "condition": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "requestFormat",
+        "requestMethod"
+      ]
+    },
+    {
+      "field": "operationName",
+      "condition": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "requestFormat",
+        "requestMethod"
+      ]
+    },
+    {
+      "field": "dataPropertyName",
+      "condition": {
+        "show": {
+          "responseFormat": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseFormat"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "headerParametersUi",
+      "validOptions": [
+        "parameter"
+      ],
+      "optionSchemas": {
+        "parameter": [
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

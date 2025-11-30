@@ -1,0 +1,363 @@
+{
+  "nodeType": "n8n-nodes-base.awsRekognition",
+  "displayName": "AWS Rekognition",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "resource",
+    "operation",
+    "type",
+    "binaryData",
+    "binaryPropertyName",
+    "bucket",
+    "name",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "iam",
+        "enumValues": [
+          "iam",
+          "assumeRole"
+        ]
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "image",
+        "enumValues": [
+          "image"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "analyze",
+        "enumValues": [
+          "analyze"
+        ]
+      }
+    },
+    {
+      "field": "type",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "detectFaces",
+        "enumValues": [
+          "detectFaces",
+          "detectLabels",
+          "detectModerationLabels",
+          "detectText",
+          "recognizeCelebrity"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryData",
+      "type": "boolean",
+      "required": true,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "bucket",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "iam",
+    "resource": "image",
+    "operation": "analyze",
+    "type": "detectFaces",
+    "binaryData": false,
+    "binaryPropertyName": "data",
+    "bucket": "",
+    "name": "",
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "type",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryData",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryPropertyName",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "bucket",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "name",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "binaryData"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "image": {
+      "operations": [
+        "analyze"
+      ],
+      "fieldsPerOperation": {
+        "analyze": [
+          "type",
+          "binaryData",
+          "binaryPropertyName",
+          "bucket",
+          "name",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

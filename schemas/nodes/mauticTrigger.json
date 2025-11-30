@@ -1,0 +1,101 @@
+{
+  "name": "mauticTrigger",
+  "displayName": "Mautic Trigger",
+  "description": "Handle Mautic events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "credentials",
+    "events": [],
+    "eventsOrder": "ASC"
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "credentials",
+      "options": [
+        {
+          "name": "Credentials",
+          "value": "credentials"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "events",
+      "displayName": "Event Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getEvents"
+      }
+    },
+    {
+      "name": "eventsOrder",
+      "displayName": "Events Order",
+      "type": "options",
+      "default": "ASC",
+      "description": "Order direction for queued events in one webhook. Can be “DESC” or “ASC”.",
+      "options": [
+        {
+          "name": "ASC",
+          "value": "ASC"
+        },
+        {
+          "name": "DESC",
+          "value": "DESC"
+        }
+      ]
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mauticApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "credentials"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mauticOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "events"
+  ],
+  "optionalFields": [
+    "authentication",
+    "eventsOrder"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "events": "multiOptions",
+    "eventsOrder": "options"
+  },
+  "hasVersions": false
+}

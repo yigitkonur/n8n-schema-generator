@@ -1,0 +1,185 @@
+{
+  "name": "oura",
+  "displayName": "Oura",
+  "description": "Consume Oura API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "summary",
+    "operation": "getSleep",
+    "returnAll": false,
+    "limit": 5,
+    "filters": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "summary",
+      "options": [
+        {
+          "name": "Profile",
+          "value": "profile"
+        },
+        {
+          "name": "Summary",
+          "value": "summary"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get the user's personal information",
+          "action": "Get a profile"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "profile"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getSleep",
+      "options": [
+        {
+          "name": "Get Activity Summary",
+          "value": "getActivity",
+          "description": "Get the user's activity summary",
+          "action": "Get activity summary"
+        },
+        {
+          "name": "Get Readiness Summary",
+          "value": "getReadiness",
+          "description": "Get the user's readiness summary",
+          "action": "Get readiness summary"
+        },
+        {
+          "name": "Get Sleep Periods",
+          "value": "getSleep",
+          "description": "Get the user's sleep summary",
+          "action": "Get sleep summary"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "summary"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "summary"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "summary"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "End Date",
+          "name": "end",
+          "type": "dateTime",
+          "default": "",
+          "description": "End date for the summary retrieval. If omitted, it defaults to the current day."
+        },
+        {
+          "displayName": "Start Date",
+          "name": "start",
+          "type": "dateTime",
+          "default": "",
+          "description": "Start date for the summary retrieval. If omitted, it defaults to a week ago."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "summary"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "ouraApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection"
+  },
+  "hasVersions": false
+}

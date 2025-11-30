@@ -1,0 +1,1593 @@
+{
+  "name": "wait",
+  "displayName": "Wait",
+  "description": "Wait before continue with execution",
+  "group": [
+    "organization"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "resume": "timeInterval",
+    "dateTime": "",
+    "amount": 1,
+    "unit": "hours",
+    "webhookNotice": "",
+    "formNotice": "",
+    "formTitle": "",
+    "formDescription": "",
+    "formFields": {},
+    "httpMethod": "GET",
+    "responseCode": 200,
+    "responseData": "firstEntryJson",
+    "responseBinaryPropertyName": "data",
+    "limitWaitTime": false,
+    "limitType": "afterTimeInterval",
+    "resumeAmount": 1,
+    "resumeUnit": "hours",
+    "maxDateAndTime": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resume",
+      "displayName": "Resume",
+      "type": "options",
+      "default": "timeInterval",
+      "description": "Determines the waiting mode to use before the workflow continues",
+      "options": [
+        {
+          "name": "After Time Interval",
+          "value": "timeInterval",
+          "description": "Waits for a certain amount of time"
+        },
+        {
+          "name": "At Specified Time",
+          "value": "specificTime",
+          "description": "Waits until a specific date and time to continue"
+        },
+        {
+          "name": "On Webhook Call",
+          "value": "webhook",
+          "description": "Waits for a webhook call before continuing"
+        },
+        {
+          "name": "On Form Submitted",
+          "value": "form",
+          "description": "Waits for a form submission before continuing"
+        }
+      ]
+    },
+    {
+      "name": "incomingAuthentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "none",
+      "description": "If and how incoming resume-webhook-requests to $execution.resumeFormUrl should be authenticated for additional security",
+      "options": [
+        {
+          "name": "Basic Auth",
+          "value": "basicAuth"
+        },
+        {
+          "name": "None",
+          "value": "none"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "incomingAuthentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "none",
+      "description": "If and how incoming resume-webhook-requests to $execution.resumeUrl should be authenticated for additional security",
+      "options": [
+        {
+          "name": "Basic Auth",
+          "value": "basicAuth"
+        },
+        {
+          "name": "Header Auth",
+          "value": "headerAuth"
+        },
+        {
+          "name": "JWT Auth",
+          "value": "jwtAuth"
+        },
+        {
+          "name": "None",
+          "value": "none"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dateTime",
+      "displayName": "Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "The date and time to wait for before continuing",
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "specificTime"
+          ]
+        }
+      }
+    },
+    {
+      "name": "amount",
+      "displayName": "Wait Amount",
+      "type": "number",
+      "default": 1,
+      "description": "The time to wait",
+      "typeOptions": {
+        "minValue": 0,
+        "numberPrecision": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "amount",
+      "displayName": "Wait Amount",
+      "type": "number",
+      "default": 5,
+      "description": "The time to wait",
+      "typeOptions": {
+        "minValue": 0,
+        "numberPrecision": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "unit",
+      "displayName": "Wait Unit",
+      "type": "options",
+      "default": "hours",
+      "description": "The time unit of the Wait Amount value",
+      "options": [
+        {
+          "name": "Seconds",
+          "value": "seconds"
+        },
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "unit",
+      "displayName": "Wait Unit",
+      "type": "options",
+      "default": "seconds",
+      "description": "The time unit of the Wait Amount value",
+      "options": [
+        {
+          "name": "Seconds",
+          "value": "seconds"
+        },
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "webhookNotice",
+      "displayName": "The webhook URL will be generated at run time. It can be referenced with the <strong>$execution.resumeUrl</strong> variable. Send it somewhere before getting to this node. <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.wait/?utm_source=n8n_app&utm_medium=node_settings_modal-credential_link&utm_campaign=n8n-nodes-base.wait\" target=\"_blank\">More info</a>",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "formNotice",
+      "displayName": "The form url will be generated at run time. It can be referenced with the <strong>$execution.resumeFormUrl</strong> variable. Send it somewhere before getting to this node. <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.wait/?utm_source=n8n_app&utm_medium=node_settings_modal-credential_link&utm_campaign=n8n-nodes-base.wait\" target=\"_blank\">More info</a>",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "formTitle",
+      "displayName": "Form Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Shown at the top of the form",
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "placeholder": "e.g. Contact us"
+    },
+    {
+      "name": "formDescription",
+      "displayName": "Form Description",
+      "type": "string",
+      "default": "",
+      "description": "Shown underneath the Form Title. Can be used to prompt the user on how to complete the form. Accepts HTML.",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "placeholder": "e.g. We'll get back to you soon"
+    },
+    {
+      "name": "formFields",
+      "displayName": "Form Elements",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Field Name",
+              "name": "fieldLabel",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. What is your name?",
+              "description": "Label that appears above the input field",
+              "required": true,
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "hiddenField",
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Name",
+              "name": "fieldName",
+              "description": "The name of the field, used in input attributes and referenced by the workflow",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Element Type",
+              "name": "fieldType",
+              "type": "options",
+              "default": "text",
+              "description": "The type of field to add to the form",
+              "options": [
+                {
+                  "name": "Checkboxes",
+                  "value": "checkbox"
+                },
+                {
+                  "name": "Custom HTML",
+                  "value": "html"
+                },
+                {
+                  "name": "Date",
+                  "value": "date"
+                },
+                {
+                  "name": "Dropdown",
+                  "value": "dropdown"
+                },
+                {
+                  "name": "Email",
+                  "value": "email"
+                },
+                {
+                  "name": "File",
+                  "value": "file"
+                },
+                {
+                  "name": "Hidden Field",
+                  "value": "hiddenField"
+                },
+                {
+                  "name": "Number",
+                  "value": "number"
+                },
+                {
+                  "name": "Password",
+                  "value": "password"
+                },
+                {
+                  "name": "Radio Buttons",
+                  "value": "radio"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                },
+                {
+                  "name": "Textarea",
+                  "value": "textarea"
+                }
+              ],
+              "required": true
+            },
+            {
+              "displayName": "Element Name",
+              "name": "elementName",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. content-section",
+              "description": "Optional field. It can be used to include the html in the output.",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Placeholder",
+              "name": "placeholder",
+              "description": "Sample text to display inside the field",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "dropdown",
+                    "date",
+                    "file",
+                    "html",
+                    "hiddenField",
+                    "radio",
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Options",
+              "name": "fieldOptions",
+              "placeholder": "Add Field Option",
+              "description": "List of options that can be selected from the dropdown",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Option",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Checkboxes",
+              "name": "fieldOptions",
+              "placeholder": "Add Checkbox",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Checkbox Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Radio Buttons",
+              "name": "fieldOptions",
+              "placeholder": "Add Radio Button",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "radio"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Radio Button Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Multiple Choice is a legacy option, please use Checkboxes or Radio Buttons field type instead",
+              "name": "multiselectLegacyNotice",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "multiselect": [
+                    true
+                  ],
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Choice",
+              "name": "multiselect",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to allow the user to select multiple options from the dropdown list",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Limit Selection",
+              "name": "limitSelection",
+              "type": "options",
+              "default": "unlimited",
+              "options": [
+                {
+                  "name": "Exact Number",
+                  "value": "exact"
+                },
+                {
+                  "name": "Range",
+                  "value": "range"
+                },
+                {
+                  "name": "Unlimited",
+                  "value": "unlimited"
+                }
+              ],
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Number of Selections",
+              "name": "numberOfSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "exact"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Minimum Selections",
+              "name": "minSelections",
+              "type": "number",
+              "default": 0,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 0
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Maximum Selections",
+              "name": "maxSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "HTML",
+              "name": "html",
+              "typeOptions": {
+                "editor": "htmlEditor"
+              },
+              "type": "string",
+              "noDataExpression": true,
+              "default": "<!-- Your custom HTML here --->\n\n\n",
+              "description": "HTML elements to display on the form page",
+              "hint": "Does not accept <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> or <code>&lt;input&gt;</code> tags",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Files",
+              "name": "multipleFiles",
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to allow the user to select multiple files from the file input or just one",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Accepted File Types",
+              "name": "acceptFileTypes",
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of allowed file extensions",
+              "hint": "Leave empty to allow all file types",
+              "placeholder": "e.g. .jpg, .png",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "The displayed date is formatted based on the locale of the user's browser",
+              "name": "formatDate",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "date"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Required Field",
+              "name": "requiredField",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to require the user to enter a value for this field before submitting the form",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "html",
+                    "hiddenField"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "placeholder": "Add Form Element"
+    },
+    {
+      "name": "responseMode",
+      "displayName": "Respond When",
+      "type": "options",
+      "default": "onReceived",
+      "description": "When to respond to the form submission",
+      "options": [
+        {
+          "name": "Form Is Submitted",
+          "value": "onReceived",
+          "description": "As soon as this node receives the form submission"
+        },
+        {
+          "name": "Workflow Finishes",
+          "value": "lastNode",
+          "description": "When the last node of the workflow is executed"
+        },
+        {
+          "name": "Using 'Respond to Webhook' Node",
+          "value": "responseNode",
+          "description": "When the 'Respond to Webhook' node is executed"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpMethod",
+      "displayName": "HTTP Method",
+      "type": "options",
+      "default": "GET",
+      "description": "The HTTP method of the Webhook call",
+      "options": [
+        {
+          "name": "DELETE",
+          "value": "DELETE"
+        },
+        {
+          "name": "GET",
+          "value": "GET"
+        },
+        {
+          "name": "HEAD",
+          "value": "HEAD"
+        },
+        {
+          "name": "PATCH",
+          "value": "PATCH"
+        },
+        {
+          "name": "POST",
+          "value": "POST"
+        },
+        {
+          "name": "PUT",
+          "value": "PUT"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseCode",
+      "displayName": "Response Code",
+      "type": "number",
+      "default": 200,
+      "description": "The HTTP Response code to return",
+      "typeOptions": {
+        "minValue": 100,
+        "maxValue": 599
+      },
+      "displayOptions": {
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        },
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseMode",
+      "displayName": "Respond",
+      "type": "options",
+      "default": "onReceived",
+      "description": "When and how to respond to the webhook",
+      "options": [
+        {
+          "name": "Immediately",
+          "value": "onReceived",
+          "description": "As soon as this node executes"
+        },
+        {
+          "name": "When Last Node Finishes",
+          "value": "lastNode",
+          "description": "Returns data of the last-executed node"
+        },
+        {
+          "name": "Using 'Respond to Webhook' Node",
+          "value": "responseNode",
+          "description": "Response defined in that node"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseData",
+      "displayName": "Response Data",
+      "type": "options",
+      "default": "firstEntryJson",
+      "description": "What data should be returned. If it should return all items as an array or only the first item as object.",
+      "options": [
+        {
+          "name": "All Entries",
+          "value": "allEntries",
+          "description": "Returns all the entries of the last node. Always returns an array."
+        },
+        {
+          "name": "First Entry JSON",
+          "value": "firstEntryJson",
+          "description": "Returns the JSON data of the first entry of the last node. Always returns a JSON object."
+        },
+        {
+          "name": "First Entry Binary",
+          "value": "firstEntryBinary",
+          "description": "Returns the binary data of the first entry of the last node. Always returns a binary file."
+        },
+        {
+          "name": "No Response Body",
+          "value": "noData",
+          "description": "Returns without a body"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "lastNode"
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseBinaryPropertyName",
+      "displayName": "Property Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the binary property to return",
+      "displayOptions": {
+        "show": {
+          "responseData": [
+            "firstEntryBinary"
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limitWaitTime",
+      "displayName": "Limit Wait Time",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limitType",
+      "displayName": "Limit Type",
+      "type": "options",
+      "default": "afterTimeInterval",
+      "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+      "options": [
+        {
+          "name": "After Time Interval",
+          "description": "Waits for a certain amount of time",
+          "value": "afterTimeInterval"
+        },
+        {
+          "name": "At Specified Time",
+          "description": "Waits until the set date and time to continue",
+          "value": "atSpecifiedTime"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeAmount",
+      "displayName": "Amount",
+      "type": "number",
+      "default": 1,
+      "description": "The time to wait",
+      "typeOptions": {
+        "minValue": 0,
+        "numberPrecision": 2
+      },
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeUnit",
+      "displayName": "Unit",
+      "type": "options",
+      "default": "hours",
+      "description": "Unit of the interval value",
+      "options": [
+        {
+          "name": "Seconds",
+          "value": "seconds"
+        },
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "maxDateAndTime",
+      "displayName": "Max Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "description": "Continue execution after the specified date and time",
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "atSpecifiedTime"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Binary File",
+          "name": "binaryData",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/httpMethod": [
+                "PATCH",
+                "PUT",
+                "POST"
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether the webhook will receive binary data"
+        },
+        {
+          "displayName": "Put Output File in Field",
+          "name": "binaryPropertyName",
+          "type": "string",
+          "default": "data",
+          "displayOptions": {
+            "show": {
+              "binaryData": [
+                true
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "hint": "The name of the output binary field to put the file in",
+          "description": "If the data gets received via \"Form-Data Multipart\" it will be the prefix and a number starting with 0 will be attached to it"
+        },
+        {
+          "displayName": "Field Name for Binary Data",
+          "name": "binaryPropertyName",
+          "type": "string",
+          "default": "data",
+          "displayOptions": {
+            "hide": {
+              "@version": [
+                1
+              ]
+            }
+          },
+          "description": "The name of the output field to put any binary file data in. Only relevant if binary data is received."
+        },
+        {
+          "displayName": "Ignore Bots",
+          "name": "ignoreBots",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to ignore requests from bots like link previewers and web crawlers"
+        },
+        {
+          "displayName": "IP(s) Whitelist",
+          "name": "ipWhitelist",
+          "type": "string",
+          "placeholder": "e.g. 127.0.0.1",
+          "default": "",
+          "description": "Comma-separated list of allowed IP addresses. Leave empty to allow all IPs."
+        },
+        {
+          "displayName": "No Response Body",
+          "name": "noResponseBody",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to send any body in the response",
+          "displayOptions": {
+            "hide": {
+              "rawBody": [
+                true
+              ]
+            },
+            "show": {
+              "/responseMode": [
+                "onReceived"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Raw Body",
+          "name": "rawBody",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "@version": [
+                1
+              ]
+            },
+            "hide": {
+              "binaryData": [
+                true
+              ],
+              "noResponseBody": [
+                true
+              ]
+            }
+          },
+          "default": false,
+          "description": "Raw body (binary)"
+        },
+        {
+          "displayName": "Raw Body",
+          "name": "rawBody",
+          "type": "boolean",
+          "displayOptions": {
+            "hide": {
+              "noResponseBody": [
+                true
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to return the raw body"
+        },
+        {
+          "displayName": "Response Data",
+          "name": "responseData",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/responseMode": [
+                "onReceived"
+              ]
+            },
+            "hide": {
+              "noResponseBody": [
+                true
+              ]
+            }
+          },
+          "default": "",
+          "placeholder": "success",
+          "description": "Custom response data to send"
+        },
+        {
+          "displayName": "Response Content-Type",
+          "name": "responseContentType",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/responseData": [
+                "firstEntryJson"
+              ],
+              "/responseMode": [
+                "lastNode"
+              ]
+            }
+          },
+          "default": "",
+          "placeholder": "application/xml",
+          "description": "Set a custom content-type to return if another one as the \"application/json\" should be returned"
+        },
+        {
+          "displayName": "Response Headers",
+          "name": "responseHeaders",
+          "placeholder": "Add Response Header",
+          "description": "Add headers to the webhook response",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "entries",
+              "displayName": "Entries",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the header"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the header"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Property Name",
+          "name": "responsePropertyName",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/responseData": [
+                "firstEntryJson"
+              ],
+              "/responseMode": [
+                "lastNode"
+              ]
+            }
+          },
+          "default": "data",
+          "description": "Name of the property to return the data of instead of the whole JSON"
+        },
+        {
+          "displayName": "Webhook Suffix",
+          "name": "webhookSuffix",
+          "type": "string",
+          "default": "",
+          "placeholder": "webhook",
+          "noDataExpression": true,
+          "description": "This suffix path will be appended to the restart URL. Helpful when using multiple wait nodes."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the link “Form automated with n8n” at the bottom of the form"
+        },
+        {
+          "displayName": "Form Response",
+          "name": "respondWithOptions",
+          "type": "fixedCollection",
+          "placeholder": "Add option",
+          "default": {
+            "values": {
+              "respondWith": "text"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Respond With",
+                  "name": "respondWith",
+                  "type": "options",
+                  "default": "text",
+                  "options": [
+                    {
+                      "name": "Form Submitted Text",
+                      "value": "text",
+                      "description": "Show a response text to the user"
+                    },
+                    {
+                      "name": "Redirect URL",
+                      "value": "redirect",
+                      "description": "Redirect the user to a URL"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Text to Show",
+                  "name": "formSubmittedText",
+                  "description": "The text displayed to users after they fill the form. Leave it empty if don't want to show any additional text.",
+                  "type": "string",
+                  "default": "Your response has been recorded",
+                  "displayOptions": {
+                    "show": {
+                      "respondWith": [
+                        "text"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "URL to Redirect to",
+                  "name": "redirectUrl",
+                  "description": "The URL to redirect users to after they fill the form. Must be a valid URL.",
+                  "type": "string",
+                  "default": "",
+                  "validateType": "url",
+                  "placeholder": "e.g. http://www.n8n.io",
+                  "displayOptions": {
+                    "show": {
+                      "respondWith": [
+                        "redirect"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Webhook Suffix",
+          "name": "webhookSuffix",
+          "type": "string",
+          "default": "",
+          "placeholder": "webhook",
+          "noDataExpression": true,
+          "description": "This suffix path will be appended to the restart URL. Helpful when using multiple wait nodes."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the link “Form automated with n8n” at the bottom of the form"
+        },
+        {
+          "displayName": "Webhook Suffix",
+          "name": "webhookSuffix",
+          "type": "string",
+          "default": "",
+          "placeholder": "webhook",
+          "noDataExpression": true,
+          "description": "This suffix path will be appended to the restart URL. Helpful when using multiple wait nodes."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "onReceived",
+            "lastNode"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "httpBasicAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jwtAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "jwtAuth"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "dateTime",
+    "formTitle",
+    "responseBinaryPropertyName"
+  ],
+  "optionalFields": [
+    "resume",
+    "incomingAuthentication",
+    "incomingAuthentication",
+    "amount",
+    "amount",
+    "unit",
+    "unit",
+    "webhookNotice",
+    "formNotice",
+    "formDescription",
+    "formFields",
+    "responseMode",
+    "httpMethod",
+    "responseCode",
+    "responseMode",
+    "responseData",
+    "limitWaitTime",
+    "limitType",
+    "resumeAmount",
+    "resumeUnit",
+    "maxDateAndTime",
+    "options",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "resume": "options",
+    "incomingAuthentication": "options",
+    "dateTime": "dateTime",
+    "amount": "number",
+    "unit": "options",
+    "webhookNotice": "notice",
+    "formNotice": "notice",
+    "formTitle": "string",
+    "formDescription": "string",
+    "formFields": "fixedCollection",
+    "responseMode": "options",
+    "httpMethod": "options",
+    "responseCode": "number",
+    "responseData": "options",
+    "responseBinaryPropertyName": "string",
+    "limitWaitTime": "boolean",
+    "limitType": "options",
+    "resumeAmount": "number",
+    "resumeUnit": "options",
+    "maxDateAndTime": "dateTime",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

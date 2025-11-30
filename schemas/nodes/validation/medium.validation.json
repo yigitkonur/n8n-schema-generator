@@ -1,0 +1,498 @@
+{
+  "nodeType": "n8n-nodes-base.medium",
+  "displayName": "Medium",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "resource",
+    "operation",
+    "publication",
+    "publicationId",
+    "title",
+    "contentFormat",
+    "content",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "accessToken",
+        "enumValues": [
+          "accessToken",
+          "oAuth2"
+        ]
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "post",
+        "enumValues": [
+          "post",
+          "publication"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "publication",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "publicationId",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "publication": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "publication"
+      ]
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contentFormat",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "html",
+          "markdown"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "content",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "publication",
+        "enumValues": [
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "accessToken",
+    "resource": "post",
+    "operation": "create",
+    "publication": false,
+    "publicationId": "",
+    "title": "",
+    "contentFormat": "",
+    "content": "",
+    "additionalFields": {},
+    "returnAll": false,
+    "limit": 100
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "publication",
+      "condition": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "publicationId",
+      "condition": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "publication": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "publication"
+      ]
+    },
+    {
+      "field": "title",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "contentFormat",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "content",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "post": {
+      "operations": [
+        "create"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "publication",
+          "publicationId",
+          "title",
+          "contentFormat",
+          "content",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

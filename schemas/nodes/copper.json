@@ -1,0 +1,3472 @@
+{
+  "name": "copper",
+  "displayName": "Copper",
+  "description": "Consume the Copper API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "company",
+    "operation": "create",
+    "name": "",
+    "additionalFields": {},
+    "filterFields": {},
+    "updateFields": {},
+    "customerSourceId": "",
+    "primaryContactId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "company",
+      "options": [
+        {
+          "name": "Company",
+          "value": "company"
+        },
+        {
+          "name": "Customer Source",
+          "value": "customerSource"
+        },
+        {
+          "name": "Lead",
+          "value": "lead"
+        },
+        {
+          "name": "Opportunity",
+          "value": "opportunity"
+        },
+        {
+          "name": "Person",
+          "value": "person"
+        },
+        {
+          "name": "Project",
+          "value": "project"
+        },
+        {
+          "name": "Task",
+          "value": "task"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a company"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a company"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a company"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many companies"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a company"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the company to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description of the company to create"
+        },
+        {
+          "displayName": "Email Domain",
+          "name": "email_domain",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the company to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the company to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Country",
+          "name": "country",
+          "type": "options",
+          "options": [
+            {
+              "name": "Afghanistan",
+              "value": "AF"
+            },
+            {
+              "name": "Åland Islands",
+              "value": "AX"
+            },
+            {
+              "name": "Albania",
+              "value": "AL"
+            },
+            {
+              "name": "Algeria",
+              "value": "DZ"
+            },
+            {
+              "name": "American Samoa",
+              "value": "AS"
+            },
+            {
+              "name": "Andorra",
+              "value": "AD"
+            },
+            {
+              "name": "Angola",
+              "value": "AO"
+            },
+            {
+              "name": "Anguilla",
+              "value": "AI"
+            },
+            {
+              "name": "Antarctica",
+              "value": "AQ"
+            },
+            {
+              "name": "Antigua and Barbuda",
+              "value": "AG"
+            },
+            {
+              "name": "Argentina",
+              "value": "AR"
+            },
+            {
+              "name": "Armenia",
+              "value": "AM"
+            },
+            {
+              "name": "Aruba",
+              "value": "AW"
+            },
+            {
+              "name": "Australia",
+              "value": "AU"
+            },
+            {
+              "name": "Austria",
+              "value": "AT"
+            },
+            {
+              "name": "Azerbaijan",
+              "value": "AZ"
+            },
+            {
+              "name": "Bahamas (the)",
+              "value": "BS"
+            },
+            {
+              "name": "Bahrain",
+              "value": "BH"
+            },
+            {
+              "name": "Bangladesh",
+              "value": "BD"
+            },
+            {
+              "name": "Barbados",
+              "value": "BB"
+            },
+            {
+              "name": "Belarus",
+              "value": "BY"
+            },
+            {
+              "name": "Belgium",
+              "value": "BE"
+            },
+            {
+              "name": "Belize",
+              "value": "BZ"
+            },
+            {
+              "name": "Benin",
+              "value": "BJ"
+            },
+            {
+              "name": "Bermuda",
+              "value": "BM"
+            },
+            {
+              "name": "Bhutan",
+              "value": "BT"
+            },
+            {
+              "name": "Bolivia (Plurinational State of)",
+              "value": "BO"
+            },
+            {
+              "name": "Bonaire, Sint Eustatius and Saba",
+              "value": "BQ"
+            },
+            {
+              "name": "Bosnia and Herzegovina",
+              "value": "BA"
+            },
+            {
+              "name": "Botswana",
+              "value": "BW"
+            },
+            {
+              "name": "Bouvet Island",
+              "value": "BV"
+            },
+            {
+              "name": "Brazil",
+              "value": "BR"
+            },
+            {
+              "name": "British Indian Ocean Territory (the)",
+              "value": "IO"
+            },
+            {
+              "name": "Brunei Darussalam",
+              "value": "BN"
+            },
+            {
+              "name": "Bulgaria",
+              "value": "BG"
+            },
+            {
+              "name": "Burkina Faso",
+              "value": "BF"
+            },
+            {
+              "name": "Burundi",
+              "value": "BI"
+            },
+            {
+              "name": "Cabo Verde",
+              "value": "CV"
+            },
+            {
+              "name": "Cambodia",
+              "value": "KH"
+            },
+            {
+              "name": "Cameroon",
+              "value": "CM"
+            },
+            {
+              "name": "Canada",
+              "value": "CA"
+            },
+            {
+              "name": "Cayman Islands (the)",
+              "value": "KY"
+            },
+            {
+              "name": "Central African Republic (the)",
+              "value": "CF"
+            },
+            {
+              "name": "Chad",
+              "value": "TD"
+            },
+            {
+              "name": "Chile",
+              "value": "CL"
+            },
+            {
+              "name": "China",
+              "value": "CN"
+            },
+            {
+              "name": "Christmas Island",
+              "value": "CX"
+            },
+            {
+              "name": "Cocos (Keeling) Islands (the)",
+              "value": "CC"
+            },
+            {
+              "name": "Colombia",
+              "value": "CO"
+            },
+            {
+              "name": "Comoros (the)",
+              "value": "KM"
+            },
+            {
+              "name": "Congo (the Democratic Republic of the)",
+              "value": "CD"
+            },
+            {
+              "name": "Congo (the)",
+              "value": "CG"
+            },
+            {
+              "name": "Cook Islands (the)",
+              "value": "CK"
+            },
+            {
+              "name": "Costa Rica",
+              "value": "CR"
+            },
+            {
+              "name": "Côte d'Ivoire",
+              "value": "CI"
+            },
+            {
+              "name": "Croatia",
+              "value": "HR"
+            },
+            {
+              "name": "Cuba",
+              "value": "CU"
+            },
+            {
+              "name": "Curaçao",
+              "value": "CW"
+            },
+            {
+              "name": "Cyprus",
+              "value": "CY"
+            },
+            {
+              "name": "Czechia",
+              "value": "CZ"
+            },
+            {
+              "name": "Denmark",
+              "value": "DK"
+            },
+            {
+              "name": "Djibouti",
+              "value": "DJ"
+            },
+            {
+              "name": "Dominica",
+              "value": "DM"
+            },
+            {
+              "name": "Dominican Republic (the)",
+              "value": "DO"
+            },
+            {
+              "name": "Ecuador",
+              "value": "EC"
+            },
+            {
+              "name": "Egypt",
+              "value": "EG"
+            },
+            {
+              "name": "El Salvador",
+              "value": "SV"
+            },
+            {
+              "name": "Equatorial Guinea",
+              "value": "GQ"
+            },
+            {
+              "name": "Eritrea",
+              "value": "ER"
+            },
+            {
+              "name": "Estonia",
+              "value": "EE"
+            },
+            {
+              "name": "Ethiopia",
+              "value": "ET"
+            },
+            {
+              "name": "Falkland Islands (the) [Malvinas]",
+              "value": "FK"
+            },
+            {
+              "name": "Faroe Islands (the)",
+              "value": "FO"
+            },
+            {
+              "name": "Fiji",
+              "value": "FJ"
+            },
+            {
+              "name": "Finland",
+              "value": "FI"
+            },
+            {
+              "name": "France",
+              "value": "FR"
+            },
+            {
+              "name": "French Guiana",
+              "value": "GF"
+            },
+            {
+              "name": "French Polynesia",
+              "value": "PF"
+            },
+            {
+              "name": "French Southern Territories (the)",
+              "value": "TF"
+            },
+            {
+              "name": "Gabon",
+              "value": "GA"
+            },
+            {
+              "name": "Gambia (the)",
+              "value": "GM"
+            },
+            {
+              "name": "Georgia",
+              "value": "GE"
+            },
+            {
+              "name": "Germany",
+              "value": "DE"
+            },
+            {
+              "name": "Ghana",
+              "value": "GH"
+            },
+            {
+              "name": "Gibraltar",
+              "value": "GI"
+            },
+            {
+              "name": "Greece",
+              "value": "GR"
+            },
+            {
+              "name": "Greenland",
+              "value": "GL"
+            },
+            {
+              "name": "Grenada",
+              "value": "GD"
+            },
+            {
+              "name": "Guadeloupe",
+              "value": "GP"
+            },
+            {
+              "name": "Guam",
+              "value": "GU"
+            },
+            {
+              "name": "Guatemala",
+              "value": "GT"
+            },
+            {
+              "name": "Guernsey",
+              "value": "GG"
+            },
+            {
+              "name": "Guinea",
+              "value": "GN"
+            },
+            {
+              "name": "Guinea-Bissau",
+              "value": "GW"
+            },
+            {
+              "name": "Guyana",
+              "value": "GY"
+            },
+            {
+              "name": "Haiti",
+              "value": "HT"
+            },
+            {
+              "name": "Heard Island and McDonald Islands",
+              "value": "HM"
+            },
+            {
+              "name": "Holy See (the)",
+              "value": "VA"
+            },
+            {
+              "name": "Honduras",
+              "value": "HN"
+            },
+            {
+              "name": "Hong Kong",
+              "value": "HK"
+            },
+            {
+              "name": "Hungary",
+              "value": "HU"
+            },
+            {
+              "name": "Iceland",
+              "value": "IS"
+            },
+            {
+              "name": "India",
+              "value": "IN"
+            },
+            {
+              "name": "Indonesia",
+              "value": "ID"
+            },
+            {
+              "name": "Iran (Islamic Republic of)",
+              "value": "IR"
+            },
+            {
+              "name": "Iraq",
+              "value": "IQ"
+            },
+            {
+              "name": "Ireland",
+              "value": "IE"
+            },
+            {
+              "name": "Isle of Man",
+              "value": "IM"
+            },
+            {
+              "name": "Israel",
+              "value": "IL"
+            },
+            {
+              "name": "Italy",
+              "value": "IT"
+            },
+            {
+              "name": "Jamaica",
+              "value": "JM"
+            },
+            {
+              "name": "Japan",
+              "value": "JP"
+            },
+            {
+              "name": "Jersey",
+              "value": "JE"
+            },
+            {
+              "name": "Jordan",
+              "value": "JO"
+            },
+            {
+              "name": "Kazakhstan",
+              "value": "KZ"
+            },
+            {
+              "name": "Kenya",
+              "value": "KE"
+            },
+            {
+              "name": "Kiribati",
+              "value": "KI"
+            },
+            {
+              "name": "Korea (the Democratic People's Republic of)",
+              "value": "KP"
+            },
+            {
+              "name": "Korea (the Republic of)",
+              "value": "KR"
+            },
+            {
+              "name": "Kuwait",
+              "value": "KW"
+            },
+            {
+              "name": "Kyrgyzstan",
+              "value": "KG"
+            },
+            {
+              "name": "Lao People's Democratic Republic (the)",
+              "value": "LA"
+            },
+            {
+              "name": "Latvia",
+              "value": "LV"
+            },
+            {
+              "name": "Lebanon",
+              "value": "LB"
+            },
+            {
+              "name": "Lesotho",
+              "value": "LS"
+            },
+            {
+              "name": "Liberia",
+              "value": "LR"
+            },
+            {
+              "name": "Libya",
+              "value": "LY"
+            },
+            {
+              "name": "Liechtenstein",
+              "value": "LI"
+            },
+            {
+              "name": "Lithuania",
+              "value": "LT"
+            },
+            {
+              "name": "Luxembourg",
+              "value": "LU"
+            },
+            {
+              "name": "Macao",
+              "value": "MO"
+            },
+            {
+              "name": "Macedonia (the former Yugoslav Republic of)",
+              "value": "MK"
+            },
+            {
+              "name": "Madagascar",
+              "value": "MG"
+            },
+            {
+              "name": "Malawi",
+              "value": "MW"
+            },
+            {
+              "name": "Malaysia",
+              "value": "MY"
+            },
+            {
+              "name": "Maldives",
+              "value": "MV"
+            },
+            {
+              "name": "Mali",
+              "value": "ML"
+            },
+            {
+              "name": "Malta",
+              "value": "MT"
+            },
+            {
+              "name": "Marshall Islands (the)",
+              "value": "MH"
+            },
+            {
+              "name": "Martinique",
+              "value": "MQ"
+            },
+            {
+              "name": "Mauritania",
+              "value": "MR"
+            },
+            {
+              "name": "Mauritius",
+              "value": "MU"
+            },
+            {
+              "name": "Mayotte",
+              "value": "YT"
+            },
+            {
+              "name": "Mexico",
+              "value": "MX"
+            },
+            {
+              "name": "Micronesia (Federated States of)",
+              "value": "FM"
+            },
+            {
+              "name": "Moldova (the Republic of)",
+              "value": "MD"
+            },
+            {
+              "name": "Monaco",
+              "value": "MC"
+            },
+            {
+              "name": "Mongolia",
+              "value": "MN"
+            },
+            {
+              "name": "Montenegro",
+              "value": "ME"
+            },
+            {
+              "name": "Montserrat",
+              "value": "MS"
+            },
+            {
+              "name": "Morocco",
+              "value": "MA"
+            },
+            {
+              "name": "Mozambique",
+              "value": "MZ"
+            },
+            {
+              "name": "Myanmar",
+              "value": "MM"
+            },
+            {
+              "name": "Namibia",
+              "value": "NA"
+            },
+            {
+              "name": "Nauru",
+              "value": "NR"
+            },
+            {
+              "name": "Nepal",
+              "value": "NP"
+            },
+            {
+              "name": "Netherlands (the)",
+              "value": "NL"
+            },
+            {
+              "name": "New Caledonia",
+              "value": "NC"
+            },
+            {
+              "name": "New Zealand",
+              "value": "NZ"
+            },
+            {
+              "name": "Nicaragua",
+              "value": "NI"
+            },
+            {
+              "name": "Niger (the)",
+              "value": "NE"
+            },
+            {
+              "name": "Nigeria",
+              "value": "NG"
+            },
+            {
+              "name": "Niue",
+              "value": "NU"
+            },
+            {
+              "name": "Norfolk Island",
+              "value": "NF"
+            },
+            {
+              "name": "Northern Mariana Islands (the)",
+              "value": "MP"
+            },
+            {
+              "name": "Norway",
+              "value": "NO"
+            },
+            {
+              "name": "Oman",
+              "value": "OM"
+            },
+            {
+              "name": "Pakistan",
+              "value": "PK"
+            },
+            {
+              "name": "Palau",
+              "value": "PW"
+            },
+            {
+              "name": "Palestine, State of",
+              "value": "PS"
+            },
+            {
+              "name": "Panama",
+              "value": "PA"
+            },
+            {
+              "name": "Papua New Guinea",
+              "value": "PG"
+            },
+            {
+              "name": "Paraguay",
+              "value": "PY"
+            },
+            {
+              "name": "Peru",
+              "value": "PE"
+            },
+            {
+              "name": "Philippines (the)",
+              "value": "PH"
+            },
+            {
+              "name": "Pitcairn",
+              "value": "PN"
+            },
+            {
+              "name": "Poland",
+              "value": "PL"
+            },
+            {
+              "name": "Portugal",
+              "value": "PT"
+            },
+            {
+              "name": "Puerto Rico",
+              "value": "PR"
+            },
+            {
+              "name": "Qatar",
+              "value": "QA"
+            },
+            {
+              "name": "Réunion",
+              "value": "RE"
+            },
+            {
+              "name": "Romania",
+              "value": "RO"
+            },
+            {
+              "name": "Russian Federation (the)",
+              "value": "RU"
+            },
+            {
+              "name": "Rwanda",
+              "value": "RW"
+            },
+            {
+              "name": "Saint Barthélemy",
+              "value": "BL"
+            },
+            {
+              "name": "Saint Helena, Ascension and Tristan da Cunha",
+              "value": "SH"
+            },
+            {
+              "name": "Saint Kitts and Nevis",
+              "value": "KN"
+            },
+            {
+              "name": "Saint Lucia",
+              "value": "LC"
+            },
+            {
+              "name": "Saint Martin (French part)",
+              "value": "MF"
+            },
+            {
+              "name": "Saint Pierre and Miquelon",
+              "value": "PM"
+            },
+            {
+              "name": "Saint Vincent and the Grenadines",
+              "value": "VC"
+            },
+            {
+              "name": "Samoa",
+              "value": "WS"
+            },
+            {
+              "name": "San Marino",
+              "value": "SM"
+            },
+            {
+              "name": "Sao Tome and Principe",
+              "value": "ST"
+            },
+            {
+              "name": "Saudi Arabia",
+              "value": "SA"
+            },
+            {
+              "name": "Senegal",
+              "value": "SN"
+            },
+            {
+              "name": "Serbia",
+              "value": "RS"
+            },
+            {
+              "name": "Seychelles",
+              "value": "SC"
+            },
+            {
+              "name": "Sierra Leone",
+              "value": "SL"
+            },
+            {
+              "name": "Singapore",
+              "value": "SG"
+            },
+            {
+              "name": "Sint Maarten (Dutch part)",
+              "value": "SX"
+            },
+            {
+              "name": "Slovakia",
+              "value": "SK"
+            },
+            {
+              "name": "Slovenia",
+              "value": "SI"
+            },
+            {
+              "name": "Solomon Islands",
+              "value": "SB"
+            },
+            {
+              "name": "Somalia",
+              "value": "SO"
+            },
+            {
+              "name": "South Africa",
+              "value": "ZA"
+            },
+            {
+              "name": "South Georgia and the South Sandwich Islands",
+              "value": "GS"
+            },
+            {
+              "name": "South Sudan",
+              "value": "SS"
+            },
+            {
+              "name": "Spain",
+              "value": "ES"
+            },
+            {
+              "name": "Sri Lanka",
+              "value": "LK"
+            },
+            {
+              "name": "Sudan (the)",
+              "value": "SD"
+            },
+            {
+              "name": "Suriname",
+              "value": "SR"
+            },
+            {
+              "name": "Svalbard and Jan Mayen",
+              "value": "SJ"
+            },
+            {
+              "name": "Swaziland",
+              "value": "SZ"
+            },
+            {
+              "name": "Sweden",
+              "value": "SE"
+            },
+            {
+              "name": "Switzerland",
+              "value": "CH"
+            },
+            {
+              "name": "Syrian Arab Republic",
+              "value": "SY"
+            },
+            {
+              "name": "Taiwan (Province of China)",
+              "value": "TW"
+            },
+            {
+              "name": "Tajikistan",
+              "value": "TJ"
+            },
+            {
+              "name": "Tanzania, United Republic of",
+              "value": "TZ"
+            },
+            {
+              "name": "Thailand",
+              "value": "TH"
+            },
+            {
+              "name": "Timor-Leste",
+              "value": "TL"
+            },
+            {
+              "name": "Togo",
+              "value": "TG"
+            },
+            {
+              "name": "Tokelau",
+              "value": "TK"
+            },
+            {
+              "name": "Tonga",
+              "value": "TO"
+            },
+            {
+              "name": "Trinidad and Tobago",
+              "value": "TT"
+            },
+            {
+              "name": "Tunisia",
+              "value": "TN"
+            },
+            {
+              "name": "Turkey",
+              "value": "TR"
+            },
+            {
+              "name": "Turkmenistan",
+              "value": "TM"
+            },
+            {
+              "name": "Turks and Caicos Islands (the)",
+              "value": "TC"
+            },
+            {
+              "name": "Tuvalu",
+              "value": "TV"
+            },
+            {
+              "name": "Uganda",
+              "value": "UG"
+            },
+            {
+              "name": "Ukraine",
+              "value": "UA"
+            },
+            {
+              "name": "United Arab Emirates (the)",
+              "value": "AE"
+            },
+            {
+              "name": "United Kingdom of Great Britain and Northern Ireland (the)",
+              "value": "GB"
+            },
+            {
+              "name": "United States Minor Outlying Islands (the)",
+              "value": "UM"
+            },
+            {
+              "name": "United States of America (the)",
+              "value": "US"
+            },
+            {
+              "name": "Uruguay",
+              "value": "UY"
+            },
+            {
+              "name": "Uzbekistan",
+              "value": "UZ"
+            },
+            {
+              "name": "Vanuatu",
+              "value": "VU"
+            },
+            {
+              "name": "Venezuela (Bolivarian Republic of)",
+              "value": "VE"
+            },
+            {
+              "name": "Viet Nam",
+              "value": "VN"
+            },
+            {
+              "name": "Virgin Islands (British)",
+              "value": "VG"
+            },
+            {
+              "name": "Virgin Islands (U.S.)",
+              "value": "VI"
+            },
+            {
+              "name": "Wallis and Futuna",
+              "value": "WF"
+            },
+            {
+              "name": "Western Sahara*",
+              "value": "EH"
+            },
+            {
+              "name": "Yemen",
+              "value": "YE"
+            },
+            {
+              "name": "Zambia",
+              "value": "ZM"
+            },
+            {
+              "name": "Zimbabwe",
+              "value": "ZW"
+            }
+          ],
+          "default": "",
+          "description": "Country of the company to filter by"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name of the company to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the company to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the company"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the company"
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many customer sources"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customerSource"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customerSource"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customerSource"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a lead"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a lead"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a lead"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many leads"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a lead"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the lead to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "placeholder": "Add Email",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Email Fields",
+              "name": "emailFields",
+              "values": [
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "name@email.com",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "leadId",
+      "displayName": "Lead ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the lead to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "leadId",
+      "displayName": "Lead ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the lead to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Country",
+          "name": "country",
+          "type": "string",
+          "default": "",
+          "description": "Name of the country to filter by"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name of the lead to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "leadId",
+      "displayName": "Lead ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the lead to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the lead"
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "placeholder": "Add Email",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Email Fields",
+              "name": "emailFields",
+              "values": [
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "name@email.com",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the lead"
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an opportunity"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete an opportunity"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an opportunity"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many opportunities"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update an opportunity"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the opportunity to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "customerSourceId",
+      "displayName": "Customer Source ID",
+      "type": "string",
+      "default": "",
+      "description": "ID of the customer source that generated this opportunity",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "primaryContactId",
+      "displayName": "Primary Contact ID",
+      "type": "string",
+      "default": "",
+      "description": "ID of the primary company associated with this opportunity",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the opportunity to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the opportunity to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Company IDs",
+          "name": "company_ids",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated IDs of the primary companies to filter by"
+        },
+        {
+          "displayName": "Customer Source IDs",
+          "name": "customer_source_ids",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated IDs of the customer sources to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "opportunityId",
+      "displayName": "Opportunity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the opportunity to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Customer Source ID",
+          "name": "customer_source_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the primary company associated with this opportunity"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the opportunity"
+        },
+        {
+          "displayName": "Primary Contact ID",
+          "name": "primary_contact_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the customer source that generated this opportunity"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a person"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a person"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a person"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many people"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a person"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the person to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the person"
+        },
+        {
+          "displayName": "Email Domain",
+          "name": "email_domain",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Emails",
+          "name": "emails",
+          "placeholder": "Add Email",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Email Fields",
+              "name": "emailFields",
+              "values": [
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "name@email.com",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the person to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the person to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name of the person to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the person to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "address",
+          "placeholder": "Add Address Fields",
+          "type": "fixedCollection",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address Fields",
+              "name": "addressFields",
+              "values": [
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Postal Code",
+                  "name": "postal_code",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "description": "ISO 3166 alpha-2 country code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the person"
+        },
+        {
+          "displayName": "Email Domain",
+          "name": "email_domain",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Emails",
+          "name": "emails",
+          "placeholder": "Add Email",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Email Fields",
+              "name": "emailFields",
+              "values": [
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "name@email.com",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the person"
+        },
+        {
+          "displayName": "Phone Numbers",
+          "name": "phone_numbers",
+          "placeholder": "Add Phone Number",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone Fields",
+              "name": "phoneFields",
+              "values": [
+                {
+                  "displayName": "Number",
+                  "name": "number",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Category",
+                  "name": "category",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a project"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a project"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a project"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many projects"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a project"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the project to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee ID",
+          "name": "assignee_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the user who will own the project to create"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description of the project to create"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "default": "Open",
+          "options": [
+            {
+              "name": "Completed",
+              "value": "Completed"
+            },
+            {
+              "name": "Open",
+              "value": "Open"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the project to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the project to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name of the project to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the project to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee ID",
+          "name": "assignee_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the user who will own the project"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the project"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the project"
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "default": "Open",
+          "options": [
+            {
+              "name": "Completed",
+              "value": "Completed"
+            },
+            {
+              "name": "Open",
+              "value": "Open"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a task"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a task"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a task"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many tasks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee ID",
+          "name": "assignee_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the user who will own the task to create"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description of the task to create"
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "default": "High",
+          "options": [
+            {
+              "name": "High",
+              "value": "High"
+            },
+            {
+              "name": "None",
+              "value": "None"
+            }
+          ]
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "default": "Open",
+          "options": [
+            {
+              "name": "Completed",
+              "value": "Completed"
+            },
+            {
+              "name": "Open",
+              "value": "Open"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filterFields",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee IDs",
+          "name": "assignee_ids",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated IDs of assignee IDs to filter by"
+        },
+        {
+          "displayName": "Project IDs",
+          "name": "project_ids",
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated IDs of project IDs to filter by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "taskId",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the task to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee ID",
+          "name": "assignee_id",
+          "type": "string",
+          "default": "",
+          "description": "ID of the user who will own the task"
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": "",
+          "description": "Description to set for the task"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Name to set for the task"
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "default": "High",
+          "options": [
+            {
+              "name": "High",
+              "value": "High"
+            },
+            {
+              "name": "None",
+              "value": "None"
+            }
+          ]
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "default": "Open",
+          "options": [
+            {
+              "name": "Completed",
+              "value": "Completed"
+            },
+            {
+              "name": "Open",
+              "value": "Open"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many users"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "copperApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "name",
+    "companyId",
+    "companyId",
+    "companyId",
+    "name",
+    "leadId",
+    "leadId",
+    "leadId",
+    "name",
+    "opportunityId",
+    "opportunityId",
+    "opportunityId",
+    "name",
+    "personId",
+    "personId",
+    "personId",
+    "name",
+    "projectId",
+    "projectId",
+    "projectId",
+    "name",
+    "taskId",
+    "taskId",
+    "taskId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "customerSourceId",
+    "primaryContactId",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filterFields",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "name": "string",
+    "additionalFields": "collection",
+    "companyId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filterFields": "collection",
+    "updateFields": "collection",
+    "leadId": "string",
+    "customerSourceId": "string",
+    "primaryContactId": "string",
+    "opportunityId": "string",
+    "personId": "string",
+    "projectId": "string",
+    "taskId": "string"
+  },
+  "hasVersions": false
+}

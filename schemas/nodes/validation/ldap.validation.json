@@ -1,0 +1,893 @@
+{
+  "nodeType": "n8n-nodes-base.ldap",
+  "displayName": "Ldap",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "operation",
+    "nodeDebug",
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "dn",
+    "id",
+    "value",
+    "targetDn",
+    "attributes",
+    "attributes",
+    "baseDN",
+    "searchFor",
+    "customFilter",
+    "attribute",
+    "searchText",
+    "returnAll",
+    "limit",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "search",
+        "enumValues": [
+          "compare",
+          "create",
+          "delete",
+          "rename",
+          "search",
+          "update"
+        ]
+      }
+    },
+    {
+      "field": "nodeDebug",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "modify"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "id",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "value",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "targetDn",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "attributes",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "attribute": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": [
+          "attribute.id"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "attributes",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "add": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "replace": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "delete": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": [
+          "add.id",
+          "replace.id",
+          "delete.id"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "baseDN",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "searchFor",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "customFilter",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": "(objectclass=*)"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "attribute",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "searchText",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "search",
+    "nodeDebug": false,
+    "id": [],
+    "value": "",
+    "targetDn": "",
+    "attributes": {},
+    "baseDN": "",
+    "searchFor": [],
+    "customFilter": "(objectclass=*)",
+    "attribute": [],
+    "searchText": "",
+    "returnAll": false,
+    "limit": 50,
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "modify"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dn",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "id",
+      "condition": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "value",
+      "condition": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "targetDn",
+      "condition": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "attributes",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "attributes",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "baseDN",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "searchFor",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "customFilter",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "attribute",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "searchText",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "searchFor"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "attributes",
+      "validOptions": [
+        "attribute"
+      ],
+      "optionSchemas": {
+        "attribute": [
+          {
+            "field": "id",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "attributes",
+      "validOptions": [
+        "add",
+        "replace",
+        "delete"
+      ],
+      "optionSchemas": {
+        "add": [
+          {
+            "field": "id",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "replace": [
+          {
+            "field": "id",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "delete": [
+          {
+            "field": "id",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+{
+  "name": "googleBooks",
+  "displayName": "Google Books",
+  "description": "Read data from Google Books",
+  "group": [
+    "input",
+    "output"
+  ],
+  "version": [
+    1,
+    2
+  ],
+  "defaults": {
+    "authentication": "serviceAccount",
+    "resource": "bookshelf",
+    "operation": "get",
+    "myLibrary": false,
+    "searchQuery": "",
+    "userId": "",
+    "shelfId": "",
+    "volumeId": "",
+    "volumePosition": "",
+    "returnAll": false,
+    "limit": 40
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "serviceAccount",
+      "options": [
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "oAuth2",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "bookshelf",
+      "options": [
+        {
+          "name": "Bookshelf",
+          "value": "bookshelf"
+        },
+        {
+          "name": "Bookshelf Volume",
+          "value": "bookshelfVolume"
+        },
+        {
+          "name": "Volume",
+          "value": "volume"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a specific bookshelf resource for the specified user",
+          "action": "Get a bookshelf"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many public bookshelf resource for the specified user",
+          "action": "Get many bookshelves"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookshelf"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add a volume to a bookshelf",
+          "action": "Add a bookshelf volume"
+        },
+        {
+          "name": "Clear",
+          "value": "clear",
+          "description": "Clears all volumes from a bookshelf",
+          "action": "Clear a bookshelf volume"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many volumes in a specific bookshelf for the specified user",
+          "action": "Get many bookshelf volumes"
+        },
+        {
+          "name": "Move",
+          "value": "move",
+          "description": "Moves a volume within a bookshelf",
+          "action": "Move a bookshelf volume"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Removes a volume from a bookshelf",
+          "action": "Remove a bookshelf volume"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookshelfVolume"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a volume resource based on ID",
+          "action": "Get a volume"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many volumes filtered by query",
+          "action": "Get many volumes"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "volume"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "myLibrary",
+      "displayName": "My Library",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "resource": [
+            "bookshelf",
+            "bookshelfVolume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "searchQuery",
+      "displayName": "Search Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Full-text search query string",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "volume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of user",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "resource": [
+            "bookshelf",
+            "bookshelfVolume"
+          ]
+        },
+        "hide": {
+          "myLibrary": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "shelfId",
+      "displayName": "Bookshelf ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the bookshelf",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "add",
+            "clear",
+            "move",
+            "remove"
+          ],
+          "resource": [
+            "bookshelf",
+            "bookshelfVolume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "shelfId",
+      "displayName": "Bookshelf ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the bookshelf",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "bookshelfVolume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "volumeId",
+      "displayName": "Volume ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the volume",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add",
+            "move",
+            "remove",
+            "get"
+          ],
+          "resource": [
+            "bookshelfVolume",
+            "volume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "volumePosition",
+      "displayName": "Volume Position",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Position on shelf to move the item (0 puts the item before the current first item, 1 puts it between the first and the second and so on)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "bookshelfVolume"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 40,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 40
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleBooksOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "myLibrary",
+    "searchQuery",
+    "userId",
+    "shelfId",
+    "shelfId",
+    "volumeId",
+    "volumePosition"
+  ],
+  "optionalFields": [
+    "authentication",
+    "authentication",
+    "resource",
+    "operation",
+    "operation",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "myLibrary": "boolean",
+    "searchQuery": "string",
+    "userId": "string",
+    "shelfId": "string",
+    "volumeId": "string",
+    "volumePosition": "string",
+    "returnAll": "boolean",
+    "limit": "number"
+  },
+  "hasVersions": false
+}

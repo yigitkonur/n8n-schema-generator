@@ -1,0 +1,517 @@
+{
+  "name": "jinaAi",
+  "displayName": "Jina AI",
+  "description": "Interact with Jina AI API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "reader",
+    "operation": "read",
+    "url": "",
+    "simplify": true,
+    "options": {},
+    "searchQuery": "",
+    "researchQuery": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "reader",
+      "options": [
+        {
+          "name": "Reader",
+          "value": "reader"
+        },
+        {
+          "name": "Research",
+          "value": "research"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "read",
+      "options": [
+        {
+          "name": "Read",
+          "value": "read",
+          "action": "Read URL content",
+          "description": "Fetches content from a URL and converts it to clean, LLM-friendly formats",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=https://r.jina.ai/{{ $parameter[\"url\"] }}",
+              "headers": {
+                "X-Return-Format": "={{ $parameter[\"options\"][\"outputFormat\"] }}",
+                "X-Target-Selector": "={{ $parameter[\"options\"][\"targetSelector\"] }}",
+                "X-Remove-Selector": "={{ $parameter[\"options\"][\"excludeSelector\"] }}",
+                "X-With-Generated-Alt": "={{ $parameter[\"options\"][\"enableImageCaptioning\"] }}",
+                "X-Wait-For-Selector": "={{ $parameter[\"options\"][\"waitForSelector\"] }}"
+              }
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "enabled": "={{ $parameter[\"simplify\"] }}",
+                  "properties": {
+                    "property": "data"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search",
+          "value": "search",
+          "action": "Search web",
+          "description": "Performs a web search via Jina AI and returns top results as clean, LLM-friendly formats",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "https://s.jina.ai/",
+              "headers": {
+                "X-Return-Format": "={{ $parameter[\"options\"][\"outputFormat\"] }}",
+                "X-Site": "={{ $parameter[\"options\"][\"siteFilter\"] }}"
+              },
+              "qs": {
+                "q": "={{ $parameter[\"searchQuery\"] }}",
+                "page": "={{ $parameter[\"options\"][\"pageNumber\"] }}"
+              }
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "enabled": "={{ $parameter[\"simplify\"] }}",
+                  "properties": {
+                    "property": "data"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "deepResearch",
+      "options": [
+        {
+          "name": "Deep Research",
+          "value": "deepResearch",
+          "action": "Perform deep research",
+          "description": "Research a topic and generate a structured research report",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "https://deepsearch.jina.ai/v1/chat/completions",
+              "body": {
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "={{ $parameter[\"researchQuery\"] }}"
+                  }
+                ],
+                "max_returned_urls": "={{ $parameter[\"options\"][\"maxReturnedSources\"] }}",
+                "boost_hostnames": "={{ $parameter[\"options\"][\"prioritizeSources\"].split(/,\\s*/) }}",
+                "bad_hostnames": "={{ $parameter[\"options\"][\"excludeSources\"].split(/,\\s*/) }}",
+                "only_hostnames": "={{ $parameter[\"options\"][\"siteFilter\"].split(/,\\s*/) }}"
+              }
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "setKeyValue",
+                  "enabled": "={{ $parameter[\"simplify\"] }}",
+                  "properties": {
+                    "content": "={{ $responseItem[\"choices\"][0][\"message\"][\"content\"] }}",
+                    "annotations": "={{ $responseItem[\"choices\"][0][\"message\"][\"annotations\"] }}",
+                    "usage": "={{ $responseItem[\"usage\"] }}"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL to fetch content from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "placeholder": "https://jina.ai/"
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "read"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Output Format",
+          "name": "outputFormat",
+          "description": "Specify desired output format",
+          "type": "options",
+          "options": [
+            {
+              "name": "HTML",
+              "value": "html"
+            },
+            {
+              "name": "JSON",
+              "value": ""
+            },
+            {
+              "name": "Markdown",
+              "value": "markdown"
+            },
+            {
+              "name": "Screenshot",
+              "value": "screenshot"
+            },
+            {
+              "name": "Text",
+              "value": "text"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Target CSS Selector",
+          "name": "targetSelector",
+          "type": "string",
+          "description": "CSS selector to focus on specific page elements",
+          "default": "",
+          "placeholder": "e.g. #main-content .article"
+        },
+        {
+          "displayName": "Exclude CSS Selector",
+          "name": "excludeSelector",
+          "type": "string",
+          "description": "CSS selector for elements to exclude",
+          "default": "",
+          "placeholder": "e.g. header, footer, .ads"
+        },
+        {
+          "displayName": "Enable Image Captioning",
+          "name": "enableImageCaptioning",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to generate captions for images within the content"
+        },
+        {
+          "displayName": "Wait for CSS Selector",
+          "name": "waitForSelector",
+          "type": "string",
+          "description": "Wait for a specific element to appear before extracting content (for dynamic pages)",
+          "default": "",
+          "placeholder": "e.g. #results-loaded"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "searchQuery",
+      "displayName": "Search Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "e.g. Jina AI"
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Output Format",
+          "name": "outputFormat",
+          "description": "Specify desired output format",
+          "type": "options",
+          "options": [
+            {
+              "name": "HTML",
+              "value": "html"
+            },
+            {
+              "name": "JSON",
+              "value": ""
+            },
+            {
+              "name": "Markdown",
+              "value": "markdown"
+            },
+            {
+              "name": "Screenshot",
+              "value": "screenshot"
+            },
+            {
+              "name": "Text",
+              "value": "text"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Site Filter",
+          "name": "siteFilter",
+          "type": "string",
+          "description": "Restrict search to specific websites",
+          "default": "",
+          "placeholder": "e.g. jina.ai, github.com"
+        },
+        {
+          "displayName": "Page Number",
+          "name": "pageNumber",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1,
+            "numberPrecision": 0
+          },
+          "description": "The page number of the search results to retrieve",
+          "default": "",
+          "placeholder": "1"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "researchQuery",
+      "displayName": "Research Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The topic or question for the AI to research",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      },
+      "placeholder": "e.g. Analyze the impact of renewable energy sources on climate change mitigation"
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Max Returned Sources",
+          "name": "maxReturnedSources",
+          "description": "The maximum number of URLs to include in the final answer",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1,
+            "numberPrecision": 0
+          },
+          "default": "",
+          "placeholder": "e.g. 5"
+        },
+        {
+          "displayName": "Prioritize Sources",
+          "name": "prioritizeSources",
+          "type": "string",
+          "description": "A list of domains that are given a higher priority for content retrieval",
+          "default": "",
+          "placeholder": "e.g. jina.ai, github.com"
+        },
+        {
+          "displayName": "Exclude Sources",
+          "name": "excludeSources",
+          "type": "string",
+          "description": "A list of domains to be strictly excluded from content retrieval",
+          "default": "",
+          "placeholder": "e.g. jina.ai, github.com"
+        },
+        {
+          "displayName": "Site Filter",
+          "name": "siteFilter",
+          "type": "string",
+          "description": "Restrict search to specific websites",
+          "default": "",
+          "placeholder": "e.g. jina.ai, github.com"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "jinaAiApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "url",
+    "searchQuery",
+    "researchQuery"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "simplify",
+    "options",
+    "simplify",
+    "options",
+    "simplify",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "url": "string",
+    "simplify": "boolean",
+    "options": "collection",
+    "searchQuery": "string",
+    "researchQuery": "string"
+  },
+  "hasVersions": false
+}

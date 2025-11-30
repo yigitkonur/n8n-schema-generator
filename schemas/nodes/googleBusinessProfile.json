@@ -1,0 +1,1564 @@
+{
+  "name": "googleBusinessProfile",
+  "displayName": "Google Business Profile",
+  "description": "Consume Google Business Profile API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "post",
+    "operation": "create",
+    "account": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "location": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "postType": "STANDARD",
+    "summary": "",
+    "startDateTime": "",
+    "endDateTime": "",
+    "startDate": "",
+    "endDate": "",
+    "alertType": "COVID_19",
+    "additionalOptions": {},
+    "notice": "",
+    "reply": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "post",
+      "options": [
+        {
+          "name": "Post",
+          "value": "post"
+        },
+        {
+          "name": "Review",
+          "value": "review"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create post",
+          "description": "Create a new post on Google Business Profile",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "request": {
+              "method": "POST",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/localPosts"
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete post",
+          "description": "Delete an existing post",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/{{$parameter[\"post\"]}}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get post",
+          "description": "Retrieve details of a specific post",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/{{$parameter[\"post\"]}}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many posts",
+          "description": "Retrieve multiple posts",
+          "routing": {
+            "send": {
+              "paginate": true
+            },
+            "operations": {},
+            "request": {
+              "method": "GET",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/localPosts",
+              "qs": {
+                "pageSize": "={{ $parameter[\"limit\"] ? ($parameter[\"limit\"] < 100 ? $parameter[\"limit\"] : 100) : 100 }}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a post",
+          "description": "Update an existing post",
+          "routing": {
+            "send": {
+              "preSend": [
+                null,
+                null
+              ]
+            },
+            "request": {
+              "method": "PATCH",
+              "url": "=/{{$parameter[\"post\"]}}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "postType",
+      "displayName": "Post Type",
+      "type": "options",
+      "default": "STANDARD",
+      "required": true,
+      "description": "The type of post to create (standard, event, offer, or alert)",
+      "options": [
+        {
+          "name": "Standard",
+          "value": "STANDARD"
+        },
+        {
+          "name": "Event",
+          "value": "EVENT"
+        },
+        {
+          "name": "Offer",
+          "value": "OFFER"
+        },
+        {
+          "name": "Alert",
+          "value": "ALERT"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "topicType"
+        }
+      }
+    },
+    {
+      "name": "summary",
+      "displayName": "Summary",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The main text of the post",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "summary"
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "E.g. Sales this week.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "EVENT"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "event.title"
+        }
+      }
+    },
+    {
+      "name": "startDateTime",
+      "displayName": "Start Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "The start date and time of the event",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "EVENT"
+          ]
+        }
+      }
+    },
+    {
+      "name": "endDateTime",
+      "displayName": "End Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "required": true,
+      "description": "The end date and time of the event",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "EVENT"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "E.g. 20% off in store or online.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "event.title"
+        }
+      }
+    },
+    {
+      "name": "startDate",
+      "displayName": "Start Date",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The start date of the offer",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "placeholder": "YYYY-MM-DD"
+    },
+    {
+      "name": "endDate",
+      "displayName": "End Date",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The end date of the offer",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "placeholder": "YYYY-MM-DD"
+    },
+    {
+      "name": "alertType",
+      "displayName": "Alert Type",
+      "type": "options",
+      "default": "COVID_19",
+      "required": true,
+      "description": "The sub-type of the alert",
+      "options": [
+        {
+          "name": "Covid 19",
+          "value": "COVID_19",
+          "description": "This alert is related to the 2019 Coronavirus Disease pandemic"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "ALERT"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "alertType"
+        }
+      }
+    },
+    {
+      "name": "additionalOptions",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Language",
+          "name": "languageCode",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. en",
+          "description": "The language code of the post content. <a href=\"https://cloud.google.com/translate/docs/languages\" target=\"_blank\">More info</a>.",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "languageCode"
+            }
+          }
+        },
+        {
+          "displayName": "Call to Action Type",
+          "name": "callToActionType",
+          "type": "options",
+          "default": "ACTION_TYPE_UNSPECIFIED",
+          "description": "The type of call to action",
+          "displayOptions": {
+            "show": {
+              "/postType": [
+                "STANDARD",
+                "EVENT",
+                "ALERT"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "callToAction.actionType"
+            }
+          },
+          "options": [
+            {
+              "name": "Action Type Unspecified",
+              "value": "ACTION_TYPE_UNSPECIFIED",
+              "description": "Type unspecified"
+            },
+            {
+              "name": "Book",
+              "value": "BOOK",
+              "description": "This post wants a user to book an appointment/table/etc"
+            },
+            {
+              "name": "Call",
+              "value": "CALL",
+              "description": "This post wants a user to call the business"
+            },
+            {
+              "name": "Learn More",
+              "value": "LEARN_MORE",
+              "description": "This post wants a user to learn more (at their website)"
+            },
+            {
+              "name": "Order",
+              "value": "ORDER",
+              "description": "This post wants a user to order something"
+            },
+            {
+              "name": "Shop",
+              "value": "SHOP",
+              "description": "This post wants a user to browse a product catalog"
+            },
+            {
+              "name": "Sign Up",
+              "value": "SIGN_UP",
+              "description": "This post wants a user to register/sign up/join something"
+            }
+          ]
+        },
+        {
+          "displayName": "Call to Action Url",
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "The URL that users are sent to when clicking through the promotion",
+          "displayOptions": {
+            "show": {
+              "/postType": [
+                "STANDARD",
+                "EVENT",
+                "ALERT"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "callToAction.url"
+            }
+          }
+        },
+        {
+          "displayName": "Coupon Code",
+          "name": "couponCode",
+          "type": "string",
+          "default": "",
+          "description": "The coupon code for the offer",
+          "displayOptions": {
+            "show": {
+              "/postType": [
+                "OFFER"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.couponCode"
+            }
+          }
+        },
+        {
+          "displayName": "Redeem Online Url",
+          "name": "redeemOnlineUrl",
+          "type": "string",
+          "default": "",
+          "description": "Link to redeem the offer",
+          "displayOptions": {
+            "show": {
+              "/postType": [
+                "OFFER"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.redeemOnlineUrl"
+            }
+          }
+        },
+        {
+          "displayName": "Terms and Conditions",
+          "name": "termsConditions",
+          "type": "string",
+          "default": "",
+          "description": "The terms and conditions of the offer",
+          "displayOptions": {
+            "show": {
+              "/postType": [
+                "OFFER"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.termsConditions"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "post",
+      "displayName": "Post",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "description": "Select the post to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "post",
+      "displayName": "Post",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "description": "Select the post to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "post",
+      "displayName": "Post",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "description": "Select the post to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "notice",
+      "displayName": "Make sure that the updated options are supported by the post type. <a target='_blank' href='https://developers.google.com/my-business/reference/rest/v4/accounts.locations.localPosts#resource:-localpost'>More info</a>.",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalOptions",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Summary",
+          "name": "summary",
+          "type": "string",
+          "default": "",
+          "description": "The main text of the post",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "summary"
+            }
+          }
+        },
+        {
+          "displayName": "Language",
+          "name": "languageCode",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. en",
+          "description": "The language code of the post content. <a href=\"https://cloud.google.com/translate/docs/languages\" target=\"_blank\">More info</a>.",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "languageCode"
+            }
+          }
+        },
+        {
+          "displayName": "Call to Action Type",
+          "name": "callToActionType",
+          "type": "options",
+          "default": "ACTION_TYPE_UNSPECIFIED",
+          "description": "The type of call to action",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "callToAction.actionType"
+            }
+          },
+          "options": [
+            {
+              "name": "Action Type Unspecified",
+              "value": "ACTION_TYPE_UNSPECIFIED",
+              "description": "Type unspecified"
+            },
+            {
+              "name": "Book",
+              "value": "BOOK",
+              "description": "This post wants a user to book an appointment/table/etc"
+            },
+            {
+              "name": "Get Offer",
+              "value": "GET_OFFER",
+              "description": "Deprecated. Use OFFER in LocalPostTopicType to create a post with offer content."
+            },
+            {
+              "name": "Learn More",
+              "value": "LEARN_MORE",
+              "description": "This post wants a user to learn more (at their website)"
+            },
+            {
+              "name": "Order",
+              "value": "ORDER",
+              "description": "This post wants a user to order something"
+            },
+            {
+              "name": "Shop",
+              "value": "SHOP",
+              "description": "This post wants a user to browse a product catalog"
+            },
+            {
+              "name": "Sign Up",
+              "value": "SIGN_UP",
+              "description": "This post wants a user to register/sign up/join something"
+            }
+          ]
+        },
+        {
+          "displayName": "Call to Action Url",
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "The URL that users are sent to when clicking through the promotion",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "callToAction.url"
+            }
+          }
+        },
+        {
+          "displayName": "Start Date and Time",
+          "name": "startDateTime",
+          "type": "dateTime",
+          "default": "",
+          "description": "The start date and time of the event"
+        },
+        {
+          "displayName": "End Date and Time",
+          "name": "endDateTime",
+          "type": "dateTime",
+          "default": "",
+          "description": "The end date and time of the event"
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "E.g. 20% off in store or online.",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "event.title"
+            }
+          }
+        },
+        {
+          "displayName": "Start Date",
+          "name": "startDate",
+          "type": "string",
+          "default": "",
+          "placeholder": "YYYY-MM-DD",
+          "description": "The start date of the offer"
+        },
+        {
+          "displayName": "End Date",
+          "name": "endDate",
+          "type": "string",
+          "default": "",
+          "placeholder": "YYYY-MM-DD",
+          "description": "The end date of the offer"
+        },
+        {
+          "displayName": "Coupon Code",
+          "name": "couponCode",
+          "type": "string",
+          "default": "",
+          "description": "The coupon code for the offer",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.couponCode"
+            }
+          }
+        },
+        {
+          "displayName": "Redeem Online Url",
+          "name": "redeemOnlineUrl",
+          "type": "string",
+          "default": "",
+          "description": "Link to redeem the offer",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.redeemOnlineUrl"
+            }
+          }
+        },
+        {
+          "displayName": "Terms and Conditions",
+          "name": "termsConditions",
+          "type": "string",
+          "default": "",
+          "description": "The terms and conditions of the offer",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "offer.termsConditions"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Delete Reply",
+          "value": "delete",
+          "action": "Delete a reply to a review",
+          "description": "Delete a reply to a review",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/reviews/{{$parameter[\"review\"].split(\"reviews/\").pop().split(\"/reply\")[0]}}/reply",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get review",
+          "description": "Retrieve details of a specific review on Google Business Profile",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/reviews/{{$parameter[\"review\"].split(\"reviews/\").pop().split(\"/reply\")[0]}}",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many reviews",
+          "description": "Retrieve multiple reviews",
+          "routing": {
+            "send": {
+              "paginate": true
+            },
+            "operations": {},
+            "request": {
+              "method": "GET",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/reviews",
+              "qs": {
+                "pageSize": "={{ $parameter[\"limit\"] ? ($parameter[\"limit\"] < 50 ? $parameter[\"limit\"] : 50) : 50 }}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Reply",
+          "value": "reply",
+          "action": "Reply to review",
+          "description": "Reply to a review",
+          "routing": {
+            "request": {
+              "method": "PUT",
+              "url": "=/{{$parameter[\"account\"]}}/{{$parameter[\"location\"]}}/reviews/{{$parameter[\"review\"].split(\"reviews/\").pop().split(\"/reply\")[0]}}/reply",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "review",
+      "displayName": "Review",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the review to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "review",
+      "displayName": "Review",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the review to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "required": true,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "account",
+      "displayName": "Account",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The Google Business Profile account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      }
+    },
+    {
+      "name": "location",
+      "displayName": "Location",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The specific location or business associated with the account",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      }
+    },
+    {
+      "name": "review",
+      "displayName": "Review",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the review to retrieve its details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      }
+    },
+    {
+      "name": "reply",
+      "displayName": "Reply",
+      "type": "string",
+      "default": "",
+      "description": "The body of the reply (up to 4096 characters)",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "comment"
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleBusinessProfileOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "account",
+    "location",
+    "postType",
+    "summary",
+    "title",
+    "startDateTime",
+    "endDateTime",
+    "title",
+    "startDate",
+    "endDate",
+    "alertType",
+    "account",
+    "location",
+    "account",
+    "location",
+    "account",
+    "location",
+    "account",
+    "location",
+    "account",
+    "location",
+    "review",
+    "account",
+    "location",
+    "review",
+    "account",
+    "location",
+    "limit",
+    "account",
+    "location",
+    "review"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalOptions",
+    "post",
+    "post",
+    "returnAll",
+    "limit",
+    "post",
+    "notice",
+    "additionalOptions",
+    "operation",
+    "returnAll",
+    "reply"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "account": "resourceLocator",
+    "location": "resourceLocator",
+    "postType": "options",
+    "summary": "string",
+    "title": "string",
+    "startDateTime": "dateTime",
+    "endDateTime": "dateTime",
+    "startDate": "string",
+    "endDate": "string",
+    "alertType": "options",
+    "additionalOptions": "collection",
+    "post": "resourceLocator",
+    "returnAll": "boolean",
+    "limit": "number",
+    "notice": "notice",
+    "review": "resourceLocator",
+    "reply": "string"
+  },
+  "hasVersions": false
+}

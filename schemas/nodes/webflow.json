@@ -1,0 +1,583 @@
+{
+  "name": "webflow",
+  "displayName": "Webflow",
+  "description": "Consume the Webflow API",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    2
+  ],
+  "defaults": {
+    "resource": "item",
+    "operation": "get",
+    "fieldsUi": {},
+    "siteId": "",
+    "collectionId": "",
+    "itemId": "",
+    "returnAll": false,
+    "limit": 100
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "item",
+      "options": [
+        {
+          "name": "Item",
+          "value": "item"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an item"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteItem",
+          "action": "Delete an item"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many items"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update an item"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the site containing the collection whose items to add to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the collection to add an item to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections",
+        "loadOptionsDependsOn": [
+          "siteId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "live",
+      "displayName": "Live",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether the item should be published on the live site",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Fields",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "fieldValues",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldId",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsMethod": "getFields",
+                "loadOptionsDependsOn": [
+                  "collectionId"
+                ]
+              },
+              "default": "",
+              "description": "Field to set for the item to create. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": "",
+              "description": "Value to set for the item to create"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the site containing the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "deleteItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections",
+        "loadOptionsDependsOn": [
+          "siteId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "deleteItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "itemId",
+      "displayName": "Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the item to operate on",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "deleteItem"
+          ]
+        }
+      }
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the site containing the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections",
+        "loadOptionsDependsOn": [
+          "siteId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "itemId",
+      "displayName": "Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the item to operate on",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the site containing the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the collection whose items to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections",
+        "loadOptionsDependsOn": [
+          "siteId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the site containing the collection whose items to add to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the collection to add an item to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections",
+        "loadOptionsDependsOn": [
+          "siteId"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "itemId",
+      "displayName": "Item ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the item to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "live",
+      "displayName": "Live",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether the item should be published on the live site",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "displayName": "Fields",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Field",
+          "name": "fieldValues",
+          "values": [
+            {
+              "displayName": "Field Name or ID",
+              "name": "fieldId",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsMethod": "getFields",
+                "loadOptionsDependsOn": [
+                  "collectionId"
+                ]
+              },
+              "default": "",
+              "description": "Field to set for the item to create. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": "",
+              "description": "Value to set for the item to create"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "webflowOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "siteId",
+    "collectionId",
+    "live",
+    "siteId",
+    "collectionId",
+    "itemId",
+    "siteId",
+    "collectionId",
+    "itemId",
+    "siteId",
+    "collectionId",
+    "siteId",
+    "collectionId",
+    "itemId",
+    "live"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "fieldsUi",
+    "returnAll",
+    "limit",
+    "fieldsUi"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "siteId": "options",
+    "collectionId": "options",
+    "live": "boolean",
+    "fieldsUi": "fixedCollection",
+    "itemId": "string",
+    "returnAll": "boolean",
+    "limit": "number"
+  },
+  "hasVersions": true,
+  "availableVersions": [
+    1,
+    2
+  ],
+  "defaultVersion": 2
+}

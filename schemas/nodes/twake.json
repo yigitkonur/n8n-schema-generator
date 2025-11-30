@@ -1,0 +1,144 @@
+{
+  "name": "twake",
+  "displayName": "Twake",
+  "description": "Consume Twake API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "message",
+    "operation": "send",
+    "channelId": "",
+    "content": "",
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "message",
+      "options": [
+        {
+          "name": "Message",
+          "value": "message",
+          "description": "Send data to the message app"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "description": "Send a message",
+          "action": "Send a message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "channelId",
+      "displayName": "Channel Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Channel's ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getChannels"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "content",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Message content",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Sender Icon",
+          "name": "senderIcon",
+          "type": "string",
+          "default": "",
+          "description": "URL of the image/icon"
+        },
+        {
+          "displayName": "Sender Name",
+          "name": "senderName",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "twakeCloudApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "content"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "channelId",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "channelId": "options",
+    "content": "string",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

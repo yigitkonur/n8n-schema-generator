@@ -1,0 +1,2446 @@
+{
+  "name": "mySql",
+  "displayName": "MySQL",
+  "description": "Get, add and update data in MySQL",
+  "group": [
+    "input"
+  ],
+  "version": [
+    2,
+    2.1,
+    2.2,
+    2.3,
+    2.4,
+    2.5
+  ],
+  "defaults": {
+    "resource": "database",
+    "operation": "insert",
+    "table": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "deleteCommand": "truncate",
+    "where": {},
+    "options": {},
+    "query": "",
+    "valuesToSend": {},
+    "returnAll": false,
+    "limit": 50,
+    "sort": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "hidden",
+      "default": "database",
+      "options": [
+        {
+          "name": "Database",
+          "value": "database"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "insert",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "deleteTable",
+          "description": "Delete an entire table or rows in a table",
+          "action": "Delete table or rows"
+        },
+        {
+          "name": "Execute SQL",
+          "value": "executeQuery",
+          "description": "Execute an SQL query",
+          "action": "Execute a SQL query"
+        },
+        {
+          "name": "Insert",
+          "value": "insert",
+          "description": "Insert rows in a table",
+          "action": "Insert rows in a table"
+        },
+        {
+          "name": "Insert or Update",
+          "value": "upsert",
+          "description": "Insert or update rows in a table",
+          "action": "Insert or update rows in a table"
+        },
+        {
+          "name": "Select",
+          "value": "select",
+          "description": "Select rows from a table",
+          "action": "Select rows from a table"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update rows in a table",
+          "action": "Update rows in a table"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "table",
+      "displayName": "Table",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The table you want to work on",
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      }
+    },
+    {
+      "name": "deleteCommand",
+      "displayName": "Command",
+      "type": "options",
+      "default": "truncate",
+      "options": [
+        {
+          "name": "Truncate",
+          "value": "truncate",
+          "description": "Only removes the table's data and preserves the table's structure"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete the rows that match the 'Select Rows' conditions below. If no selection is made, all rows in the table are deleted."
+        },
+        {
+          "name": "Drop",
+          "value": "drop",
+          "description": "Deletes the table's data and also the table's structure permanently"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "where",
+      "displayName": "Select Rows",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "If not set, all rows will be selected",
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "default": "",
+              "placeholder": "e.g. ID",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumns",
+                "loadOptionsDependsOn": [
+                  "schema.value",
+                  "table.value"
+                ]
+              }
+            },
+            {
+              "displayName": "Operator",
+              "name": "condition",
+              "type": "options",
+              "description": "The operator to check the column against. When using 'LIKE' operator percent sign ( %) matches zero or more characters, underscore ( _ ) matches any single character.",
+              "options": [
+                {
+                  "name": "Equal",
+                  "value": "equal"
+                },
+                {
+                  "name": "Not Equal",
+                  "value": "!="
+                },
+                {
+                  "name": "Like",
+                  "value": "LIKE"
+                },
+                {
+                  "name": "Greater Than",
+                  "value": ">"
+                },
+                {
+                  "name": "Less Than",
+                  "value": "<"
+                },
+                {
+                  "name": "Greater Than Or Equal",
+                  "value": ">="
+                },
+                {
+                  "name": "Less Than Or Equal",
+                  "value": "<="
+                },
+                {
+                  "name": "Is Null",
+                  "value": "IS NULL"
+                },
+                {
+                  "name": "Is Not Null",
+                  "value": "IS NOT NULL"
+                }
+              ],
+              "default": "equal"
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "IS NULL",
+                    "IS NOT NULL"
+                  ]
+                }
+              },
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "combineConditions",
+      "displayName": "Combine Conditions",
+      "type": "options",
+      "default": "AND",
+      "description": "How to combine the conditions defined in \"Select Rows\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "options": [
+        {
+          "name": "AND",
+          "value": "AND",
+          "description": "Only rows that meet all the conditions are selected"
+        },
+        {
+          "name": "OR",
+          "value": "OR",
+          "description": "Rows that meet at least one condition are selected"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "query",
+      "displayName": "Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The SQL query to execute. You can use n8n expressions and $1, $2, $3, etc to refer to the 'Query Parameters' set in options below.",
+      "typeOptions": {
+        "editor": "sqlEditor",
+        "sqlDialect": "MySQL"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "placeholder": "e.g. SELECT id, name FROM product WHERE id < 40",
+      "hint": "Consider using query parameters to prevent SQL injection attacks. Add them in the options below",
+      "noDataExpression": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "autoMapInputData",
+      "description": "Whether to map node input properties and the table data automatically or manually",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties names exactly match the table column names"
+        },
+        {
+          "name": "Map Each Column Manually",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column manually"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "notice",
+      "displayName": "\n\t\tIn this mode, make sure incoming data fields are named the same as the columns in your table. If needed, use an 'Edit Fields' node before this node to change the field names.\n\t\t",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "displayName": "Values to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumns",
+                "loadOptionsDependsOn": [
+                  "table.value"
+                ]
+              },
+              "default": []
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Value",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Value"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "where",
+      "displayName": "Select Rows",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "If not set, all rows will be selected",
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "default": "",
+              "placeholder": "e.g. ID",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumns",
+                "loadOptionsDependsOn": [
+                  "schema.value",
+                  "table.value"
+                ]
+              }
+            },
+            {
+              "displayName": "Operator",
+              "name": "condition",
+              "type": "options",
+              "description": "The operator to check the column against. When using 'LIKE' operator percent sign ( %) matches zero or more characters, underscore ( _ ) matches any single character.",
+              "options": [
+                {
+                  "name": "Equal",
+                  "value": "equal"
+                },
+                {
+                  "name": "Not Equal",
+                  "value": "!="
+                },
+                {
+                  "name": "Like",
+                  "value": "LIKE"
+                },
+                {
+                  "name": "Greater Than",
+                  "value": ">"
+                },
+                {
+                  "name": "Less Than",
+                  "value": "<"
+                },
+                {
+                  "name": "Greater Than Or Equal",
+                  "value": ">="
+                },
+                {
+                  "name": "Less Than Or Equal",
+                  "value": "<="
+                },
+                {
+                  "name": "Is Null",
+                  "value": "IS NULL"
+                },
+                {
+                  "name": "Is Not Null",
+                  "value": "IS NOT NULL"
+                }
+              ],
+              "default": "equal"
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "displayOptions": {
+                "hide": {
+                  "condition": [
+                    "IS NULL",
+                    "IS NOT NULL"
+                  ]
+                }
+              },
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Condition"
+    },
+    {
+      "name": "combineConditions",
+      "displayName": "Combine Conditions",
+      "type": "options",
+      "default": "AND",
+      "description": "How to combine the conditions defined in \"Select Rows\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "options": [
+        {
+          "name": "AND",
+          "value": "AND",
+          "description": "Only rows that meet all the conditions are selected"
+        },
+        {
+          "name": "OR",
+          "value": "OR",
+          "description": "Rows that meet at least one condition are selected"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "sort",
+      "displayName": "Sort",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "default": "",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumns",
+                "loadOptionsDependsOn": [
+                  "schema.value",
+                  "table.value"
+                ]
+              }
+            },
+            {
+              "displayName": "Direction",
+              "name": "direction",
+              "type": "options",
+              "options": [
+                {
+                  "name": "ASC",
+                  "value": "ASC"
+                },
+                {
+                  "name": "DESC",
+                  "value": "DESC"
+                }
+              ],
+              "default": "ASC"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Sort Rule"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "autoMapInputData",
+      "description": "Whether to map node input properties and the table data automatically or manually",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties names exactly match the table column names"
+        },
+        {
+          "name": "Map Each Column Below",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column manually"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "notice",
+      "displayName": "\n\t\tIn this mode, make sure incoming data fields are named the same as the columns in your table. If needed, use an 'Edit Fields' node before this node to change the field names.\n\t\t",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "columnToMatchOn",
+      "displayName": "Column to Match On",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getColumns",
+        "loadOptionsDependsOn": [
+          "schema.value",
+          "table.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "hint": "Used to find the correct row to update. Doesn't get changed."
+    },
+    {
+      "name": "valueToMatchOn",
+      "displayName": "Value of Column to Match On",
+      "type": "string",
+      "default": "",
+      "description": "Rows with a value in the specified \"Column to Match On\" that corresponds to the value in this field will be updated",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "displayName": "Values to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumnsWithoutColumnToMatchOn",
+                "loadOptionsDependsOn": [
+                  "schema.value",
+                  "table.value"
+                ]
+              },
+              "default": []
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Value",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Value"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "dataMode",
+      "displayName": "Data Mode",
+      "type": "options",
+      "default": "autoMapInputData",
+      "description": "Whether to map node input properties and the table data automatically or manually",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputData",
+          "description": "Use when node input properties names exactly match the table column names"
+        },
+        {
+          "name": "Map Each Column Below",
+          "value": "defineBelow",
+          "description": "Set the value for each destination column manually"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "notice",
+      "displayName": "\n\t\tIn this mode, make sure incoming data fields are named the same as the columns in your table. If needed, use an 'Edit Fields' node before this node to change the field names.\n\t\t",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "columnToMatchOn",
+      "displayName": "Column to Match On",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The column to compare when finding the rows to update. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getColumns",
+        "loadOptionsDependsOn": [
+          "schema.value",
+          "table.value"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "hint": "Used to find the correct row to update. Doesn't get changed. Has to be unique."
+    },
+    {
+      "name": "valueToMatchOn",
+      "displayName": "Value of Column to Match On",
+      "type": "string",
+      "default": "",
+      "description": "Rows with a value in the specified \"Column to Match On\" that corresponds to the value in this field will be updated. New rows will be created for non-matching items.",
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "displayName": "Values to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Column",
+              "name": "column",
+              "type": "options",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+              "typeOptions": {
+                "loadOptionsMethod": "getColumnsWithoutColumnToMatchOn",
+                "loadOptionsDependsOn": [
+                  "schema.value",
+                  "table.value"
+                ]
+              },
+              "default": []
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Value",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add Value"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Connection Timeout",
+          "name": "connectionTimeoutMillis",
+          "type": "number",
+          "default": 30,
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Connections Limit",
+          "name": "connectionLimit",
+          "type": "number",
+          "default": 10,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes"
+        },
+        {
+          "displayName": "Query Batching",
+          "name": "queryBatching",
+          "type": "options",
+          "noDataExpression": true,
+          "description": "The way queries should be sent to the database",
+          "options": [
+            {
+              "name": "Single Query",
+              "value": "single",
+              "description": "A single query for all incoming items"
+            },
+            {
+              "name": "Independent",
+              "value": "independently",
+              "description": "Execute one query per incoming item of the run"
+            },
+            {
+              "name": "Transaction",
+              "value": "transaction",
+              "description": "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+            }
+          ],
+          "default": "single"
+        },
+        {
+          "displayName": "Query Parameters",
+          "name": "queryReplacement",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. value1,value2,value3",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "hint": "Comma-separated list of values: reference them in your query as $1, $2, $3…",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Columns",
+          "name": "outputColumns",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getColumnsMultiOptions",
+            "loadOptionsDependsOn": [
+              "table.value"
+            ]
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Large-Format Numbers As",
+          "name": "largeNumbersOutput",
+          "type": "options",
+          "options": [
+            {
+              "name": "Numbers",
+              "value": "numbers"
+            },
+            {
+              "name": "Text",
+              "value": "text",
+              "description": "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+            }
+          ],
+          "hint": "Applies to NUMERIC and BIGINT columns only",
+          "default": "text",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Decimals as Numbers",
+          "name": "decimalNumbers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "options",
+          "options": [
+            {
+              "name": "Low Prioirity",
+              "value": "LOW_PRIORITY",
+              "description": "Delays execution of the INSERT until no other clients are reading from the table"
+            },
+            {
+              "name": "High Priority",
+              "value": "HIGH_PRIORITY",
+              "description": "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+            }
+          ],
+          "default": "LOW_PRIORITY",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Replace Empty Strings with NULL",
+          "name": "replaceEmptyStrings",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Select Distinct",
+          "name": "selectDistinct",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove these duplicate rows",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Output Query Execution Details",
+          "name": "detailedOutput",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success"
+        },
+        {
+          "displayName": "Skip on Conflict",
+          "name": "skipOnConflict",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mySql",
+      "required": true,
+      "testedBy": "mysqlConnectionTest"
+    }
+  ],
+  "requiredFields": [
+    "table",
+    "query",
+    "columnToMatchOn",
+    "columnToMatchOn"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "deleteCommand",
+    "where",
+    "combineConditions",
+    "options",
+    "options",
+    "dataMode",
+    "notice",
+    "valuesToSend",
+    "options",
+    "returnAll",
+    "limit",
+    "where",
+    "combineConditions",
+    "sort",
+    "options",
+    "dataMode",
+    "notice",
+    "valueToMatchOn",
+    "valuesToSend",
+    "options",
+    "dataMode",
+    "notice",
+    "valueToMatchOn",
+    "valuesToSend",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "hidden",
+    "operation": "options",
+    "table": "resourceLocator",
+    "deleteCommand": "options",
+    "where": "fixedCollection",
+    "combineConditions": "options",
+    "options": "collection",
+    "query": "string",
+    "dataMode": "options",
+    "notice": "notice",
+    "valuesToSend": "fixedCollection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "sort": "fixedCollection",
+    "columnToMatchOn": "options",
+    "valueToMatchOn": "string"
+  },
+  "hasVersions": false
+}

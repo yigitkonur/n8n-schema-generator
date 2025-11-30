@@ -1,0 +1,149 @@
+{
+  "expressionFormat": {
+    "patterns": [
+      {
+        "pattern": "^={{.*}}$",
+        "description": "Standard expression format"
+      },
+      {
+        "pattern": "^{{.*}}$",
+        "description": "Legacy expression format"
+      }
+    ],
+    "validPrefixes": [
+      "$json",
+      "$node",
+      "$input",
+      "$binary",
+      "$now",
+      "$today",
+      "$env",
+      "$execution",
+      "$workflow",
+      "$vars",
+      "$runIndex",
+      "$itemIndex",
+      "$prevNode",
+      "$parameter"
+    ]
+  },
+  "commonExpressions": {
+    "$json": {
+      "description": "Access current item JSON data",
+      "example": "{{ $json.fieldName }}"
+    },
+    "$json[\"field\"]": {
+      "description": "Access field with special characters",
+      "example": "{{ $json[\"field-name\"] }}"
+    },
+    "$node[\"name\"].json": {
+      "description": "Access another node output",
+      "example": "{{ $node[\"HTTP Request\"].json.data }}"
+    },
+    "$input.first()": {
+      "description": "Get first input item",
+      "example": "{{ $input.first().json }}"
+    },
+    "$input.last()": {
+      "description": "Get last input item",
+      "example": "{{ $input.last().json }}"
+    },
+    "$input.all()": {
+      "description": "Get all input items",
+      "example": "{{ $input.all() }}"
+    },
+    "$now": {
+      "description": "Current DateTime",
+      "example": "{{ $now.format(\"yyyy-MM-dd\") }}"
+    },
+    "$today": {
+      "description": "Today at midnight",
+      "example": "{{ $today }}"
+    },
+    "$env": {
+      "description": "Environment variables",
+      "example": "{{ $env.API_KEY }}"
+    },
+    "$execution.id": {
+      "description": "Current execution ID",
+      "example": "{{ $execution.id }}"
+    },
+    "$workflow.id": {
+      "description": "Current workflow ID",
+      "example": "{{ $workflow.id }}"
+    },
+    "$workflow.name": {
+      "description": "Current workflow name",
+      "example": "{{ $workflow.name }}"
+    },
+    "$itemIndex": {
+      "description": "Current item index",
+      "example": "{{ $itemIndex }}"
+    },
+    "$runIndex": {
+      "description": "Current run index (for loops)",
+      "example": "{{ $runIndex }}"
+    }
+  },
+  "builtInFunctions": {
+    "string": [
+      "toUpperCase",
+      "toLowerCase",
+      "trim",
+      "split",
+      "replace",
+      "slice",
+      "includes",
+      "startsWith",
+      "endsWith"
+    ],
+    "array": [
+      "first",
+      "last",
+      "filter",
+      "map",
+      "reduce",
+      "length",
+      "includes",
+      "join"
+    ],
+    "number": [
+      "round",
+      "floor",
+      "ceil",
+      "abs",
+      "toFixed"
+    ],
+    "dateTime": [
+      "format",
+      "plus",
+      "minus",
+      "startOf",
+      "endOf",
+      "diff",
+      "toISO",
+      "toMillis"
+    ],
+    "object": [
+      "keys",
+      "values",
+      "entries",
+      "isEmpty",
+      "hasOwnProperty"
+    ]
+  },
+  "validationRules": {
+    "mustBeBalanced": {
+      "description": "Brackets must be balanced",
+      "regex": null
+    },
+    "noNestedExpressions": {
+      "description": "Expressions cannot be nested",
+      "check": "count {{ and }} pairs"
+    },
+    "validVariableAccess": {
+      "description": "Variable paths must be valid",
+      "check": "parse and validate path"
+    }
+  }
+}

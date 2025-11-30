@@ -1,0 +1,1109 @@
+{
+  "name": "form",
+  "displayName": "n8n Form",
+  "description": "Generate webforms in n8n and pass their responses to the workflow",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    2.3
+  ],
+  "defaults": {
+    "triggerNotice": "",
+    "operation": "page",
+    "defineForm": "fields",
+    "jsonOutput": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+    "formFields": {},
+    "limitWaitTime": false,
+    "options": {},
+    "respondWith": "text",
+    "redirectUrl": "",
+    "completionTitle": "",
+    "completionMessage": "",
+    "responseText": "",
+    "inputDataFieldName": "data"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "triggerNotice",
+      "displayName": "An n8n Form Trigger node must be set up before this node",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "operation",
+      "displayName": "Page Type",
+      "type": "options",
+      "default": "page",
+      "options": [
+        {
+          "name": "Next Form Page",
+          "value": "page"
+        },
+        {
+          "name": "Form Ending",
+          "value": "completion"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "defineForm",
+      "displayName": "Define Form",
+      "type": "options",
+      "default": "fields",
+      "options": [
+        {
+          "name": "Using Fields Below",
+          "value": "fields"
+        },
+        {
+          "name": "Using JSON",
+          "value": "json"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "jsonOutput",
+      "displayName": "Form Fields",
+      "type": "json",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "hint": "<a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.form/\" target=\"_blank\">See docs</a> for field syntax"
+    },
+    {
+      "name": "formFields",
+      "displayName": "Form Elements",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Field Name",
+              "name": "fieldLabel",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. What is your name?",
+              "description": "Label that appears above the input field",
+              "required": true,
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "hiddenField",
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Name",
+              "name": "fieldName",
+              "description": "The name of the field, used in input attributes and referenced by the workflow",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Element Type",
+              "name": "fieldType",
+              "type": "options",
+              "default": "text",
+              "description": "The type of field to add to the form",
+              "options": [
+                {
+                  "name": "Checkboxes",
+                  "value": "checkbox"
+                },
+                {
+                  "name": "Custom HTML",
+                  "value": "html"
+                },
+                {
+                  "name": "Date",
+                  "value": "date"
+                },
+                {
+                  "name": "Dropdown",
+                  "value": "dropdown"
+                },
+                {
+                  "name": "Email",
+                  "value": "email"
+                },
+                {
+                  "name": "File",
+                  "value": "file"
+                },
+                {
+                  "name": "Hidden Field",
+                  "value": "hiddenField"
+                },
+                {
+                  "name": "Number",
+                  "value": "number"
+                },
+                {
+                  "name": "Password",
+                  "value": "password"
+                },
+                {
+                  "name": "Radio Buttons",
+                  "value": "radio"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                },
+                {
+                  "name": "Textarea",
+                  "value": "textarea"
+                }
+              ],
+              "required": true
+            },
+            {
+              "displayName": "Element Name",
+              "name": "elementName",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. content-section",
+              "description": "Optional field. It can be used to include the html in the output.",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Placeholder",
+              "name": "placeholder",
+              "description": "Sample text to display inside the field",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "dropdown",
+                    "date",
+                    "file",
+                    "html",
+                    "hiddenField",
+                    "radio",
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Options",
+              "name": "fieldOptions",
+              "placeholder": "Add Field Option",
+              "description": "List of options that can be selected from the dropdown",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Option",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Checkboxes",
+              "name": "fieldOptions",
+              "placeholder": "Add Checkbox",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Checkbox Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Radio Buttons",
+              "name": "fieldOptions",
+              "placeholder": "Add Radio Button",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "radio"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Radio Button Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Multiple Choice is a legacy option, please use Checkboxes or Radio Buttons field type instead",
+              "name": "multiselectLegacyNotice",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "multiselect": [
+                    true
+                  ],
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Choice",
+              "name": "multiselect",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to allow the user to select multiple options from the dropdown list",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Limit Selection",
+              "name": "limitSelection",
+              "type": "options",
+              "default": "unlimited",
+              "options": [
+                {
+                  "name": "Exact Number",
+                  "value": "exact"
+                },
+                {
+                  "name": "Range",
+                  "value": "range"
+                },
+                {
+                  "name": "Unlimited",
+                  "value": "unlimited"
+                }
+              ],
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Number of Selections",
+              "name": "numberOfSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "exact"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Minimum Selections",
+              "name": "minSelections",
+              "type": "number",
+              "default": 0,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 0
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Maximum Selections",
+              "name": "maxSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "HTML",
+              "name": "html",
+              "typeOptions": {
+                "editor": "htmlEditor"
+              },
+              "type": "string",
+              "noDataExpression": true,
+              "default": "<!-- Your custom HTML here --->\n\n\n",
+              "description": "HTML elements to display on the form page",
+              "hint": "Does not accept <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> or <code>&lt;input&gt;</code> tags",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Files",
+              "name": "multipleFiles",
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to allow the user to select multiple files from the file input or just one",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Accepted File Types",
+              "name": "acceptFileTypes",
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of allowed file extensions",
+              "hint": "Leave empty to allow all file types",
+              "placeholder": "e.g. .jpg, .png",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "The displayed date is formatted based on the locale of the user's browser",
+              "name": "formatDate",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "date"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Required Field",
+              "name": "requiredField",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to require the user to enter a value for this field before submitting the form",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "html",
+                    "hiddenField"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "fields"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "placeholder": "Add Form Element"
+    },
+    {
+      "name": "limitWaitTime",
+      "displayName": "Limit Wait Time",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "page"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limitType",
+      "displayName": "Limit Type",
+      "type": "options",
+      "default": "afterTimeInterval",
+      "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+      "options": [
+        {
+          "name": "After Time Interval",
+          "description": "Waits for a certain amount of time",
+          "value": "afterTimeInterval"
+        },
+        {
+          "name": "At Specified Time",
+          "description": "Waits until the set date and time to continue",
+          "value": "atSpecifiedTime"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeAmount",
+      "displayName": "Amount",
+      "type": "number",
+      "default": 1,
+      "description": "The time to wait",
+      "typeOptions": {
+        "minValue": 0,
+        "numberPrecision": 2
+      },
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeUnit",
+      "displayName": "Unit",
+      "type": "options",
+      "default": "hours",
+      "description": "Unit of the interval value",
+      "options": [
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      }
+    },
+    {
+      "name": "maxDateAndTime",
+      "displayName": "Max Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "description": "Continue execution after the specified date and time",
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "atSpecifiedTime"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Form Title",
+          "name": "formTitle",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. Contact us",
+          "required": false,
+          "description": "Shown at the top of the form"
+        },
+        {
+          "displayName": "Form Description",
+          "name": "formDescription",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. We'll get back to you soon",
+          "description": "Shown underneath the Form Title. Can be used to prompt the user on how to complete the form. Accepts HTML.",
+          "typeOptions": {
+            "rows": 2
+          }
+        },
+        {
+          "displayName": "Button Label",
+          "name": "buttonLabel",
+          "type": "string",
+          "default": "Submit"
+        },
+        {
+          "displayName": "Custom Form Styling",
+          "name": "customCss",
+          "type": "string",
+          "typeOptions": {
+            "rows": 10,
+            "editor": "cssEditor"
+          },
+          "default": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}",
+          "description": "Override default styling of the public form interface with CSS"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "respondWith",
+      "displayName": "On n8n Form Submission",
+      "type": "options",
+      "default": "text",
+      "options": [
+        {
+          "name": "Show Completion Screen",
+          "value": "text",
+          "description": "Show a response text to the user"
+        },
+        {
+          "name": "Redirect to URL",
+          "value": "redirect",
+          "description": "Redirect the user to a URL"
+        },
+        {
+          "name": "Show Text",
+          "value": "showText",
+          "description": "Display simple text or HTML"
+        },
+        {
+          "name": "Return Binary File",
+          "value": "returnBinary",
+          "description": "Return incoming binary file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "redirectUrl",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "redirect"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "completionTitle",
+      "displayName": "Completion Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "text",
+            "returnBinary"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "completionMessage",
+      "displayName": "Completion Message",
+      "type": "string",
+      "default": "",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "text",
+            "returnBinary"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseText",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "description": "The text to display on the page. Use HTML to show a customized web page.",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "showText"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      },
+      "placeholder": "e.g. Thanks for filling the form"
+    },
+    {
+      "name": "inputDataFieldName",
+      "displayName": "Input Data Field Name",
+      "type": "string",
+      "default": "data",
+      "description": "Find the name of input field containing the binary data to return in the Input panel on the left, in the Binary tab",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "returnBinary"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      },
+      "placeholder": "e.g. data",
+      "hint": "The name of the input field containing the binary file data to be returned"
+    },
+    {
+      "name": "limitWaitTime",
+      "displayName": "Limit Wait Time",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limitType",
+      "displayName": "Limit Type",
+      "type": "options",
+      "default": "afterTimeInterval",
+      "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+      "options": [
+        {
+          "name": "After Time Interval",
+          "description": "Waits for a certain amount of time",
+          "value": "afterTimeInterval"
+        },
+        {
+          "name": "At Specified Time",
+          "description": "Waits until the set date and time to continue",
+          "value": "atSpecifiedTime"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeAmount",
+      "displayName": "Amount",
+      "type": "number",
+      "default": 1,
+      "description": "The time to wait",
+      "typeOptions": {
+        "minValue": 0,
+        "numberPrecision": 2
+      },
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resumeUnit",
+      "displayName": "Unit",
+      "type": "options",
+      "default": "hours",
+      "description": "Unit of the interval value",
+      "options": [
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "maxDateAndTime",
+      "displayName": "Max Date and Time",
+      "type": "dateTime",
+      "default": "",
+      "description": "Continue execution after the specified date and time",
+      "displayOptions": {
+        "show": {
+          "limitType": [
+            "atSpecifiedTime"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Completion Page Title",
+          "name": "formTitle",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. Contact us",
+          "required": false,
+          "description": "Shown at the top of the form"
+        },
+        {
+          "displayName": "Custom Form Styling",
+          "name": "customCss",
+          "type": "string",
+          "typeOptions": {
+            "rows": 10,
+            "editor": "cssEditor"
+          },
+          "default": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}",
+          "description": "Override default styling of the public form interface with CSS"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "text",
+            "returnBinary",
+            "redirect"
+          ],
+          "operation": [
+            "completion"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "redirectUrl",
+    "completionTitle"
+  ],
+  "optionalFields": [
+    "triggerNotice",
+    "operation",
+    "defineForm",
+    "jsonOutput",
+    "formFields",
+    "limitWaitTime",
+    "limitType",
+    "resumeAmount",
+    "resumeUnit",
+    "maxDateAndTime",
+    "options",
+    "respondWith",
+    "completionMessage",
+    "responseText",
+    "inputDataFieldName",
+    "limitWaitTime",
+    "limitType",
+    "resumeAmount",
+    "resumeUnit",
+    "maxDateAndTime",
+    "options"
+  ],
+  "parameterTypes": {
+    "triggerNotice": "notice",
+    "operation": "options",
+    "defineForm": "options",
+    "jsonOutput": "json",
+    "formFields": "fixedCollection",
+    "limitWaitTime": "boolean",
+    "limitType": "options",
+    "resumeAmount": "number",
+    "resumeUnit": "options",
+    "maxDateAndTime": "dateTime",
+    "options": "collection",
+    "respondWith": "options",
+    "redirectUrl": "string",
+    "completionTitle": "string",
+    "completionMessage": "string",
+    "responseText": "string",
+    "inputDataFieldName": "string"
+  },
+  "hasVersions": false
+}

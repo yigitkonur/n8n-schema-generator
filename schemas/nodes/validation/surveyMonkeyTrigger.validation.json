@@ -1,0 +1,331 @@
+{
+  "nodeType": "n8n-nodes-base.surveyMonkeyTrigger",
+  "displayName": "SurveyMonkey Trigger",
+  "version": 1,
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "objectType"
+  ],
+  "optionalParameters": [
+    "authentication",
+    "event",
+    "event",
+    "surveyIds",
+    "surveyId",
+    "collectorIds",
+    "resolveData",
+    "onlyAnswers"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "accessToken",
+        "enumValues": [
+          "accessToken",
+          "oAuth2"
+        ]
+      }
+    },
+    {
+      "field": "objectType",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "collector",
+          "survey"
+        ]
+      }
+    },
+    {
+      "field": "event",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "collector_created",
+          "collector_deleted",
+          "collector_updated",
+          "response_completed",
+          "response_created",
+          "response_deleted",
+          "response_disqualified",
+          "response_overquota",
+          "response_updated",
+          "survey_created",
+          "survey_deleted",
+          "survey_updated"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "objectType": [
+            "survey"
+          ]
+        }
+      },
+      "dependsOn": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "event",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": [
+          "collector_deleted",
+          "collector_updated",
+          "response_completed",
+          "response_created",
+          "response_deleted",
+          "response_disqualified",
+          "response_overquota",
+          "response_updated"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOn": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "surveyIds",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "objectType": [
+            "survey"
+          ]
+        },
+        "hide": {
+          "event": [
+            "survey_created"
+          ]
+        }
+      },
+      "dependsOn": [
+        "objectType",
+        "event"
+      ]
+    },
+    {
+      "field": "surveyId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOn": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "collectorIds",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOn": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "resolveData",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "response_completed"
+          ]
+        }
+      },
+      "dependsOn": [
+        "event"
+      ]
+    },
+    {
+      "field": "onlyAnswers",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "resolveData": [
+            true
+          ],
+          "event": [
+            "response_completed"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resolveData",
+        "event"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "accessToken",
+    "objectType": "",
+    "surveyIds": [],
+    "surveyId": [],
+    "collectorIds": [],
+    "resolveData": true,
+    "onlyAnswers": true
+  },
+  "conditionalFields": [
+    {
+      "field": "event",
+      "condition": {
+        "show": {
+          "objectType": [
+            "survey"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "event",
+      "condition": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "surveyIds",
+      "condition": {
+        "show": {
+          "objectType": [
+            "survey"
+          ]
+        },
+        "hide": {
+          "event": [
+            "survey_created"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "objectType",
+        "event"
+      ]
+    },
+    {
+      "field": "surveyId",
+      "condition": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "collectorIds",
+      "condition": {
+        "show": {
+          "objectType": [
+            "collector"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "objectType"
+      ]
+    },
+    {
+      "field": "resolveData",
+      "condition": {
+        "show": {
+          "event": [
+            "response_completed"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "event"
+      ]
+    },
+    {
+      "field": "onlyAnswers",
+      "condition": {
+        "show": {
+          "resolveData": [
+            true
+          ],
+          "event": [
+            "response_completed"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resolveData",
+        "event"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

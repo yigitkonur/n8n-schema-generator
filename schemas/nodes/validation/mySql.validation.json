@@ -1,0 +1,2132 @@
+{
+  "nodeType": "n8n-nodes-base.mySql",
+  "displayName": "MySQL",
+  "version": [
+    2,
+    2.1,
+    2.2,
+    2.3,
+    2.4,
+    2.5
+  ],
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "table",
+    "deleteCommand",
+    "where",
+    "combineConditions",
+    "options",
+    "query",
+    "options",
+    "dataMode",
+    "notice",
+    "valuesToSend",
+    "options",
+    "returnAll",
+    "limit",
+    "where",
+    "combineConditions",
+    "sort",
+    "options",
+    "dataMode",
+    "notice",
+    "columnToMatchOn",
+    "valueToMatchOn",
+    "valuesToSend",
+    "options",
+    "dataMode",
+    "notice",
+    "columnToMatchOn",
+    "valueToMatchOn",
+    "valuesToSend",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "hidden",
+      "required": false,
+      "constraints": {
+        "type": "hidden",
+        "default": "database"
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "insert",
+        "enumValues": [
+          "deleteTable",
+          "executeQuery",
+          "insert",
+          "upsert",
+          "select",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "table",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "hide": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "deleteCommand",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "truncate",
+        "enumValues": [
+          "truncate",
+          "delete",
+          "drop"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "where",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": ""
+              },
+              "condition": {
+                "type": "options",
+                "default": "equal",
+                "enumValues": [
+                  "equal",
+                  "!=",
+                  "LIKE",
+                  ">",
+                  "<",
+                  ">=",
+                  "<=",
+                  "IS NULL",
+                  "IS NOT NULL"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "deleteCommand",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "combineConditions",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "AND",
+        "enumValues": [
+          "AND",
+          "OR"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "deleteCommand",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "query",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "autoMapInputData",
+        "enumValues": [
+          "autoMapInputData",
+          "defineBelow"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": []
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "returnAll",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "where",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": ""
+              },
+              "condition": {
+                "type": "options",
+                "default": "equal",
+                "enumValues": [
+                  "equal",
+                  "!=",
+                  "LIKE",
+                  ">",
+                  "<",
+                  ">=",
+                  "<=",
+                  "IS NULL",
+                  "IS NOT NULL"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "combineConditions",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "AND",
+        "enumValues": [
+          "AND",
+          "OR"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "sort",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": ""
+              },
+              "direction": {
+                "type": "options",
+                "default": "ASC",
+                "enumValues": [
+                  "ASC",
+                  "DESC"
+                ]
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "autoMapInputData",
+        "enumValues": [
+          "autoMapInputData",
+          "defineBelow"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "columnToMatchOn",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valueToMatchOn",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": []
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "autoMapInputData",
+        "enumValues": [
+          "autoMapInputData",
+          "defineBelow"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "columnToMatchOn",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valueToMatchOn",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "values": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "options",
+                "default": []
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "database",
+    "operation": "insert",
+    "table": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "deleteCommand": "truncate",
+    "where": {},
+    "options": {},
+    "query": "",
+    "valuesToSend": {},
+    "returnAll": false,
+    "limit": 50,
+    "sort": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "table",
+      "condition": {
+        "hide": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "deleteCommand",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "where",
+      "condition": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "deleteCommand",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "combineConditions",
+      "condition": {
+        "show": {
+          "deleteCommand": [
+            "delete"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "deleteCommand",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "query",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "returnAll",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "where",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "combineConditions",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "sort",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "columnToMatchOn",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valueToMatchOn",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "dataMode",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "notice",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "autoMapInputData"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "columnToMatchOn",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valueToMatchOn",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "valuesToSend",
+      "condition": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "dataMode",
+        "resource",
+        "operation",
+        "table"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "table"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "database": {
+      "operations": [
+        "deleteTable",
+        "executeQuery",
+        "insert",
+        "upsert",
+        "select",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "deleteTable": [
+          "deleteCommand",
+          "where",
+          "combineConditions",
+          "options"
+        ],
+        "executeQuery": [
+          "query",
+          "options"
+        ],
+        "insert": [
+          "dataMode",
+          "notice",
+          "valuesToSend",
+          "options"
+        ],
+        "upsert": [
+          "dataMode",
+          "notice",
+          "columnToMatchOn",
+          "valueToMatchOn",
+          "valuesToSend",
+          "options"
+        ],
+        "select": [
+          "returnAll",
+          "limit",
+          "where",
+          "combineConditions",
+          "sort",
+          "options"
+        ],
+        "update": [
+          "dataMode",
+          "notice",
+          "columnToMatchOn",
+          "valueToMatchOn",
+          "valuesToSend",
+          "options"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "where",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "equal",
+              "enumValues": [
+                "equal",
+                "!=",
+                "LIKE",
+                ">",
+                "<",
+                ">=",
+                "<=",
+                "IS NULL",
+                "IS NOT NULL"
+              ]
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "hide": {
+                "condition": [
+                  "IS NULL",
+                  "IS NOT NULL"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": []
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "where",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "equal",
+              "enumValues": [
+                "equal",
+                "!=",
+                "LIKE",
+                ">",
+                "<",
+                ">=",
+                "<=",
+                "IS NULL",
+                "IS NOT NULL"
+              ]
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            },
+            "displayOptions": {
+              "hide": {
+                "condition": [
+                  "IS NULL",
+                  "IS NOT NULL"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "sort",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "direction",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ASC",
+              "enumValues": [
+                "ASC",
+                "DESC"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": []
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "valuesToSend",
+      "validOptions": [
+        "values"
+      ],
+      "optionSchemas": {
+        "values": [
+          {
+            "field": "column",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": []
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "name": "e2eTest",
+  "displayName": "E2E Test",
+  "description": "Dummy node used for e2e testing",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "operation": "remoteOptions",
+    "fieldId": "",
+    "remoteOptions": [],
+    "rlc": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "resourceMapper": {
+      "mappingMode": "defineBelow",
+      "value": null
+    },
+    "otherField": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "remoteOptions",
+      "options": [
+        {
+          "name": "Remote Options",
+          "value": "remoteOptions"
+        },
+        {
+          "name": "Resource Locator",
+          "value": "resourceLocator"
+        },
+        {
+          "name": "Resource Mapping Component",
+          "value": "resourceMapper"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "fieldId",
+      "displayName": "Field ID",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "remoteOptions",
+      "displayName": "Remote Options Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "Remote options to load. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "fieldId"
+        ],
+        "loadOptionsMethod": "getOptions"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "remoteOptions"
+          ]
+        }
+      }
+    },
+    {
+      "name": "rlc",
+      "displayName": "Resource Locator",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "resourceLocator"
+          ]
+        }
+      }
+    },
+    {
+      "name": "resourceMapper",
+      "displayName": "Resource Mapping Component",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "fieldId"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "upsert",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "resourceMapper"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "otherField",
+      "displayName": "Other Non Important Field",
+      "type": "string",
+      "default": ""
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "remoteOptions",
+    "rlc",
+    "resourceMapper"
+  ],
+  "optionalFields": [
+    "operation",
+    "fieldId",
+    "otherField"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "fieldId": "string",
+    "remoteOptions": "options",
+    "rlc": "resourceLocator",
+    "resourceMapper": "resourceMapper",
+    "otherField": "string"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,780 @@
+{
+  "name": "dropbox",
+  "displayName": "Dropbox",
+  "description": "Access data on Dropbox",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "accessToken",
+    "resource": "file",
+    "operation": "upload",
+    "path": "",
+    "binaryData": false,
+    "fileContent": "",
+    "query": "",
+    "fileStatus": "active",
+    "simple": true,
+    "filters": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "description": "Means of authenticating with the service",
+      "options": [
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "file",
+      "options": [
+        {
+          "name": "File",
+          "value": "file"
+        },
+        {
+          "name": "Folder",
+          "value": "folder"
+        },
+        {
+          "name": "Search",
+          "value": "search"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "upload",
+      "options": [
+        {
+          "name": "Copy",
+          "value": "copy",
+          "description": "Copy a file",
+          "action": "Copy a file"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a file",
+          "action": "Delete a file"
+        },
+        {
+          "name": "Download",
+          "value": "download",
+          "description": "Download a file",
+          "action": "Download a file"
+        },
+        {
+          "name": "Move",
+          "value": "move",
+          "description": "Move a file",
+          "action": "Move a file"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload a file",
+          "action": "Upload a file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Copy",
+          "value": "copy",
+          "description": "Copy a folder",
+          "action": "Copy a folder"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a folder",
+          "action": "Create a folder"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a folder",
+          "action": "Delete a folder"
+        },
+        {
+          "name": "List",
+          "value": "list",
+          "description": "Return the files and folders in a given folder",
+          "action": "List a folder"
+        },
+        {
+          "name": "Move",
+          "value": "move",
+          "description": "Move a folder",
+          "action": "Move a folder"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "query",
+      "options": [
+        {
+          "name": "Query",
+          "value": "query",
+          "action": "Query"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "path",
+      "displayName": "From Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The path of file or folder to copy",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "copy"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/original.txt"
+    },
+    {
+      "name": "toPath",
+      "displayName": "To Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The destination path of file or folder",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "copy"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/copy.txt"
+    },
+    {
+      "name": "path",
+      "displayName": "Delete Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The path to delete. Can be a single file or a whole folder.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/2019/invoice_1.pdf"
+    },
+    {
+      "name": "path",
+      "displayName": "From Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The path of file or folder to move",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/old_name.txt"
+    },
+    {
+      "name": "toPath",
+      "displayName": "To Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The new path of file or folder",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/new_name.txt"
+    },
+    {
+      "name": "path",
+      "displayName": "File Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to download. Has to contain the full path.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "placeholder": "/invoices/2019/invoice_1.pdf"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "path",
+      "displayName": "File Path",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The file path of the file to upload. Has to contain the full path. The parent folder has to exist. Existing files get overwritten.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "placeholder": "/invoices/2019/invoice_1.pdf"
+    },
+    {
+      "name": "binaryData",
+      "displayName": "Binary File",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the data to upload should be taken from binary field",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileContent",
+      "displayName": "File Content",
+      "type": "string",
+      "default": "",
+      "description": "The text content of the file to upload",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be uploaded"
+    },
+    {
+      "name": "query",
+      "displayName": "Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The string to search for. May match across multiple fields based on the request arguments.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileStatus",
+      "displayName": "File Status",
+      "type": "options",
+      "default": "active",
+      "description": "The string to search for. May match across multiple fields based on the request arguments.",
+      "options": [
+        {
+          "name": "Active",
+          "value": "active"
+        },
+        {
+          "name": "Deleted",
+          "value": "deleted"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "query"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File Categories",
+          "name": "file_categories",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Audio (mp3, qav, mid, etc.)",
+              "value": "audio"
+            },
+            {
+              "name": "Document (doc, docx, txt, etc.)",
+              "value": "document"
+            },
+            {
+              "name": "Dropbox Paper",
+              "value": "paper"
+            },
+            {
+              "name": "Folder",
+              "value": "folder"
+            },
+            {
+              "name": "Image (jpg, png, gif, etc.)",
+              "value": "image"
+            },
+            {
+              "name": "Other",
+              "value": "other"
+            },
+            {
+              "name": "PDF",
+              "value": "pdf"
+            },
+            {
+              "name": "Presentation (ppt, pptx, key, etc.)",
+              "value": "presentation"
+            },
+            {
+              "name": "Spreadsheet (xlsx, xls, csv, etc.)",
+              "value": "spreadsheet"
+            },
+            {
+              "name": "Video (avi, wmv, mp4, etc.)",
+              "value": "video"
+            }
+          ],
+          "default": []
+        },
+        {
+          "displayName": "File Extensions",
+          "name": "file_extensions",
+          "type": "string",
+          "default": "",
+          "description": "Multiple file extensions can be set separated by comma. Example: jpg,pdf."
+        },
+        {
+          "displayName": "Folder",
+          "name": "path",
+          "type": "string",
+          "default": "",
+          "description": "If this field is not specified, this module searches the entire Dropbox"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "path",
+      "displayName": "Folder",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The folder to create. The parent folder has to exist.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/2019"
+    },
+    {
+      "name": "path",
+      "displayName": "Folder Path",
+      "type": "string",
+      "default": "",
+      "description": "The path of which to list the content",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "placeholder": "/invoices/2019/"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Deleted",
+          "name": "include_deleted",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the results will include entries for files and folders that used to exist but were deleted. The default for this field is False."
+        },
+        {
+          "displayName": "Include Shared Members",
+          "name": "include_has_explicit_shared_members",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the results will include a flag for each file indicating whether or not that file has any explicit members. The default for this field is False."
+        },
+        {
+          "displayName": "Include Mounted Folders",
+          "name": "include_mounted_folders",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the results will include entries under mounted folders which includes app folder, shared folder and team folder. The default for this field is True."
+        },
+        {
+          "displayName": "Include Non Downloadable Files",
+          "name": "include_non_downloadable_files",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include files that are not downloadable, i.e. Google Docs. The default for this field is True."
+        },
+        {
+          "displayName": "Recursive",
+          "name": "recursive",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the list folder operation will be applied recursively to all subfolders and the response will contain contents of all subfolders. The default for this field is False."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "dropboxApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dropboxOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "path",
+    "toPath",
+    "path",
+    "path",
+    "toPath",
+    "path",
+    "binaryPropertyName",
+    "path",
+    "binaryPropertyName",
+    "query",
+    "path"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "operation",
+    "operation",
+    "binaryData",
+    "fileContent",
+    "fileStatus",
+    "returnAll",
+    "limit",
+    "simple",
+    "filters",
+    "path",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "path": "string",
+    "toPath": "string",
+    "binaryPropertyName": "string",
+    "binaryData": "boolean",
+    "fileContent": "string",
+    "query": "string",
+    "fileStatus": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "simple": "boolean",
+    "filters": "collection"
+  },
+  "hasVersions": false
+}

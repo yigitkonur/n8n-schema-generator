@@ -1,0 +1,244 @@
+{
+  "name": "gotify",
+  "displayName": "Gotify",
+  "description": "Consume Gotify API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "message",
+    "operation": "create",
+    "message": "",
+    "additionalFields": {},
+    "options": {},
+    "messageId": "",
+    "returnAll": false,
+    "limit": 20
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "message",
+      "options": [
+        {
+          "name": "Message",
+          "value": "message"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a message"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a message"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many messages"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The message to send, If using Markdown add the Content Type option",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Priority",
+          "name": "priority",
+          "type": "number",
+          "default": 1,
+          "description": "The priority of the message"
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "The title of the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Content Type",
+          "name": "contentType",
+          "type": "options",
+          "default": "text/plain",
+          "description": "The message content type",
+          "options": [
+            {
+              "name": "Plain",
+              "value": "text/plain"
+            },
+            {
+              "name": "Markdown",
+              "value": "text/markdown"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "messageId",
+      "displayName": "Message ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "gotifyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "message",
+    "messageId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "options",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "message": "string",
+    "additionalFields": "collection",
+    "options": "collection",
+    "messageId": "string",
+    "returnAll": "boolean",
+    "limit": "number"
+  },
+  "hasVersions": false
+}

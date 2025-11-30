@@ -1,0 +1,303 @@
+{
+  "name": "awsSqs",
+  "displayName": "AWS SQS",
+  "description": "Sends messages to AWS SQS",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "operation": "sendMessage",
+    "queue": "",
+    "queueType": "standard",
+    "sendInputData": true,
+    "message": "",
+    "messageGroupId": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "sendMessage",
+      "options": [
+        {
+          "name": "Send Message",
+          "value": "sendMessage",
+          "description": "Send a message to a queue",
+          "action": "Send a message to a queue"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "queue",
+      "displayName": "Queue Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Queue to send a message to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "options": [],
+      "typeOptions": {
+        "loadOptionsMethod": "getQueues"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      }
+    },
+    {
+      "name": "queueType",
+      "displayName": "Queue Type",
+      "type": "options",
+      "default": "standard",
+      "options": [
+        {
+          "name": "FIFO",
+          "value": "fifo",
+          "description": "FIFO SQS queue"
+        },
+        {
+          "name": "Standard",
+          "value": "standard",
+          "description": "Standard SQS queue"
+        }
+      ]
+    },
+    {
+      "name": "sendInputData",
+      "displayName": "Send Input Data",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to send the data the node receives as JSON to SQS"
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Message to send to the queue",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ],
+          "sendInputData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "messageGroupId",
+      "displayName": "Message Group ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Tag that specifies that a message belongs to a specific message group. Applies only to FIFO (first-in-first-out) queues.",
+      "displayOptions": {
+        "show": {
+          "queueType": [
+            "fifo"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delay Seconds",
+          "name": "delaySeconds",
+          "type": "number",
+          "displayOptions": {
+            "show": {
+              "/queueType": [
+                "standard"
+              ]
+            }
+          },
+          "description": "How long, in seconds, to delay a message for",
+          "default": 0,
+          "typeOptions": {
+            "minValue": 0,
+            "maxValue": 900
+          }
+        },
+        {
+          "displayName": "Message Attributes",
+          "name": "messageAttributes",
+          "placeholder": "Add Attribute",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "Attributes to set",
+          "default": {},
+          "options": [
+            {
+              "name": "binary",
+              "displayName": "Binary",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the attribute"
+                },
+                {
+                  "displayName": "Property Name",
+                  "name": "dataPropertyName",
+                  "type": "string",
+                  "default": "data",
+                  "description": "Name of the binary property which contains the data for the message attribute"
+                }
+              ]
+            },
+            {
+              "name": "number",
+              "displayName": "Number",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the attribute"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "number",
+                  "default": 0,
+                  "description": "Number value of the attribute"
+                }
+              ]
+            },
+            {
+              "name": "string",
+              "displayName": "String",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the attribute"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "String value of attribute"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Message Deduplication ID",
+          "name": "messageDeduplicationId",
+          "type": "string",
+          "default": "",
+          "description": "Token used for deduplication of sent messages. Applies only to FIFO (first-in-first-out) queues.",
+          "displayOptions": {
+            "show": {
+              "/queueType": [
+                "fifo"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "queue",
+    "message",
+    "messageGroupId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "operation",
+    "queueType",
+    "sendInputData",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "operation": "options",
+    "queue": "options",
+    "queueType": "options",
+    "sendInputData": "boolean",
+    "message": "string",
+    "messageGroupId": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

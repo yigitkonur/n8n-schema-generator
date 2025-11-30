@@ -1,0 +1,1680 @@
+{
+  "name": "microsoftSharePoint",
+  "displayName": "Microsoft SharePoint",
+  "description": "Interact with Microsoft SharePoint API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "file",
+    "operation": "download",
+    "site": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "changeFileContent": false,
+    "filter": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "file",
+      "options": [
+        {
+          "name": "File",
+          "value": "file"
+        },
+        {
+          "name": "Item",
+          "value": "item"
+        },
+        {
+          "name": "List",
+          "value": "list"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "download",
+      "options": [
+        {
+          "name": "Download",
+          "value": "download",
+          "description": "Download a file",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/drive/items/{{ $parameter[\"file\"] }}/content",
+              "json": false,
+              "encoding": "arraybuffer"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Download file"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a file",
+          "routing": {
+            "request": {
+              "method": "PATCH",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/drive/items/{{ $parameter[\"file\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Update file"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload an existing file",
+          "routing": {
+            "request": {
+              "method": "PUT",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/drive/items/{{ $parameter[\"folder\"] }}:/{{ $parameter[\"fileName\"] }}:/content"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Upload file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve folders from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folder",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the folder to download the file from",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "/ (Library root)"
+    },
+    {
+      "name": "file",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the file to download",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "folder": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "eg. my-file.pdf"
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve folders from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folder",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the folder to update the file in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "/ (Library root)"
+    },
+    {
+      "name": "file",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the file to update",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "folder": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "eg. my-file.pdf"
+    },
+    {
+      "name": "fileName",
+      "displayName": "Updated File Name",
+      "type": "string",
+      "default": "",
+      "description": "If not specified, the original file name will be used",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File",
+      "routing": {
+        "send": {
+          "property": "name",
+          "type": "body",
+          "value": "={{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "changeFileContent",
+      "displayName": "Change File Content",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to update the file contents",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File"
+    },
+    {
+      "name": "fileContents",
+      "displayName": "Updated File Contents",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Find the name of input field containing the binary data to update the file with in the Input panel on the left, in the Binary tab",
+      "displayOptions": {
+        "show": {
+          "changeFileContent": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "data",
+      "hint": "The name of the input field containing the binary file data to update the file with",
+      "routing": {
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve folders from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folder",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the folder to upload the file to",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "/ (Library root)"
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the file being uploaded",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File"
+    },
+    {
+      "name": "fileContents",
+      "displayName": "File Contents",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Find the name of input field containing the binary data to upload in the Input panel on the left, in the Binary tab",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "data",
+      "hint": "The name of the input field containing the binary file data to upload",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an item in an existing list",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create item in a list"
+        },
+        {
+          "name": "Create or Update",
+          "value": "upsert",
+          "description": "Create a new item, or update the current one if it already exists (upsert)",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create or update item (upsert)"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an item from a list",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items/{{ $parameter[\"item\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"deleted\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete an item"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve an item from a list",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items/{{ $parameter[\"item\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get an item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get specific items in a list or list many items",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "value"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Get many items"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an item in an existing list",
+          "routing": {
+            "request": {
+              "method": "PATCH",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}/items"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Update item in a list"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to create an item in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "noticeUnsupportedFields",
+      "displayName": "Due to API restrictions, the following column types cannot be updated: Hyperlink, Location, Metadata",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "site.value",
+          "list.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "add",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "noDataExpression": true,
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to delete an item in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "item",
+      "displayName": "Item",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the item you want to delete",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to retrieve an item from",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "item",
+      "displayName": "Item",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the item you want to get",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to search for items in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "displayName": "Filter by Formula",
+      "type": "string",
+      "default": "",
+      "description": "The formula will be evaluated for each record. <a href=\"https://learn.microsoft.com/en-us/graph/filter-query-parameter\">More info</a>.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "e.g. fields/Title eq 'item1'",
+      "hint": "If empty, all the items will be returned",
+      "routing": {
+        "send": {
+          "property": "$filter",
+          "type": "query",
+          "value": "={{ $value ? $value : undefined }}"
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.body?.[\"@odata.nextLink\"] }}",
+              "request": {
+                "url": "={{ $response.body?.[\"@odata.nextLink\"] ?? $request.url }}",
+                "qs": {
+                  "$select": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$select }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$top",
+          "type": "query",
+          "value": "={{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "default": [],
+          "description": "The fields you want to include in the output",
+          "displayOptions": {
+            "hide": {
+              "/simplify": [
+                true
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "Content Type",
+              "value": "contentType"
+            },
+            {
+              "name": "Created At",
+              "value": "createdDateTime"
+            },
+            {
+              "name": "Created By",
+              "value": "createdBy"
+            },
+            {
+              "name": "Fields",
+              "value": "fields"
+            },
+            {
+              "name": "ID",
+              "value": "id"
+            },
+            {
+              "name": "Last Modified At",
+              "value": "lastModifiedDateTime"
+            },
+            {
+              "name": "Last Modified By",
+              "value": "lastModifiedBy"
+            },
+            {
+              "name": "Parent Reference",
+              "value": "parentReference"
+            },
+            {
+              "name": "Web URL",
+              "value": "webUrl"
+            }
+          ],
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "multiOptions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to update an item in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "noticeUnsupportedFields",
+      "displayName": "Due to API restrictions, the following column types cannot be updated: Hyperlink, Location, Metadata",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "site.value",
+          "list.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "update",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "noDataExpression": true,
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to create or update an item in",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "noticeUnsupportedFields",
+      "displayName": "Due to API restrictions, the following column types cannot be updated: Hyperlink, Location, Metadata",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "resourceMapper",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "site.value",
+          "list.value"
+        ],
+        "resourceMapper": {
+          "resourceMapperMethod": "getMappingColumns",
+          "mode": "upsert",
+          "fieldWords": {
+            "singular": "column",
+            "plural": "columns"
+          },
+          "addAllFields": true,
+          "multiKeyMatch": false
+        }
+      },
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ],
+          "list": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "noDataExpression": true,
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve details of a single list",
+          "routing": {
+            "request": {
+              "ignoreHttpStatusErrors": true,
+              "method": "GET",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists/{{ $parameter[\"list\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get list"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of lists",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/sites/{{ $parameter[\"site\"] }}/lists"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "value"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Get many lists"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "list",
+      "displayName": "List",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the list you want to retrieve",
+      "displayOptions": {
+        "hide": {
+          "site": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value ? \"id,name,displayName,description,createdDateTime,lastModifiedDateTime,webUrl\" : undefined }}"
+        }
+      }
+    },
+    {
+      "name": "site",
+      "displayName": "Site",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the site to retrieve lists from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.body?.[\"@odata.nextLink\"] }}",
+              "request": {
+                "url": "={{ $response.body?.[\"@odata.nextLink\"] ?? $request.url }}",
+                "qs": {
+                  "$select": "={{ !!$response.body?.[\"@odata.nextLink\"] ? undefined : $request.qs?.$select }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$top",
+          "type": "query",
+          "value": "={{ $value }}"
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "property": "$select",
+          "type": "query",
+          "value": "={{ $value ? \"id,name,displayName,description,createdDateTime,lastModifiedDateTime,webUrl\" : undefined }}"
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "microsoftSharePointOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "site",
+    "folder",
+    "file",
+    "site",
+    "folder",
+    "file",
+    "changeFileContent",
+    "fileContents",
+    "site",
+    "folder",
+    "fileName",
+    "fileContents",
+    "site",
+    "list",
+    "columns",
+    "site",
+    "list",
+    "item",
+    "site",
+    "list",
+    "item",
+    "site",
+    "list",
+    "site",
+    "list",
+    "columns",
+    "site",
+    "list",
+    "columns",
+    "site",
+    "list",
+    "site"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "fileName",
+    "operation",
+    "noticeUnsupportedFields",
+    "simplify",
+    "filter",
+    "returnAll",
+    "limit",
+    "options",
+    "simplify",
+    "noticeUnsupportedFields",
+    "noticeUnsupportedFields",
+    "operation",
+    "simplify",
+    "returnAll",
+    "limit",
+    "simplify"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "site": "resourceLocator",
+    "folder": "resourceLocator",
+    "file": "resourceLocator",
+    "fileName": "string",
+    "changeFileContent": "boolean",
+    "fileContents": "string",
+    "list": "resourceLocator",
+    "noticeUnsupportedFields": "notice",
+    "columns": "resourceMapper",
+    "item": "resourceLocator",
+    "simplify": "boolean",
+    "filter": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

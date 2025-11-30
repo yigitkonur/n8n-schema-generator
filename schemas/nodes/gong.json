@@ -1,0 +1,789 @@
+{
+  "name": "gong",
+  "displayName": "Gong",
+  "description": "Interact with Gong API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "accessToken",
+    "resource": "call",
+    "operation": "getAll",
+    "call": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "options": {},
+    "returnAll": false,
+    "limit": 50,
+    "filters": {},
+    "user": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    }
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "options": [
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "call",
+      "options": [
+        {
+          "name": "Call",
+          "value": "call"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific call",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v2/calls/extensive",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get call"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of calls",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v2/calls/extensive",
+              "body": {
+                "filter": {}
+              },
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Get many calls"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "call",
+      "displayName": "Call to Get",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "filter.callIds",
+          "propertyInDotNotation": true,
+          "value": "={{ [$value] }}"
+        },
+        "output": {
+          "postReceive": [
+            {
+              "type": "rootProperty",
+              "properties": {
+                "property": "calls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Call Data to Include",
+          "name": "properties",
+          "type": "multiOptions",
+          "default": [],
+          "description": "The Call properties to include in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+          "options": [
+            {
+              "name": "Action Items",
+              "value": "pointsOfInterest",
+              "description": "Call points of interest"
+            },
+            {
+              "name": "Audio and Video URLs",
+              "value": "media",
+              "description": "Audio and video URL of the call. The URLs will be available for 8 hours."
+            },
+            {
+              "name": "Brief",
+              "value": "brief",
+              "description": "Spotlight call brief",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contentSelector.exposedFields.content.brief",
+                  "propertyInDotNotation": true,
+                  "value": "={{ $value }}"
+                }
+              }
+            },
+            {
+              "name": "Comments",
+              "value": "publicComments",
+              "description": "Public comments made for this call"
+            },
+            {
+              "name": "Highlights",
+              "value": "highlights",
+              "description": "Call highlights"
+            },
+            {
+              "name": "Keypoints",
+              "value": "keyPoints",
+              "description": "Key points of the call"
+            },
+            {
+              "name": "Outcome",
+              "value": "callOutcome",
+              "description": "Outcome of the call"
+            },
+            {
+              "name": "Outline",
+              "value": "outline",
+              "description": "Call outline"
+            },
+            {
+              "name": "Participants",
+              "value": "parties",
+              "description": "Information about the participants of the call"
+            },
+            {
+              "name": "Structure",
+              "value": "structure",
+              "description": "Call agenda"
+            },
+            {
+              "name": "Topics",
+              "value": "topics",
+              "description": "Duration of call topics"
+            },
+            {
+              "name": "Trackers",
+              "value": "trackers",
+              "description": "Smart tracker and keyword tracker information for the call"
+            },
+            {
+              "name": "Transcript",
+              "value": "transcript",
+              "description": "Information about the participants"
+            }
+          ],
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {}
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            null,
+            {
+              "type": "limit",
+              "properties": {
+                "maxResults": "={{ $value }}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "After",
+          "name": "fromDateTime",
+          "default": "",
+          "description": "Returns calls that started on or after the specified date and time. If not provided, list starts with earliest call. For web-conference calls recorded by Gong, the date denotes its scheduled time, otherwise, it denotes its actual start time.",
+          "placeholder": "e.g. 2018-02-18T02:30:00-07:00 or 2018-02-18T08:00:00Z",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.fromDateTime",
+              "propertyInDotNotation": true,
+              "value": "={{ new Date($value).toISOString() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Before",
+          "name": "toDateTime",
+          "default": "",
+          "description": "Returns calls that started up to but excluding specified date and time. If not provided, list ends with most recent call. For web-conference calls recorded by Gong, the date denotes its scheduled time, otherwise, it denotes its actual start time.",
+          "placeholder": "e.g. 2018-02-18T02:30:00-07:00 or 2018-02-18T08:00:00Z",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.toDateTime",
+              "propertyInDotNotation": true,
+              "value": "={{ new Date($value).toISOString() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Workspace ID",
+          "name": "workspaceId",
+          "default": "",
+          "description": "Return only the calls belonging to this workspace",
+          "placeholder": "e.g. 623457276584334",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.workspaceId",
+              "propertyInDotNotation": true,
+              "value": "={{ $value }}"
+            }
+          },
+          "type": "string",
+          "validateType": "number"
+        },
+        {
+          "displayName": "Call IDs",
+          "name": "callIds",
+          "default": "",
+          "description": "List of calls IDs to be filtered",
+          "hint": "Comma separated list of IDs, array of strings can be set in expression",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "placeholder": "e.g. 7782342274025937895",
+          "type": "string"
+        },
+        {
+          "displayName": "Organizer",
+          "name": "primaryUserIds",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "description": "Return only the calls hosted by the specified user",
+          "modes": [
+            {
+              "displayName": "From List",
+              "name": "list",
+              "type": "list",
+              "typeOptions": {
+                "searchListMethod": "getUsers",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "By ID",
+              "name": "id",
+              "placeholder": "e.g. 7782342274025937895",
+              "type": "string",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "[0-9]{1,20}",
+                    "errorMessage": "Not a valid Gong User ID"
+                  }
+                }
+              ]
+            }
+          ],
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.primaryUserIds",
+              "propertyInDotNotation": true,
+              "value": "={{ [$value] }}"
+            }
+          },
+          "type": "resourceLocator"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Call Data to Include",
+          "name": "properties",
+          "type": "multiOptions",
+          "default": [],
+          "description": "The Call properties to include in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+          "options": [
+            {
+              "name": "Participants",
+              "value": "parties",
+              "description": "Information about the participants of the call"
+            },
+            {
+              "name": "Topics",
+              "value": "topics",
+              "description": "Information about the topics of the call"
+            }
+          ],
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve data for a specific user",
+          "action": "Get user",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v2/users/extensive",
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of users",
+          "action": "Get many users",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v2/users/extensive",
+              "body": {
+                "filter": {}
+              },
+              "ignoreHttpStatusErrors": true
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "user",
+      "displayName": "User to Get",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "filter.userIds",
+          "propertyInDotNotation": true,
+          "value": "={{ [$value] }}"
+        },
+        "output": {
+          "postReceive": [
+            {
+              "type": "rootProperty",
+              "properties": {
+                "property": "users"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {}
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "rootProperty",
+              "properties": {
+                "property": "users"
+              }
+            },
+            {
+              "type": "limit",
+              "properties": {
+                "maxResults": "={{ $value }}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Created After",
+          "name": "createdFromDateTime",
+          "default": "",
+          "description": "An optional user creation time lower limit, if supplied the API will return only the users created at or after this time",
+          "placeholder": "e.g. 2018-02-18T02:30:00-07:00 or 2018-02-18T08:00:00Z",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.createdFromDateTime",
+              "propertyInDotNotation": true,
+              "value": "={{ new Date($value).toISOString() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "Created Before",
+          "name": "createdToDateTime",
+          "default": "",
+          "description": "An optional user creation time upper limit, if supplied the API will return only the users created before this time",
+          "placeholder": "e.g. 2018-02-18T02:30:00-07:00 or 2018-02-18T08:00:00Z",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "filter.createdToDateTime",
+              "propertyInDotNotation": true,
+              "value": "={{ new Date($value).toISOString() }}"
+            }
+          },
+          "type": "dateTime",
+          "validateType": "dateTime"
+        },
+        {
+          "displayName": "User IDs",
+          "name": "userIds",
+          "default": "",
+          "description": "Set of Gong's unique numeric identifiers for the users (up to 20 digits)",
+          "hint": "Comma separated list of IDs, array of strings can be set in expression",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "placeholder": "e.g. 7782342274025937895",
+          "type": "string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "gongApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gongOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "call",
+    "user"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "options",
+    "returnAll",
+    "limit",
+    "filters",
+    "options",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "call": "resourceLocator",
+    "options": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "user": "resourceLocator"
+  },
+  "hasVersions": false
+}

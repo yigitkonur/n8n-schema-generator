@@ -1,0 +1,1117 @@
+{
+  "nodeType": "n8n-nodes-base.filemaker",
+  "displayName": "FileMaker",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "action",
+    "layout",
+    "recid",
+    "offset",
+    "limit",
+    "getPortals",
+    "portals",
+    "responseLayout",
+    "queries",
+    "setSort",
+    "sortParametersUi",
+    "setScriptBefore",
+    "scriptBefore",
+    "scriptBeforeParam",
+    "setScriptSort",
+    "scriptSort",
+    "scriptSortParam",
+    "setScriptAfter",
+    "scriptAfter",
+    "scriptAfterParam",
+    "modId",
+    "fieldsParametersUi",
+    "script",
+    "scriptParam"
+  ],
+  "validationRules": [
+    {
+      "field": "action",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "record",
+        "enumValues": [
+          "create",
+          "delete",
+          "duplicate",
+          "edit",
+          "find",
+          "records",
+          "record",
+          "performscript"
+        ]
+      }
+    },
+    {
+      "field": "layout",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {}
+    },
+    {
+      "field": "recid",
+      "type": "number",
+      "required": true,
+      "constraints": {
+        "type": "number",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "record",
+            "edit",
+            "delete",
+            "duplicate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "offset",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 1
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "getPortals",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "record",
+            "records",
+            "find"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "portals",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": [],
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "record",
+            "records",
+            "find"
+          ],
+          "getPortals": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "getPortals"
+      ]
+    },
+    {
+      "field": "responseLayout",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "queries",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "query": {
+            "type": "object",
+            "properties": {
+              "fields": {
+                "type": "fixedCollection",
+                "default": {},
+                "properties": {
+                  "field": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "options",
+                        "default": "",
+                        "enumValues": []
+                      },
+                      "value": {
+                        "type": "string",
+                        "default": ""
+                      }
+                    }
+                  }
+                },
+                "requiredProperties": []
+              },
+              "omit": {
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "setSort",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "sortParametersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "rules": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "options",
+                "default": "",
+                "enumValues": []
+              },
+              "value": {
+                "type": "options",
+                "default": "ascend",
+                "enumValues": [
+                  "ascend",
+                  "descend"
+                ]
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "setSort": [
+            true
+          ],
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "setSort",
+        "action"
+      ]
+    },
+    {
+      "field": "setScriptBefore",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptBefore",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptBefore": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptBefore"
+      ]
+    },
+    {
+      "field": "scriptBeforeParam",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptBefore": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptBefore"
+      ]
+    },
+    {
+      "field": "setScriptSort",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptSort",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptSort": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptSort"
+      ]
+    },
+    {
+      "field": "scriptSortParam",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptSort": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptSort"
+      ]
+    },
+    {
+      "field": "setScriptAfter",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptAfter",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptAfter": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptAfter"
+      ]
+    },
+    {
+      "field": "scriptAfterParam",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptAfter": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "action",
+        "setScriptAfter"
+      ]
+    },
+    {
+      "field": "modId",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "edit"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "fieldsParametersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "fields": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "options",
+                "default": "",
+                "enumValues": []
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "create",
+            "edit"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "script",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "performscript"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptParam",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "performscript"
+          ]
+        }
+      },
+      "dependsOn": [
+        "action"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "action": "record",
+    "layout": "",
+    "recid": "",
+    "offset": 1,
+    "limit": 100,
+    "getPortals": false,
+    "portals": [],
+    "responseLayout": "",
+    "queries": {},
+    "setSort": false,
+    "sortParametersUi": {},
+    "setScriptBefore": false,
+    "scriptBefore": "",
+    "scriptBeforeParam": "",
+    "setScriptSort": false,
+    "scriptSort": "",
+    "scriptSortParam": "",
+    "setScriptAfter": false,
+    "scriptAfter": "",
+    "scriptAfterParam": "",
+    "modId": "",
+    "fieldsParametersUi": {},
+    "script": "",
+    "scriptParam": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "layout",
+      "condition": {},
+      "dependsOnFields": []
+    },
+    {
+      "field": "recid",
+      "condition": {
+        "show": {
+          "action": [
+            "record",
+            "edit",
+            "delete",
+            "duplicate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "offset",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "getPortals",
+      "condition": {
+        "show": {
+          "action": [
+            "record",
+            "records",
+            "find"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "portals",
+      "condition": {
+        "show": {
+          "action": [
+            "record",
+            "records",
+            "find"
+          ],
+          "getPortals": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "getPortals"
+      ]
+    },
+    {
+      "field": "responseLayout",
+      "condition": {
+        "show": {
+          "action": [
+            "find"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "queries",
+      "condition": {
+        "show": {
+          "action": [
+            "find"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "setSort",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "sortParametersUi",
+      "condition": {
+        "show": {
+          "setSort": [
+            true
+          ],
+          "action": [
+            "find",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "setSort",
+        "action"
+      ]
+    },
+    {
+      "field": "setScriptBefore",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptBefore",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptBefore": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptBefore"
+      ]
+    },
+    {
+      "field": "scriptBeforeParam",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptBefore": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptBefore"
+      ]
+    },
+    {
+      "field": "setScriptSort",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptSort",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptSort": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptSort"
+      ]
+    },
+    {
+      "field": "scriptSortParam",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptSort": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptSort"
+      ]
+    },
+    {
+      "field": "setScriptAfter",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptAfter",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptAfter": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptAfter"
+      ]
+    },
+    {
+      "field": "scriptAfterParam",
+      "condition": {
+        "show": {
+          "action": [
+            "find",
+            "record",
+            "records"
+          ],
+          "setScriptAfter": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action",
+        "setScriptAfter"
+      ]
+    },
+    {
+      "field": "modId",
+      "condition": {
+        "show": {
+          "action": [
+            "edit"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "fieldsParametersUi",
+      "condition": {
+        "show": {
+          "action": [
+            "create",
+            "edit"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "script",
+      "condition": {
+        "show": {
+          "action": [
+            "performscript"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    },
+    {
+      "field": "scriptParam",
+      "condition": {
+        "show": {
+          "action": [
+            "performscript"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "action"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "queries",
+      "validOptions": [
+        "query"
+      ],
+      "optionSchemas": {
+        "query": [
+          {
+            "field": "fields",
+            "type": "fixedCollection",
+            "required": false,
+            "constraints": {
+              "type": "fixedCollection",
+              "default": {},
+              "properties": {
+                "field": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "options",
+                      "default": "",
+                      "enumValues": []
+                    },
+                    "value": {
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              },
+              "requiredProperties": []
+            }
+          },
+          {
+            "field": "omit",
+            "type": "boolean",
+            "required": false,
+            "constraints": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "sortParametersUi",
+      "validOptions": [
+        "rules"
+      ],
+      "optionSchemas": {
+        "rules": [
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": []
+            }
+          },
+          {
+            "field": "value",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "ascend",
+              "enumValues": [
+                "ascend",
+                "descend"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "fieldsParametersUi",
+      "validOptions": [
+        "fields"
+      ],
+      "optionSchemas": {
+        "fields": [
+          {
+            "field": "name",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": []
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

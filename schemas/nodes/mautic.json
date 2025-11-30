@@ -1,0 +1,2543 @@
+{
+  "name": "mautic",
+  "displayName": "Mautic",
+  "description": "Consume Mautic API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "credentials",
+    "resource": "contact",
+    "name": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "operation": "create",
+    "jsonParameters": false,
+    "email": "",
+    "firstName": "",
+    "lastName": "",
+    "company": "",
+    "position": "",
+    "title": "",
+    "bodyJson": "",
+    "channel": "email",
+    "points": 0,
+    "options": {},
+    "campaignEmailId": "",
+    "segmentId": "",
+    "campaignId": "",
+    "segmentEmailId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "credentials",
+      "options": [
+        {
+          "name": "Credentials",
+          "value": "credentials"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "options": [
+        {
+          "name": "Campaign Contact",
+          "value": "campaignContact",
+          "description": "Add/remove contacts to/from a campaign"
+        },
+        {
+          "name": "Company",
+          "value": "company",
+          "description": "Create or modify a company"
+        },
+        {
+          "name": "Company Contact",
+          "value": "companyContact",
+          "description": "Add/remove contacts to/from a company"
+        },
+        {
+          "name": "Contact",
+          "value": "contact",
+          "description": "Create & modify contacts"
+        },
+        {
+          "name": "Contact Segment",
+          "value": "contactSegment",
+          "description": "Add/remove contacts to/from a segment"
+        },
+        {
+          "name": "Segment Email",
+          "value": "segmentEmail",
+          "description": "Send an email"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new company",
+          "action": "Create a company"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a company",
+          "action": "Delete a company"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get data of a company",
+          "action": "Get a company"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get data of many companies",
+          "action": "Get many companies"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a company",
+          "action": "Update a company"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Company Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the company to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "addressUi",
+          "placeholder": "Address",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "addressValues",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "Address Line 1",
+                  "name": "address1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Address Line 2",
+                  "name": "address2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zipCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Annual Revenue",
+          "name": "annualRevenue",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Company Email",
+          "name": "companyEmail",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Fields",
+          "description": "Adds a custom fields to set also values which have not been predefined",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCompanyFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Fax",
+          "name": "fax",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Industry Name or ID",
+          "name": "industry",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getIndustries"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Is Published",
+          "name": "isPublished",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Number of Employees",
+          "name": "numberOfEmpoyees",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Overwrite With Blank",
+          "name": "overwriteWithBlank",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether empty values are set to fields. Otherwise empty values are skipped."
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the company to update",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "addressUi",
+          "placeholder": "Address",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "addressValues",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "Address Line 1",
+                  "name": "address1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Address Line 2",
+                  "name": "address2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zipCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Annual Revenue",
+          "name": "annualRevenue",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Company Email",
+          "name": "companyEmail",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Company Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Fields",
+          "description": "Adds a custom fields to set also values which have not been predefined",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCompanyFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Fax",
+          "name": "fax",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Industry Name or ID",
+          "name": "industry",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getIndustries"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Is Published",
+          "name": "isPublished",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Number of Employees",
+          "name": "numberOfEmpoyees",
+          "type": "number",
+          "default": 0
+        },
+        {
+          "displayName": "Overwrite With Blank",
+          "name": "overwriteWithBlank",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether empty values are set to fields. Otherwise, empty values are skipped."
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the company to return",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 30,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 30
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Order Direction",
+          "name": "orderByDir",
+          "type": "options",
+          "options": [
+            {
+              "name": "ASC",
+              "value": "asc"
+            },
+            {
+              "name": "DESC",
+              "value": "desc"
+            }
+          ],
+          "default": "",
+          "description": "Sort direction: asc or desc"
+        },
+        {
+          "displayName": "Order By Name or ID",
+          "name": "orderBy",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getCompanyFields"
+          },
+          "default": "",
+          "description": "Column to sort by. Can use any column listed in the response. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Search",
+          "name": "search",
+          "type": "string",
+          "default": "",
+          "description": "String or search command to filter entities by"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the company to delete",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new contact",
+          "action": "Create a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact",
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Edit Contact Points",
+          "value": "editContactPoint",
+          "description": "Edit contact's points",
+          "action": "Edit a contact's points"
+        },
+        {
+          "name": "Edit Do Not Contact List",
+          "value": "editDoNotContactList",
+          "description": "Add/remove contacts from/to the do not contact list",
+          "action": "Add/remove contacts from/to the do not contact list"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get data of a contact",
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get data of many contacts",
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Send Email",
+          "value": "sendEmail",
+          "description": "Send email to contact",
+          "action": "Send email to a contact"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a contact",
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "jsonParameters",
+      "displayName": "JSON Parameters",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "description": "Email address of the contact",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "firstName",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "lastName",
+      "displayName": "Last Name",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "company",
+      "displayName": "Primary Company Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCompanies"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "position",
+      "displayName": "Position",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "bodyJson",
+      "displayName": "Body",
+      "type": "json",
+      "default": "",
+      "description": "Contact parameters",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Address",
+          "name": "addressUi",
+          "placeholder": "Address",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "addressValues",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "Address Line 1",
+                  "name": "address1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Address Line 2",
+                  "name": "address2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zipCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "B2B or B2C",
+          "name": "b2bOrb2c",
+          "type": "options",
+          "options": [
+            {
+              "name": "B2B",
+              "value": "B2B"
+            },
+            {
+              "name": "B2C",
+              "value": "B2C"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "CRM ID",
+          "name": "crmId",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Fields",
+          "description": "Adds a custom fields to set also values which have not been predefined",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getContactFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Fax",
+          "name": "fax",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Has Purchased",
+          "name": "hasPurchased",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "default": "",
+          "description": "IP address to associate with the contact"
+        },
+        {
+          "displayName": "Last Active",
+          "name": "lastActive",
+          "type": "dateTime",
+          "default": "",
+          "description": "Date/time in UTC;"
+        },
+        {
+          "displayName": "Mobile",
+          "name": "mobile",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Owner ID",
+          "name": "ownerId",
+          "type": "string",
+          "default": "",
+          "description": "ID of a Mautic user to assign this contact to"
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Prospect or Customer",
+          "name": "prospectOrCustomer",
+          "type": "options",
+          "options": [
+            {
+              "name": "Prospect",
+              "value": "Prospect"
+            },
+            {
+              "name": "Customer",
+              "value": "Customer"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Sandbox",
+          "name": "sandbox",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Stage Name or ID",
+          "name": "stage",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getStages"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": []
+        },
+        {
+          "displayName": "Social Media",
+          "name": "socialMediaUi",
+          "placeholder": "Social Media",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "socialMediaValues",
+              "displayName": "Social Media",
+              "values": [
+                {
+                  "displayName": "Facebook",
+                  "name": "facebook",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Foursquare",
+                  "name": "foursquare",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Instagram",
+                  "name": "instagram",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "LinkedIn",
+                  "name": "linkedIn",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Skype",
+                  "name": "skype",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Twitter",
+                  "name": "twitter",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jsonParameters",
+      "displayName": "JSON Parameters",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Body",
+          "name": "bodyJson",
+          "type": "json",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                true
+              ]
+            }
+          },
+          "default": "",
+          "description": "Contact parameters"
+        },
+        {
+          "displayName": "Address",
+          "name": "addressUi",
+          "placeholder": "Address",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "addressValues",
+              "displayName": "Address",
+              "values": [
+                {
+                  "displayName": "Address Line 1",
+                  "name": "address1",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Address Line 2",
+                  "name": "address2",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Zip Code",
+                  "name": "zipCode",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "B2B or B2C",
+          "name": "b2bOrb2c",
+          "type": "options",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "B2B",
+              "value": "B2B"
+            },
+            {
+              "name": "B2C",
+              "value": "B2C"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "CRM ID",
+          "name": "crmId",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "placeholder": "Add Custom Fields",
+          "description": "Adds a custom fields to set also values which have not been predefined",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "fieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getContactFields"
+                  },
+                  "default": "",
+                  "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "fieldValue",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the field to set"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "Email address of the contact"
+        },
+        {
+          "displayName": "Fax",
+          "name": "fax",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Has Purchased",
+          "name": "hasPurchased",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": false
+        },
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "IP address to associate with the contact"
+        },
+        {
+          "displayName": "Last Active",
+          "name": "lastActive",
+          "type": "dateTime",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "Date/time in UTC;"
+        },
+        {
+          "displayName": "Last Name",
+          "name": "lastName",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "LastName"
+        },
+        {
+          "displayName": "Mobile",
+          "name": "mobile",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Owner ID",
+          "name": "ownerId",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "ID of a Mautic user to assign this contact to"
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Position",
+          "name": "position",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Primary Company Name or ID",
+          "name": "company",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getCompanies"
+          },
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Prospect or Customer",
+          "name": "prospectOrCustomer",
+          "type": "options",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "Prospect",
+              "value": "Prospect"
+            },
+            {
+              "name": "Customer",
+              "value": "Customer"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Sandbox",
+          "name": "sandbox",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": false
+        },
+        {
+          "displayName": "Stage Name or ID",
+          "name": "stage",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "typeOptions": {
+            "loadOptionsMethod": "getStages"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": []
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Social Media",
+          "name": "socialMediaUi",
+          "placeholder": "Social Media",
+          "type": "fixedCollection",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "socialMediaValues",
+              "displayName": "Social Media",
+              "values": [
+                {
+                  "displayName": "Facebook",
+                  "name": "facebook",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Foursquare",
+                  "name": "foursquare",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Instagram",
+                  "name": "instagram",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "LinkedIn",
+                  "name": "linkedIn",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Skype",
+                  "name": "skype",
+                  "type": "string",
+                  "default": ""
+                },
+                {
+                  "displayName": "Twitter",
+                  "name": "twitter",
+                  "type": "string",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": ""
+        },
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "default": "",
+          "description": "IP address to associate with the contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "editDoNotContactList"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "action",
+      "displayName": "Action",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "action": "Add a contact"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "action": "Remove a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "editDoNotContactList"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "channel",
+      "displayName": "Channel",
+      "type": "options",
+      "default": "email",
+      "required": true,
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "SMS",
+          "value": "sms"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "editDoNotContactList"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Reason To Do Not Contact",
+          "name": "reason",
+          "type": "options",
+          "options": [
+            {
+              "name": "Unsubscribed",
+              "value": "1"
+            },
+            {
+              "name": "Bounced",
+              "value": "2"
+            },
+            {
+              "name": "Manual",
+              "value": "3"
+            }
+          ],
+          "default": "3"
+        },
+        {
+          "displayName": "Comments",
+          "name": "comments",
+          "type": "string",
+          "default": "",
+          "description": "A text describing details of Do Not Contact entry"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "editDoNotContactList"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "editContactPoint"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "action",
+      "displayName": "Action",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "action": "Add a contact"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "action": "Remove a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "editContactPoint"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "points",
+      "displayName": "Points",
+      "type": "number",
+      "default": 0,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "editContactPoint"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 30,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 30
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Search",
+          "name": "search",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "default": "",
+          "description": "String or search command to filter entities by"
+        },
+        {
+          "displayName": "Order By",
+          "name": "orderBy",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "default": "",
+          "description": "Column to sort by. Can use any column listed in the response."
+        },
+        {
+          "displayName": "Order By Dir",
+          "name": "orderByDir",
+          "type": "options",
+          "displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "default": "",
+          "options": [
+            {
+              "name": "ASC",
+              "value": "asc"
+            },
+            {
+              "name": "DESC",
+              "value": "desc"
+            }
+          ],
+          "description": "Sort direction: ASC or DESC"
+        },
+        {
+          "displayName": "Published Only",
+          "name": "publishedOnly",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to return currently published entities"
+        },
+        {
+          "displayName": "Minimal",
+          "name": "minimal",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to return array of entities without additional lists in it"
+        },
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": true,
+          "description": "By default only the data of the fields get returned. If this options gets set the RAW response with all data gets returned."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "sendEmail",
+            "editDoNotContactList",
+            "editContactPoint"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "campaignEmailId",
+      "displayName": "Campaign Email Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCampaignEmails"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "sendEmail"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "sendEmail"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add contact to a segment",
+          "action": "Add a contact to a segment"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove contact from a segment",
+          "action": "Remove a contact from a segment"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactSegment"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactSegment"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "segmentId",
+      "displayName": "Segment Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getSegments"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contactSegment"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add contact to a campaign",
+          "action": "Add a campaign contact"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove contact from a campaign",
+          "action": "Remove a campaign contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "campaignContact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "campaignContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "campaignId",
+      "displayName": "Campaign Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCampaigns"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "campaignContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add contact to a company",
+          "action": "Add a company contact"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove a contact from a company",
+          "action": "Remove a company contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "companyContact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the contact",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "companyContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "companyId",
+      "displayName": "Company ID",
+      "type": "string",
+      "default": "",
+      "description": "The ID of the company",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "companyContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send an email to a segment"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "segmentEmail"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "segmentEmailId",
+      "displayName": "Segment Email Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getSegmentEmails"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "segmentEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mauticApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "credentials"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mauticOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "channel",
+    "campaignEmailId",
+    "contactId",
+    "contactId",
+    "segmentId",
+    "contactId",
+    "campaignId",
+    "segmentEmailId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "name",
+    "simple",
+    "additionalFields",
+    "companyId",
+    "simple",
+    "updateFields",
+    "companyId",
+    "simple",
+    "returnAll",
+    "limit",
+    "simple",
+    "additionalFields",
+    "companyId",
+    "simple",
+    "operation",
+    "jsonParameters",
+    "email",
+    "firstName",
+    "lastName",
+    "company",
+    "position",
+    "title",
+    "bodyJson",
+    "additionalFields",
+    "contactId",
+    "jsonParameters",
+    "updateFields",
+    "contactId",
+    "action",
+    "additionalFields",
+    "contactId",
+    "action",
+    "points",
+    "contactId",
+    "returnAll",
+    "limit",
+    "contactId",
+    "options",
+    "operation",
+    "operation",
+    "operation",
+    "contactId",
+    "companyId",
+    "operation"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "name": "string",
+    "simple": "boolean",
+    "additionalFields": "collection",
+    "companyId": "string",
+    "updateFields": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "jsonParameters": "boolean",
+    "email": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "company": "options",
+    "position": "string",
+    "title": "string",
+    "bodyJson": "json",
+    "contactId": "string",
+    "action": "options",
+    "channel": "options",
+    "points": "number",
+    "options": "collection",
+    "campaignEmailId": "options",
+    "segmentId": "options",
+    "campaignId": "options",
+    "segmentEmailId": "options"
+  },
+  "hasVersions": false
+}

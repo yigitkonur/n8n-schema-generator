@@ -1,0 +1,388 @@
+{
+  "name": "graphql",
+  "displayName": "GraphQL",
+  "description": "Makes a GraphQL request and returns the received data",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "authentication": "none",
+    "requestMethod": "POST",
+    "endpoint": "",
+    "allowUnauthorizedCerts": false,
+    "requestFormat": "graphql",
+    "query": "",
+    "variables": "",
+    "operationName": "",
+    "responseFormat": "json",
+    "dataPropertyName": "data",
+    "headerParametersUi": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "none",
+      "description": "The way to authenticate",
+      "options": [
+        {
+          "name": "Basic Auth",
+          "value": "basicAuth"
+        },
+        {
+          "name": "Custom Auth",
+          "value": "customAuth"
+        },
+        {
+          "name": "Digest Auth",
+          "value": "digestAuth"
+        },
+        {
+          "name": "Header Auth",
+          "value": "headerAuth"
+        },
+        {
+          "name": "None",
+          "value": "none"
+        },
+        {
+          "name": "OAuth1",
+          "value": "oAuth1"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Query Auth",
+          "value": "queryAuth"
+        }
+      ]
+    },
+    {
+      "name": "requestMethod",
+      "displayName": "HTTP Request Method",
+      "type": "options",
+      "default": "POST",
+      "description": "The underlying HTTP request method to use",
+      "options": [
+        {
+          "name": "GET",
+          "value": "GET"
+        },
+        {
+          "name": "POST",
+          "value": "POST"
+        }
+      ]
+    },
+    {
+      "name": "endpoint",
+      "displayName": "Endpoint",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The GraphQL endpoint",
+      "placeholder": "http://example.com/graphql"
+    },
+    {
+      "name": "allowUnauthorizedCerts",
+      "displayName": "Ignore SSL Issues (Insecure)",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to download the response even if SSL certificate validation is not possible"
+    },
+    {
+      "name": "requestFormat",
+      "displayName": "Request Format",
+      "type": "options",
+      "default": "graphql",
+      "required": true,
+      "description": "The format for the query payload",
+      "options": [
+        {
+          "name": "GraphQL (Raw)",
+          "value": "graphql"
+        },
+        {
+          "name": "JSON",
+          "value": "json"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "requestFormat",
+      "displayName": "Request Format",
+      "type": "options",
+      "default": "json",
+      "required": true,
+      "description": "The request format for the query payload",
+      "options": [
+        {
+          "name": "JSON (Recommended)",
+          "value": "json",
+          "description": "JSON object with query, variables, and operationName properties. The standard and most widely supported format for GraphQL requests."
+        },
+        {
+          "name": "GraphQL (Raw)",
+          "value": "graphql",
+          "description": "Raw GraphQL query string. Not all servers support this format. Use JSON for better compatibility."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "requestMethod": [
+            "POST"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "query",
+      "displayName": "Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "GraphQL query",
+      "typeOptions": {
+        "rows": 6
+      }
+    },
+    {
+      "name": "variables",
+      "displayName": "Variables",
+      "type": "json",
+      "default": "",
+      "description": "Query variables as JSON object",
+      "displayOptions": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operationName",
+      "displayName": "Operation Name",
+      "type": "string",
+      "default": "",
+      "description": "Name of operation to execute",
+      "displayOptions": {
+        "show": {
+          "requestFormat": [
+            "json"
+          ],
+          "requestMethod": [
+            "POST"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseFormat",
+      "displayName": "Response Format",
+      "type": "options",
+      "default": "json",
+      "description": "The format in which the data gets returned from the URL",
+      "options": [
+        {
+          "name": "JSON",
+          "value": "json"
+        },
+        {
+          "name": "String",
+          "value": "string"
+        }
+      ]
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "Response Data Property Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the property to which to write the response data",
+      "displayOptions": {
+        "show": {
+          "responseFormat": [
+            "string"
+          ]
+        }
+      }
+    },
+    {
+      "name": "headerParametersUi",
+      "displayName": "Headers",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "The headers to send",
+      "options": [
+        {
+          "name": "parameter",
+          "displayName": "Header",
+          "values": [
+            {
+              "displayName": "Name",
+              "name": "name",
+              "type": "string",
+              "default": "",
+              "description": "Name of the header"
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value to set for the header"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "placeholder": "Add Header"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "httpBasicAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpCustomAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "customAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpDigestAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "digestAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpQueryAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "queryAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "oAuth1Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "oAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "endpoint",
+    "requestFormat",
+    "requestFormat",
+    "query",
+    "dataPropertyName"
+  ],
+  "optionalFields": [
+    "authentication",
+    "requestMethod",
+    "allowUnauthorizedCerts",
+    "variables",
+    "operationName",
+    "responseFormat",
+    "headerParametersUi"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "requestMethod": "options",
+    "endpoint": "string",
+    "allowUnauthorizedCerts": "boolean",
+    "requestFormat": "options",
+    "query": "string",
+    "variables": "json",
+    "operationName": "string",
+    "responseFormat": "options",
+    "dataPropertyName": "string",
+    "headerParametersUi": "fixedCollection"
+  },
+  "hasVersions": false
+}

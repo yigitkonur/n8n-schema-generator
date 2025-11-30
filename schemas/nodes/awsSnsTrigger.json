@@ -1,0 +1,84 @@
+{
+  "name": "awsSnsTrigger",
+  "displayName": "AWS SNS Trigger",
+  "description": "Handle AWS SNS events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "topic": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    }
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "topic",
+      "displayName": "Topic",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "topic"
+  ],
+  "optionalFields": [
+    "authentication"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "topic": "resourceLocator"
+  },
+  "hasVersions": false
+}

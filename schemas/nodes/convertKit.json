@@ -1,0 +1,973 @@
+{
+  "name": "convertKit",
+  "displayName": "ConvertKit",
+  "description": "Consume ConvertKit API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "form",
+    "label": "",
+    "operation": "addSubscriber",
+    "id": "",
+    "email": "",
+    "additionalFields": {},
+    "name": "",
+    "tagId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "form",
+      "options": [
+        {
+          "name": "Custom Field",
+          "value": "customField"
+        },
+        {
+          "name": "Form",
+          "value": "form"
+        },
+        {
+          "name": "Sequence",
+          "value": "sequence"
+        },
+        {
+          "name": "Tag",
+          "value": "tag"
+        },
+        {
+          "name": "Tag Subscriber",
+          "value": "tagSubscriber"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "update",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a field",
+          "action": "Create a custom field"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a field",
+          "action": "Delete a custom field"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many fields",
+          "action": "Get many custom fields"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a field",
+          "action": "Update a custom field"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customField"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Field ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of your custom field",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customField"
+          ],
+          "operation": [
+            "update",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "label",
+      "displayName": "Label",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The label of the custom field",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customField"
+          ],
+          "operation": [
+            "update",
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "customField"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "customField"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "addSubscriber",
+      "description": "The operations to perform",
+      "options": [
+        {
+          "name": "Add Subscriber",
+          "value": "addSubscriber",
+          "description": "Add a subscriber",
+          "action": "Add a subscriber"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many forms",
+          "action": "Get many forms"
+        },
+        {
+          "name": "Get Subscriptions",
+          "value": "getSubscriptions",
+          "description": "List subscriptions to a form including subscriber data",
+          "action": "Get all subscriptions"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Form Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getForms"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "addSubscriber",
+            "getSubscriptions"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The subscriber's email address",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "addSubscriber"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "fieldsUi",
+          "placeholder": "Add Custom Field",
+          "description": "Object of key/value pairs for custom fields (the custom field must exist before you can use it here)",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "fieldsValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "last_name",
+                  "description": "The field's key"
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "Doe",
+                  "description": "Value of the field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "description": "The subscriber's first name"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "addSubscriber"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "getSubscriptions"
+          ],
+          "resource": [
+            "form"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "getSubscriptions"
+          ],
+          "resource": [
+            "form"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "description": "Receive only active subscribers or cancelled subscribers",
+      "options": [
+        {
+          "displayName": "Subscriber State",
+          "name": "subscriberState",
+          "type": "options",
+          "options": [
+            {
+              "name": "Active",
+              "value": "active"
+            },
+            {
+              "name": "Cancelled",
+              "value": "cancelled"
+            }
+          ],
+          "default": "active"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "getSubscriptions"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "addSubscriber",
+      "description": "The operations to perform",
+      "options": [
+        {
+          "name": "Add Subscriber",
+          "value": "addSubscriber",
+          "description": "Add a subscriber",
+          "action": "Add a subscriber"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many sequences",
+          "action": "Get many sequences"
+        },
+        {
+          "name": "Get Subscriptions",
+          "value": "getSubscriptions",
+          "description": "Get all subscriptions to a sequence including subscriber data",
+          "action": "Get all subscriptions to a sequence"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Sequence Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getSequences"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ],
+          "operation": [
+            "addSubscriber",
+            "getSubscriptions"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The subscriber's email address",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ],
+          "operation": [
+            "addSubscriber"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "getSubscriptions"
+          ],
+          "resource": [
+            "sequence"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "getSubscriptions"
+          ],
+          "resource": [
+            "sequence"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "fieldsUi",
+          "placeholder": "Add Custom Field",
+          "description": "Object of key/value pairs for custom fields (the custom field must exist before you can use it here)",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "fieldsValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "last_name",
+                  "description": "The field's key"
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "Doe",
+                  "description": "Value of the field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "description": "The subscriber's first name"
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "Tags. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ],
+          "operation": [
+            "addSubscriber"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "description": "Receive only active subscribers or cancelled subscribers",
+      "options": [
+        {
+          "displayName": "Subscriber State",
+          "name": "subscriberState",
+          "type": "options",
+          "options": [
+            {
+              "name": "Active",
+              "value": "active"
+            },
+            {
+              "name": "Cancelled",
+              "value": "cancelled"
+            }
+          ],
+          "default": "active"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ],
+          "operation": [
+            "getSubscriptions"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a tag",
+          "action": "Create a tag"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many tags",
+          "action": "Get many tags"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Tag name, multiple can be added separated by comma",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tag"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tag"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add a tag to a subscriber",
+          "action": "Add a tag to a subscriber"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "List subscriptions to a tag including subscriber data",
+          "action": "Get many tag subscriptions"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a tag from a subscriber",
+          "action": "Delete a tag from a subscriber"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "tagId",
+      "displayName": "Tag Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getTags"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "add",
+            "getAll",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Subscriber email address",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "add",
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "fields",
+          "placeholder": "Add Custom Field",
+          "description": "Object of key/value pairs for custom fields (the custom field must exist before you can use it here)",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "field",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "last_name",
+                  "description": "The field's key"
+                },
+                {
+                  "displayName": "Field Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "Doe",
+                  "description": "Value of the field"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "description": "Subscriber first name"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tagSubscriber"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tagSubscriber"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "description": "Receive only active subscribers or cancelled subscribers",
+      "options": [
+        {
+          "displayName": "Subscriber State",
+          "name": "subscriberState",
+          "type": "options",
+          "options": [
+            {
+              "name": "Active",
+              "value": "active"
+            },
+            {
+              "name": "Cancelled",
+              "value": "cancelled"
+            }
+          ],
+          "default": "active"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "convertKitApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "id",
+    "label",
+    "id",
+    "email",
+    "id",
+    "email",
+    "name",
+    "tagId",
+    "email"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "id": "options",
+    "label": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "email": "string",
+    "additionalFields": "collection",
+    "name": "string",
+    "tagId": "options"
+  },
+  "hasVersions": false
+}

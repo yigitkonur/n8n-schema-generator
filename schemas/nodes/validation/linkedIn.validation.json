@@ -1,0 +1,399 @@
+{
+  "nodeType": "n8n-nodes-base.linkedIn",
+  "displayName": "LinkedIn",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "resource",
+    "operation",
+    "postAs",
+    "person",
+    "organization",
+    "text",
+    "shareMediaCategory",
+    "binaryPropertyName",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "standard",
+        "enumValues": [
+          "standard",
+          "communityManagement"
+        ]
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "post",
+        "enumValues": [
+          "post"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "postAs",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "person",
+        "enumValues": [
+          "person",
+          "organization"
+        ]
+      }
+    },
+    {
+      "field": "person",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "person"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "postAs",
+        "resource"
+      ]
+    },
+    {
+      "field": "organization",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "organization"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "postAs",
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "shareMediaCategory",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "NONE",
+        "enumValues": [
+          "NONE",
+          "ARTICLE",
+          "IMAGE"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ],
+          "shareMediaCategory": [
+            "IMAGE"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "shareMediaCategory"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "standard",
+    "resource": "post",
+    "operation": "create",
+    "postAs": "person",
+    "person": "",
+    "organization": "",
+    "text": "",
+    "shareMediaCategory": "NONE",
+    "binaryPropertyName": "data",
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "person",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "person"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "postAs",
+        "resource"
+      ]
+    },
+    {
+      "field": "organization",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "organization"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "postAs",
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "shareMediaCategory",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "binaryPropertyName",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ],
+          "shareMediaCategory": [
+            "IMAGE"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "shareMediaCategory"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "post": {
+      "operations": [
+        "create"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "person",
+          "organization",
+          "text",
+          "shareMediaCategory",
+          "binaryPropertyName",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

@@ -1,0 +1,288 @@
+{
+  "name": "microsoftOneDriveTrigger",
+  "displayName": "Microsoft OneDrive Trigger",
+  "description": "Trigger for Microsoft OneDrive API.",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "event": "fileCreated",
+    "simple": true,
+    "watchFolder": false,
+    "fileId": {
+      "__rl": true,
+      "mode": "id",
+      "value": ""
+    },
+    "options": {}
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "event",
+      "displayName": "Trigger On",
+      "type": "options",
+      "default": "fileCreated",
+      "options": [
+        {
+          "name": "File Created",
+          "value": "fileCreated",
+          "description": "When a new file is created"
+        },
+        {
+          "name": "File Updated",
+          "value": "fileUpdated",
+          "description": "When an existing file is modified"
+        },
+        {
+          "name": "Folder Created",
+          "value": "folderCreated",
+          "description": "When a new folder is created"
+        },
+        {
+          "name": "Folder Updated",
+          "value": "folderUpdated",
+          "description": "When an existing folder is modified"
+        }
+      ]
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data"
+    },
+    {
+      "name": "watchFolder",
+      "displayName": "Watch Folder",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to watch for the created file in a given folder, rather than the entire OneDrive",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "fileCreated"
+          ]
+        }
+      }
+    },
+    {
+      "name": "watch",
+      "displayName": "Watch",
+      "type": "options",
+      "default": "anyFile",
+      "description": "How to select which file to watch",
+      "options": [
+        {
+          "name": "Any File",
+          "value": "anyFile",
+          "description": "Watch for updated files in the entire OneDrive"
+        },
+        {
+          "name": "Inside a Folder",
+          "value": "selectedFolder",
+          "description": "Watch for updated files inside a selected folder"
+        },
+        {
+          "name": "A Selected File",
+          "value": "selectedFile",
+          "description": "Watch a specific file for updates"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "event": [
+            "fileUpdated"
+          ]
+        }
+      }
+    },
+    {
+      "name": "watchFolder",
+      "displayName": "Watch Folder",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to watch for the created folder in a given folder, rather than the entire OneDrive",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "folderCreated"
+          ]
+        }
+      }
+    },
+    {
+      "name": "watch",
+      "displayName": "Watch",
+      "type": "options",
+      "default": "anyFolder",
+      "description": "How to select which folder to watch",
+      "options": [
+        {
+          "name": "Any Folder",
+          "value": "anyFolder",
+          "description": "Watch for updated folders in the entire OneDrive"
+        },
+        {
+          "name": "Inside a Folder",
+          "value": "selectedFolder",
+          "description": "Watch for updated folders inside a selected folder"
+        },
+        {
+          "name": "A Selected Folder",
+          "value": "oneSelectedFolder",
+          "description": "Watch a specific folder for updates"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "event": [
+            "folderUpdated"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to operate on. The 'By URL' option only accepts URLs that start with 'https://onedrive.live.com'.",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "fileUpdated"
+          ],
+          "watch": [
+            "selectedFile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": "",
+        "cachedResultName": ""
+      },
+      "required": true,
+      "description": "The folder to operate on. The 'By URL' option only accepts URLs that start with 'https://onedrive.live.com'.",
+      "displayOptions": {
+        "show": {
+          "watch": [
+            "selectedFolder",
+            "oneSelectedFolder"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "id",
+        "value": "",
+        "cachedResultName": ""
+      },
+      "required": true,
+      "description": "The folder to operate on. The 'By URL' option only accepts URLs that start with 'https://onedrive.live.com'.",
+      "displayOptions": {
+        "show": {
+          "watchFolder": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Watch Nested Folders",
+          "name": "folderChild",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to look for modified files/folders in all nested folders, rather than only direct descendants"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "watch": [
+            "selectedFolder"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Watch Nested Folders",
+          "name": "folderChild",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to look for modified files/folders in all nested folders, rather than only direct descendants"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "watchFolder": [
+            true
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "microsoftOneDriveOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "fileId",
+    "folderId",
+    "folderId"
+  ],
+  "optionalFields": [
+    "event",
+    "simple",
+    "watchFolder",
+    "watch",
+    "watchFolder",
+    "watch",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "event": "options",
+    "simple": "boolean",
+    "watchFolder": "boolean",
+    "watch": "options",
+    "fileId": "resourceLocator",
+    "folderId": "resourceLocator",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

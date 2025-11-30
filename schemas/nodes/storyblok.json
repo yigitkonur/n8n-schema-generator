@@ -1,0 +1,638 @@
+{
+  "name": "storyblok",
+  "displayName": "Storyblok",
+  "description": "Consume Storyblok API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "source": "contentApi",
+    "resource": "story",
+    "operation": "get",
+    "identifier": "",
+    "filters": {},
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "source",
+      "displayName": "Source",
+      "type": "options",
+      "default": "contentApi",
+      "description": "Pick where your data comes from, Content or Management API",
+      "options": [
+        {
+          "name": "Content API",
+          "value": "contentApi"
+        },
+        {
+          "name": "Management API",
+          "value": "managementApi"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "story",
+      "options": [
+        {
+          "name": "Story",
+          "value": "story"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "story",
+      "options": [
+        {
+          "name": "Story",
+          "value": "story"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a story",
+          "action": "Get a story"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many stories",
+          "action": "Get many stories"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "identifier",
+      "displayName": "Identifier",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID or slug of the story to get",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Starts With",
+          "name": "starts_with",
+          "type": "string",
+          "default": "",
+          "description": "Filter by slug"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a story",
+          "action": "Delete a story"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a story",
+          "action": "Get a story"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many stories",
+          "action": "Get many stories"
+        },
+        {
+          "name": "Publish",
+          "value": "publish",
+          "description": "Publish a story",
+          "action": "Publish a story"
+        },
+        {
+          "name": "Unpublish",
+          "value": "unpublish",
+          "description": "Unpublish a story",
+          "action": "Unpublish a story"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "space",
+      "displayName": "Space Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSpaces"
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyId",
+      "displayName": "Story ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Numeric ID of the story",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "space",
+      "displayName": "Space Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSpaces"
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyId",
+      "displayName": "Story ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Numeric ID of the story",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "space",
+      "displayName": "Space Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSpaces"
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Starts With",
+          "name": "starts_with",
+          "type": "string",
+          "default": "",
+          "description": "Filter by slug"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "space",
+      "displayName": "Space Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSpaces"
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "publish"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyId",
+      "displayName": "Story ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Numeric ID of the story",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "publish"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Release ID",
+          "name": "releaseId",
+          "type": "string",
+          "default": "",
+          "description": "Numeric ID of release"
+        },
+        {
+          "displayName": "Language",
+          "name": "language",
+          "type": "string",
+          "default": "",
+          "description": "Language code to publish the story individually (must be enabled in the space settings)"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "publish"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "space",
+      "displayName": "Space Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSpaces"
+      },
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "unpublish"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyId",
+      "displayName": "Story ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Numeric ID of the story",
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "unpublish"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "storyblokContentApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyblokManagementApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "identifier",
+    "space",
+    "storyId",
+    "space",
+    "storyId",
+    "space",
+    "space",
+    "storyId",
+    "space",
+    "storyId"
+  ],
+  "optionalFields": [
+    "source",
+    "resource",
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "options"
+  ],
+  "parameterTypes": {
+    "source": "options",
+    "resource": "options",
+    "operation": "options",
+    "identifier": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "space": "options",
+    "storyId": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

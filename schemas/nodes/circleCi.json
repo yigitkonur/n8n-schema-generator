@@ -1,0 +1,274 @@
+{
+  "name": "circleCi",
+  "displayName": "CircleCI",
+  "description": "Consume CircleCI API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "pipeline",
+    "operation": "get",
+    "vcs": "",
+    "projectSlug": "",
+    "pipelineNumber": 1,
+    "returnAll": false,
+    "limit": 100,
+    "filters": {},
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "pipeline",
+      "options": [
+        {
+          "name": "Pipeline",
+          "value": "pipeline"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a pipeline",
+          "action": "Get a pipeline"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many pipelines",
+          "action": "Get many pipelines"
+        },
+        {
+          "name": "Trigger",
+          "value": "trigger",
+          "description": "Trigger a pipeline",
+          "action": "Trigger a pipeline"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "vcs",
+      "displayName": "Provider",
+      "type": "options",
+      "default": "",
+      "description": "Source control system",
+      "options": [
+        {
+          "name": "Bitbucket",
+          "value": "bitbucket"
+        },
+        {
+          "name": "GitHub",
+          "value": "github"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectSlug",
+      "displayName": "Project Slug",
+      "type": "string",
+      "default": "",
+      "description": "Project slug in the form org-name/repo-name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "placeholder": "n8n-io/n8n"
+    },
+    {
+      "name": "pipelineNumber",
+      "displayName": "Pipeline Number",
+      "type": "number",
+      "default": 1,
+      "description": "The number of the pipeline",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branch",
+          "name": "branch",
+          "type": "string",
+          "default": "",
+          "description": "The name of a vcs branch"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branch",
+          "name": "branch",
+          "type": "string",
+          "default": "",
+          "description": "The branch where the pipeline ran. The HEAD commit on this branch was used for the pipeline. Note that branch and tag are mutually exclusive."
+        },
+        {
+          "displayName": "Tag",
+          "name": "tag",
+          "type": "string",
+          "default": "",
+          "description": "The tag used by the pipeline. The commit that this tag points to was used for the pipeline. Note that branch and tag are mutually exclusive"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "trigger"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "circleCiApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "vcs",
+    "projectSlug",
+    "pipelineNumber",
+    "returnAll",
+    "limit",
+    "filters",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "vcs": "options",
+    "projectSlug": "string",
+    "pipelineNumber": "number",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

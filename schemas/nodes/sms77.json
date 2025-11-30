@@ -1,0 +1,263 @@
+{
+  "name": "sms77",
+  "displayName": "seven",
+  "description": "Send SMS and make text-to-speech calls",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "sms",
+    "operation": "send",
+    "from": "",
+    "to": "",
+    "message": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "sms",
+      "options": [
+        {
+          "name": "SMS",
+          "value": "sms"
+        },
+        {
+          "name": "Voice Call",
+          "value": "voice"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "description": "Send SMS",
+          "action": "Send an SMS"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "description": "Converts text to voice and calls a given number",
+          "action": "Convert text to voice"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "from",
+      "displayName": "From",
+      "type": "string",
+      "default": "",
+      "description": "The caller ID displayed in the receivers display. Max 16 numeric or 11 alphanumeric characters.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "placeholder": "+4901234567890"
+    },
+    {
+      "name": "to",
+      "displayName": "To",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The number of your recipient(s) separated by comma. Can be regular numbers or contact/groups from seven.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "placeholder": "+49876543210, MyGroup"
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The message to send. Max. 1520 characters",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delay",
+          "name": "delay",
+          "type": "dateTime",
+          "default": "",
+          "description": "Pick a date for time delayed dispatch"
+        },
+        {
+          "displayName": "Foreign ID",
+          "name": "foreign_id",
+          "type": "string",
+          "default": "",
+          "placeholder": "MyCustomForeignID",
+          "description": "Custom foreign ID returned in DLR callbacks"
+        },
+        {
+          "displayName": "Flash",
+          "name": "flash",
+          "type": "boolean",
+          "default": false,
+          "description": "Send as flash message being displayed directly the receiver's display"
+        },
+        {
+          "displayName": "Label",
+          "name": "label",
+          "type": "string",
+          "default": "",
+          "placeholder": "MyCustomLabel",
+          "description": "Custom label used to group analytics"
+        },
+        {
+          "displayName": "Performance Tracking",
+          "name": "performance_tracking",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable performance tracking for URLs found in the message text"
+        },
+        {
+          "displayName": "TTL",
+          "name": "ttl",
+          "type": "number",
+          "default": 2880,
+          "typeOptions": {
+            "minValue": 1
+          },
+          "description": "Custom time to live specifying the validity period of a message in minutes"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "From",
+          "name": "from",
+          "type": "string",
+          "default": "",
+          "placeholder": "+4901234567890",
+          "description": "The caller ID. Please use only verified sender IDs, one of your virtual inbound numbers or one of our shared virtual numbers."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "sms77Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "to",
+    "message"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "from",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "from": "string",
+    "to": "string",
+    "message": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,321 @@
+{
+  "name": "netlify",
+  "displayName": "Netlify",
+  "description": "Consume Netlify API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "deploy",
+    "operation": "getAll",
+    "siteId": "",
+    "deployId": "",
+    "returnAll": false,
+    "limit": 50,
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "deploy",
+      "required": true,
+      "options": [
+        {
+          "name": "Deploy",
+          "value": "deploy"
+        },
+        {
+          "name": "Site",
+          "value": "site"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Cancel",
+          "value": "cancel",
+          "description": "Cancel a deployment",
+          "action": "Cancel a deployment"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new deployment",
+          "action": "Create a deployment"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a deployment",
+          "action": "Get a deployment"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many deployments",
+          "action": "Get many deployments"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Enter the Site ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "create",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "deployId",
+      "displayName": "Deploy ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "cancel"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deploy"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Branch",
+          "name": "branch",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Fields"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "delete",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a site",
+          "action": "Delete a site"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a site",
+          "action": "Get a site"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Returns many sites",
+          "action": "Get many sites"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "netlifyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "siteId",
+    "deployId",
+    "siteId"
+  ],
+  "optionalFields": [
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "siteId": "string",
+    "deployId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

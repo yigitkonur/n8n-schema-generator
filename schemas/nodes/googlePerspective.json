@@ -1,0 +1,176 @@
+{
+  "name": "googlePerspective",
+  "displayName": "Google Perspective",
+  "description": "Consume Google Perspective API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "operation": "analyzeComment",
+    "text": "",
+    "requestedAttributesUi": {},
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "analyzeComment",
+      "options": [
+        {
+          "name": "Analyze Comment",
+          "value": "analyzeComment"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "text",
+      "displayName": "Text",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      }
+    },
+    {
+      "name": "requestedAttributesUi",
+      "displayName": "Attributes to Analyze",
+      "type": "fixedCollection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Properties",
+          "name": "requestedAttributesValues",
+          "values": [
+            {
+              "displayName": "Attribute Name",
+              "name": "attributeName",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Flirtation",
+                  "value": "flirtation"
+                },
+                {
+                  "name": "Identity Attack",
+                  "value": "identity_attack"
+                },
+                {
+                  "name": "Insult",
+                  "value": "insult"
+                },
+                {
+                  "name": "Profanity",
+                  "value": "profanity"
+                },
+                {
+                  "name": "Severe Toxicity",
+                  "value": "severe_toxicity"
+                },
+                {
+                  "name": "Sexually Explicit",
+                  "value": "sexually_explicit"
+                },
+                {
+                  "name": "Threat",
+                  "value": "threat"
+                },
+                {
+                  "name": "Toxicity",
+                  "value": "toxicity"
+                }
+              ],
+              "description": "Attribute to analyze in the text. Details <a href=\"https://developers.perspectiveapi.com/s/about-the-api-attributes-and-languages\">here</a>.",
+              "default": "flirtation"
+            },
+            {
+              "displayName": "Score Threshold",
+              "name": "scoreThreshold",
+              "type": "number",
+              "typeOptions": {
+                "numberPrecision": 2,
+                "minValue": 0,
+                "maxValue": 1
+              },
+              "description": "Score above which to return results. At zero, all scores are returned.",
+              "default": 0
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "placeholder": "Add Atrribute"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Language Name or ID",
+          "name": "languages",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getLanguages"
+          },
+          "default": "",
+          "description": "Languages of the text input. If unspecified, the API will auto-detect the comment language. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googlePerspectiveOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "text",
+    "requestedAttributesUi"
+  ],
+  "optionalFields": [
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "text": "string",
+    "requestedAttributesUi": "fixedCollection",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

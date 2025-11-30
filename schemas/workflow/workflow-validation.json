@@ -1,0 +1,259 @@
+{
+  "structure": {
+    "requiredProperties": [
+      "nodes",
+      "connections"
+    ],
+    "optionalProperties": [
+      "id",
+      "name",
+      "active",
+      "settings",
+      "staticData",
+      "pinData",
+      "tags",
+      "meta"
+    ],
+    "propertyTypes": {
+      "id": "string",
+      "name": "string",
+      "active": "boolean",
+      "nodes": "array",
+      "connections": "object",
+      "settings": "object",
+      "staticData": "object",
+      "pinData": "object",
+      "tags": "array",
+      "meta": "object"
+    }
+  },
+  "nodes": {
+    "requiredFields": [
+      "type",
+      "typeVersion",
+      "position",
+      "parameters"
+    ],
+    "fieldTypes": {
+      "id": {
+        "type": "string",
+        "required": false,
+        "constraints": {
+          "type": "string",
+          "pattern": "^[a-f0-9-]{36}$"
+        }
+      },
+      "name": {
+        "type": "string",
+        "required": false
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "constraints": {
+          "type": "string",
+          "pattern": "^[\\w@/-]+\\.[\\w]+$"
+        }
+      },
+      "typeVersion": {
+        "type": "number",
+        "required": true,
+        "constraints": {
+          "type": "number",
+          "minValue": 1
+        }
+      },
+      "position": {
+        "type": "array",
+        "required": true,
+        "constraints": {
+          "type": "array",
+          "itemType": "number",
+          "minLength": 2,
+          "maxLength": 2
+        }
+      },
+      "parameters": {
+        "type": "object",
+        "required": true
+      },
+      "credentials": {
+        "type": "object",
+        "required": false
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "notes": {
+        "type": "string",
+        "required": false
+      },
+      "notesInFlow": {
+        "type": "boolean",
+        "required": false
+      },
+      "retryOnFail": {
+        "type": "boolean",
+        "required": false
+      },
+      "maxTries": {
+        "type": "number",
+        "required": false,
+        "constraints": {
+          "type": "number",
+          "minValue": 1
+        }
+      },
+      "waitBetweenTries": {
+        "type": "number",
+        "required": false,
+        "constraints": {
+          "type": "number",
+          "minValue": 0
+        }
+      },
+      "alwaysOutputData": {
+        "type": "boolean",
+        "required": false
+      },
+      "executeOnce": {
+        "type": "boolean",
+        "required": false
+      },
+      "continueOnFail": {
+        "type": "boolean",
+        "required": false
+      },
+      "onError": {
+        "type": "string",
+        "required": false,
+        "constraints": {
+          "type": "string",
+          "enumValues": [
+            "stopWorkflow",
+            "continueRegularOutput",
+            "continueErrorOutput"
+          ]
+        }
+      },
+      "webhookId": {
+        "type": "string",
+        "required": false
+      }
+    },
+    "typeFormat": {
+      "pattern": "^[\\w@/-]+\\.[\\w]+$",
+      "examples": [
+        "n8n-nodes-base.httpRequest",
+        "n8n-nodes-base.if",
+        "@n8n/n8n-nodes-langchain.agent"
+      ],
+      "validPrefixes": [
+        "n8n-nodes-base",
+        "n8n-nodes-langchain",
+        "@n8n/n8n-nodes-langchain"
+      ]
+    }
+  },
+  "connections": {
+    "structure": {
+      "type": "object",
+      "keyPattern": "^.+$",
+      "valueType": "ConnectionOutput"
+    },
+    "connectionOutput": {
+      "type": "object",
+      "properties": {
+        "main": {
+          "type": "array",
+          "items": "ConnectionArray"
+        }
+      }
+    },
+    "connectionItem": {
+      "required": [
+        "node",
+        "type",
+        "index"
+      ],
+      "properties": {
+        "node": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "index": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "settings": {
+    "validSettings": {
+      "saveManualExecutions": {
+        "type": "boolean",
+        "required": false
+      },
+      "saveDataErrorExecution": {
+        "type": "string",
+        "required": false,
+        "constraints": {
+          "type": "string",
+          "enumValues": [
+            "all",
+            "none"
+          ]
+        }
+      },
+      "saveDataSuccessExecution": {
+        "type": "string",
+        "required": false,
+        "constraints": {
+          "type": "string",
+          "enumValues": [
+            "all",
+            "none"
+          ]
+        }
+      },
+      "saveExecutionProgress": {
+        "type": "boolean",
+        "required": false
+      },
+      "executionTimeout": {
+        "type": "number",
+        "required": false,
+        "constraints": {
+          "type": "number",
+          "minValue": -1
+        }
+      },
+      "errorWorkflow": {
+        "type": "string",
+        "required": false
+      },
+      "timezone": {
+        "type": "string",
+        "required": false
+      },
+      "executionOrder": {
+        "type": "string",
+        "required": false,
+        "constraints": {
+          "type": "string",
+          "enumValues": [
+            "v0",
+            "v1"
+          ]
+        }
+      }
+    },
+    "executionOrderOptions": [
+      "v0",
+      "v1"
+    ],
+    "errorWorkflowFormat": "workflow ID string"
+  }
+}

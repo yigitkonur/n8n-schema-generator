@@ -1,0 +1,745 @@
+{
+  "name": "getResponse",
+  "displayName": "GetResponse",
+  "description": "Consume GetResponse API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "apiKey",
+    "resource": "contact",
+    "operation": "get",
+    "email": "",
+    "campaignId": "",
+    "additionalFields": {},
+    "options": {},
+    "contactId": "",
+    "returnAll": false,
+    "limit": 20,
+    "updateFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiKey",
+      "options": [
+        {
+          "name": "API Key",
+          "value": "apiKey"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "options": [
+        {
+          "name": "Contact",
+          "value": "contact"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new contact",
+          "action": "Create a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact",
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a contact",
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many contacts",
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update contact properties",
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "campaignId",
+      "displayName": "Campaign Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCampaigns"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Custom Field",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "customFieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "description": "The end user specified value of the user defined data",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Day Of Cycle",
+          "name": "dayOfCycle",
+          "type": "string",
+          "description": "The day on which the contact is in the Autoresponder cycle. null indicates the contacts is not in the cycle.",
+          "default": ""
+        },
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "description": "The contact's IP address. IPv4 and IPv6 formats are accepted.",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Note",
+          "name": "note",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Scoring",
+          "name": "scoring",
+          "type": "number",
+          "default": "",
+          "description": "Contact scoring, pass null to remove the score from a contact",
+          "typeOptions": {
+            "minValue": 0
+          }
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": []
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of contact to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "description": "This makes it possible to pass the IP from which the contact unsubscribed. Used only if the messageId was send.",
+          "default": ""
+        },
+        {
+          "displayName": "Message ID",
+          "name": "messageId",
+          "type": "string",
+          "description": "The ID of a message (such as a newsletter, an autoresponder, or an RSS-newsletter). When passed, this method will simulate the unsubscribe process, as if the contact clicked the unsubscribe link in a given message.",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular contact",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "type": "string",
+          "description": "List of fields that should be returned. ID is always returned. Fields should be separated by comma",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Campaign ID",
+          "name": "campaignId",
+          "type": "string",
+          "description": "Search contacts by campaign ID",
+          "default": ""
+        },
+        {
+          "displayName": "Change On From",
+          "name": "changeOnFrom",
+          "type": "dateTime",
+          "default": "",
+          "description": "Search contacts edited from this date"
+        },
+        {
+          "displayName": "Change On To",
+          "name": "changeOnTo",
+          "type": "dateTime",
+          "default": "",
+          "description": "Search contacts edited to this date"
+        },
+        {
+          "displayName": "Created On From",
+          "name": "createdOnFrom",
+          "type": "dateTime",
+          "default": "",
+          "description": "Count data from this date"
+        },
+        {
+          "displayName": "Created On To",
+          "name": "createdOnTo",
+          "type": "dateTime",
+          "default": "",
+          "description": "Count data from this date"
+        },
+        {
+          "displayName": "Exact Match",
+          "name": "exactMatch",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to search for contacts with the exact value of the email and name provided in the query string. Without this flag, matching is done via a standard 'like' comparison, which may sometimes be slow."
+        },
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "type": "string",
+          "description": "List of fields that should be returned. ID is always returned. Fields should be separated by comma",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "description": "Search contacts by name",
+          "default": ""
+        },
+        {
+          "displayName": "Origin",
+          "name": "origin",
+          "type": "options",
+          "options": [
+            {
+              "name": "API",
+              "value": "api"
+            },
+            {
+              "name": "Copy",
+              "value": "copy"
+            },
+            {
+              "name": "Email",
+              "value": "email"
+            },
+            {
+              "name": "Forward",
+              "value": "forward"
+            },
+            {
+              "name": "Import",
+              "value": "import"
+            },
+            {
+              "name": "Iphone",
+              "value": "iphone"
+            },
+            {
+              "name": "Landing Page",
+              "value": "landing_page"
+            },
+            {
+              "name": "Leads",
+              "value": "leads"
+            },
+            {
+              "name": "Panel",
+              "value": "panel"
+            },
+            {
+              "name": "Sale",
+              "value": "sale"
+            },
+            {
+              "name": "Survey",
+              "value": "survey"
+            },
+            {
+              "name": "Webinar",
+              "value": "webinar"
+            },
+            {
+              "name": "WWW",
+              "value": "www"
+            }
+          ],
+          "description": "Search contacts by origin",
+          "default": ""
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sortBy",
+          "type": "options",
+          "options": [
+            {
+              "name": "Campaign ID",
+              "value": "campaignId"
+            },
+            {
+              "name": "Changed On",
+              "value": "changedOn"
+            },
+            {
+              "name": "Created On",
+              "value": "createdOn"
+            },
+            {
+              "name": "Email",
+              "value": "email"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sortOrder",
+          "type": "options",
+          "options": [
+            {
+              "name": "ASC",
+              "value": "ASC"
+            },
+            {
+              "name": "DESC",
+              "value": "DESC"
+            }
+          ],
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular contact",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Campaign Name or ID",
+          "name": "campaignId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getCampaigns"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Custom Field",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "customFieldValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Field Name or ID",
+                  "name": "customFieldId",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "description": "The end user specified value of the user defined data",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Day Of Cycle",
+          "name": "dayOfCycle",
+          "type": "string",
+          "description": "The day on which the contact is in the Autoresponder cycle. null indicates the contacts is not in the cycle.",
+          "default": ""
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": ""
+        },
+        {
+          "displayName": "IP Address",
+          "name": "ipAddress",
+          "type": "string",
+          "description": "The contact's IP address. IPv4 and IPv6 formats are accepted.",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Note",
+          "name": "note",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Scoring",
+          "name": "scoring",
+          "type": "number",
+          "default": "",
+          "description": "Contact scoring, pass null to remove the score from a contact",
+          "typeOptions": {
+            "minValue": 0
+          }
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": []
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "getResponseApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getResponseOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "contactId",
+    "contactId",
+    "contactId"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "email",
+    "campaignId",
+    "additionalFields",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "email": "string",
+    "campaignId": "options",
+    "additionalFields": "collection",
+    "contactId": "string",
+    "options": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateFields": "collection"
+  },
+  "hasVersions": false
+}

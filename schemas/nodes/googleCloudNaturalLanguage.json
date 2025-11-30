@@ -1,0 +1,278 @@
+{
+  "name": "googleCloudNaturalLanguage",
+  "displayName": "Google Cloud Natural Language",
+  "description": "Consume Google Cloud Natural Language API",
+  "group": [
+    "input",
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "document",
+    "operation": "analyzeSentiment",
+    "source": "content",
+    "content": "",
+    "gcsContentUri": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "document",
+      "options": [
+        {
+          "name": "Document",
+          "value": "document"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "analyzeSentiment",
+      "options": [
+        {
+          "name": "Analyze Sentiment",
+          "value": "analyzeSentiment",
+          "action": "Analyze sentiment"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "source",
+      "displayName": "Source",
+      "type": "options",
+      "default": "content",
+      "required": true,
+      "description": "The source of the document: a string containing the content or a Google Cloud Storage URI",
+      "options": [
+        {
+          "name": "Content",
+          "value": "content"
+        },
+        {
+          "name": "Google Cloud Storage URI",
+          "value": "gcsContentUri"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ]
+        }
+      }
+    },
+    {
+      "name": "content",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ],
+          "source": [
+            "content"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gcsContentUri",
+      "displayName": "Google Cloud Storage URI",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: <code>gs://bucket_name/object_name</code>. For more details, see <a href=\"https://cloud.google.com/storage/docs/reference-uris.\">reference</a>.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ],
+          "source": [
+            "gcsContentUri"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Document Type",
+          "name": "documentType",
+          "type": "options",
+          "options": [
+            {
+              "name": "HTML",
+              "value": "HTML"
+            },
+            {
+              "name": "Plain Text",
+              "value": "PLAIN_TEXT"
+            }
+          ],
+          "default": "PLAIN_TEXT",
+          "description": "The type of input document"
+        },
+        {
+          "displayName": "Encoding Type",
+          "name": "encodingType",
+          "type": "options",
+          "options": [
+            {
+              "name": "None",
+              "value": "NONE"
+            },
+            {
+              "name": "UTF-8",
+              "value": "UTF8"
+            },
+            {
+              "name": "UTF-16",
+              "value": "UTF16"
+            },
+            {
+              "name": "UTF-32",
+              "value": "UTF32"
+            }
+          ],
+          "default": "UTF16",
+          "description": "The encoding type used by the API to calculate sentence offsets"
+        },
+        {
+          "displayName": "Language",
+          "name": "language",
+          "type": "options",
+          "options": [
+            {
+              "name": "Arabic",
+              "value": "ar"
+            },
+            {
+              "name": "Chinese (Simplified)",
+              "value": "zh"
+            },
+            {
+              "name": "Chinese (Traditional)",
+              "value": "zh-Hant"
+            },
+            {
+              "name": "Dutch",
+              "value": "nl"
+            },
+            {
+              "name": "English",
+              "value": "en"
+            },
+            {
+              "name": "French",
+              "value": "fr"
+            },
+            {
+              "name": "German",
+              "value": "de"
+            },
+            {
+              "name": "Indonesian",
+              "value": "id"
+            },
+            {
+              "name": "Italian",
+              "value": "it"
+            },
+            {
+              "name": "Japanese",
+              "value": "ja"
+            },
+            {
+              "name": "Korean",
+              "value": "ko"
+            },
+            {
+              "name": "Portuguese (Brazilian & Continental)",
+              "value": "pt"
+            },
+            {
+              "name": "Spanish",
+              "value": "es"
+            },
+            {
+              "name": "Thai",
+              "value": "th"
+            },
+            {
+              "name": "Turkish",
+              "value": "tr"
+            },
+            {
+              "name": "Vietnamese",
+              "value": "vi"
+            }
+          ],
+          "default": "en",
+          "placeholder": "",
+          "description": "The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleCloudNaturalLanguageOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "source",
+    "content",
+    "gcsContentUri"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "source": "options",
+    "content": "string",
+    "gcsContentUri": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,70 @@
+{
+  "name": "twilioTrigger",
+  "displayName": "Twilio Trigger",
+  "description": "Starts the workflow on a Twilio update",
+  "group": [
+    "trigger"
+  ],
+  "version": [
+    1
+  ],
+  "defaults": {
+    "updates": [],
+    "callTriggerNotice": ""
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "updates",
+      "displayName": "Trigger On",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "options": [
+        {
+          "name": "New SMS",
+          "value": "com.twilio.messaging.inbound-message.received",
+          "description": "When an SMS message is received"
+        },
+        {
+          "name": "New Call",
+          "value": "com.twilio.voice.insights.call-summary.complete",
+          "description": "When a call is received"
+        }
+      ]
+    },
+    {
+      "name": "callTriggerNotice",
+      "displayName": "The 'New Call' event may take up to thirty minutes to be triggered",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "updates": [
+            "com.twilio.voice.insights.call-summary.complete"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "twilioApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "updates"
+  ],
+  "optionalFields": [
+    "callTriggerNotice"
+  ],
+  "parameterTypes": {
+    "updates": "multiOptions",
+    "callTriggerNotice": "notice"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,274 @@
+{
+  "name": "mistralAi",
+  "displayName": "Mistral AI",
+  "description": "Consume Mistral AI API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "document",
+    "operation": "extractText",
+    "model": "mistral-ocr-latest",
+    "documentType": "document_url",
+    "inputType": "binary",
+    "binaryProperty": "data",
+    "url": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "document",
+      "options": [
+        {
+          "name": "Document",
+          "value": "document"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "extractText",
+      "options": [
+        {
+          "name": "Extract Text",
+          "value": "extractText",
+          "description": "Extract text from document using OCR",
+          "action": "Extract text"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "mistral-ocr-latest",
+      "required": true,
+      "description": "The OCR model to use",
+      "options": [
+        {
+          "name": "mistral-ocr-latest",
+          "value": "mistral-ocr-latest"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "documentType",
+      "displayName": "Document Type",
+      "type": "options",
+      "default": "document_url",
+      "required": true,
+      "description": "The type of document to process",
+      "options": [
+        {
+          "name": "Document",
+          "value": "document_url"
+        },
+        {
+          "name": "Image",
+          "value": "image_url"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "inputType",
+      "displayName": "Input Type",
+      "type": "options",
+      "default": "binary",
+      "required": true,
+      "description": "How the document will be provided",
+      "options": [
+        {
+          "name": "Binary Data",
+          "value": "binary"
+        },
+        {
+          "name": "URL",
+          "value": "url"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the input binary field that contains the file to process",
+      "displayOptions": {
+        "show": {
+          "inputType": [
+            "binary"
+          ],
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "placeholder": "e.g. data",
+      "hint": "Uploaded document files must not exceed 50 MB in size and should be no longer than 1,000 pages."
+    },
+    {
+      "name": "url",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL of the document or image to process",
+      "displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "placeholder": "e.g. https://example.com/document.pdf"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Enable Batch Processing",
+          "name": "batch",
+          "type": "boolean",
+          "description": "Whether to process multiple documents in a single API call (more cost-efficient)",
+          "default": false
+        },
+        {
+          "displayName": "Batch Size",
+          "name": "batchSize",
+          "type": "number",
+          "description": "Maximum number of documents to process in a single batch",
+          "default": 50,
+          "typeOptions": {
+            "maxValue": 2048
+          },
+          "required": true,
+          "displayOptions": {
+            "show": {
+              "batch": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Delete Files After Processing",
+          "name": "deleteFiles",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to delete the files on Mistral Cloud after processing",
+          "displayOptions": {
+            "show": {
+              "batch": [
+                true
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mistralCloudApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "model",
+    "documentType",
+    "inputType",
+    "binaryProperty",
+    "url"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "model": "options",
+    "documentType": "options",
+    "inputType": "options",
+    "binaryProperty": "string",
+    "url": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

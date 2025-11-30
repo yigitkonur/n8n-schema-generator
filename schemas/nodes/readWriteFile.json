@@ -1,0 +1,194 @@
+{
+  "name": "readWriteFile",
+  "displayName": "Read/Write Files from Disk",
+  "description": "Read or write files from the computer that runs n8n",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "info": "",
+    "operation": "read",
+    "fileSelector": "",
+    "options": {},
+    "fileName": "",
+    "dataPropertyName": "data"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "info",
+      "displayName": "Use this node to read and write files on the same computer running n8n. To handle files between different computers please use other nodes (e.g. FTP, HTTP Request, AWS).",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "read",
+      "options": [
+        {
+          "name": "Read File(s) From Disk",
+          "value": "read",
+          "description": "Retrieve one or more files from the computer that runs n8n",
+          "action": "Read File(s) From Disk"
+        },
+        {
+          "name": "Write File to Disk",
+          "value": "write",
+          "description": "Create a binary file on the computer that runs n8n",
+          "action": "Write File to Disk"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "fileSelector",
+      "displayName": "File(s) Selector",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Specify a file's path or path pattern to read multiple files. Always use forward-slashes for path separator even on Windows.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "placeholder": "e.g. /home/user/Pictures/**/*.png",
+      "hint": "Supports patterns, learn more <a href=\"https://github.com/micromatch/picomatch#basic-globbing\" target=\"_blank\">here</a>"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File Extension",
+          "name": "fileExtension",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. zip",
+          "description": "Extension of the file in the output binary"
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. data.zip",
+          "description": "Name of the file in the output binary"
+        },
+        {
+          "displayName": "Mime Type",
+          "name": "mimeType",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. application/zip",
+          "description": "Mime type of the file in the output binary"
+        },
+        {
+          "displayName": "Put Output File in Field",
+          "name": "dataPropertyName",
+          "type": "string",
+          "default": "data",
+          "placeholder": "e.g. data",
+          "description": "By default 'data' is used",
+          "hint": "The name of the output binary field to put the file in"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "fileName",
+      "displayName": "File Path and Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Path and name of the file that should be written. Also include the file extension.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "placeholder": "e.g. /data/example.jpg"
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "placeholder": "e.g. data",
+      "hint": "The name of the input binary field containing the file to be written"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Append",
+          "name": "append",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to append to an existing file. While it's commonly used with text files, it's not limited to them, however, it wouldn't be applicable for file types that have a specific structure like most binary formats."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "fileSelector",
+    "fileName",
+    "dataPropertyName"
+  ],
+  "optionalFields": [
+    "info",
+    "operation",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "info": "notice",
+    "operation": "options",
+    "fileSelector": "string",
+    "options": "collection",
+    "fileName": "string",
+    "dataPropertyName": "string"
+  },
+  "hasVersions": false
+}

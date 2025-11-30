@@ -1,0 +1,422 @@
+{
+  "nodeType": "n8n-nodes-base.marketstack",
+  "displayName": "Marketstack",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [
+    "resource"
+  ],
+  "optionalParameters": [
+    "operation",
+    "symbols",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation",
+    "exchange",
+    "operation",
+    "symbol"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "endOfDayData",
+        "enumValues": [
+          "endOfDayData",
+          "exchange",
+          "ticker"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getAll",
+        "enumValues": [
+          "getAll"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "symbols",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "exchange",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "exchange"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticker"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "symbol",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticker"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "endOfDayData",
+    "operation": "getAll",
+    "symbols": "",
+    "returnAll": false,
+    "limit": 50,
+    "filters": {},
+    "exchange": "",
+    "symbol": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "symbols",
+      "condition": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "exchange"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "exchange",
+      "condition": {
+        "show": {
+          "resource": [
+            "exchange"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "ticker"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "symbol",
+      "condition": {
+        "show": {
+          "resource": [
+            "ticker"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "endOfDayData": {
+      "operations": [
+        "getAll"
+      ],
+      "fieldsPerOperation": {
+        "getAll": [
+          "symbols",
+          "returnAll",
+          "limit",
+          "filters"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

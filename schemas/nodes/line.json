@@ -1,0 +1,235 @@
+{
+  "name": "line",
+  "displayName": "Line",
+  "description": "Consume Line API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "notice": "",
+    "resource": "notification",
+    "operation": "send",
+    "message": "",
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "notice",
+      "displayName": "End of service: LINE Notify will be discontinued from April 1st 2025, You can find more information <a href=\"https://notify-bot.line.me/closing-announce\" target=\"_blank\">here</a>",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "notification",
+      "options": [
+        {
+          "name": "Notification",
+          "value": "notification"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "description": "Sends notifications to users or groups",
+          "action": "Send a notification"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Image",
+          "name": "imageUi",
+          "placeholder": "Add Image",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "imageValue",
+              "displayName": "Image",
+              "values": [
+                {
+                  "displayName": "Binary File",
+                  "name": "binaryData",
+                  "type": "boolean",
+                  "default": false
+                },
+                {
+                  "displayName": "Image Full Size",
+                  "name": "imageFullsize",
+                  "type": "string",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        false
+                      ]
+                    }
+                  },
+                  "description": "HTTP/HTTPS URL. Maximum size of 2048×2048px JPEG."
+                },
+                {
+                  "displayName": "Image Thumbnail",
+                  "name": "imageThumbnail",
+                  "type": "string",
+                  "displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        false
+                      ]
+                    }
+                  },
+                  "default": "",
+                  "description": "HTTP/HTTPS URL. Maximum size of 240×240px JPEG."
+                },
+                {
+                  "displayName": "Input Binary Field",
+                  "name": "binaryProperty",
+                  "type": "string",
+                  "displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        true
+                      ]
+                    }
+                  },
+                  "default": "data",
+                  "hint": "The name of the input binary field containing the file to be written"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Notification Disabled",
+          "name": "notificationDisabled",
+          "type": "boolean",
+          "default": false,
+          "description": "<p>true: The user doesn't receive a push notification when the message is sent.</p><p>false: The user receives a push notification when the message is sent</p>"
+        },
+        {
+          "displayName": "Sticker",
+          "name": "stickerUi",
+          "placeholder": "Add Sticker",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "stickerValue",
+              "displayName": "Sticker",
+              "values": [
+                {
+                  "displayName": "Sticker ID",
+                  "name": "stickerId",
+                  "type": "number",
+                  "default": ""
+                },
+                {
+                  "displayName": "Sticker Package ID",
+                  "name": "stickerPackageId",
+                  "type": "number",
+                  "default": "",
+                  "description": "Package ID"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "lineNotifyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "message"
+  ],
+  "optionalFields": [
+    "notice",
+    "resource",
+    "operation",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "notice": "notice",
+    "resource": "options",
+    "operation": "options",
+    "message": "string",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

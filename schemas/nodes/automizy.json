@@ -1,0 +1,776 @@
+{
+  "name": "automizy",
+  "displayName": "Automizy",
+  "description": "Consume Automizy API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "deprecated": "",
+    "resource": "contact",
+    "operation": "create",
+    "email": "",
+    "listId": "",
+    "additionalFields": {},
+    "updateFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "deprecated",
+      "displayName": "This service may no longer exist and will be removed from n8n in a future release.",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "contact",
+      "options": [
+        {
+          "name": "Contact",
+          "value": "contact"
+        },
+        {
+          "name": "List",
+          "value": "list"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a contact",
+          "action": "Create a contact"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a contact",
+          "action": "Delete a contact"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a contact",
+          "action": "Get a contact"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many contacts",
+          "action": "Get many contacts"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a contact",
+          "action": "Update a contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email address of the contact",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Custom Field",
+          "typeOptions": {
+            "multipleValues": true,
+            "loadOptionsMethod": "getCustomFields"
+          },
+          "options": [
+            {
+              "name": "customFieldsValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Key Name or ID",
+                  "name": "key",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "description": "The end user specified value of the user defined data",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Active",
+              "value": "ACTIVE"
+            },
+            {
+              "name": "Banned",
+              "value": "BANNED"
+            },
+            {
+              "name": "Bounced",
+              "value": "BOUNCED"
+            },
+            {
+              "name": "Inactive",
+              "value": "INACTIVE"
+            },
+            {
+              "name": "Unsubscribed",
+              "value": "UNSUBSCRIBED"
+            }
+          ],
+          "default": "",
+          "description": "The status of the contact. You can only send email to contacts with ACTIVE status."
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The tags you want to set to the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Can be ID or email",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contactId",
+      "displayName": "Contact ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Can be ID or email",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Direction",
+          "name": "direction",
+          "type": "options",
+          "options": [
+            {
+              "name": "ASC",
+              "value": "asc"
+            },
+            {
+              "name": "DESC",
+              "value": "desc"
+            }
+          ],
+          "default": "desc",
+          "description": "Defines the direction in which search results are ordered. Default value is DESC. Note: It has to be using with the Sort By parameter"
+        },
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "type": "string",
+          "default": "",
+          "description": "A comma-separated list of attributes to include in the response"
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sortBy",
+          "type": "string",
+          "default": "Defines the field in which search results are sort by. Note: It has to be using with the Direcction parameter"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Add Tag Names or IDs",
+          "name": "addTags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The tags you want to add to the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Custom Fields",
+          "name": "customFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Custom Field",
+          "typeOptions": {
+            "multipleValues": true,
+            "loadOptionsMethod": "getCustomFields"
+          },
+          "options": [
+            {
+              "name": "customFieldsValues",
+              "displayName": "Custom Field",
+              "values": [
+                {
+                  "displayName": "Key Name or ID",
+                  "name": "key",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getCustomFields"
+                  },
+                  "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "default": ""
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "description": "The end user specified value of the user defined data",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Remove Tags",
+          "name": "removeTags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The tags you want to add to the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Status",
+          "name": "status",
+          "type": "options",
+          "options": [
+            {
+              "name": "Active",
+              "value": "ACTIVE"
+            },
+            {
+              "name": "Banned",
+              "value": "BANNED"
+            },
+            {
+              "name": "Bounced",
+              "value": "BOUNCED"
+            },
+            {
+              "name": "Inactive",
+              "value": "INACTIVE"
+            },
+            {
+              "name": "Unsubscribed",
+              "value": "UNSUBSCRIBED"
+            }
+          ],
+          "default": "",
+          "description": "The status of the contact. You can only send email to contacts with ACTIVE status."
+        },
+        {
+          "displayName": "Tag Names or IDs",
+          "name": "tags",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTags"
+          },
+          "default": [],
+          "description": "The tags you want to set to the contact. Will replace all existing ones. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a list",
+          "action": "Create a list"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a list",
+          "action": "Delete a list"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a list",
+          "action": "Get a list"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many lists",
+          "action": "Get many lists"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a list",
+          "action": "Update a list"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Direction",
+          "name": "direction",
+          "type": "options",
+          "options": [
+            {
+              "name": "ASC",
+              "value": "asc"
+            },
+            {
+              "name": "DESC",
+              "value": "desc"
+            }
+          ],
+          "default": "desc",
+          "description": "Defines the direction in which search results are ordered. Default value is DESC. Note: It has to be using with the Sort By parameter"
+        },
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "type": "string",
+          "default": "",
+          "description": "A comma-separated list of attributes to include in the response"
+        },
+        {
+          "displayName": "Sort By",
+          "name": "sortBy",
+          "type": "string",
+          "default": "Defines the field in which search results are sort by. Note: It has to be using with the Direcction parameter"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "listId",
+      "displayName": "List ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "automizyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "email",
+    "listId",
+    "contactId",
+    "contactId",
+    "listId",
+    "email",
+    "name",
+    "listId",
+    "listId",
+    "listId",
+    "name"
+  ],
+  "optionalFields": [
+    "deprecated",
+    "resource",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "updateFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "deprecated": "notice",
+    "resource": "options",
+    "operation": "options",
+    "email": "string",
+    "listId": "string",
+    "additionalFields": "collection",
+    "contactId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateFields": "collection",
+    "name": "string"
+  },
+  "hasVersions": false
+}

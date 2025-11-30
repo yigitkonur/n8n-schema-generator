@@ -1,0 +1,200 @@
+{
+  "nodeType": "n8n-nodes-base.quickChart",
+  "displayName": "QuickChart",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [
+    "data",
+    "output"
+  ],
+  "optionalParameters": [
+    "chartType",
+    "labelsMode",
+    "labelsUi",
+    "labelsArray",
+    "chartOptions",
+    "datasetOptions"
+  ],
+  "validationRules": [
+    {
+      "field": "chartType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "bar",
+        "enumValues": [
+          "bar",
+          "doughnut",
+          "line",
+          "pie",
+          "polarArea"
+        ]
+      }
+    },
+    {
+      "field": "labelsMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "manually",
+        "enumValues": [
+          "manually",
+          "array"
+        ]
+      }
+    },
+    {
+      "field": "labelsUi",
+      "type": "fixedCollection",
+      "required": true,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "labelsValues": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "labelsMode": [
+            "manually"
+          ]
+        }
+      },
+      "dependsOn": [
+        "labelsMode"
+      ]
+    },
+    {
+      "field": "labelsArray",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "labelsMode": [
+            "array"
+          ]
+        }
+      },
+      "dependsOn": [
+        "labelsMode"
+      ]
+    },
+    {
+      "field": "data",
+      "type": "json",
+      "required": true,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      }
+    },
+    {
+      "field": "output",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      }
+    },
+    {
+      "field": "chartOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    },
+    {
+      "field": "datasetOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "chartType": "bar",
+    "labelsMode": "manually",
+    "labelsUi": {},
+    "labelsArray": "",
+    "data": "",
+    "output": "data",
+    "chartOptions": {},
+    "datasetOptions": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "labelsUi",
+      "condition": {
+        "show": {
+          "labelsMode": [
+            "manually"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "labelsMode"
+      ]
+    },
+    {
+      "field": "labelsArray",
+      "condition": {
+        "show": {
+          "labelsMode": [
+            "array"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "labelsMode"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "labelsUi",
+      "validOptions": [
+        "labelsValues"
+      ],
+      "optionSchemas": {
+        "labelsValues": [
+          {
+            "field": "label",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

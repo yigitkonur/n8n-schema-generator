@@ -1,0 +1,3013 @@
+{
+  "name": "googleDrive",
+  "displayName": "Google Drive",
+  "description": "Access data on Google Drive",
+  "group": [
+    "input"
+  ],
+  "version": 3,
+  "defaults": {
+    "preBuiltAgentsCalloutGoogleDrive": "",
+    "authentication": "oAuth2",
+    "resource": "file",
+    "options": {},
+    "operation": "upload",
+    "sameFolder": true,
+    "content": "",
+    "permissionsUi": {},
+    "changeFileContent": false,
+    "newUpdatedFileName": "",
+    "inputDataFieldName": "data",
+    "name": "",
+    "driveId": {
+      "__rl": true,
+      "mode": "list",
+      "value": "My Drive"
+    },
+    "folderId": {
+      "__rl": true,
+      "mode": "list",
+      "value": "root",
+      "cachedResultName": "/ (Root folder)"
+    },
+    "searchMethod": "name",
+    "filter": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "preBuiltAgentsCalloutGoogleDrive",
+      "displayName": "Retrieve, analyze, and answer questions using your Google Drive documents with our pre-built",
+      "type": "callout",
+      "default": "",
+      "typeOptions": {
+        "calloutAction": {
+          "label": "Knowledge store agent",
+          "icon": "bot",
+          "type": "openSampleWorkflowTemplate",
+          "templateId": "knowledge_store_agent_with_google_drive"
+        }
+      }
+    },
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "oAuth2",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "oAuth2"
+        },
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "file",
+      "options": [
+        {
+          "name": "File",
+          "value": "file"
+        },
+        {
+          "name": "File/Folder",
+          "value": "fileFolder"
+        },
+        {
+          "name": "Folder",
+          "value": "folder"
+        },
+        {
+          "name": "Shared Drive",
+          "value": "drive"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a shared drive",
+          "action": "Create shared drive"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteDrive",
+          "description": "Permanently delete a shared drive",
+          "action": "Delete shared drive"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a shared drive",
+          "action": "Get shared drive"
+        },
+        {
+          "name": "Get Many",
+          "value": "list",
+          "description": "Get the list of shared drives",
+          "action": "Get many shared drives"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a shared drive",
+          "action": "Update shared drive"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the shared drive to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. New Shared Drive"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Capabilities",
+          "name": "capabilities",
+          "type": "collection",
+          "placeholder": "Add Field",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Can Add Children",
+              "name": "canAddChildren",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can add children to folders in this shared drive"
+            },
+            {
+              "displayName": "Can Change Copy Requires Writer Permission Restriction",
+              "name": "canChangeCopyRequiresWriterPermissionRestriction",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can change the copyRequiresWriterPermission restriction of this shared drive"
+            },
+            {
+              "displayName": "Can Change Domain Users Only Restriction",
+              "name": "canChangeDomainUsersOnlyRestriction",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can change the domainUsersOnly restriction of this shared drive"
+            },
+            {
+              "displayName": "Can Change Drive Background",
+              "name": "canChangeDriveBackground",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can change the background of this shared drive"
+            },
+            {
+              "displayName": "Can Change Drive Members Only Restriction",
+              "name": "canChangeDriveMembersOnlyRestriction",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can change the driveMembersOnly restriction of this shared drive"
+            },
+            {
+              "displayName": "Can Comment",
+              "name": "canComment",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can comment on files in this shared drive"
+            },
+            {
+              "displayName": "Can Copy",
+              "name": "canCopy",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can copy files in this shared drive"
+            },
+            {
+              "displayName": "Can Delete Children",
+              "name": "canDeleteChildren",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can delete children from folders in this shared drive"
+            },
+            {
+              "displayName": "Can Delete Drive",
+              "name": "canDeleteDrive",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can delete this shared drive. Attempting to delete the shared drive may still fail if there are untrashed items inside the shared drive."
+            },
+            {
+              "displayName": "Can Download",
+              "name": "canDownload",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can download files in this shared drive"
+            },
+            {
+              "displayName": "Can Edit",
+              "name": "canEdit",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can edit files in this shared drive"
+            },
+            {
+              "displayName": "Can List Children",
+              "name": "canListChildren",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can list the children of folders in this shared drive"
+            },
+            {
+              "displayName": "Can Manage Members",
+              "name": "canManageMembers",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can add members to this shared drive or remove them or change their role"
+            },
+            {
+              "displayName": "Can Read Revisions",
+              "name": "canReadRevisions",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can read the revisions resource of files in this shared drive"
+            },
+            {
+              "displayName": "Can Rename",
+              "name": "canRename",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can rename files or folders in this shared drive"
+            },
+            {
+              "displayName": "Can Rename Drive",
+              "name": "canRenameDrive",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can rename this shared drive"
+            },
+            {
+              "displayName": "Can Share",
+              "name": "canShare",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can share files or folders in this shared drive"
+            },
+            {
+              "displayName": "Can Trash Children",
+              "name": "canTrashChildren",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the current user can trash children from folders in this shared drive"
+            }
+          ]
+        },
+        {
+          "displayName": "Color RGB",
+          "name": "colorRgb",
+          "type": "color",
+          "default": "",
+          "description": "The color of this shared drive as an RGB hex string"
+        },
+        {
+          "displayName": "Hidden",
+          "name": "hidden",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the shared drive is hidden from default view"
+        },
+        {
+          "displayName": "Restrictions",
+          "name": "restrictions",
+          "type": "collection",
+          "placeholder": "Add Field",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Admin Managed Restrictions",
+              "name": "adminManagedRestrictions",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive."
+            },
+            {
+              "displayName": "Copy Requires Writer Permission",
+              "name": "copyRequiresWriterPermission",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive."
+            },
+            {
+              "displayName": "Domain Users Only",
+              "name": "domainUsersOnly",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether access to this shared drive and items inside this shared drive is restricted to users of the domain to which this shared drive belongs. This restriction may be overridden by other sharing policies controlled outside of this shared drive."
+            },
+            {
+              "displayName": "Drive Members Only",
+              "name": "driveMembersOnly",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether access to items inside this shared drive is restricted to its members"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "driveId",
+      "displayName": "Shared Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The shared drive to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "deleteDrive"
+          ]
+        }
+      }
+    },
+    {
+      "name": "driveId",
+      "displayName": "Shared Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The shared drive to get",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Use Domain Admin Access",
+          "name": "useDomainAdminAccess",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query",
+          "name": "q",
+          "type": "string",
+          "default": "",
+          "description": "Query string for searching shared drives. See the <a href=\"https://developers.google.com/drive/api/v3/search-shareddrives\">\"Search for shared drives\"</a> guide for supported syntax."
+        },
+        {
+          "displayName": "Use Domain Admin Access",
+          "name": "useDomainAdminAccess",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "driveId",
+      "displayName": "Shared Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The shared drive to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Color RGB",
+          "name": "colorRgb",
+          "type": "color",
+          "default": "",
+          "description": "The color of this shared drive as an RGB hex string"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "The updated name of the shared drive"
+        },
+        {
+          "displayName": "Restrictions",
+          "name": "restrictions",
+          "type": "collection",
+          "placeholder": "Add Field",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Admin Managed Restrictions",
+              "name": "adminManagedRestrictions",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive."
+            },
+            {
+              "displayName": "Copy Requires Writer Permission",
+              "name": "copyRequiresWriterPermission",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive."
+            },
+            {
+              "displayName": "Domain Users Only",
+              "name": "domainUsersOnly",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether access to this shared drive and items inside this shared drive is restricted to users of the domain to which this shared drive belongs. This restriction may be overridden by other sharing policies controlled outside of this shared drive."
+            },
+            {
+              "displayName": "Drive Members Only",
+              "name": "driveMembersOnly",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether access to items inside this shared drive is restricted to its members"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "upload",
+      "options": [
+        {
+          "name": "Copy",
+          "value": "copy",
+          "description": "Create a copy of an existing file",
+          "action": "Copy file"
+        },
+        {
+          "name": "Create From Text",
+          "value": "createFromText",
+          "description": "Create a file from a provided text",
+          "action": "Create file from text"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteFile",
+          "description": "Permanently delete a file",
+          "action": "Delete a file"
+        },
+        {
+          "name": "Download",
+          "value": "download",
+          "description": "Download a file",
+          "action": "Download file"
+        },
+        {
+          "name": "Move",
+          "value": "move",
+          "description": "Move a file to another folder",
+          "action": "Move file"
+        },
+        {
+          "name": "Share",
+          "value": "share",
+          "description": "Add sharing permissions to a file",
+          "action": "Share file"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a file",
+          "action": "Update file"
+        },
+        {
+          "name": "Upload",
+          "value": "upload",
+          "description": "Upload an existing file to Google Drive",
+          "action": "Upload file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to copy",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the new file. If not set, “Copy of {original file name}” will be used.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      },
+      "placeholder": "e.g. My File"
+    },
+    {
+      "name": "sameFolder",
+      "displayName": "Copy In The Same Folder",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to copy the file in the same folder as the original file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "driveId",
+      "displayName": "Parent Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "required": true,
+      "description": "The drive where to save the copied file",
+      "displayOptions": {
+        "show": {
+          "sameFolder": [
+            false
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "required": true,
+      "description": "The folder where to save the copied file",
+      "displayOptions": {
+        "show": {
+          "sameFolder": [
+            false
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Copy Requires Writer Permission",
+          "name": "copyRequiresWriterPermission",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the options to copy, print, or download this file, should be disabled for readers and commenters"
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": "",
+          "description": "A short description of the file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "deleteFile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delete Permanently",
+          "name": "deletePermanently",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to delete the file immediately. If false, the file will be moved to the trash."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "deleteFile"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "content",
+      "displayName": "File Content",
+      "type": "string",
+      "default": "",
+      "description": "The text to create the file with",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the file you want to create. If not specified, 'Untitled' will be used.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File"
+    },
+    {
+      "name": "driveId",
+      "displayName": "Parent Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "required": false,
+      "description": "The drive where to create the new file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "required": false,
+      "description": "The folder where to create the new file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "APP Properties",
+          "name": "appPropertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are private to the requesting app",
+          "options": [
+            {
+              "name": "appPropertyValues",
+              "displayName": "APP Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Properties",
+          "name": "propertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are visible to all apps",
+          "options": [
+            {
+              "name": "propertyValues",
+              "displayName": "Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Keep Revision Forever",
+          "name": "keepRevisionForever",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to set the 'keepForever' field in the new head revision. This is only applicable to files with binary content in Google Drive. Only 200 revisions for the file can be kept forever. If the limit is reached, try deleting pinned revisions."
+        },
+        {
+          "displayName": "OCR Language",
+          "name": "ocrLanguage",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. en",
+          "description": "A language hint for OCR processing during image import (ISO 639-1 code)"
+        },
+        {
+          "displayName": "Use Content As Indexable Text",
+          "name": "useContentAsIndexableText",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use the uploaded content as indexable text"
+        },
+        {
+          "displayName": "Convert to Google Document",
+          "name": "convertToGoogleDocument",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to create a Google Document (instead of the .txt default format)",
+          "hint": "Google Docs API has to be enabled in the <a href=\"https://console.developers.google.com/apis/library/docs.googleapis.com\" target=\"_blank\">Google API Console</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to download",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Put Output File in Field",
+          "name": "binaryPropertyName",
+          "type": "string",
+          "placeholder": "e.g. data",
+          "default": "data",
+          "description": "Use this field name in the following nodes, to use the binary file data",
+          "hint": "The name of the output binary field to put the file in"
+        },
+        {
+          "displayName": "Google File Conversion",
+          "name": "googleFileConversion",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "default": {},
+          "placeholder": "Add Conversion",
+          "options": [
+            {
+              "displayName": "Conversion",
+              "name": "conversion",
+              "values": [
+                {
+                  "displayName": "Google Docs",
+                  "name": "docsToFormat",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "HTML",
+                      "value": "text/html"
+                    },
+                    {
+                      "name": "MS Word Document",
+                      "value": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    },
+                    {
+                      "name": "Open Office Document",
+                      "value": "application/vnd.oasis.opendocument.text"
+                    },
+                    {
+                      "name": "PDF",
+                      "value": "application/pdf"
+                    },
+                    {
+                      "name": "Rich Text (rtf)",
+                      "value": "application/rtf"
+                    },
+                    {
+                      "name": "Text (txt)",
+                      "value": "text/plain"
+                    }
+                  ],
+                  "default": "text/html",
+                  "description": "Format used to export when downloading Google Docs files"
+                },
+                {
+                  "displayName": "Google Drawings",
+                  "name": "drawingsToFormat",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "JPEG",
+                      "value": "image/jpeg"
+                    },
+                    {
+                      "name": "PDF",
+                      "value": "application/pdf"
+                    },
+                    {
+                      "name": "PNG",
+                      "value": "image/png"
+                    },
+                    {
+                      "name": "SVG",
+                      "value": "image/svg+xml"
+                    }
+                  ],
+                  "default": "image/jpeg",
+                  "description": "Format used to export when downloading Google Drawings files"
+                },
+                {
+                  "displayName": "Google Slides",
+                  "name": "slidesToFormat",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "MS PowerPoint",
+                      "value": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                    },
+                    {
+                      "name": "OpenOffice Presentation",
+                      "value": "application/vnd.oasis.opendocument.presentation"
+                    },
+                    {
+                      "name": "PDF",
+                      "value": "application/pdf"
+                    }
+                  ],
+                  "default": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                  "description": "Format used to export when downloading Google Slides files"
+                },
+                {
+                  "displayName": "Google Sheets",
+                  "name": "sheetsToFormat",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "CSV",
+                      "value": "text/csv"
+                    },
+                    {
+                      "name": "MS Excel",
+                      "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    },
+                    {
+                      "name": "Open Office Sheet",
+                      "value": "application/vnd.oasis.opendocument.spreadsheet"
+                    },
+                    {
+                      "name": "PDF",
+                      "value": "application/pdf"
+                    }
+                  ],
+                  "default": "text/csv",
+                  "description": "Format used to export when downloading Google Sheets files"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "description": "File name. Ex: data.pdf."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to move",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      }
+    },
+    {
+      "name": "driveId",
+      "displayName": "Parent Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "required": true,
+      "description": "The drive where to move the file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "required": true,
+      "description": "The folder where to move the file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fileId",
+      "displayName": "File",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to share",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      }
+    },
+    {
+      "name": "permissionsUi",
+      "displayName": "Permissions",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Permission",
+          "name": "permissionsValues",
+          "values": [
+            {
+              "displayName": "Role",
+              "name": "role",
+              "type": "options",
+              "description": "Defines what users can do with the file or folder",
+              "options": [
+                {
+                  "name": "Commenter",
+                  "value": "commenter"
+                },
+                {
+                  "name": "File Organizer",
+                  "value": "fileOrganizer"
+                },
+                {
+                  "name": "Organizer",
+                  "value": "organizer"
+                },
+                {
+                  "name": "Owner",
+                  "value": "owner"
+                },
+                {
+                  "name": "Reader",
+                  "value": "reader"
+                },
+                {
+                  "name": "Writer",
+                  "value": "writer"
+                }
+              ],
+              "default": ""
+            },
+            {
+              "displayName": "Type",
+              "name": "type",
+              "type": "options",
+              "options": [
+                {
+                  "name": "User",
+                  "value": "user"
+                },
+                {
+                  "name": "Group",
+                  "value": "group"
+                },
+                {
+                  "name": "Domain",
+                  "value": "domain"
+                },
+                {
+                  "name": "Anyone",
+                  "value": "anyone"
+                }
+              ],
+              "default": "",
+              "description": "The scope of the permission. A permission with type=user applies to a specific user whereas a permission with type=domain applies to everyone in a specific domain."
+            },
+            {
+              "displayName": "Email Address",
+              "name": "emailAddress",
+              "type": "string",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "user",
+                    "group"
+                  ]
+                }
+              },
+              "placeholder": "“e.g. name@mail.com",
+              "default": "",
+              "description": "The email address of the user or group to which this permission refers"
+            },
+            {
+              "displayName": "Domain",
+              "name": "domain",
+              "type": "string",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "domain"
+                  ]
+                }
+              },
+              "placeholder": "e.g. mycompany.com",
+              "default": "",
+              "description": "The domain to which this permission refers"
+            },
+            {
+              "displayName": "Allow File Discovery",
+              "name": "allowFileDiscovery",
+              "type": "boolean",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "domain",
+                    "anyone"
+                  ]
+                }
+              },
+              "default": false,
+              "description": "Whether to allow the file to be discovered through search"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "placeholder": "Add Permission"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email Message",
+          "name": "emailMessage",
+          "type": "string",
+          "default": "",
+          "description": "A plain text custom message to include in the notification email",
+          "typeOptions": {
+            "rows": 2
+          }
+        },
+        {
+          "displayName": "Move To New Owners Root",
+          "name": "moveToNewOwnersRoot",
+          "type": "boolean",
+          "default": false,
+          "description": "<p>This parameter only takes effect if the item is not in a shared drive and the request is attempting to transfer the ownership of the item.</p><p>When set to true, the item is moved to the new owner's My Drive root folder and all prior parents removed.</p>"
+        },
+        {
+          "displayName": "Send Notification Email",
+          "name": "sendNotificationEmail",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to send a notification email when sharing to users or groups"
+        },
+        {
+          "displayName": "Transfer Ownership",
+          "name": "transferOwnership",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to transfer ownership to the specified user and downgrade the current owner to a writer"
+        },
+        {
+          "displayName": "Use Domain Admin Access",
+          "name": "useDomainAdminAccess",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to perform the operation as domain administrator, i.e. if you are an administrator of the domain to which the shared drive belongs, you will be granted access automatically."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "fileId",
+      "displayName": "File to Update",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The file to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "changeFileContent",
+      "displayName": "Change File Content",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to send a new binary data to update the file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "inputDataFieldName",
+      "displayName": "Input Data Field Name",
+      "type": "string",
+      "default": "data",
+      "description": "Find the name of input field containing the binary data to update the file in the Input panel on the left, in the Binary tab",
+      "displayOptions": {
+        "show": {
+          "changeFileContent": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. data",
+      "hint": "The name of the input field containing the binary file data to update the file"
+    },
+    {
+      "name": "newUpdatedFileName",
+      "displayName": "New Updated File Name",
+      "type": "string",
+      "default": "",
+      "description": "If not specified, the file name will not be changed",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "APP Properties",
+          "name": "appPropertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are private to the requesting app",
+          "options": [
+            {
+              "name": "appPropertyValues",
+              "displayName": "APP Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Properties",
+          "name": "propertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are visible to all apps",
+          "options": [
+            {
+              "name": "propertyValues",
+              "displayName": "Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Keep Revision Forever",
+          "name": "keepRevisionForever",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to set the 'keepForever' field in the new head revision. This is only applicable to files with binary content in Google Drive. Only 200 revisions for the file can be kept forever. If the limit is reached, try deleting pinned revisions."
+        },
+        {
+          "displayName": "OCR Language",
+          "name": "ocrLanguage",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. en",
+          "description": "A language hint for OCR processing during image import (ISO 639-1 code)"
+        },
+        {
+          "displayName": "Use Content As Indexable Text",
+          "name": "useContentAsIndexableText",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use the uploaded content as indexable text"
+        },
+        {
+          "displayName": "Move to Trash",
+          "name": "trashed",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to move a file to the trash. Only the owner may trash a file."
+        },
+        {
+          "displayName": "Return Fields",
+          "name": "fields",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "[All]",
+              "value": "*",
+              "description": "All fields"
+            },
+            {
+              "name": "explicitlyTrashed",
+              "value": "explicitlyTrashed"
+            },
+            {
+              "name": "exportLinks",
+              "value": "exportLinks"
+            },
+            {
+              "name": "hasThumbnail",
+              "value": "hasThumbnail"
+            },
+            {
+              "name": "iconLink",
+              "value": "iconLink"
+            },
+            {
+              "name": "ID",
+              "value": "id"
+            },
+            {
+              "name": "Kind",
+              "value": "kind"
+            },
+            {
+              "name": "mimeType",
+              "value": "mimeType"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "Permissions",
+              "value": "permissions"
+            },
+            {
+              "name": "Shared",
+              "value": "shared"
+            },
+            {
+              "name": "Spaces",
+              "value": "spaces"
+            },
+            {
+              "name": "Starred",
+              "value": "starred"
+            },
+            {
+              "name": "thumbnailLink",
+              "value": "thumbnailLink"
+            },
+            {
+              "name": "Trashed",
+              "value": "trashed"
+            },
+            {
+              "name": "Version",
+              "value": "version"
+            },
+            {
+              "name": "webViewLink",
+              "value": "webViewLink"
+            }
+          ],
+          "default": [],
+          "description": "The fields to return"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "inputDataFieldName",
+      "displayName": "Input Data Field Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Find the name of input field containing the binary data to update the file in the Input panel on the left, in the Binary tab",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "“e.g. data",
+      "hint": "The name of the input field containing the binary file data to update the file"
+    },
+    {
+      "name": "name",
+      "displayName": "File Name",
+      "type": "string",
+      "default": "",
+      "description": "If not specified, the original file name will be used",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "e.g. My New File"
+    },
+    {
+      "name": "driveId",
+      "displayName": "Parent Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "required": true,
+      "description": "The drive where to upload the file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "required": true,
+      "description": "The folder where to upload the file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "APP Properties",
+          "name": "appPropertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are private to the requesting app",
+          "options": [
+            {
+              "name": "appPropertyValues",
+              "displayName": "APP Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Properties",
+          "name": "propertiesUi",
+          "placeholder": "Add Property",
+          "type": "fixedCollection",
+          "default": {},
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "description": "A collection of arbitrary key-value pairs which are visible to all apps",
+          "options": [
+            {
+              "name": "propertyValues",
+              "displayName": "Property",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the key to add"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value to set for the key"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Keep Revision Forever",
+          "name": "keepRevisionForever",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to set the 'keepForever' field in the new head revision. This is only applicable to files with binary content in Google Drive. Only 200 revisions for the file can be kept forever. If the limit is reached, try deleting pinned revisions."
+        },
+        {
+          "displayName": "OCR Language",
+          "name": "ocrLanguage",
+          "type": "string",
+          "default": "",
+          "placeholder": "e.g. en",
+          "description": "A language hint for OCR processing during image import (ISO 639-1 code)"
+        },
+        {
+          "displayName": "Use Content As Indexable Text",
+          "name": "useContentAsIndexableText",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to use the uploaded content as indexable text"
+        },
+        {
+          "displayName": "Simplify Output",
+          "name": "simplifyOutput",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of all fields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "search",
+      "options": [
+        {
+          "name": "Search",
+          "value": "search",
+          "description": "Search or list files and folders",
+          "action": "Search files and folders"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "searchMethod",
+      "displayName": "Search Method",
+      "type": "options",
+      "default": "name",
+      "description": "Whether to search for the file/folder name or use a query string",
+      "options": [
+        {
+          "name": "Search File/Folder Name",
+          "value": "name"
+        },
+        {
+          "name": "Advanced Search",
+          "value": "query"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "queryString",
+      "displayName": "Search Query",
+      "type": "string",
+      "default": "",
+      "description": "The name of the file or folder to search for. Returns also files and folders whose names partially match this search term.",
+      "displayOptions": {
+        "show": {
+          "searchMethod": [
+            "name"
+          ],
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "e.g. My File / My Folder"
+    },
+    {
+      "name": "queryString",
+      "displayName": "Query String",
+      "type": "string",
+      "default": "",
+      "description": "Use the Google query strings syntax to search for a specific set of files or folders. <a href=\"https://developers.google.com/drive/api/v3/search-files\" target=\"_blank\">Learn more</a>.",
+      "displayOptions": {
+        "show": {
+          "searchMethod": [
+            "query"
+          ],
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "e.g. not name contains 'hello'"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "displayName": "Filter",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Drive",
+          "name": "driveId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "required": false,
+          "modes": [
+            {
+              "displayName": "Drive",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a drive...",
+              "typeOptions": {
+                "searchListMethod": "driveSearchWithDefault",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "Link",
+              "name": "url",
+              "type": "string",
+              "placeholder": "https://drive.google.com/drive/folders/0AaaaaAAAAAAAaa",
+              "extractValue": {
+                "type": "regex",
+                "regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+              },
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)",
+                    "errorMessage": "Not a valid Google Drive Drive URL"
+                  }
+                }
+              ]
+            },
+            {
+              "displayName": "ID",
+              "name": "id",
+              "type": "string",
+              "hint": "The ID of the shared drive",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "[a-zA-Z0-9\\-_]{2,}",
+                    "errorMessage": "Not a valid Google Drive Drive ID"
+                  }
+                }
+              ],
+              "url": "=https://drive.google.com/drive/folders/{{$value}}"
+            }
+          ],
+          "description": "The drive you want to search in. By default, the personal \"My Drive\" is used."
+        },
+        {
+          "displayName": "Folder",
+          "name": "folderId",
+          "type": "resourceLocator",
+          "default": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "required": false,
+          "modes": [
+            {
+              "displayName": "Folder",
+              "name": "list",
+              "type": "list",
+              "placeholder": "Select a folder...",
+              "typeOptions": {
+                "searchListMethod": "folderSearchWithDefault",
+                "searchable": true
+              }
+            },
+            {
+              "displayName": "Link",
+              "name": "url",
+              "type": "string",
+              "placeholder": "e.g. https://drive.google.com/drive/folders/1Tx9WHbA3wBpPB4C_HcoZDH9WZFWYxAMU",
+              "extractValue": {
+                "type": "regex",
+                "regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+              },
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "https:\\/\\/drive\\.google\\.com(?:\\/.*|)\\/folders\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)",
+                    "errorMessage": "Not a valid Google Drive Folder URL"
+                  }
+                }
+              ]
+            },
+            {
+              "displayName": "ID",
+              "name": "id",
+              "type": "string",
+              "placeholder": "e.g. 1anGBg0b5re2VtF2bKu201_a-Vnz5BHq9Y4r-yBDAj5A",
+              "validation": [
+                {
+                  "type": "regex",
+                  "properties": {
+                    "regex": "[a-zA-Z0-9\\-_]{2,}",
+                    "errorMessage": "Not a valid Google Drive Folder ID"
+                  }
+                }
+              ],
+              "url": "=https://drive.google.com/drive/folders/{{$value}}"
+            }
+          ],
+          "description": "The folder you want to search in. By default, the root folder of the drive is used. If you select a folder other than the root folder, only the direct children will be included."
+        },
+        {
+          "displayName": "What to Search",
+          "name": "whatToSearch",
+          "type": "options",
+          "default": "all",
+          "options": [
+            {
+              "name": "Files and Folders",
+              "value": "all"
+            },
+            {
+              "name": "Files",
+              "value": "files"
+            },
+            {
+              "name": "Folders",
+              "value": "folders"
+            }
+          ]
+        },
+        {
+          "displayName": "File Types",
+          "name": "fileTypes",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Return only items corresponding to the selected MIME types",
+          "options": [
+            {
+              "name": "All",
+              "value": "*",
+              "description": "Return all file types"
+            },
+            {
+              "name": "3rd Party Shortcut",
+              "value": "application/vnd.google-apps.drive-sdk"
+            },
+            {
+              "name": "Audio",
+              "value": "application/vnd.google-apps.audio"
+            },
+            {
+              "name": "Folder",
+              "value": "application/vnd.google-apps.folder"
+            },
+            {
+              "name": "Google Apps Scripts",
+              "value": "application/vnd.google-apps.script"
+            },
+            {
+              "name": "Google Docs",
+              "value": "application/vnd.google-apps.document"
+            },
+            {
+              "name": "Google Drawing",
+              "value": "application/vnd.google-apps.drawing"
+            },
+            {
+              "name": "Google Forms",
+              "value": "application/vnd.google-apps.form"
+            },
+            {
+              "name": "Google Fusion Tables",
+              "value": "application/vnd.google-apps.fusiontable"
+            },
+            {
+              "name": "Google My Maps",
+              "value": "application/vnd.google-apps.map"
+            },
+            {
+              "name": "Google Sheets",
+              "value": "application/vnd.google-apps.spreadsheet"
+            },
+            {
+              "name": "Google Sites",
+              "value": "application/vnd.google-apps.sites"
+            },
+            {
+              "name": "Google Slides",
+              "value": "application/vnd.google-apps.presentation"
+            },
+            {
+              "name": "Photo",
+              "value": "application/vnd.google-apps.photo"
+            },
+            {
+              "name": "Unknown",
+              "value": "application/vnd.google-apps.unknown"
+            },
+            {
+              "name": "Video",
+              "value": "application/vnd.google-apps.video"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "whatToSearch": [
+                "all"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "File Types",
+          "name": "fileTypes",
+          "type": "multiOptions",
+          "default": [],
+          "description": "Return only items corresponding to the selected MIME types",
+          "options": [
+            {
+              "name": "All",
+              "value": "*",
+              "description": "Return all file types"
+            },
+            {
+              "name": "3rd Party Shortcut",
+              "value": "application/vnd.google-apps.drive-sdk"
+            },
+            {
+              "name": "Audio",
+              "value": "application/vnd.google-apps.audio"
+            },
+            {
+              "name": "Google Apps Scripts",
+              "value": "application/vnd.google-apps.script"
+            },
+            {
+              "name": "Google Docs",
+              "value": "application/vnd.google-apps.document"
+            },
+            {
+              "name": "Google Drawing",
+              "value": "application/vnd.google-apps.drawing"
+            },
+            {
+              "name": "Google Forms",
+              "value": "application/vnd.google-apps.form"
+            },
+            {
+              "name": "Google Fusion Tables",
+              "value": "application/vnd.google-apps.fusiontable"
+            },
+            {
+              "name": "Google My Maps",
+              "value": "application/vnd.google-apps.map"
+            },
+            {
+              "name": "Google Sheets",
+              "value": "application/vnd.google-apps.spreadsheet"
+            },
+            {
+              "name": "Google Sites",
+              "value": "application/vnd.google-apps.sites"
+            },
+            {
+              "name": "Google Slides",
+              "value": "application/vnd.google-apps.presentation"
+            },
+            {
+              "name": "Photo",
+              "value": "application/vnd.google-apps.photo"
+            },
+            {
+              "name": "Unknown",
+              "value": "application/vnd.google-apps.unknown"
+            },
+            {
+              "name": "Video",
+              "value": "application/vnd.google-apps.video"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "whatToSearch": [
+                "files"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Include Trashed Items",
+          "name": "includeTrashed",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to return also items in the Drive's bin"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields",
+          "name": "fields",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "*",
+              "value": "*",
+              "description": "All fields"
+            },
+            {
+              "name": "explicitlyTrashed",
+              "value": "explicitlyTrashed"
+            },
+            {
+              "name": "exportLinks",
+              "value": "exportLinks"
+            },
+            {
+              "name": "hasThumbnail",
+              "value": "hasThumbnail"
+            },
+            {
+              "name": "iconLink",
+              "value": "iconLink"
+            },
+            {
+              "name": "ID",
+              "value": "id"
+            },
+            {
+              "name": "Kind",
+              "value": "kind"
+            },
+            {
+              "name": "mimeType",
+              "value": "mimeType"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "Permissions",
+              "value": "permissions"
+            },
+            {
+              "name": "Shared",
+              "value": "shared"
+            },
+            {
+              "name": "Spaces",
+              "value": "spaces"
+            },
+            {
+              "name": "Starred",
+              "value": "starred"
+            },
+            {
+              "name": "thumbnailLink",
+              "value": "thumbnailLink"
+            },
+            {
+              "name": "Trashed",
+              "value": "trashed"
+            },
+            {
+              "name": "Version",
+              "value": "version"
+            },
+            {
+              "name": "webViewLink",
+              "value": "webViewLink"
+            }
+          ],
+          "default": [],
+          "description": "The fields to return"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a folder",
+          "action": "Create folder"
+        },
+        {
+          "name": "Delete",
+          "value": "deleteFolder",
+          "description": "Permanently delete a folder",
+          "action": "Delete folder"
+        },
+        {
+          "name": "Share",
+          "value": "share",
+          "description": "Add sharing permissions to a folder",
+          "action": "Share folder"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Folder Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the new folder. If not set, 'Untitled' will be used.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. New Folder"
+    },
+    {
+      "name": "driveId",
+      "displayName": "Parent Drive",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "required": true,
+      "description": "The drive where to create the new folder",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "folderId",
+      "displayName": "Parent Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "required": true,
+      "description": "The parent folder where to create the new folder",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Simplify Output",
+          "name": "simplifyOutput",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to return a simplified version of the response instead of all fields"
+        },
+        {
+          "displayName": "Folder Color",
+          "name": "folderColorRgb",
+          "type": "color",
+          "default": "",
+          "description": "The color of the folder as an RGB hex string. If an unsupported color is specified, the closest color in the palette will be used instead."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "folderNoRootId",
+      "displayName": "Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The folder to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "deleteFolder"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delete Permanently",
+          "name": "deletePermanently",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to delete the folder immediately. If false, the folder will be moved to the trash."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "deleteFolder"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "folderNoRootId",
+      "displayName": "Folder",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "The folder to share",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      }
+    },
+    {
+      "name": "permissionsUi",
+      "displayName": "Permissions",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Permission",
+          "name": "permissionsValues",
+          "values": [
+            {
+              "displayName": "Role",
+              "name": "role",
+              "type": "options",
+              "description": "Defines what users can do with the file or folder",
+              "options": [
+                {
+                  "name": "Commenter",
+                  "value": "commenter"
+                },
+                {
+                  "name": "File Organizer",
+                  "value": "fileOrganizer"
+                },
+                {
+                  "name": "Organizer",
+                  "value": "organizer"
+                },
+                {
+                  "name": "Owner",
+                  "value": "owner"
+                },
+                {
+                  "name": "Reader",
+                  "value": "reader"
+                },
+                {
+                  "name": "Writer",
+                  "value": "writer"
+                }
+              ],
+              "default": ""
+            },
+            {
+              "displayName": "Type",
+              "name": "type",
+              "type": "options",
+              "options": [
+                {
+                  "name": "User",
+                  "value": "user"
+                },
+                {
+                  "name": "Group",
+                  "value": "group"
+                },
+                {
+                  "name": "Domain",
+                  "value": "domain"
+                },
+                {
+                  "name": "Anyone",
+                  "value": "anyone"
+                }
+              ],
+              "default": "",
+              "description": "The scope of the permission. A permission with type=user applies to a specific user whereas a permission with type=domain applies to everyone in a specific domain."
+            },
+            {
+              "displayName": "Email Address",
+              "name": "emailAddress",
+              "type": "string",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "user",
+                    "group"
+                  ]
+                }
+              },
+              "placeholder": "“e.g. name@mail.com",
+              "default": "",
+              "description": "The email address of the user or group to which this permission refers"
+            },
+            {
+              "displayName": "Domain",
+              "name": "domain",
+              "type": "string",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "domain"
+                  ]
+                }
+              },
+              "placeholder": "e.g. mycompany.com",
+              "default": "",
+              "description": "The domain to which this permission refers"
+            },
+            {
+              "displayName": "Allow File Discovery",
+              "name": "allowFileDiscovery",
+              "type": "boolean",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "domain",
+                    "anyone"
+                  ]
+                }
+              },
+              "default": false,
+              "description": "Whether to allow the file to be discovered through search"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "placeholder": "Add Permission"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email Message",
+          "name": "emailMessage",
+          "type": "string",
+          "default": "",
+          "description": "A plain text custom message to include in the notification email",
+          "typeOptions": {
+            "rows": 2
+          }
+        },
+        {
+          "displayName": "Move To New Owners Root",
+          "name": "moveToNewOwnersRoot",
+          "type": "boolean",
+          "default": false,
+          "description": "<p>This parameter only takes effect if the item is not in a shared drive and the request is attempting to transfer the ownership of the item.</p><p>When set to true, the item is moved to the new owner's My Drive root folder and all prior parents removed.</p>"
+        },
+        {
+          "displayName": "Send Notification Email",
+          "name": "sendNotificationEmail",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to send a notification email when sharing to users or groups"
+        },
+        {
+          "displayName": "Transfer Ownership",
+          "name": "transferOwnership",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to transfer ownership to the specified user and downgrade the current owner to a writer"
+        },
+        {
+          "displayName": "Use Domain Admin Access",
+          "name": "useDomainAdminAccess",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to perform the operation as domain administrator, i.e. if you are an administrator of the domain to which the shared drive belongs, you will be granted access automatically."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleDriveOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "driveId",
+    "driveId",
+    "driveId",
+    "fileId",
+    "driveId",
+    "folderId",
+    "fileId",
+    "fileId",
+    "fileId",
+    "driveId",
+    "folderId",
+    "fileId",
+    "fileId",
+    "inputDataFieldName",
+    "driveId",
+    "folderId",
+    "driveId",
+    "folderId",
+    "folderNoRootId",
+    "folderNoRootId"
+  ],
+  "optionalFields": [
+    "preBuiltAgentsCalloutGoogleDrive",
+    "authentication",
+    "resource",
+    "operation",
+    "name",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "options",
+    "operation",
+    "name",
+    "sameFolder",
+    "options",
+    "options",
+    "content",
+    "name",
+    "driveId",
+    "folderId",
+    "options",
+    "options",
+    "permissionsUi",
+    "options",
+    "changeFileContent",
+    "inputDataFieldName",
+    "newUpdatedFileName",
+    "options",
+    "name",
+    "options",
+    "operation",
+    "searchMethod",
+    "queryString",
+    "queryString",
+    "returnAll",
+    "limit",
+    "filter",
+    "options",
+    "operation",
+    "name",
+    "options",
+    "options",
+    "permissionsUi",
+    "options"
+  ],
+  "parameterTypes": {
+    "preBuiltAgentsCalloutGoogleDrive": "callout",
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "name": "string",
+    "options": "collection",
+    "driveId": "resourceLocator",
+    "returnAll": "boolean",
+    "limit": "number",
+    "fileId": "resourceLocator",
+    "sameFolder": "boolean",
+    "folderId": "resourceLocator",
+    "content": "string",
+    "permissionsUi": "fixedCollection",
+    "changeFileContent": "boolean",
+    "inputDataFieldName": "string",
+    "newUpdatedFileName": "string",
+    "searchMethod": "options",
+    "queryString": "string",
+    "filter": "collection",
+    "folderNoRootId": "resourceLocator"
+  },
+  "hasVersions": false
+}

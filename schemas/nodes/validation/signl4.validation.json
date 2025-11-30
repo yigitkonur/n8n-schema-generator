@@ -1,0 +1,215 @@
+{
+  "nodeType": "n8n-nodes-base.signl4",
+  "displayName": "SIGNL4",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "message",
+    "additionalFields",
+    "externalId"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "alert",
+        "enumValues": [
+          "alert"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "send",
+        "enumValues": [
+          "send",
+          "resolve"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "message",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "externalId",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "resolve"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "alert",
+    "operation": "send",
+    "message": "",
+    "additionalFields": {},
+    "externalId": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "message",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "externalId",
+      "condition": {
+        "show": {
+          "operation": [
+            "resolve"
+          ],
+          "resource": [
+            "alert"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "alert": {
+      "operations": [
+        "send",
+        "resolve"
+      ],
+      "fieldsPerOperation": {
+        "send": [
+          "message",
+          "additionalFields"
+        ],
+        "resolve": [
+          "externalId"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

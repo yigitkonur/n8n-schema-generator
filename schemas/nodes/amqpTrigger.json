@@ -1,0 +1,139 @@
+{
+  "name": "amqpTrigger",
+  "displayName": "AMQP Trigger",
+  "description": "Listens to AMQP 1.0 Messages",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "sink": "",
+    "clientname": "",
+    "subscription": "",
+    "options": {}
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "sink",
+      "displayName": "Queue / Topic",
+      "type": "string",
+      "default": "",
+      "description": "Name of the queue of topic to listen to",
+      "placeholder": "topic://sourcename.something"
+    },
+    {
+      "name": "clientname",
+      "displayName": "Clientname",
+      "type": "string",
+      "default": "",
+      "description": "Leave empty for non-durable topic subscriptions or queues",
+      "placeholder": "e.g. n8n",
+      "hint": "for durable/persistent topic subscriptions"
+    },
+    {
+      "name": "subscription",
+      "displayName": "Subscription",
+      "type": "string",
+      "default": "",
+      "description": "Leave empty for non-durable topic subscriptions or queues",
+      "placeholder": "e.g. order-worker",
+      "hint": "for durable/persistent topic subscriptions"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Container ID",
+          "name": "containerId",
+          "type": "string",
+          "default": "",
+          "description": "Will be used to pass to the RHEA Backend as container_id"
+        },
+        {
+          "displayName": "Convert Body To String",
+          "name": "jsonConvertByteArrayToString",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to convert JSON Body content ([\"body\"][\"content\"]) from Byte Array to string. Needed for Azure Service Bus."
+        },
+        {
+          "displayName": "JSON Parse Body",
+          "name": "jsonParseBody",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to parse the body to an object"
+        },
+        {
+          "displayName": "Messages per Cicle",
+          "name": "pullMessagesNumber",
+          "type": "number",
+          "default": 100,
+          "description": "Number of messages to pull from the bus for every cicle"
+        },
+        {
+          "displayName": "Only Body",
+          "name": "onlyBody",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to return only the body property"
+        },
+        {
+          "displayName": "Parallel Processing",
+          "name": "parallelProcessing",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to process messages in parallel"
+        },
+        {
+          "displayName": "Reconnect",
+          "name": "reconnect",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to automatically reconnect if disconnected"
+        },
+        {
+          "displayName": "Reconnect Limit",
+          "name": "reconnectLimit",
+          "type": "number",
+          "default": 50,
+          "description": "Maximum number of reconnect attempts"
+        },
+        {
+          "displayName": "Sleep Time",
+          "name": "sleepTime",
+          "type": "number",
+          "default": 10,
+          "description": "Milliseconds to sleep after every cicle"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "amqp",
+      "required": true
+    }
+  ],
+  "requiredFields": [],
+  "optionalFields": [
+    "sink",
+    "clientname",
+    "subscription",
+    "options"
+  ],
+  "parameterTypes": {
+    "sink": "string",
+    "clientname": "string",
+    "subscription": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

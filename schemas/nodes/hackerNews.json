@@ -1,0 +1,305 @@
+{
+  "name": "hackerNews",
+  "displayName": "Hacker News",
+  "description": "Consume Hacker News API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "article",
+    "operation": "get",
+    "articleId": "",
+    "username": "",
+    "returnAll": false,
+    "limit": 100,
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "article",
+      "options": [
+        {
+          "name": "All",
+          "value": "all"
+        },
+        {
+          "name": "Article",
+          "value": "article"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many items",
+          "action": "Get many items"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a Hacker News article",
+          "action": "Get an article"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "article"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a Hacker News user",
+          "action": "Get a user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "articleId",
+      "displayName": "Article ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the Hacker News article to be returned",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "article"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "username",
+      "displayName": "Username",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The Hacker News user to be returned",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Comments",
+          "name": "includeComments",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include all the comments in a Hacker News article"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "article"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Keyword",
+          "name": "keyword",
+          "type": "string",
+          "default": "",
+          "description": "The keyword for filtering the results of the query"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Ask HN",
+              "value": "ask_hn",
+              "description": "Returns query results filtered by Ask HN tag"
+            },
+            {
+              "name": "Comment",
+              "value": "comment",
+              "description": "Returns query results filtered by comment tag"
+            },
+            {
+              "name": "Front Page",
+              "value": "front_page",
+              "description": "Returns query results filtered by Front Page tag"
+            },
+            {
+              "name": "Poll",
+              "value": "poll",
+              "description": "Returns query results filtered by poll tag"
+            },
+            {
+              "name": "Show HN",
+              "value": "show_hn",
+              "description": "Returns query results filtered by Show HN tag"
+            },
+            {
+              "name": "Story",
+              "value": "story",
+              "description": "Returns query results filtered by story tag"
+            }
+          ],
+          "default": [],
+          "description": "Tags for filtering the results of the query"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "articleId",
+    "username"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "operation",
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "articleId": "string",
+    "username": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

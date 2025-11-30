@@ -1,0 +1,124 @@
+{
+  "nodeType": "n8n-nodes-base.notionTrigger",
+  "displayName": "Notion Trigger",
+  "version": 1,
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "event"
+  ],
+  "optionalParameters": [
+    "notionNotice",
+    "databaseId",
+    "simple"
+  ],
+  "validationRules": [
+    {
+      "field": "event",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "pageAddedToDatabase",
+        "enumValues": [
+          "pageAddedToDatabase",
+          "pagedUpdatedInDatabase"
+        ]
+      }
+    },
+    {
+      "field": "notionNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      }
+    },
+    {
+      "field": "databaseId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      },
+      "dependsOn": [
+        "event"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      },
+      "dependsOn": [
+        "event"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "event": "pageAddedToDatabase",
+    "notionNotice": "",
+    "databaseId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "simple": true
+  },
+  "conditionalFields": [
+    {
+      "field": "databaseId",
+      "condition": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "event"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "event": [
+            "pageAddedToDatabase",
+            "pagedUpdatedInDatabase"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "event"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

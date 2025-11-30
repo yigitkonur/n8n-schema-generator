@@ -1,0 +1,862 @@
+{
+  "name": "googleFirebaseCloudFirestore",
+  "displayName": "Google Cloud Firestore",
+  "description": "Interact with Google Firebase - Cloud Firestore API",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "authentication": "googleFirebaseCloudFirestoreOAuth2Api",
+    "resource": "document",
+    "operation": "get",
+    "projectId": "",
+    "database": "(default)",
+    "collection": "",
+    "documentId": "",
+    "simple": true,
+    "updateKey": "",
+    "query": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "googleFirebaseCloudFirestoreOAuth2Api",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "googleFirebaseCloudFirestoreOAuth2Api"
+        },
+        {
+          "name": "Service Account",
+          "value": "serviceAccount"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "document",
+      "options": [
+        {
+          "name": "Document",
+          "value": "document"
+        },
+        {
+          "name": "Collection",
+          "value": "collection"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a document",
+          "action": "Create a document"
+        },
+        {
+          "name": "Create or Update",
+          "value": "upsert",
+          "description": "Create a new document, or update the current one if it already exists (upsert)",
+          "action": "Create or update a document"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a document",
+          "action": "Delete a document"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a document",
+          "action": "Get a document"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many documents from a collection",
+          "action": "Get many documents"
+        },
+        {
+          "name": "Query",
+          "value": "query",
+          "description": "Runs a query against your documents",
+          "action": "Query a document"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Collection name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns / Attributes",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "List of attributes to save",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "productId, modelName, description"
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Collection name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Collection name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Collection name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collection",
+      "displayName": "Collection",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Collection name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateKey",
+      "displayName": "Update Key",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the field in an input item that contains the document ID",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "placeholder": "documentId"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns /Attributes",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Columns to insert",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "placeholder": "age, city, location"
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "name": "query",
+      "displayName": "Query JSON",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "JSON query to execute",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "{\"structuredQuery\": {\"where\": {\"fieldFilter\": {\"field\": {\"fieldPath\": \"age\"},\"op\": \"EQUAL\", \"value\": {\"integerValue\": 28}}}, \"from\": [{\"collectionId\": \"users-collection\"}]}}"
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many root collections",
+          "action": "Get many collections"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "projectId",
+      "displayName": "Project Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getProjects"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "database",
+      "displayName": "Database",
+      "type": "string",
+      "default": "(default)",
+      "required": true,
+      "description": "Usually the provided default value will work",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleFirebaseCloudFirestoreOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "googleFirebaseCloudFirestoreOAuth2Api"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "projectId",
+    "database",
+    "collection",
+    "columns",
+    "projectId",
+    "database",
+    "collection",
+    "documentId",
+    "projectId",
+    "database",
+    "collection",
+    "returnAll",
+    "projectId",
+    "database",
+    "collection",
+    "documentId",
+    "projectId",
+    "database",
+    "collection",
+    "updateKey",
+    "columns",
+    "projectId",
+    "database",
+    "query",
+    "projectId",
+    "database",
+    "returnAll"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "documentId",
+    "simple",
+    "simple",
+    "limit",
+    "simple",
+    "simple",
+    "operation",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "projectId": "options",
+    "database": "string",
+    "collection": "string",
+    "documentId": "string",
+    "columns": "string",
+    "simple": "boolean",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateKey": "string",
+    "query": "string"
+  },
+  "hasVersions": false
+}

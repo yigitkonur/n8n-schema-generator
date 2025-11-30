@@ -1,0 +1,1661 @@
+{
+  "nodeType": "n8n-nodes-base.googleCalendar",
+  "displayName": "Google Calendar",
+  "version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "preBuiltAgentsCalloutGoogleCalendar",
+    "resource",
+    "operation",
+    "calendar",
+    "timeMin",
+    "timeMax",
+    "timeMin",
+    "timeMax",
+    "options",
+    "operation",
+    "calendar",
+    "start",
+    "end",
+    "start",
+    "end",
+    "useDefaultReminders",
+    "additionalFields",
+    "remindersUi",
+    "eventId",
+    "options",
+    "eventId",
+    "options",
+    "returnAll",
+    "limit",
+    "timeMin",
+    "timeMax",
+    "options",
+    "eventId",
+    "modifyTarget",
+    "useDefaultReminders",
+    "updateFields",
+    "remindersUi",
+    "useN8nTimeZone"
+  ],
+  "validationRules": [
+    {
+      "field": "preBuiltAgentsCalloutGoogleCalendar",
+      "type": "callout",
+      "required": false,
+      "constraints": {
+        "type": "callout",
+        "default": ""
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "event",
+        "enumValues": [
+          "calendar",
+          "event"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "availability",
+        "enumValues": [
+          "availability"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "calendar",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now }}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now.plus(1, 'hour') }}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "calendar",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "start",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "end",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "start",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now }}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "end",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now.plus(1, 'hour') }}"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "useDefaultReminders",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "remindersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "remindersValues": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "email",
+                  "popup"
+                ]
+              },
+              "minutes": {
+                "type": "number",
+                "default": 0,
+                "minValue": 0,
+                "maxValue": 40320
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ],
+          "useDefaultReminders": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "useDefaultReminders"
+      ]
+    },
+    {
+      "field": "eventId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "eventId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "type": "dateTime",
+      "required": false,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now }}"
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version",
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "type": "dateTime",
+      "required": false,
+      "constraints": {
+        "type": "dateTime",
+        "default": "={{ $now.plus({ week: 1 }) }}"
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version",
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "eventId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "modifyTarget",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "instance",
+        "enumValues": [
+          "instance",
+          "event"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@tool": [
+            false
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "eventId": [
+            {
+              "_cnd": {
+                "includes": "_"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "@tool",
+        "@version",
+        "resource",
+        "operation",
+        "eventId"
+      ]
+    },
+    {
+      "field": "useDefaultReminders",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "remindersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "remindersValues": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "email",
+                  "popup"
+                ]
+              },
+              "minutes": {
+                "type": "number",
+                "default": 0,
+                "minValue": 0,
+                "maxValue": 40320
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "useDefaultReminders": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "useDefaultReminders"
+      ]
+    },
+    {
+      "field": "useN8nTimeZone",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      }
+    }
+  ],
+  "computedDefaults": {
+    "preBuiltAgentsCalloutGoogleCalendar": "",
+    "resource": "event",
+    "options": {},
+    "operation": "create",
+    "calendar": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "start": "",
+    "end": "",
+    "useDefaultReminders": true,
+    "additionalFields": {},
+    "remindersUi": {},
+    "returnAll": false,
+    "limit": 50,
+    "modifyTarget": "instance",
+    "updateFields": {},
+    "useN8nTimeZone": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "calendar",
+      "condition": {
+        "show": {
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "condition": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "condition": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "condition": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "condition": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "availability"
+          ],
+          "resource": [
+            "calendar"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "calendar",
+      "condition": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "start",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "end",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "start",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "end",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "@version"
+      ]
+    },
+    {
+      "field": "useDefaultReminders",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "remindersUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ],
+          "useDefaultReminders": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "useDefaultReminders"
+      ]
+    },
+    {
+      "field": "eventId",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "eventId",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "timeMin",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version",
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "timeMax",
+      "condition": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version",
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "eventId",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "modifyTarget",
+      "condition": {
+        "show": {
+          "@tool": [
+            false
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "eventId": [
+            {
+              "_cnd": {
+                "includes": "_"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@tool",
+        "@version",
+        "resource",
+        "operation",
+        "eventId"
+      ]
+    },
+    {
+      "field": "useDefaultReminders",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "remindersUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "useDefaultReminders": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "useDefaultReminders"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "calendar": {
+      "operations": [
+        "availability"
+      ],
+      "fieldsPerOperation": {
+        "availability": [
+          "timeMin",
+          "timeMax",
+          "timeMin",
+          "timeMax",
+          "options"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "remindersUi",
+      "validOptions": [
+        "remindersValues"
+      ],
+      "optionSchemas": {
+        "remindersValues": [
+          {
+            "field": "method",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "email",
+                "popup"
+              ]
+            }
+          },
+          {
+            "field": "minutes",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0,
+              "minValue": 0,
+              "maxValue": 40320
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "remindersUi",
+      "validOptions": [
+        "remindersValues"
+      ],
+      "optionSchemas": {
+        "remindersValues": [
+          {
+            "field": "method",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "email",
+                "popup"
+              ]
+            }
+          },
+          {
+            "field": "minutes",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0,
+              "minValue": 0,
+              "maxValue": 40320
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

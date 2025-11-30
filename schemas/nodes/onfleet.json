@@ -1,0 +1,3800 @@
+{
+  "name": "onfleet",
+  "displayName": "Onfleet",
+  "description": "Consume Onfleet API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "task",
+    "email": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "containerType": "",
+    "containerId": "",
+    "type": "",
+    "index": 0,
+    "tasks": [],
+    "options": {},
+    "unparsed": false,
+    "address": "",
+    "addressNumber": "",
+    "addressStreet": "",
+    "addressCity": "",
+    "addressCountry": "",
+    "destination": {},
+    "getBy": "id",
+    "recipientName": "",
+    "recipientPhone": "",
+    "operation": "get",
+    "id": "",
+    "success": true,
+    "filters": {},
+    "overrideFields": {},
+    "workers": [],
+    "managers": [],
+    "byLocation": false,
+    "teams": [],
+    "longitude": 0,
+    "latitude": 0,
+    "schedule": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "task",
+      "description": "The resource to perform operations on",
+      "options": [
+        {
+          "name": "Admin",
+          "value": "admin"
+        },
+        {
+          "name": "Container",
+          "value": "container"
+        },
+        {
+          "name": "Destination",
+          "value": "destination"
+        },
+        {
+          "name": "Hub",
+          "value": "hub"
+        },
+        {
+          "name": "Organization",
+          "value": "organization"
+        },
+        {
+          "name": "Recipient",
+          "value": "recipient"
+        },
+        {
+          "name": "Task",
+          "value": "task"
+        },
+        {
+          "name": "Team",
+          "value": "team"
+        },
+        {
+          "name": "Worker",
+          "value": "worker"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet admin",
+          "action": "Create an admin"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an Onfleet admin",
+          "action": "Delete an admin"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many Onfleet admins",
+          "action": "Get many admins"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet admin",
+          "action": "Update an admin"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Admin ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the admin object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "create",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 64,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 64
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The administrator's name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The administrator's email address",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": "",
+          "description": "The administrator's phone number"
+        },
+        {
+          "displayName": "Read Only",
+          "name": "isReadOnly",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this administrator can perform write operations"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "The administrator's name"
+        },
+        {
+          "displayName": "Phone",
+          "name": "phone",
+          "type": "string",
+          "default": "",
+          "description": "The administrator's phone number"
+        },
+        {
+          "displayName": "Read Only",
+          "name": "isReadOnly",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this administrator can perform write operations"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "admin"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Add Tasks",
+          "value": "addTask",
+          "description": "Add task at index (or append)",
+          "action": "Add tasks"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get container information",
+          "action": "Get a container"
+        },
+        {
+          "name": "Update Tasks",
+          "value": "updateTask",
+          "description": "Fully replace a container's tasks",
+          "action": "Update tasks"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "containerType",
+      "displayName": "Container Type",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "options": [
+        {
+          "name": "Organizations",
+          "value": "organizations"
+        },
+        {
+          "name": "Teams",
+          "value": "teams"
+        },
+        {
+          "name": "Workers",
+          "value": "workers"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get",
+            "addTask"
+          ]
+        }
+      }
+    },
+    {
+      "name": "containerId",
+      "displayName": "Container ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The object ID according to the container chosen",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get",
+            "addTask",
+            "updateTask"
+          ]
+        }
+      }
+    },
+    {
+      "name": "type",
+      "displayName": "Insert Type",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "options": [
+        {
+          "name": "Append",
+          "value": -1
+        },
+        {
+          "name": "Prepend",
+          "value": 0
+        },
+        {
+          "name": "At Specific Index",
+          "value": 1
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "addTask"
+          ]
+        }
+      }
+    },
+    {
+      "name": "index",
+      "displayName": "Index",
+      "type": "number",
+      "default": 0,
+      "required": true,
+      "description": "The index given indicates the position where the tasks are going to be inserted",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "addTask"
+          ],
+          "type": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "tasks",
+      "displayName": "Task IDs",
+      "type": "string",
+      "default": [],
+      "required": true,
+      "description": "Task's ID that are going to be used",
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add Task"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "addTask",
+            "updateTask"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Consider Dependencies",
+          "name": "considerDependencies",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the target task's dependency family (parent and child tasks) in the resulting assignment operation",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "addTask",
+            "updateTask"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new destination",
+          "action": "Create a destination"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific destination",
+          "action": "Get a destination"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Destination ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the destination object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "unparsed",
+      "displayName": "Unparsed Address",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether or not the address is specified in a single unparsed string",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "address",
+      "displayName": "Destination Address",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The destination's street address details",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "addressNumber",
+      "displayName": "Number",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The number component of this address, it may also contain letters",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "addressStreet",
+      "displayName": "Street",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the street",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "addressCity",
+      "displayName": "City",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the municipality",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "addressCountry",
+      "displayName": "Country",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the country",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Apartment",
+          "name": "addressApartment",
+          "type": "string",
+          "default": "",
+          "description": "The suite or apartment number, or any additional relevant information"
+        },
+        {
+          "displayName": "Address Name",
+          "name": "addressName",
+          "type": "string",
+          "default": "",
+          "description": "A name associated with this address"
+        },
+        {
+          "displayName": "Address Notes",
+          "name": "addressNotes",
+          "type": "string",
+          "default": "",
+          "description": "Notes about the destination"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            true
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Apartment",
+          "name": "addressApartment",
+          "type": "string",
+          "default": "",
+          "description": "The suite or apartment number, or any additional relevant information"
+        },
+        {
+          "displayName": "Address Name",
+          "name": "addressName",
+          "type": "string",
+          "default": "",
+          "description": "A name associated with this address"
+        },
+        {
+          "displayName": "Address Notes",
+          "name": "addressNotes",
+          "type": "string",
+          "default": "",
+          "description": "Notes about the destination"
+        },
+        {
+          "displayName": "Postal Code",
+          "name": "addressPostalCode",
+          "type": "string",
+          "default": "",
+          "description": "The postal or zip code"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "destination"
+          ],
+          "operation": [
+            "create"
+          ],
+          "unparsed": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet hub",
+          "action": "Create a hub"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many Onfleet hubs",
+          "action": "Get many hubs"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet hub",
+          "action": "Update a hub"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Hub ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the hub object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 64,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 64
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A name to identify the hub",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "destination",
+      "displayName": "Destination",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Destination Properties",
+          "name": "destinationProperties",
+          "default": {},
+          "values": [
+            {
+              "displayName": "Unparsed Address",
+              "name": "unparsed",
+              "type": "boolean",
+              "description": "Whether or not the address is specified in a single unparsed string",
+              "default": false,
+              "required": false
+            },
+            {
+              "displayName": "Destination Address",
+              "name": "address",
+              "type": "string",
+              "description": "The destination's street address details",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    true
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Number",
+              "name": "addressNumber",
+              "type": "string",
+              "description": "The number component of this address, it may also contain letters",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Street",
+              "name": "addressStreet",
+              "type": "string",
+              "description": "The name of the street",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "City",
+              "name": "addressCity",
+              "type": "string",
+              "description": "The name of the municipality",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "State",
+              "name": "addressState",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Country",
+              "name": "addressCountry",
+              "type": "string",
+              "description": "The name of the country",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "displayName": "Postal Code",
+              "name": "addressPostalCode",
+              "type": "string",
+              "default": "",
+              "description": "The postal or zip code",
+              "required": false
+            },
+            {
+              "displayName": "Address Name",
+              "name": "addressName",
+              "type": "string",
+              "default": "",
+              "description": "A name associated with this address",
+              "required": false
+            },
+            {
+              "displayName": "Apartment",
+              "name": "addressApartment",
+              "type": "string",
+              "default": "",
+              "description": "The suite or apartment number, or any additional relevant information",
+              "required": false
+            },
+            {
+              "displayName": "Address Notes",
+              "name": "addressNotes",
+              "type": "string",
+              "default": "",
+              "description": "Notes about the destination",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Destination"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Team Names or IDs",
+          "name": "teams",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": [],
+          "description": "These are the teams that this Hub will be assigned to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Destination",
+          "name": "destination",
+          "type": "fixedCollection",
+          "placeholder": "Add Destination",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Destination Properties",
+              "name": "destinationProperties",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Unparsed Address",
+                  "name": "unparsed",
+                  "type": "boolean",
+                  "description": "Whether or not the address is specified in a single unparsed string",
+                  "default": false,
+                  "required": false
+                },
+                {
+                  "displayName": "Destination Address",
+                  "name": "address",
+                  "type": "string",
+                  "description": "The destination's street address details",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        true
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayName": "Number",
+                  "name": "addressNumber",
+                  "type": "string",
+                  "description": "The number component of this address, it may also contain letters",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayName": "Street",
+                  "name": "addressStreet",
+                  "type": "string",
+                  "description": "The name of the street",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayName": "City",
+                  "name": "addressCity",
+                  "type": "string",
+                  "description": "The name of the municipality",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayName": "State",
+                  "name": "addressState",
+                  "type": "string",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayName": "Country",
+                  "name": "addressCountry",
+                  "type": "string",
+                  "description": "The name of the country",
+                  "default": "",
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "required": true
+                },
+                {
+                  "displayOptions": {
+                    "show": {
+                      "unparsed": [
+                        false
+                      ]
+                    }
+                  },
+                  "displayName": "Postal Code",
+                  "name": "addressPostalCode",
+                  "type": "string",
+                  "default": "",
+                  "description": "The postal or zip code",
+                  "required": false
+                },
+                {
+                  "displayName": "Address Name",
+                  "name": "addressName",
+                  "type": "string",
+                  "default": "",
+                  "description": "A name associated with this address",
+                  "required": false
+                },
+                {
+                  "displayName": "Apartment",
+                  "name": "addressApartment",
+                  "type": "string",
+                  "default": "",
+                  "description": "The suite or apartment number, or any additional relevant information",
+                  "required": false
+                },
+                {
+                  "displayName": "Address Notes",
+                  "name": "addressNotes",
+                  "type": "string",
+                  "default": "",
+                  "description": "Notes about the destination",
+                  "required": false
+                }
+              ]
+            }
+          ],
+          "required": false
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "A name to identify the hub"
+        },
+        {
+          "displayName": "Team Names or IDs",
+          "name": "teams",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": [],
+          "description": "These are the teams that this Hub will be assigned to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "hub"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get My Organization",
+          "value": "get",
+          "description": "Retrieve your own organization's details",
+          "action": "Get my organization"
+        },
+        {
+          "name": "Get Delegatee Details",
+          "value": "getDelegatee",
+          "description": "Retrieve the details of an organization with which you are connected",
+          "action": "Get a delegatee's details"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the delegatees for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getDelegatee"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet recipient",
+          "action": "Create a recipient"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific Onfleet recipient",
+          "action": "Get a recipient"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet recipient",
+          "action": "Update a recipient"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "getBy",
+      "displayName": "Get By",
+      "type": "options",
+      "default": "id",
+      "required": true,
+      "description": "The variable that is used for looking up a recipient",
+      "options": [
+        {
+          "name": "ID",
+          "value": "id"
+        },
+        {
+          "name": "Phone",
+          "value": "phone"
+        },
+        {
+          "name": "Name",
+          "value": "name"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Recipient ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the recipient object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "get"
+          ],
+          "getBy": [
+            "id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Recipient ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the recipient object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the recipient for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "get"
+          ],
+          "getBy": [
+            "name"
+          ]
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "displayName": "Phone",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The phone of the recipient for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "get"
+          ],
+          "getBy": [
+            "phone"
+          ]
+        }
+      }
+    },
+    {
+      "name": "recipientName",
+      "displayName": "Recipient Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The recipient's complete name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "recipientPhone",
+      "displayName": "Recipient Phone",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A unique, valid phone number as per the organization's country if there's no leading + sign. If a phone number has a leading + sign, it will disregard the organization's country setting.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Recipient Notes",
+          "name": "recipientNotes",
+          "type": "string",
+          "default": "",
+          "description": "Notes for this recipient: these are global notes that should not be task- or destination-specific"
+        },
+        {
+          "displayName": "Skip Recipient SMS Notifications",
+          "name": "recipientSkipSMSNotifications",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this recipient has requested to skip SMS notifications"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Recipient Name",
+          "name": "recipientName",
+          "type": "string",
+          "description": "The recipient's complete name",
+          "default": "",
+          "required": false
+        },
+        {
+          "displayName": "Recipient Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Notes for this recipient: these are global notes that should not be task- or destination-specific"
+        },
+        {
+          "displayName": "Recipient Phone",
+          "name": "recipientPhone",
+          "type": "string",
+          "description": "A unique, valid phone number as per the organization's country if there's no leading + sign. If a phone number has a leading + sign, it will disregard the organization's country setting.",
+          "default": "",
+          "required": false
+        },
+        {
+          "displayName": "Skip Recipient SMS Notifications",
+          "name": "skipSMSNotifications",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this recipient has requested to skip SMS notifications"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Update Fields"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Skip Recipient Phone Number Validation",
+          "name": "recipientSkipPhoneNumberValidation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to skip validation for this recipient's phone number"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "recipient"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Clone",
+          "value": "clone",
+          "description": "Clone an Onfleet task",
+          "action": "Clone a task"
+        },
+        {
+          "name": "Complete",
+          "value": "complete",
+          "description": "Force-complete a started Onfleet task",
+          "action": "Complete a task"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet task",
+          "action": "Create a task"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an Onfleet task",
+          "action": "Delete a task"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific Onfleet task",
+          "action": "Get a task"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many Onfleet tasks",
+          "action": "Get many tasks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet task",
+          "action": "Update a task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Task ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the task object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "create",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 64,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 64
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "destination",
+      "displayName": "Destination",
+      "type": "fixedCollection",
+      "default": {},
+      "required": true,
+      "options": [
+        {
+          "displayName": "Destination Properties",
+          "name": "destinationProperties",
+          "default": {},
+          "values": [
+            {
+              "displayName": "Unparsed Address",
+              "name": "unparsed",
+              "type": "boolean",
+              "description": "Whether or not the address is specified in a single unparsed string",
+              "default": false,
+              "required": false
+            },
+            {
+              "displayName": "Destination Address",
+              "name": "address",
+              "type": "string",
+              "description": "The destination's street address details",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    true
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Number",
+              "name": "addressNumber",
+              "type": "string",
+              "description": "The number component of this address, it may also contain letters",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Street",
+              "name": "addressStreet",
+              "type": "string",
+              "description": "The name of the street",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "City",
+              "name": "addressCity",
+              "type": "string",
+              "description": "The name of the municipality",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "State",
+              "name": "addressState",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayName": "Country",
+              "name": "addressCountry",
+              "type": "string",
+              "description": "The name of the country",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "required": true
+            },
+            {
+              "displayOptions": {
+                "show": {
+                  "unparsed": [
+                    false
+                  ]
+                }
+              },
+              "displayName": "Postal Code",
+              "name": "addressPostalCode",
+              "type": "string",
+              "default": "",
+              "description": "The postal or zip code",
+              "required": false
+            },
+            {
+              "displayName": "Address Name",
+              "name": "addressName",
+              "type": "string",
+              "default": "",
+              "description": "A name associated with this address",
+              "required": false
+            },
+            {
+              "displayName": "Apartment",
+              "name": "addressApartment",
+              "type": "string",
+              "default": "",
+              "description": "The suite or apartment number, or any additional relevant information",
+              "required": false
+            },
+            {
+              "displayName": "Address Notes",
+              "name": "addressNotes",
+              "type": "string",
+              "default": "",
+              "description": "Notes about the destination",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Destination"
+    },
+    {
+      "name": "success",
+      "displayName": "Complete as a Success",
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "description": "Whether the task's completion was successful",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "From",
+          "name": "from",
+          "type": "dateTime",
+          "default": "",
+          "description": "The starting time of the range. Tasks created or completed at or after this time will be included."
+        },
+        {
+          "displayName": "State",
+          "name": "state",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "[All]",
+              "value": "all"
+            },
+            {
+              "name": "Active",
+              "value": 2
+            },
+            {
+              "name": "Assigned",
+              "value": 1
+            },
+            {
+              "name": "Completed",
+              "value": 3
+            },
+            {
+              "name": "Unassigned",
+              "value": 0
+            }
+          ],
+          "default": [
+            "all"
+          ],
+          "description": "The state of the tasks"
+        },
+        {
+          "displayName": "To",
+          "name": "to",
+          "type": "dateTime",
+          "default": "",
+          "description": "The ending time of the range. Defaults to current time if not specified."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "overrideFields",
+      "displayName": "Override Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Complete After",
+          "name": "completeAfter",
+          "type": "dateTime",
+          "default": null,
+          "description": "The earliest time the task should be completed"
+        },
+        {
+          "displayName": "Complete Before",
+          "name": "completeBefore",
+          "type": "dateTime",
+          "default": null,
+          "description": "The latest time the task should be completed"
+        },
+        {
+          "displayName": "Include Barcodes",
+          "name": "includeBarcodes",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Include Dependencies",
+          "name": "includeDependencies",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Include Metadata",
+          "name": "includeMetadata",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Notes for the task",
+          "required": false
+        },
+        {
+          "displayName": "Pick Up Task",
+          "name": "pickupTask",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the task is a pickup task",
+          "required": false
+        },
+        {
+          "displayName": "Service Time",
+          "name": "serviceTime",
+          "type": "number",
+          "default": 0,
+          "description": "The number of minutes to be spent by the worker on arrival at this task's destination, for route optimization purposes",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Complete After",
+          "name": "completeAfter",
+          "type": "dateTime",
+          "default": null,
+          "description": "The earliest time the task should be completed"
+        },
+        {
+          "displayName": "Complete Before",
+          "name": "completeBefore",
+          "type": "dateTime",
+          "default": null,
+          "description": "The latest time the task should be completed"
+        },
+        {
+          "displayName": "Executor ID",
+          "name": "executor",
+          "type": "string",
+          "default": "",
+          "description": "The ID of the organization that will be responsible for fulfilling the task"
+        },
+        {
+          "displayName": "Merchant ID",
+          "name": "merchant",
+          "type": "string",
+          "default": "",
+          "description": "The ID of the organization that will be displayed to the recipient of the task"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Notes for the task"
+        },
+        {
+          "displayName": "Pick Up Task",
+          "name": "pickupTask",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the task is a pickup task"
+        },
+        {
+          "displayName": "Quantity",
+          "name": "quantity",
+          "type": "number",
+          "default": 0,
+          "description": "The number of units to be dropped off while completing this task, for route optimization purposes"
+        },
+        {
+          "displayName": "Service Time",
+          "name": "serviceTime",
+          "type": "number",
+          "default": 0,
+          "description": "The number of minutes to be spent by the worker on arrival at this task's destination, for route optimization purposes"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Completion Notes"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Complete After",
+          "name": "completeAfter",
+          "type": "dateTime",
+          "default": null,
+          "description": "The earliest time the task should be completed"
+        },
+        {
+          "displayName": "Complete Before",
+          "name": "completeBefore",
+          "type": "dateTime",
+          "default": null,
+          "description": "The latest time the task should be completed"
+        },
+        {
+          "displayName": "Executor ID",
+          "name": "executor",
+          "type": "string",
+          "default": "",
+          "description": "The ID of the organization that will be responsible for fulfilling the task"
+        },
+        {
+          "displayName": "Merchant ID",
+          "name": "merchant",
+          "type": "string",
+          "default": "",
+          "description": "The ID of the organization that will be displayed to the recipient of the task"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": "",
+          "description": "Notes for the task"
+        },
+        {
+          "displayName": "Pick Up Task",
+          "name": "pickupTask",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the task is a pickup task"
+        },
+        {
+          "displayName": "Quantity",
+          "name": "quantity",
+          "type": "number",
+          "default": 0,
+          "description": "The number of units to be dropped off while completing this task, for route optimization purposes"
+        },
+        {
+          "displayName": "Recipient",
+          "name": "recipient",
+          "type": "fixedCollection",
+          "placeholder": "Add Recipient",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Recipient Properties",
+              "name": "recipientProperties",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Recipient Name",
+                  "name": "recipientName",
+                  "type": "string",
+                  "description": "The recipient's complete name",
+                  "default": "",
+                  "required": true
+                },
+                {
+                  "displayName": "Recipient Phone",
+                  "name": "recipientPhone",
+                  "type": "string",
+                  "description": "A unique, valid phone number as per the organization's country if there's no leading + sign. If a phone number has a leading + sign, it will disregard the organization's country setting.",
+                  "default": "",
+                  "required": true
+                },
+                {
+                  "displayName": "Recipient Notes",
+                  "name": "recipientNotes",
+                  "type": "string",
+                  "default": "",
+                  "description": "Notes for this recipient: these are global notes that should not be task- or destination-specific"
+                },
+                {
+                  "displayName": "Skip Recipient SMS Notifications",
+                  "name": "recipientSkipSMSNotifications",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Whether this recipient has requested to skip SMS notifications"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Recipient Name Override",
+          "name": "recipientName",
+          "type": "string",
+          "default": "",
+          "description": "Override the recipient name for this task only"
+        },
+        {
+          "displayName": "Recipient Notes Override",
+          "name": "recipientNotes",
+          "type": "string",
+          "default": "",
+          "description": "Override the recipient notes for this task only"
+        },
+        {
+          "displayName": "Recipient Skip SMS Notifications Override",
+          "name": "recipientSkipSMSNotifications",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to override the recipient notification settings for this task"
+        },
+        {
+          "displayName": "Service Time",
+          "name": "serviceTime",
+          "type": "number",
+          "default": 0,
+          "description": "The number of minutes to be spent by the worker on arrival at this task's destination, for route optimization purposes"
+        },
+        {
+          "displayName": "Use Merchant For Proxy Override",
+          "name": "useMerchantForProxy",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to override the organization ID with the merchant's org ID for this task"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Auto-Dispatch",
+          "value": "autoDispatch",
+          "description": "Automatically dispatch tasks assigned to a team to on-duty drivers",
+          "action": "Auto-dispatch a team"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet team",
+          "action": "Create a team"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an Onfleet team",
+          "action": "Delete a team"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific Onfleet team",
+          "action": "Get a team"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many Onfleet teams",
+          "action": "Get many teams"
+        },
+        {
+          "name": "Get Time Estimates",
+          "value": "getTimeEstimates",
+          "description": "Get estimated times for upcoming tasks for a team, returns a selected driver",
+          "action": "Get time estimates for a team"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet team",
+          "action": "Update a team"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "id",
+      "displayName": "Team ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the team object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "get",
+            "update",
+            "delete",
+            "getTimeEstimates",
+            "autoDispatch"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A unique name for the team",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "workers",
+      "displayName": "Worker Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "A list of workers. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getWorkers"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "managers",
+      "displayName": "Administrator Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "A list of managing administrators. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getAdmins"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Hub Name or ID",
+          "name": "hub",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getHubs"
+          },
+          "default": "",
+          "description": "The team's hub. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Self Assignment",
+          "name": "enableSelfAssignment",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether or not to allow drivers to self-assign tasks that are in the Team's unassigned container"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 64,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 64
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Administrator Names or IDs",
+          "name": "managers",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getAdmins"
+          },
+          "default": [],
+          "description": "A list of managing administrators. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Hub Name or ID",
+          "name": "hub",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getHubs"
+          },
+          "default": "",
+          "description": "The team's hub. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "A unique name for the team"
+        },
+        {
+          "displayName": "Self Assignment",
+          "name": "enableSelfAssignment",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether or not to allow drivers to self-assign tasks that are in the Team's unassigned container"
+        },
+        {
+          "displayName": "Worker Names or IDs",
+          "name": "workers",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getWorkers"
+          },
+          "default": [],
+          "description": "A list of workers. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Ending Route",
+          "name": "endingRoute",
+          "type": "fixedCollection",
+          "placeholder": "Add Route",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Ending Route Properties",
+              "name": "endingRouteProperties",
+              "type": "fixedCollection",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Route End",
+                  "name": "routeEnd",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Team’s Hub",
+                      "value": "team_hub"
+                    },
+                    {
+                      "name": "Worker Routing Address",
+                      "value": "worker_routing_address"
+                    },
+                    {
+                      "name": "Hub",
+                      "value": "hub"
+                    },
+                    {
+                      "name": "End Anywhere",
+                      "value": "anywhere"
+                    }
+                  ],
+                  "default": "",
+                  "description": "Where the route will end",
+                  "required": true
+                },
+                {
+                  "displayName": "Hub Name or ID",
+                  "name": "hub",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsMethod": "getHubs"
+                  },
+                  "default": "",
+                  "description": "The team's hub. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "displayOptions": {
+                    "show": {
+                      "routeEnd": [
+                        "hub"
+                      ]
+                    }
+                  },
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Max Allowed Delay",
+          "name": "maxAllowedDelay",
+          "type": "number",
+          "default": 10,
+          "description": "Max allowed time in minutes that a task can be late",
+          "typeOptions": {
+            "minValue": 1
+          }
+        },
+        {
+          "displayName": "Max Number Of Tasks Per Route",
+          "name": "maxTasksPerRoute",
+          "type": "number",
+          "default": 100,
+          "typeOptions": {
+            "maxValue": 200,
+            "minValue": 1
+          },
+          "description": "Total number of tasks allowed on a route"
+        },
+        {
+          "displayName": "Schedule Time Window",
+          "name": "scheduleTimeWindow",
+          "type": "fixedCollection",
+          "placeholder": "Add Time Window",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Schedule Time Window Properties",
+              "name": "scheduleTimeWindowProperties",
+              "type": "fixedCollection",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Start Time",
+                  "name": "startTime",
+                  "type": "dateTime",
+                  "default": ""
+                },
+                {
+                  "displayName": "End Time",
+                  "name": "endTime",
+                  "type": "dateTime",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Service Time",
+          "name": "serviceTime",
+          "type": "number",
+          "default": 2,
+          "typeOptions": {
+            "minValue": 0
+          },
+          "description": "The default service time to apply in Minutes to the tasks when no task service time exists"
+        },
+        {
+          "displayName": "Task Time Window",
+          "name": "taskTimeWindow",
+          "type": "fixedCollection",
+          "placeholder": "Add Time Window",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Task Time Window Properties",
+              "name": "taskTimeWindowProperties",
+              "type": "fixedCollection",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Start Time",
+                  "name": "startTime",
+                  "type": "dateTime",
+                  "default": ""
+                },
+                {
+                  "displayName": "End Time",
+                  "name": "endTime",
+                  "type": "dateTime",
+                  "default": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "autoDispatch"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Drop Off",
+          "name": "dropOff",
+          "type": "fixedCollection",
+          "placeholder": "Add Drop Off",
+          "default": {},
+          "options": [
+            {
+              "displayName": "DropOff Properties",
+              "name": "dropOffProperties",
+              "type": "fixedCollection",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Drop Off Longitude",
+                  "name": "dropOffLongitude",
+                  "type": "number",
+                  "typeOptions": {
+                    "numberPrecision": 14
+                  },
+                  "default": 0,
+                  "description": "The longitude for drop off location",
+                  "required": true
+                },
+                {
+                  "displayName": "Drop Off Latitude",
+                  "name": "dropOffLatitude",
+                  "type": "number",
+                  "typeOptions": {
+                    "numberPrecision": 14
+                  },
+                  "default": 0,
+                  "description": "The latitude for drop off location",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Pick Up",
+          "name": "pickUp",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Pick Up",
+          "options": [
+            {
+              "displayName": "Pick Up Properties",
+              "name": "pickUpProperties",
+              "type": "fixedCollection",
+              "default": {},
+              "values": [
+                {
+                  "displayName": "Pick Up Longitude",
+                  "name": "pickupLongitude",
+                  "type": "number",
+                  "typeOptions": {
+                    "numberPrecision": 14
+                  },
+                  "default": 0,
+                  "description": "The longitude for pickup location",
+                  "required": true
+                },
+                {
+                  "displayName": "Pick Up Latitude",
+                  "name": "pickupLatitude",
+                  "type": "number",
+                  "typeOptions": {
+                    "numberPrecision": 14
+                  },
+                  "default": 0,
+                  "description": "The latitude for pickup location",
+                  "required": true
+                },
+                {
+                  "displayName": "Pick Up Time",
+                  "name": "pickupTime",
+                  "type": "dateTime",
+                  "default": "",
+                  "description": "If the request includes pickupLocation, pickupTime must be present if the time is fewer than 3 hours in the future",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Restricted Vehicle Types",
+          "name": "restrictedVehicleTypes",
+          "type": "options",
+          "options": [
+            {
+              "name": "Car",
+              "value": "CAR"
+            },
+            {
+              "name": "Motorcycle",
+              "value": "MOTORCYCLE"
+            },
+            {
+              "name": "Bicycle",
+              "value": "BICYCLE"
+            },
+            {
+              "name": "Truck",
+              "value": "TRUCK"
+            }
+          ],
+          "default": "CAR",
+          "description": "Vehicle types to ignore in the query",
+          "required": false
+        },
+        {
+          "displayName": "Service Time",
+          "name": "serviceTime",
+          "type": "number",
+          "default": 120,
+          "typeOptions": {
+            "minValue": 0
+          },
+          "description": "The expected time a worker will take at the pickupLocation, dropoffLocation, or both (as applicable) Unit: seconds",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "getTimeEstimates"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new Onfleet worker",
+          "action": "Create a worker"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an Onfleet worker",
+          "action": "Delete a worker"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a specific Onfleet worker",
+          "action": "Get a worker"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many Onfleet workers",
+          "action": "Get many workers"
+        },
+        {
+          "name": "Get Schedule",
+          "value": "getSchedule",
+          "description": "Get a specific Onfleet worker schedule",
+          "action": "Get the schedule for a worker"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an Onfleet worker",
+          "action": "Update a worker"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "byLocation",
+      "displayName": "Search by Location",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to search for only those workers who are currently within a certain target area",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "id",
+      "displayName": "Worker ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the worker object for lookup",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "get",
+            "getSchedule",
+            "setSchedule",
+            "update",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The worker's name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "phone",
+      "displayName": "Phone",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "A list of worker’s phone numbers",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "teams",
+      "displayName": "Team Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "One or more teams of which the worker is a member. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getTeams"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "longitude",
+      "displayName": "Longitude",
+      "type": "number",
+      "default": 0,
+      "required": true,
+      "description": "The longitude component of the coordinate pair",
+      "typeOptions": {
+        "numberPrecision": 14
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "byLocation": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "latitude",
+      "displayName": "Latitude",
+      "type": "number",
+      "default": 0,
+      "required": true,
+      "description": "The latitude component of the coordinate pair",
+      "typeOptions": {
+        "numberPrecision": 14
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "byLocation": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 64,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 64
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Capacity",
+          "name": "capacity",
+          "type": "number",
+          "default": 0,
+          "description": "The maximum number of units this worker can carry, for route optimization purposes"
+        },
+        {
+          "displayName": "Display Name",
+          "name": "displayName",
+          "type": "string",
+          "default": "",
+          "description": "This value is used in place of the worker's actual name within sms notifications, delivery tracking pages, and across organization boundaries"
+        },
+        {
+          "displayName": "Vehicle",
+          "name": "vehicle",
+          "type": "fixedCollection",
+          "placeholder": "Add Vehicle",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Vehicle Properties",
+              "name": "vehicleProperties",
+              "values": [
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Bicycle",
+                      "value": "BICYCLE"
+                    },
+                    {
+                      "name": "Car",
+                      "value": "CAR"
+                    },
+                    {
+                      "name": "Motorcycle",
+                      "value": "MOTORCYCLE"
+                    },
+                    {
+                      "name": "Truck",
+                      "value": "TRUCK"
+                    }
+                  ],
+                  "default": "",
+                  "description": "Whether the worker has vehicle or not. If it's not provided, this worker will be treated as if on foot.",
+                  "required": true
+                },
+                {
+                  "displayName": "Description",
+                  "name": "description",
+                  "type": "string",
+                  "default": "",
+                  "description": "The vehicle's make, model, year, or any other relevant identifying details",
+                  "required": false
+                },
+                {
+                  "displayName": "License Plate",
+                  "name": "licensePlate",
+                  "type": "string",
+                  "default": "",
+                  "description": "The vehicle's license plate number",
+                  "required": false
+                },
+                {
+                  "displayName": "Color",
+                  "name": "color",
+                  "type": "string",
+                  "default": "",
+                  "description": "The vehicle's color",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Capacity",
+          "name": "capacity",
+          "type": "number",
+          "default": 0,
+          "description": "The maximum number of units this worker can carry, for route optimization purposes"
+        },
+        {
+          "displayName": "Display Name",
+          "name": "displayName",
+          "type": "string",
+          "default": "",
+          "description": "This value is used in place of the worker's actual name within sms notifications, delivery tracking pages, and across organization boundaries"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "The worker's name"
+        },
+        {
+          "displayName": "Team Names or IDs",
+          "name": "teams",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": [],
+          "description": "One or more teams of which the worker is a member. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Radius",
+          "name": "radius",
+          "type": "number",
+          "typeOptions": {
+            "maxValue": 10000,
+            "minValue": 0
+          },
+          "default": 1000,
+          "description": "The length in meters of the radius of the spherical area in which to look for workers. Defaults to 1000 if missing. Maximum value is 10000."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "byLocation": [
+            true
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "States",
+          "name": "states",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Active (On-Duty, Active Task)",
+              "value": 2
+            },
+            {
+              "name": "Idle (On-Duty, No Active Task)",
+              "value": 1
+            },
+            {
+              "name": "Off-Duty",
+              "value": 0
+            }
+          ],
+          "default": [],
+          "description": "List of worker states"
+        },
+        {
+          "displayName": "Team Names or IDs",
+          "name": "teams",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": [],
+          "description": "A list of the teams that workers must be part of. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Phones",
+          "name": "phones",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true,
+            "multipleValueButtonText": "Add Phone"
+          },
+          "default": [],
+          "description": "A list of workers' phone numbers"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "byLocation": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fields to Return",
+          "name": "filter",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Account Status",
+              "value": "accountStatus"
+            },
+            {
+              "name": "Active Task",
+              "value": "activeTask"
+            },
+            {
+              "name": "Capacity",
+              "value": "capacity"
+            },
+            {
+              "name": "Delay Time",
+              "value": "delayTime"
+            },
+            {
+              "name": "Display Name",
+              "value": "displayName"
+            },
+            {
+              "name": "Image Url",
+              "value": "imageUrl"
+            },
+            {
+              "name": "Location",
+              "value": "location"
+            },
+            {
+              "name": "Metadata",
+              "value": "metadata"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "On Duty",
+              "value": "onDuty"
+            },
+            {
+              "name": "Organization",
+              "value": "organization"
+            },
+            {
+              "name": "Phone",
+              "value": "phone"
+            },
+            {
+              "name": "Tasks",
+              "value": "tasks"
+            },
+            {
+              "name": "Teams",
+              "value": "teams"
+            },
+            {
+              "name": "Time Created",
+              "value": "timeCreated"
+            },
+            {
+              "name": "Time Last Modified",
+              "value": "timeLastModified"
+            },
+            {
+              "name": "Time Last Seen",
+              "value": "timeLastSeen"
+            },
+            {
+              "name": "User Data",
+              "value": "userData"
+            },
+            {
+              "name": "Vehicle",
+              "value": "vehicle"
+            },
+            {
+              "name": "Worker ID",
+              "value": "id"
+            }
+          ],
+          "default": [],
+          "description": "A list of fields to show in the response, if all are not desired"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Analytics",
+          "name": "analytics",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether a more detailed response is needed, includes basic worker duty event, traveled distance (meters) and time analytics"
+        },
+        {
+          "displayName": "Fields to Return",
+          "name": "filter",
+          "type": "multiOptions",
+          "options": [
+            {
+              "name": "Account Status",
+              "value": "accountStatus"
+            },
+            {
+              "name": "Active Task",
+              "value": "activeTask"
+            },
+            {
+              "name": "Capacity",
+              "value": "capacity"
+            },
+            {
+              "name": "Delay Time",
+              "value": "delayTime"
+            },
+            {
+              "name": "Display Name",
+              "value": "displayName"
+            },
+            {
+              "name": "Image Url",
+              "value": "imageUrl"
+            },
+            {
+              "name": "Location",
+              "value": "location"
+            },
+            {
+              "name": "Metadata",
+              "value": "metadata"
+            },
+            {
+              "name": "Name",
+              "value": "name"
+            },
+            {
+              "name": "On Duty",
+              "value": "onDuty"
+            },
+            {
+              "name": "Organization",
+              "value": "organization"
+            },
+            {
+              "name": "Phone",
+              "value": "phone"
+            },
+            {
+              "name": "Tasks",
+              "value": "tasks"
+            },
+            {
+              "name": "Teams",
+              "value": "teams"
+            },
+            {
+              "name": "Time Created",
+              "value": "timeCreated"
+            },
+            {
+              "name": "Time Last Modified",
+              "value": "timeLastModified"
+            },
+            {
+              "name": "Time Last Seen",
+              "value": "timeLastSeen"
+            },
+            {
+              "name": "User Data",
+              "value": "userData"
+            },
+            {
+              "name": "Vehicle",
+              "value": "vehicle"
+            },
+            {
+              "name": "Worker ID",
+              "value": "id"
+            }
+          ],
+          "default": [],
+          "description": "A list of fields to show in the response, if all are not desired",
+          "required": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "schedule",
+      "displayName": "Schedule",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Schedule Properties",
+          "name": "scheduleProperties",
+          "default": {},
+          "values": [
+            {
+              "displayName": "Date",
+              "name": "date",
+              "type": "dateTime",
+              "default": "",
+              "description": "Schedule's date",
+              "required": true
+            },
+            {
+              "displayName": "Timezone Name or ID",
+              "name": "timezone",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsMethod": "getTimezones"
+              },
+              "default": "",
+              "description": "A valid timezone. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+              "required": true
+            },
+            {
+              "displayName": "Shifts",
+              "name": "shifts",
+              "type": "fixedCollection",
+              "default": {},
+              "placeholder": "Add Shift",
+              "typeOptions": {
+                "multipleValues": true
+              },
+              "options": [
+                {
+                  "displayName": "Shifts Properties",
+                  "name": "shiftsProperties",
+                  "default": {},
+                  "values": [
+                    {
+                      "displayName": "Start",
+                      "name": "start",
+                      "type": "dateTime",
+                      "default": "",
+                      "description": "Start time",
+                      "required": true
+                    },
+                    {
+                      "displayName": "End",
+                      "name": "end",
+                      "type": "dateTime",
+                      "default": "",
+                      "description": "End time",
+                      "required": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add Schedule"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "worker"
+          ],
+          "operation": [
+            "setSchedule"
+          ]
+        }
+      },
+      "placeholder": "Add Schedule"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "onfleetApi",
+      "required": true,
+      "testedBy": "onfleetApiTest"
+    }
+  ],
+  "requiredFields": [
+    "id",
+    "name",
+    "email",
+    "containerType",
+    "containerId",
+    "type",
+    "index",
+    "tasks",
+    "id",
+    "unparsed",
+    "address",
+    "addressNumber",
+    "addressStreet",
+    "addressCity",
+    "addressCountry",
+    "id",
+    "name",
+    "id",
+    "getBy",
+    "id",
+    "id",
+    "name",
+    "phone",
+    "recipientName",
+    "recipientPhone",
+    "id",
+    "destination",
+    "success",
+    "id",
+    "name",
+    "workers",
+    "managers",
+    "byLocation",
+    "id",
+    "name",
+    "phone",
+    "teams",
+    "longitude",
+    "latitude"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "updateFields",
+    "operation",
+    "options",
+    "operation",
+    "additionalFields",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit",
+    "destination",
+    "additionalFields",
+    "updateFields",
+    "operation",
+    "operation",
+    "additionalFields",
+    "updateFields",
+    "options",
+    "operation",
+    "returnAll",
+    "limit",
+    "filters",
+    "overrideFields",
+    "updateFields",
+    "additionalFields",
+    "additionalFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "additionalFields",
+    "filters",
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "updateFields",
+    "filters",
+    "filters",
+    "options",
+    "options",
+    "schedule"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "id": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "name": "string",
+    "email": "string",
+    "additionalFields": "collection",
+    "updateFields": "collection",
+    "containerType": "options",
+    "containerId": "string",
+    "type": "options",
+    "index": "number",
+    "tasks": "string",
+    "options": "collection",
+    "unparsed": "boolean",
+    "address": "string",
+    "addressNumber": "string",
+    "addressStreet": "string",
+    "addressCity": "string",
+    "addressCountry": "string",
+    "destination": "fixedCollection",
+    "getBy": "options",
+    "phone": "string",
+    "recipientName": "string",
+    "recipientPhone": "string",
+    "success": "boolean",
+    "filters": "collection",
+    "overrideFields": "collection",
+    "workers": "multiOptions",
+    "managers": "multiOptions",
+    "byLocation": "boolean",
+    "teams": "multiOptions",
+    "longitude": "number",
+    "latitude": "number",
+    "schedule": "fixedCollection"
+  },
+  "hasVersions": false
+}

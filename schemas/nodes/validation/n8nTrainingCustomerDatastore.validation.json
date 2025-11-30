@@ -1,0 +1,111 @@
+{
+  "nodeType": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+  "displayName": "Customer Datastore (n8n training)",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getOnePerson",
+        "enumValues": [
+          "getOnePerson",
+          "getAllPeople"
+        ]
+      }
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 5,
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "returnAll"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "getOnePerson",
+    "returnAll": false,
+    "limit": 5
+  },
+  "conditionalFields": [
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "returnAll"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

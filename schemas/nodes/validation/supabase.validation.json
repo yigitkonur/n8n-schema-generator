@@ -1,0 +1,1680 @@
+{
+  "nodeType": "n8n-nodes-base.supabase",
+  "displayName": "Supabase",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "useCustomSchema",
+    "schema",
+    "resource",
+    "operation",
+    "tableId",
+    "filterType",
+    "matchType",
+    "filters",
+    "jsonNotice",
+    "filterString",
+    "dataToSend",
+    "inputsToIgnore",
+    "fieldsUi",
+    "filterType",
+    "matchType",
+    "filters",
+    "jsonNotice",
+    "filterString",
+    "filters",
+    "returnAll",
+    "limit",
+    "filterType",
+    "matchType",
+    "filters",
+    "jsonNotice",
+    "filterString"
+  ],
+  "validationRules": [
+    {
+      "field": "useCustomSchema",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    {
+      "field": "schema",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": "public"
+      },
+      "displayOptions": {
+        "show": {
+          "useCustomSchema": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "useCustomSchema"
+      ]
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "row",
+        "enumValues": [
+          "row"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "tableId",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "delete",
+            "get",
+            "getAll",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filterType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "manual",
+        "enumValues": [
+          "manual",
+          "string"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "anyFilter",
+        "enumValues": [
+          "anyFilter",
+          "allFilters"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "type": "options",
+                "default": ""
+              },
+              "condition": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "eq",
+                  "fullText",
+                  "gt",
+                  "gte",
+                  "ilike",
+                  "is",
+                  "lt",
+                  "lte",
+                  "like",
+                  "neq"
+                ]
+              },
+              "searchFunction": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "fts",
+                  "plfts",
+                  "phfts",
+                  "wfts"
+                ]
+              },
+              "keyValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "dataToSend",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "defineBelow",
+        "enumValues": [
+          "autoMapInputData",
+          "defineBelow"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "inputsToIgnore",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "fieldsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "fieldValues": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "type": "options",
+                "default": ""
+              },
+              "fieldValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "filterType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "manual",
+        "enumValues": [
+          "manual",
+          "string"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "anyFilter",
+        "enumValues": [
+          "anyFilter",
+          "allFilters"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "type": "options",
+                "default": ""
+              },
+              "condition": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "eq",
+                  "fullText",
+                  "gt",
+                  "gte",
+                  "ilike",
+                  "is",
+                  "lt",
+                  "lte",
+                  "like",
+                  "neq"
+                ]
+              },
+              "searchFunction": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "fts",
+                  "plfts",
+                  "phfts",
+                  "wfts"
+                ]
+              },
+              "keyValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "type": "options",
+                "default": ""
+              },
+              "keyValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "manual",
+        "enumValues": [
+          "none",
+          "manual",
+          "string"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "anyFilter",
+        "enumValues": [
+          "anyFilter",
+          "allFilters"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "conditions": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "type": "options",
+                "default": ""
+              },
+              "condition": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "eq",
+                  "fullText",
+                  "gt",
+                  "gte",
+                  "ilike",
+                  "is",
+                  "lt",
+                  "lte",
+                  "like",
+                  "neq"
+                ]
+              },
+              "searchFunction": {
+                "type": "options",
+                "default": "",
+                "enumValues": [
+                  "fts",
+                  "plfts",
+                  "phfts",
+                  "wfts"
+                ]
+              },
+              "keyValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "useCustomSchema": false,
+    "schema": "public",
+    "resource": "row",
+    "operation": "create",
+    "tableId": "",
+    "filters": {},
+    "dataToSend": "defineBelow",
+    "inputsToIgnore": "",
+    "fieldsUi": {},
+    "returnAll": false,
+    "limit": 50
+  },
+  "conditionalFields": [
+    {
+      "field": "schema",
+      "condition": {
+        "show": {
+          "useCustomSchema": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "useCustomSchema"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "tableId",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "delete",
+            "get",
+            "getAll",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "filterType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "dataToSend",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "inputsToIgnore",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "fieldsUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "filterType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filterType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "matchType",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "jsonNotice",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    },
+    {
+      "field": "filterString",
+      "condition": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "filterType"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "row": {
+      "operations": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "tableId",
+          "dataToSend",
+          "inputsToIgnore",
+          "fieldsUi"
+        ],
+        "delete": [
+          "tableId",
+          "filterType",
+          "matchType",
+          "filters",
+          "jsonNotice",
+          "filterString"
+        ],
+        "get": [
+          "tableId",
+          "filters"
+        ],
+        "getAll": [
+          "tableId",
+          "returnAll",
+          "limit",
+          "filterType",
+          "matchType",
+          "filters",
+          "jsonNotice",
+          "filterString"
+        ],
+        "update": [
+          "tableId",
+          "filterType",
+          "matchType",
+          "filters",
+          "jsonNotice",
+          "filterString",
+          "dataToSend",
+          "inputsToIgnore",
+          "fieldsUi"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "keyName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "eq",
+                "fullText",
+                "gt",
+                "gte",
+                "ilike",
+                "is",
+                "lt",
+                "lte",
+                "like",
+                "neq"
+              ]
+            }
+          },
+          {
+            "field": "searchFunction",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "fts",
+                "plfts",
+                "phfts",
+                "wfts"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "condition": [
+                  "fullText"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition"
+            ]
+          },
+          {
+            "field": "keyValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "fieldsUi",
+      "validOptions": [
+        "fieldValues"
+      ],
+      "optionSchemas": {
+        "fieldValues": [
+          {
+            "field": "fieldId",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "fieldValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "keyName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "eq",
+                "fullText",
+                "gt",
+                "gte",
+                "ilike",
+                "is",
+                "lt",
+                "lte",
+                "like",
+                "neq"
+              ]
+            }
+          },
+          {
+            "field": "searchFunction",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "fts",
+                "plfts",
+                "phfts",
+                "wfts"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "condition": [
+                  "fullText"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition"
+            ]
+          },
+          {
+            "field": "keyValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "keyName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "keyValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "filters",
+      "validOptions": [
+        "conditions"
+      ],
+      "optionSchemas": {
+        "conditions": [
+          {
+            "field": "keyName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "condition",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "eq",
+                "fullText",
+                "gt",
+                "gte",
+                "ilike",
+                "is",
+                "lt",
+                "lte",
+                "like",
+                "neq"
+              ]
+            }
+          },
+          {
+            "field": "searchFunction",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "",
+              "enumValues": [
+                "fts",
+                "plfts",
+                "phfts",
+                "wfts"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "condition": [
+                  "fullText"
+                ]
+              }
+            },
+            "dependsOn": [
+              "condition"
+            ]
+          },
+          {
+            "field": "keyValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

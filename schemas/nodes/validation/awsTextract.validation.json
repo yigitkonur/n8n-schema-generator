@@ -1,0 +1,115 @@
+{
+  "nodeType": "n8n-nodes-base.awsTextract",
+  "displayName": "AWS Textract",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "authentication",
+    "operation",
+    "binaryPropertyName",
+    "simple"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "iam",
+        "enumValues": [
+          "iam",
+          "assumeRole"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "analyzeExpense",
+        "enumValues": [
+          "analyzeExpense"
+        ]
+      }
+    },
+    {
+      "field": "binaryPropertyName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeExpense"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "simple",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeExpense"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "iam",
+    "operation": "analyzeExpense",
+    "binaryPropertyName": "data",
+    "simple": true
+  },
+  "conditionalFields": [
+    {
+      "field": "binaryPropertyName",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyzeExpense"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "simple",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyzeExpense"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

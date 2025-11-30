@@ -1,0 +1,211 @@
+{
+  "name": "bitbucketTrigger",
+  "displayName": "Bitbucket Trigger",
+  "description": "Handle Bitbucket events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "authentication": "password",
+    "resource": "workspace",
+    "workspace": "",
+    "events": [],
+    "repository": ""
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "password",
+      "options": [
+        {
+          "name": "Password (Deprecated)",
+          "value": "password"
+        },
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "options": [
+        {
+          "name": "Password (Deprecated)",
+          "value": "password"
+        },
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      }
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "workspace",
+      "required": true,
+      "options": [
+        {
+          "name": "Repository",
+          "value": "repository"
+        },
+        {
+          "name": "Workspace",
+          "value": "workspace"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "workspace",
+      "displayName": "Workspace Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The repository of which to listen to the events. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getWorkspaces"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "workspace",
+            "repository"
+          ]
+        }
+      }
+    },
+    {
+      "name": "events",
+      "displayName": "Event Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "The events to listen to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "options": [],
+      "typeOptions": {
+        "loadOptionsMethod": "getWorkspaceEvents"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "workspace"
+          ]
+        }
+      }
+    },
+    {
+      "name": "repository",
+      "displayName": "Repository Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The repository of which to listen to the events. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getRepositories",
+        "loadOptionsDependsOn": [
+          "workspace"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "repository"
+          ]
+        }
+      }
+    },
+    {
+      "name": "events",
+      "displayName": "Event Names or IDs",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "The events to listen to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "options": [],
+      "typeOptions": {
+        "loadOptionsMethod": "getRepositoriesEvents"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "repository"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "bitbucketApi",
+      "required": true,
+      "testedBy": "bitbucketApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "password"
+          ]
+        }
+      }
+    },
+    {
+      "name": "bitbucketAccessTokenApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "workspace",
+    "events",
+    "repository",
+    "events"
+  ],
+  "optionalFields": [
+    "authentication",
+    "authentication"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "workspace": "options",
+    "events": "multiOptions",
+    "repository": "options"
+  },
+  "hasVersions": false
+}

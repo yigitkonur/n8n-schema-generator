@@ -1,0 +1,399 @@
+{
+  "name": "dateTime",
+  "displayName": "Date & Time",
+  "description": "Allows you to manipulate date and time values",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "noticeDateTime": "",
+    "action": "format",
+    "value": "",
+    "dataPropertyName": "data",
+    "custom": false,
+    "toFormat": "MM/DD/YYYY",
+    "options": {},
+    "operation": "add",
+    "duration": 0,
+    "timeUnit": "days"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "noticeDateTime",
+      "displayName": "More powerful date functionality is available in <a href='https://docs.n8n.io/code/cookbook/luxon/' target='_blank'>expressions</a>,</br> e.g. <code>{{ $now.plus(1, 'week') }}</code>",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "action",
+      "displayName": "Action",
+      "type": "options",
+      "default": "format",
+      "options": [
+        {
+          "name": "Calculate a Date",
+          "description": "Add or subtract time from a date",
+          "value": "calculate",
+          "action": "Add or subtract time from a date"
+        },
+        {
+          "name": "Format a Date",
+          "description": "Convert a date to a different format",
+          "value": "format",
+          "action": "Convert a date to a different format"
+        }
+      ]
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The value that should be converted",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "Property Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the property to which to write the converted date",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ]
+        }
+      }
+    },
+    {
+      "name": "custom",
+      "displayName": "Custom Format",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a predefined format should be selected or custom format entered",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ]
+        }
+      }
+    },
+    {
+      "name": "toFormat",
+      "displayName": "To Format",
+      "type": "string",
+      "default": "",
+      "description": "The format to convert the date to",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ],
+          "custom": [
+            true
+          ]
+        }
+      },
+      "placeholder": "YYYY-MM-DD"
+    },
+    {
+      "name": "toFormat",
+      "displayName": "To Format",
+      "type": "options",
+      "default": "MM/DD/YYYY",
+      "description": "The format to convert the date to",
+      "options": [
+        {
+          "name": "MM/DD/YYYY",
+          "value": "MM/DD/YYYY",
+          "description": "Example: 09/04/1986"
+        },
+        {
+          "name": "YYYY/MM/DD",
+          "value": "YYYY/MM/DD",
+          "description": "Example: 1986/04/09"
+        },
+        {
+          "name": "MMMM DD YYYY",
+          "value": "MMMM DD YYYY",
+          "description": "Example: April 09 1986"
+        },
+        {
+          "name": "MM-DD-YYYY",
+          "value": "MM-DD-YYYY",
+          "description": "Example: 09-04-1986"
+        },
+        {
+          "name": "YYYY-MM-DD",
+          "value": "YYYY-MM-DD",
+          "description": "Example: 1986-04-09"
+        },
+        {
+          "name": "Unix Timestamp",
+          "value": "X",
+          "description": "Example: 513388800.879"
+        },
+        {
+          "name": "Unix Ms Timestamp",
+          "value": "x",
+          "description": "Example: 513388800"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ],
+          "custom": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "From Format",
+          "name": "fromFormat",
+          "type": "string",
+          "default": "",
+          "description": "In case the input format is not recognized you can provide the format"
+        },
+        {
+          "displayName": "From Timezone Name or ID",
+          "name": "fromTimezone",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getTimezones"
+          },
+          "default": "UTC",
+          "description": "The timezone to convert from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "To Timezone Name or ID",
+          "name": "toTimezone",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getTimezones"
+          },
+          "default": "UTC",
+          "description": "The timezone to convert to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "value",
+      "displayName": "Date Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The date string or timestamp from which you want to add/subtract time",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "required": true,
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add time to Date Value",
+          "action": "Add time to Date Value"
+        },
+        {
+          "name": "Subtract",
+          "value": "subtract",
+          "description": "Subtract time from Date Value",
+          "action": "Subtract time from Date Value"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "duration",
+      "displayName": "Duration",
+      "type": "number",
+      "default": 0,
+      "required": true,
+      "description": "E.g. enter “10” then select “Days” if you want to add 10 days to Date Value.",
+      "typeOptions": {
+        "minValue": 0
+      },
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "timeUnit",
+      "displayName": "Time Unit",
+      "type": "options",
+      "default": "days",
+      "required": true,
+      "description": "Time unit for Duration parameter above",
+      "options": [
+        {
+          "name": "Quarters",
+          "value": "quarters"
+        },
+        {
+          "name": "Years",
+          "value": "years"
+        },
+        {
+          "name": "Months",
+          "value": "months"
+        },
+        {
+          "name": "Weeks",
+          "value": "weeks"
+        },
+        {
+          "name": "Days",
+          "value": "days"
+        },
+        {
+          "name": "Hours",
+          "value": "hours"
+        },
+        {
+          "name": "Minutes",
+          "value": "minutes"
+        },
+        {
+          "name": "Seconds",
+          "value": "seconds"
+        },
+        {
+          "name": "Milliseconds",
+          "value": "milliseconds"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "Property Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the output property to which to write the converted date",
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "From Format",
+          "name": "fromFormat",
+          "type": "string",
+          "default": "",
+          "description": "Format for parsing the value as a date. If unrecognized, specify the <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.datetime/#faqs\">format</a> for the value."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "value",
+    "dataPropertyName",
+    "value",
+    "operation",
+    "duration",
+    "timeUnit",
+    "dataPropertyName"
+  ],
+  "optionalFields": [
+    "noticeDateTime",
+    "action",
+    "custom",
+    "toFormat",
+    "toFormat",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "noticeDateTime": "notice",
+    "action": "options",
+    "value": "string",
+    "dataPropertyName": "string",
+    "custom": "boolean",
+    "toFormat": "options",
+    "options": "collection",
+    "operation": "options",
+    "duration": "number",
+    "timeUnit": "options"
+  },
+  "hasVersions": false
+}

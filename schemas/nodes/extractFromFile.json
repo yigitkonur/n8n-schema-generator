@@ -1,0 +1,1002 @@
+{
+  "name": "extractFromFile",
+  "displayName": "Extract from File",
+  "description": "Convert binary data to JSON",
+  "group": [
+    "input"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "operation": "csv",
+    "binaryPropertyName": "data",
+    "options": {},
+    "destinationKey": "data"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "csv",
+      "options": [
+        {
+          "name": "Extract From CSV",
+          "value": "csv",
+          "action": "Extract from CSV",
+          "description": "Transform a CSV file into output items"
+        },
+        {
+          "name": "Extract From HTML",
+          "value": "html",
+          "action": "Extract from HTML",
+          "description": "Transform a table in an HTML file into output items"
+        },
+        {
+          "name": "Extract From ICS",
+          "value": "fromIcs",
+          "action": "Extract from ICS",
+          "description": "Transform a ICS file into output items"
+        },
+        {
+          "name": "Extract From JSON",
+          "value": "fromJson",
+          "action": "Extract from JSON",
+          "description": "Transform a JSON file into output items"
+        },
+        {
+          "name": "Extract From ODS",
+          "value": "ods",
+          "action": "Extract from ODS",
+          "description": "Transform an ODS file into output items"
+        },
+        {
+          "name": "Extract From PDF",
+          "value": "pdf",
+          "action": "Extract from PDF",
+          "description": "Extracts the content and metadata from a PDF file"
+        },
+        {
+          "name": "Extract From RTF",
+          "value": "rtf",
+          "action": "Extract from RTF",
+          "description": "Transform a table in an RTF file into output items"
+        },
+        {
+          "name": "Extract From Text File",
+          "value": "text",
+          "action": "Extract from text file",
+          "description": "Extracts the content of a text file"
+        },
+        {
+          "name": "Extract From XML",
+          "value": "xml",
+          "action": "Extract from XML",
+          "description": "Extracts the content of an XML file"
+        },
+        {
+          "name": "Extract From XLS",
+          "value": "xls",
+          "action": "Extract from XLS",
+          "description": "Transform an Excel file into output items"
+        },
+        {
+          "name": "Extract From XLSX",
+          "value": "xlsx",
+          "action": "Extract from XLSX",
+          "description": "Transform an Excel file into output items"
+        },
+        {
+          "name": "Move File to Base64 String",
+          "value": "binaryToPropery",
+          "action": "Move file to base64 string",
+          "description": "Convert a file into a base64-encoded string"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "csv",
+            "html",
+            "rtf",
+            "ods",
+            "xls",
+            "xlsx"
+          ]
+        }
+      },
+      "hint": "The name of the input field containing the file data to be processed"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Delimiter",
+          "name": "delimiter",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": ",",
+          "placeholder": "e.g. ,",
+          "description": "Set the field delimiter, usually a comma"
+        },
+        {
+          "displayName": "Encoding",
+          "name": "encoding",
+          "type": "options",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "options": [
+            {
+              "name": "ASCII",
+              "value": "ascii"
+            },
+            {
+              "name": "Latin1",
+              "value": "latin1"
+            },
+            {
+              "name": "UCS-2",
+              "value": "ucs-2"
+            },
+            {
+              "name": "UCS2",
+              "value": "ucs2"
+            },
+            {
+              "name": "UTF-8",
+              "value": "utf-8"
+            },
+            {
+              "name": "UTF16LE",
+              "value": "utf16le"
+            },
+            {
+              "name": "UTF8",
+              "value": "utf8"
+            }
+          ],
+          "default": "utf-8"
+        },
+        {
+          "displayName": "Exclude Byte Order Mark (BOM)",
+          "name": "enableBOM",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to detect and exclude the byte-order-mark from the CSV Input if present"
+        },
+        {
+          "displayName": "Preserve Quotes",
+          "name": "relaxQuotes",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to handle unclosed quotes in CSV fields as part of the field's content instead of throwing a parsing error"
+        },
+        {
+          "displayName": "Header Row",
+          "name": "headerRow",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether the first row of the file contains the header names",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "ods",
+                "xls",
+                "xlsx",
+                "csv",
+                "html"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Include Empty Cells",
+          "name": "includeEmptyCells",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include empty cells when reading from file. They will be filled with an empty string.",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "ods",
+                "xls",
+                "xlsx",
+                "csv",
+                "html"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Max Number of Rows to Load",
+          "name": "maxRowCount",
+          "type": "number",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": -1,
+          "placeholder": "e.g. 10",
+          "description": "Stop handling records after the requested number of rows are read. Use -1 if you want to load all rows."
+        },
+        {
+          "displayName": "Range",
+          "name": "range",
+          "type": "string",
+          "default": "",
+          "description": "The range to read from the table. If set to a number it will be the starting row. If set to string it will be used as A1-style notation range.",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "ods",
+                "xls",
+                "xlsx"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to return RAW data, instead of parsing it"
+        },
+        {
+          "displayName": "Read As String",
+          "name": "readAsString",
+          "type": "boolean",
+          "default": false,
+          "description": "In some cases and file formats, it is necessary to read as string to ensure special characters are interpreted correctly"
+        },
+        {
+          "displayName": "Sheet Name",
+          "name": "sheetName",
+          "type": "string",
+          "default": "Sheet",
+          "placeholder": "e.g. mySheet",
+          "description": "Name of the sheet to read from in the spreadsheet",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "ods",
+                "xls",
+                "xlsx"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Starting Line",
+          "name": "fromLine",
+          "type": "number",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          },
+          "default": 0,
+          "placeholder": "e.g. 0",
+          "description": "Start handling records from the requested line number. Starts at 0."
+        },
+        {
+          "displayName": "Skip Records With Errors",
+          "name": "skipRecordsWithErrors",
+          "type": "fixedCollection",
+          "default": {
+            "value": {
+              "enabled": true,
+              "maxSkippedRecords": -1
+            }
+          },
+          "options": [
+            {
+              "displayName": "Value",
+              "name": "value",
+              "values": [
+                {
+                  "displayName": "Enabled",
+                  "name": "enabled",
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Whether to skip records with errors when reading from file"
+                },
+                {
+                  "displayName": "Max Skipped Records",
+                  "name": "maxSkippedRecords",
+                  "type": "number",
+                  "default": -1,
+                  "description": "The maximum number of records that can be skipped, will throw an error if exceeded. Set to -1 to remove limit."
+                }
+              ]
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "csv"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "csv",
+            "html",
+            "rtf",
+            "ods",
+            "xls",
+            "xlsx"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "binaryToPropery",
+            "fromJson",
+            "text",
+            "fromIcs",
+            "xml"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the input field containing the file data to be processed"
+    },
+    {
+      "name": "destinationKey",
+      "displayName": "Destination Output Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the output field that will contain the extracted data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "binaryToPropery",
+            "fromJson",
+            "text",
+            "fromIcs",
+            "xml"
+          ]
+        }
+      },
+      "placeholder": "e.g data"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File Encoding",
+          "name": "encoding",
+          "type": "options",
+          "options": [
+            {
+              "name": "armscii8",
+              "value": "armscii8"
+            },
+            {
+              "name": "ascii",
+              "value": "ascii"
+            },
+            {
+              "name": "base64",
+              "value": "base64"
+            },
+            {
+              "name": "big5hkscs",
+              "value": "big5hkscs"
+            },
+            {
+              "name": "binary",
+              "value": "binary"
+            },
+            {
+              "name": "cesu8",
+              "value": "cesu8"
+            },
+            {
+              "name": "cp1046",
+              "value": "cp1046"
+            },
+            {
+              "name": "cp1124",
+              "value": "cp1124"
+            },
+            {
+              "name": "cp1125",
+              "value": "cp1125"
+            },
+            {
+              "name": "cp1129",
+              "value": "cp1129"
+            },
+            {
+              "name": "cp1133",
+              "value": "cp1133"
+            },
+            {
+              "name": "cp1161",
+              "value": "cp1161"
+            },
+            {
+              "name": "cp1162",
+              "value": "cp1162"
+            },
+            {
+              "name": "cp1163",
+              "value": "cp1163"
+            },
+            {
+              "name": "cp437",
+              "value": "cp437"
+            },
+            {
+              "name": "cp720",
+              "value": "cp720"
+            },
+            {
+              "name": "cp737",
+              "value": "cp737"
+            },
+            {
+              "name": "cp775",
+              "value": "cp775"
+            },
+            {
+              "name": "cp808",
+              "value": "cp808"
+            },
+            {
+              "name": "cp850",
+              "value": "cp850"
+            },
+            {
+              "name": "cp852",
+              "value": "cp852"
+            },
+            {
+              "name": "cp855",
+              "value": "cp855"
+            },
+            {
+              "name": "cp856",
+              "value": "cp856"
+            },
+            {
+              "name": "cp857",
+              "value": "cp857"
+            },
+            {
+              "name": "cp858",
+              "value": "cp858"
+            },
+            {
+              "name": "cp860",
+              "value": "cp860"
+            },
+            {
+              "name": "cp861",
+              "value": "cp861"
+            },
+            {
+              "name": "cp862",
+              "value": "cp862"
+            },
+            {
+              "name": "cp863",
+              "value": "cp863"
+            },
+            {
+              "name": "cp864",
+              "value": "cp864"
+            },
+            {
+              "name": "cp865",
+              "value": "cp865"
+            },
+            {
+              "name": "cp866",
+              "value": "cp866"
+            },
+            {
+              "name": "cp869",
+              "value": "cp869"
+            },
+            {
+              "name": "cp922",
+              "value": "cp922"
+            },
+            {
+              "name": "cp936",
+              "value": "cp936"
+            },
+            {
+              "name": "cp949",
+              "value": "cp949"
+            },
+            {
+              "name": "cp950",
+              "value": "cp950"
+            },
+            {
+              "name": "eucjp",
+              "value": "eucjp"
+            },
+            {
+              "name": "gb18030",
+              "value": "gb18030"
+            },
+            {
+              "name": "gbk",
+              "value": "gbk"
+            },
+            {
+              "name": "georgianacademy",
+              "value": "georgianacademy"
+            },
+            {
+              "name": "georgianps",
+              "value": "georgianps"
+            },
+            {
+              "name": "hex",
+              "value": "hex"
+            },
+            {
+              "name": "hproman8",
+              "value": "hproman8"
+            },
+            {
+              "name": "iso646cn",
+              "value": "iso646cn"
+            },
+            {
+              "name": "iso646jp",
+              "value": "iso646jp"
+            },
+            {
+              "name": "iso88591",
+              "value": "iso88591"
+            },
+            {
+              "name": "iso885910",
+              "value": "iso885910"
+            },
+            {
+              "name": "iso885911",
+              "value": "iso885911"
+            },
+            {
+              "name": "iso885913",
+              "value": "iso885913"
+            },
+            {
+              "name": "iso885914",
+              "value": "iso885914"
+            },
+            {
+              "name": "iso885915",
+              "value": "iso885915"
+            },
+            {
+              "name": "iso885916",
+              "value": "iso885916"
+            },
+            {
+              "name": "iso88592",
+              "value": "iso88592"
+            },
+            {
+              "name": "iso88593",
+              "value": "iso88593"
+            },
+            {
+              "name": "iso88594",
+              "value": "iso88594"
+            },
+            {
+              "name": "iso88595",
+              "value": "iso88595"
+            },
+            {
+              "name": "iso88596",
+              "value": "iso88596"
+            },
+            {
+              "name": "iso88597",
+              "value": "iso88597"
+            },
+            {
+              "name": "iso88598",
+              "value": "iso88598"
+            },
+            {
+              "name": "iso88599",
+              "value": "iso88599"
+            },
+            {
+              "name": "koi8r",
+              "value": "koi8r"
+            },
+            {
+              "name": "koi8ru",
+              "value": "koi8ru"
+            },
+            {
+              "name": "koi8t",
+              "value": "koi8t"
+            },
+            {
+              "name": "koi8u",
+              "value": "koi8u"
+            },
+            {
+              "name": "maccenteuro",
+              "value": "maccenteuro"
+            },
+            {
+              "name": "maccroatian",
+              "value": "maccroatian"
+            },
+            {
+              "name": "maccyrillic",
+              "value": "maccyrillic"
+            },
+            {
+              "name": "macgreek",
+              "value": "macgreek"
+            },
+            {
+              "name": "maciceland",
+              "value": "maciceland"
+            },
+            {
+              "name": "macintosh",
+              "value": "macintosh"
+            },
+            {
+              "name": "macroman",
+              "value": "macroman"
+            },
+            {
+              "name": "macromania",
+              "value": "macromania"
+            },
+            {
+              "name": "macthai",
+              "value": "macthai"
+            },
+            {
+              "name": "macturkish",
+              "value": "macturkish"
+            },
+            {
+              "name": "macukraine",
+              "value": "macukraine"
+            },
+            {
+              "name": "mik",
+              "value": "mik"
+            },
+            {
+              "name": "pt154",
+              "value": "pt154"
+            },
+            {
+              "name": "rk1048",
+              "value": "rk1048"
+            },
+            {
+              "name": "shiftjis",
+              "value": "shiftjis"
+            },
+            {
+              "name": "tcvn",
+              "value": "tcvn"
+            },
+            {
+              "name": "tis620",
+              "value": "tis620"
+            },
+            {
+              "name": "ucs2",
+              "value": "ucs2"
+            },
+            {
+              "name": "utf16",
+              "value": "utf16"
+            },
+            {
+              "name": "utf16be",
+              "value": "utf16be"
+            },
+            {
+              "name": "utf32",
+              "value": "utf32"
+            },
+            {
+              "name": "utf32be",
+              "value": "utf32be"
+            },
+            {
+              "name": "utf32le",
+              "value": "utf32le"
+            },
+            {
+              "name": "utf7",
+              "value": "utf7"
+            },
+            {
+              "name": "utf7imap",
+              "value": "utf7imap"
+            },
+            {
+              "name": "utf8",
+              "value": "utf8"
+            },
+            {
+              "name": "viscii",
+              "value": "viscii"
+            },
+            {
+              "name": "windows1250",
+              "value": "windows1250"
+            },
+            {
+              "name": "windows1251",
+              "value": "windows1251"
+            },
+            {
+              "name": "windows1252",
+              "value": "windows1252"
+            },
+            {
+              "name": "windows1253",
+              "value": "windows1253"
+            },
+            {
+              "name": "windows1254",
+              "value": "windows1254"
+            },
+            {
+              "name": "windows1255",
+              "value": "windows1255"
+            },
+            {
+              "name": "windows1256",
+              "value": "windows1256"
+            },
+            {
+              "name": "windows1257",
+              "value": "windows1257"
+            },
+            {
+              "name": "windows1258",
+              "value": "windows1258"
+            },
+            {
+              "name": "windows874",
+              "value": "windows874"
+            }
+          ],
+          "default": "utf8",
+          "description": "Specify the encoding of the file, defaults to UTF-8"
+        },
+        {
+          "displayName": "Strip BOM",
+          "name": "stripBOM",
+          "displayOptions": {
+            "show": {
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to strip the BOM (Byte Order Mark) from the file, this could help in an environment where the presence of the BOM is causing issues or inconsistencies"
+        },
+        {
+          "displayName": "Keep Source",
+          "name": "keepSource",
+          "type": "options",
+          "default": "json",
+          "options": [
+            {
+              "name": "JSON",
+              "value": "json",
+              "description": "Include JSON data of the input item"
+            },
+            {
+              "name": "Binary",
+              "value": "binary",
+              "description": "Include binary data of the input item"
+            },
+            {
+              "name": "Both",
+              "value": "both",
+              "description": "Include both JSON and binary data of the input item"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "binaryToPropery",
+            "fromJson",
+            "text",
+            "fromIcs",
+            "xml"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "binaryPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ]
+        }
+      },
+      "placeholder": "e.g data",
+      "hint": "The name of the input binary field containing the file to be extracted"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Join Pages",
+          "name": "joinPages",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to join the text from all pages or return an array of text from each page"
+        },
+        {
+          "displayName": "Keep Source",
+          "name": "keepSource",
+          "type": "options",
+          "default": "json",
+          "options": [
+            {
+              "name": "JSON",
+              "value": "json",
+              "description": "Include JSON data of the input item"
+            },
+            {
+              "name": "Binary",
+              "value": "binary",
+              "description": "Include binary data of the input item"
+            },
+            {
+              "name": "Both",
+              "value": "both",
+              "description": "Include both JSON and binary data of the input item"
+            }
+          ]
+        },
+        {
+          "displayName": "Max Pages",
+          "name": "maxPages",
+          "type": "number",
+          "default": 0,
+          "description": "Maximum number of pages to include"
+        },
+        {
+          "displayName": "Password",
+          "name": "password",
+          "type": "string",
+          "typeOptions": {
+            "password": true
+          },
+          "default": "",
+          "description": "Prowide password, if the PDF is encrypted"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "binaryPropertyName",
+    "binaryPropertyName",
+    "destinationKey",
+    "binaryPropertyName"
+  ],
+  "optionalFields": [
+    "operation",
+    "options",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "binaryPropertyName": "string",
+    "options": "collection",
+    "destinationKey": "string"
+  },
+  "hasVersions": false
+}

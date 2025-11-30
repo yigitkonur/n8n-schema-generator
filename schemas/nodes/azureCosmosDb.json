@@ -1,0 +1,1226 @@
+{
+  "name": "azureCosmosDb",
+  "displayName": "Azure Cosmos DB",
+  "description": "Interact with Azure Cosmos DB API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "container",
+    "operation": "getAll",
+    "containerCreate": "",
+    "partitionKey": "{\n\t\"paths\": [\n\t\t\"/id\"\n\t],\n\t\"kind\": \"Hash\",\n\t\"version\": 2\n}",
+    "additionalFields": {},
+    "returnAll": false,
+    "limit": 50,
+    "simple": true,
+    "query": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "container",
+      "options": [
+        {
+          "name": "Container",
+          "value": "container"
+        },
+        {
+          "name": "Item",
+          "value": "item"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a container",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/colls"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create container"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a container",
+          "routing": {
+            "request": {
+              "method": "DELETE",
+              "url": "=/colls/{{ $parameter[\"container\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"deleted\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete container"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve a container",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/colls/{{ $parameter[\"container\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get container"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of containers",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/colls"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "DocumentCollections"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Get many containers"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "containerCreate",
+      "displayName": "ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the new container",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. Container1",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "partitionKey",
+      "displayName": "Partition Key",
+      "type": "json",
+      "default": "{\n\t\"paths\": [\n\t\t\"/id\"\n\t],\n\t\"kind\": \"Hash\",\n\t\"version\": 2\n}",
+      "required": true,
+      "description": "The partition key is used to automatically distribute data across partitions for scalability. Choose a property in your JSON document that has a wide range of values and evenly distributes request volume.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Indexing Policy",
+          "name": "indexingPolicy",
+          "default": "{\n\t\"indexingMode\": \"consistent\",\n\t\"automatic\": true,\n\t\"includedPaths\": [\n\t\t{\n\t\t\t\"path\": \"/*\"\n\t\t}\n\t],\n\t\"excludedPaths\": []\n}",
+          "description": "This value is used to configure indexing policy",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            }
+          },
+          "type": "json"
+        },
+        {
+          "displayName": "Max RU/s (for Autoscale)",
+          "name": "maxThroughput",
+          "default": 1000,
+          "description": "The user specified autoscale max RU/s",
+          "displayOptions": {
+            "hide": {
+              "/additionalFields.offerThroughput": [
+                {
+                  "_cnd": {
+                    "exists": true
+                  }
+                }
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-cosmos-offer-autopilot-setting": "={{ $value }}"
+              }
+            }
+          },
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1000
+          }
+        },
+        {
+          "displayName": "Manual Throughput RU/s",
+          "name": "offerThroughput",
+          "default": 400,
+          "description": "The user specified manual throughput (RU/s) for the collection expressed in units of 100 request units per second",
+          "displayOptions": {
+            "hide": {
+              "/additionalFields.maxThroughput": [
+                {
+                  "_cnd": {
+                    "exists": true
+                  }
+                }
+              ]
+            }
+          },
+          "routing": {
+            "request": {
+              "headers": {
+                "x-ms-offer-throughput": "={{ $value }}"
+              }
+            }
+          },
+          "type": "number",
+          "typeOptions": {
+            "minValue": 400
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Option"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.headers?.[\"x-ms-continuation\"] }}",
+              "request": {
+                "headers": {
+                  "x-ms-continuation": "={{ $response.headers?.[\"x-ms-continuation\"] }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "headers": {
+            "x-ms-max-item-count": "={{ $value || undefined }}"
+          }
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new item",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "request": {
+              "method": "POST",
+              "url": "=/colls/{{ $parameter[\"container\"] }}/docs",
+              "headers": {
+                "x-ms-documentdb-is-upsert": "True"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Create item"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an existing item",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "request": {
+              "method": "DELETE",
+              "url": "=/colls/{{ $parameter[\"container\"] }}/docs/{{ $parameter[\"item\"] }}"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "set",
+                  "properties": {
+                    "value": "={{ { \"deleted\": true } }}"
+                  }
+                }
+              ]
+            }
+          },
+          "action": "Delete item"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Retrieve an item",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "request": {
+              "method": "GET",
+              "url": "=/colls/{{ $parameter[\"container\"]}}/docs/{{$parameter[\"item\"]}}",
+              "headers": {
+                "x-ms-documentdb-is-upsert": "True"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                null
+              ]
+            }
+          },
+          "action": "Get item"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Retrieve a list of items",
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "=/colls/{{ $parameter[\"container\"] }}/docs"
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "Documents"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Get many items"
+        },
+        {
+          "name": "Execute Query",
+          "value": "query",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "=/colls/{{ $parameter[\"container\"] }}/docs",
+              "headers": {
+                "Content-Type": "application/query+json",
+                "x-ms-documentdb-isquery": "True",
+                "x-ms-documentdb-query-enablecrosspartition": "True"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null,
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "Documents"
+                  }
+                },
+                null
+              ]
+            }
+          },
+          "action": "Query items"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an existing item",
+          "routing": {
+            "send": {
+              "preSend": [
+                null
+              ]
+            },
+            "request": {
+              "method": "PUT",
+              "url": "=/colls/{{ $parameter[\"container\"] }}/docs/{{ $parameter[\"item\"] }}",
+              "headers": {
+                "Content-Type": "application/json-patch+json"
+              }
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          },
+          "action": "Update item"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "customProperties",
+      "displayName": "Item Contents",
+      "type": "json",
+      "default": "{\n\t\"id\": \"replace_with_new_document_id\"\n}",
+      "required": true,
+      "description": "The item contents as a JSON object",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "hint": "The item requires an ID and partition key value if a custom key is set",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "item",
+      "displayName": "Item",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the item to be deleted",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Partition Key",
+          "name": "partitionKey",
+          "default": "",
+          "hint": "Only required if a custom partition key is set for the container",
+          "type": "string"
+        }
+      ],
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "Add Partition Key"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "item",
+      "displayName": "Item",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the item you want to retrieve",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Partition Key",
+          "name": "partitionKey",
+          "default": "",
+          "hint": "Only required if a custom partition key is set for the container",
+          "type": "string"
+        }
+      ],
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Partition Key"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "paginate": "={{ $value }}"
+        },
+        "operations": {
+          "pagination": {
+            "type": "generic",
+            "properties": {
+              "continue": "={{ !!$response.headers?.[\"x-ms-continuation\"] }}",
+              "request": {
+                "headers": {
+                  "x-ms-continuation": "={{ $response.headers?.[\"x-ms-continuation\"] }}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "headers": {
+            "x-ms-max-item-count": "={{ $value || undefined }}"
+          }
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "name": "query",
+      "displayName": "Query",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The SQL query to execute. Use $1, $2, $3, etc., to reference the 'Query Parameters' set in the options below.",
+      "typeOptions": {
+        "editor": "sqlEditor",
+        "sqlDialect": "StandardSQL"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "e.g. SELECT id, name FROM c WHERE c.name = $1",
+      "hint": "Consider using query parameters to prevent SQL injection attacks. Add them in the options below.",
+      "noDataExpression": true,
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "query",
+          "value": "={{ $value.replace(/\\$(\\d+)/g, '@Param$1') }}"
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Query Options",
+          "name": "queryOptions",
+          "values": [
+            {
+              "displayName": "Query Parameters",
+              "name": "queryParameters",
+              "default": "",
+              "description": "Comma-separated list of values used as query parameters. Use $1, $2, $3, etc., in your query.",
+              "hint": "Reference them in your query as $1, $2, $3…",
+              "placeholder": "e.g. value1,value2,value3",
+              "routing": {
+                "send": {
+                  "preSend": [
+                    null
+                  ]
+                }
+              },
+              "type": "string"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "placeholder": "Add options"
+    },
+    {
+      "name": "container",
+      "displayName": "Container",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the container you want to use",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "item",
+      "displayName": "Item",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "description": "Select the item to be updated",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "customProperties",
+      "displayName": "Item Contents",
+      "type": "json",
+      "default": "{}",
+      "required": true,
+      "description": "The item contents as a JSON object",
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Partition Key",
+          "name": "partitionKey",
+          "type": "string",
+          "hint": "Only required if a custom partition key is set for the container",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Partition Key"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "microsoftAzureCosmosDbSharedKeyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "containerCreate",
+    "partitionKey",
+    "container",
+    "container",
+    "container",
+    "customProperties",
+    "container",
+    "item",
+    "container",
+    "item",
+    "container",
+    "container",
+    "query",
+    "container",
+    "item",
+    "customProperties"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "simple",
+    "returnAll",
+    "limit",
+    "simple",
+    "operation",
+    "additionalFields",
+    "simple",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "simple",
+    "simple",
+    "options",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "containerCreate": "string",
+    "partitionKey": "json",
+    "additionalFields": "collection",
+    "container": "resourceLocator",
+    "simple": "boolean",
+    "returnAll": "boolean",
+    "limit": "number",
+    "customProperties": "json",
+    "item": "resourceLocator",
+    "query": "string",
+    "options": "fixedCollection"
+  },
+  "hasVersions": false
+}

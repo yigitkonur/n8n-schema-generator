@@ -1,0 +1,2291 @@
+{
+  "nodeType": "n8n-nodes-base.todoist",
+  "displayName": "Todoist",
+  "version": [
+    2,
+    2.1
+  ],
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [
+    "resource"
+  ],
+  "optionalParameters": [
+    "authentication",
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "taskId",
+    "project",
+    "section",
+    "options",
+    "labels",
+    "content",
+    "text",
+    "options",
+    "options",
+    "returnAll",
+    "limit",
+    "filters",
+    "updateFields",
+    "projectId",
+    "name",
+    "projectOptions",
+    "projectUpdateFields",
+    "sectionId",
+    "sectionProject",
+    "sectionName",
+    "sectionOptions",
+    "sectionUpdateFields",
+    "sectionFilters",
+    "commentId",
+    "commentTaskId",
+    "commentContent",
+    "commentUpdateFields",
+    "commentFilters",
+    "labelId",
+    "labelName",
+    "labelOptions",
+    "labelUpdateFields",
+    "reminderId",
+    "itemId",
+    "dueDateType",
+    "natural_language_representation",
+    "date",
+    "datetime",
+    "datetime",
+    "timezone",
+    "reminderOptions",
+    "reminderUpdateFields"
+  ],
+  "validationRules": [
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "apiKey",
+        "enumValues": [
+          "apiKey",
+          "oAuth2"
+        ]
+      }
+    },
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "task",
+        "enumValues": [
+          "task",
+          "project",
+          "section",
+          "comment",
+          "label",
+          "reminder"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "close",
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "move",
+          "quickAdd",
+          "reopen",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "archive",
+          "create",
+          "delete",
+          "get",
+          "getCollaborators",
+          "getAll",
+          "unarchive",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "get",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "getAll",
+          "update"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "taskId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete",
+            "close",
+            "get",
+            "reopen",
+            "update",
+            "move"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "project",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create",
+            "move"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "section",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ]
+        },
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "@version"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "@version"
+      ]
+    },
+    {
+      "field": "labels",
+      "type": "multiOptions",
+      "required": false,
+      "constraints": {
+        "type": "multiOptions",
+        "default": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "content",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "quickAdd"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "quickAdd"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "archive",
+            "delete",
+            "get",
+            "getCollaborators",
+            "unarchive",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "name",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectUpdateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionProject",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionUpdateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionFilters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentTaskId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentContent",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentUpdateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentFilters",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelUpdateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "reminderId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "delete",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "itemId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dueDateType",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "natural_language",
+        "enumValues": [
+          "natural_language",
+          "full_day",
+          "floating_time",
+          "fixed_timezone"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "natural_language_representation",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "natural_language"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "date",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "full_day"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "datetime",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "floating_time"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "datetime",
+      "type": "dateTime",
+      "required": true,
+      "constraints": {
+        "type": "dateTime",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "timezone",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "reminderOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "reminderUpdateFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "authentication": "apiKey",
+    "resource": "task",
+    "operation": "create",
+    "taskId": "",
+    "project": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "section": "",
+    "options": {},
+    "labels": [],
+    "content": "",
+    "text": "",
+    "returnAll": false,
+    "limit": 50,
+    "filters": {},
+    "updateFields": {},
+    "projectId": "",
+    "name": "",
+    "projectOptions": {},
+    "projectUpdateFields": {},
+    "sectionId": "",
+    "sectionProject": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "sectionName": "",
+    "sectionOptions": {},
+    "sectionUpdateFields": {},
+    "sectionFilters": {},
+    "commentId": "",
+    "commentTaskId": "",
+    "commentContent": "",
+    "commentUpdateFields": {},
+    "commentFilters": {},
+    "labelId": "",
+    "labelName": "",
+    "labelOptions": {},
+    "labelUpdateFields": {},
+    "reminderId": "",
+    "itemId": "",
+    "dueDateType": "natural_language",
+    "natural_language_representation": "",
+    "date": "",
+    "timezone": "",
+    "reminderOptions": {},
+    "reminderUpdateFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "label"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "taskId",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete",
+            "close",
+            "get",
+            "reopen",
+            "update",
+            "move"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "project",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create",
+            "move"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "section",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ]
+        },
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "@version"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "@version"
+      ]
+    },
+    {
+      "field": "labels",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "content",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "text",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "quickAdd"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "quickAdd"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "filters",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "updateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectId",
+      "condition": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "archive",
+            "delete",
+            "get",
+            "getCollaborators",
+            "unarchive",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "name",
+      "condition": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectOptions",
+      "condition": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "projectUpdateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionId",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionProject",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionName",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionOptions",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionUpdateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "sectionFilters",
+      "condition": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentId",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentTaskId",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentContent",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentUpdateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "commentFilters",
+      "condition": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelId",
+      "condition": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelName",
+      "condition": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelOptions",
+      "condition": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "labelUpdateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "reminderId",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "delete",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "itemId",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "dueDateType",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "natural_language_representation",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "natural_language"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "date",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "full_day"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "datetime",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "floating_time"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "datetime",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "timezone",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "dueDateType"
+      ]
+    },
+    {
+      "field": "reminderOptions",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "reminderUpdateFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "task": {
+      "operations": [
+        "close",
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "move",
+        "quickAdd",
+        "reopen",
+        "update"
+      ],
+      "fieldsPerOperation": {
+        "close": [
+          "taskId"
+        ],
+        "create": [
+          "project",
+          "labels",
+          "content",
+          "options"
+        ],
+        "delete": [
+          "taskId"
+        ],
+        "get": [
+          "taskId"
+        ],
+        "getAll": [
+          "returnAll",
+          "limit",
+          "filters"
+        ],
+        "move": [
+          "taskId",
+          "project",
+          "section",
+          "options"
+        ],
+        "quickAdd": [
+          "text",
+          "options"
+        ],
+        "reopen": [
+          "taskId"
+        ],
+        "update": [
+          "taskId",
+          "updateFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

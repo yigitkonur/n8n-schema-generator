@@ -1,0 +1,720 @@
+{
+  "name": "iterable",
+  "displayName": "Iterable",
+  "description": "Consume Iterable API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "user",
+    "name": "",
+    "additionalFields": {},
+    "operation": "upsert",
+    "identifier": "",
+    "value": "",
+    "preferUserId": true
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "user",
+      "options": [
+        {
+          "name": "Event",
+          "value": "event"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        },
+        {
+          "name": "User List",
+          "value": "userList"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "track",
+      "options": [
+        {
+          "name": "Track",
+          "value": "track",
+          "description": "Record the actions a user perform",
+          "action": "Track an event"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the event to track",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Campaign ID",
+          "name": "campaignId",
+          "type": "string",
+          "default": "",
+          "description": "Campaign tied to conversion"
+        },
+        {
+          "displayName": "Created At",
+          "name": "createdAt",
+          "type": "dateTime",
+          "default": "",
+          "description": "Time event happened"
+        },
+        {
+          "displayName": "Data Fields",
+          "name": "dataFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Data Field",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "dataFieldValues",
+              "displayName": "Data Field",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "The end event specified key of the event defined data"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "The end event specified value of the event defined data"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": "",
+          "description": "Either email or userId must be passed in to identify the user. If both are passed in, email takes precedence."
+        },
+        {
+          "displayName": "ID",
+          "name": "id",
+          "type": "string",
+          "default": "",
+          "description": "Optional event ID. If an event exists with that ID, the event will be updated. If none is specified, a new ID will automatically be generated and returned."
+        },
+        {
+          "displayName": "Template ID",
+          "name": "templateId",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "User ID",
+          "name": "userId",
+          "type": "string",
+          "default": "",
+          "description": "userId that was passed into the updateUser call"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "upsert",
+      "options": [
+        {
+          "name": "Create or Update",
+          "value": "upsert",
+          "description": "Create a new user, or update the current one if it already exists (upsert)",
+          "action": "Create or update a user"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a user",
+          "action": "Delete a user"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a user",
+          "action": "Get a user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "identifier",
+      "displayName": "Identifier",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Identifier to be used",
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "User ID",
+          "value": "userId"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      }
+    },
+    {
+      "name": "preferUserId",
+      "displayName": "Create If Doesn't Exist",
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "description": "Whether to create a new user if the idetifier does not exist",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "upsert"
+          ],
+          "identifier": [
+            "userId"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Data Fields",
+          "name": "dataFieldsUi",
+          "type": "fixedCollection",
+          "default": {},
+          "placeholder": "Add Data Field",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "options": [
+            {
+              "name": "dataFieldValues",
+              "displayName": "Data Field",
+              "values": [
+                {
+                  "displayName": "Key",
+                  "name": "key",
+                  "type": "string",
+                  "default": "",
+                  "description": "The end user specified key of the user defined data"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "The end user specified value of the user defined data"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Merge Nested Objects",
+          "name": "mergeNestedObjects",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to merge top level objects instead of overwriting (default: false), e.g. if user profile has data: {mySettings:{mobile:true}} and change contact field has data: {mySettings:{email:true}}, the resulting profile: {mySettings:{mobile:true,email:true}}"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "by",
+      "displayName": "By",
+      "type": "options",
+      "default": "email",
+      "required": true,
+      "description": "Identifier to be used",
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "User ID",
+          "value": "userId"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "by": [
+            "userId"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Email for a particular user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "by",
+      "displayName": "By",
+      "type": "options",
+      "default": "email",
+      "required": true,
+      "description": "Identifier to be used",
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "User ID",
+          "value": "userId"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for a particular user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "userId"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Email for a particular user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Add",
+          "value": "add",
+          "description": "Add user to list",
+          "action": "Add a user to a list"
+        },
+        {
+          "name": "Remove",
+          "value": "remove",
+          "description": "Remove a user from a list",
+          "action": "Remove a user from a list"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Identifier to be used. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "identifier",
+      "displayName": "Identifier",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Identifier to be used",
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "User ID",
+          "value": "userId"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Identifier to be used. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "identifier",
+      "displayName": "Identifier",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Identifier to be used",
+      "options": [
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "User ID",
+          "value": "userId"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Campaign ID",
+          "name": "campaignId",
+          "type": "number",
+          "default": 0,
+          "description": "Attribute unsubscribe to a campaign"
+        },
+        {
+          "displayName": "Channel Unsubscribe",
+          "name": "channelUnsubscribe",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to unsubscribe email from list's associated channel - essentially a global unsubscribe"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "iterableApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "name",
+    "identifier",
+    "value",
+    "preferUserId",
+    "by",
+    "userId",
+    "email",
+    "by",
+    "userId",
+    "email",
+    "listId",
+    "identifier",
+    "value",
+    "listId",
+    "identifier",
+    "value"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "additionalFields",
+    "operation",
+    "additionalFields",
+    "operation",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "name": "string",
+    "additionalFields": "collection",
+    "identifier": "options",
+    "value": "string",
+    "preferUserId": "boolean",
+    "by": "options",
+    "userId": "string",
+    "email": "string",
+    "listId": "options"
+  },
+  "hasVersions": false
+}

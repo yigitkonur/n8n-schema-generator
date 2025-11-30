@@ -1,0 +1,338 @@
+{
+  "name": "switch",
+  "displayName": "Switch",
+  "description": "Route items depending on defined expression or rules",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    3,
+    3.1,
+    3.2,
+    3.3
+  ],
+  "defaults": {
+    "mode": "rules",
+    "output": "={{}}",
+    "rules": {
+      "values": [
+        {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "leftValue": "",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "renameOutput": false,
+          "outputKey": ""
+        }
+      ]
+    },
+    "looseTypeValidation": false,
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": "={{((parameters) => {\n    const mode = parameters.mode;\n    if (mode === 'expression') {\n        return Array.from({ length: parameters.numberOutputs }, (_, i) => ({\n            type: 'main',\n            displayName: i.toString(),\n        }));\n    }\n    else {\n        const rules = parameters.rules?.values ?? [];\n        const ruleOutputs = rules.map((rule, index) => {\n            return {\n                type: 'main',\n                displayName: rule.outputKey || index.toString(),\n            };\n        });\n        if (parameters.options?.fallbackOutput === 'extra') {\n            const renameFallbackOutput = parameters.options?.renameFallbackOutput;\n            ruleOutputs.push({\n                type: 'main',\n                displayName: renameFallbackOutput || 'Fallback',\n            });\n        }\n        return ruleOutputs;\n    }\n})($parameter)}}",
+  "properties": [
+    {
+      "name": "mode",
+      "displayName": "Mode",
+      "type": "options",
+      "default": "rules",
+      "description": "How data should be routed",
+      "options": [
+        {
+          "name": "Rules",
+          "value": "rules",
+          "description": "Build a matching rule for each output"
+        },
+        {
+          "name": "Expression",
+          "value": "expression",
+          "description": "Write an expression to return the output index"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "numberOutputs",
+      "displayName": "Number of Outputs",
+      "type": "number",
+      "default": 4,
+      "description": "How many outputs to create",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "expression"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 3.3
+              }
+            }
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "numberOutputs",
+      "displayName": "Number of Outputs",
+      "type": "number",
+      "default": 4,
+      "description": "How many outputs to create",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "expression"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 3.3
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Output Index",
+      "type": "number",
+      "default": "={{}}",
+      "description": "The output index to send the input item to. Use an expression to calculate which input item should be routed to which output. The expression must return a number.",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "expression"
+          ]
+        }
+      },
+      "hint": "The index to route the item to, starts at 0"
+    },
+    {
+      "name": "rules",
+      "displayName": "Routing Rules",
+      "type": "fixedCollection",
+      "default": {
+        "values": [
+          {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "leftValue": "",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "string",
+                    "operation": "equals"
+                  }
+                }
+              ],
+              "combinator": "and"
+            }
+          }
+        ]
+      },
+      "options": [
+        {
+          "name": "values",
+          "displayName": "Values",
+          "values": [
+            {
+              "displayName": "Conditions",
+              "name": "conditions",
+              "placeholder": "Add Condition",
+              "type": "filter",
+              "default": {},
+              "typeOptions": {
+                "multipleValues": false,
+                "filter": {
+                  "caseSensitive": "={{!$parameter.options.ignoreCase}}",
+                  "typeValidation": "={{ ($nodeVersion < 3.1 ? $parameter.options.looseTypeValidation :  $parameter.looseTypeValidation) ? \"loose\" : \"strict\" }}",
+                  "version": "={{ $nodeVersion >= 3.2 ? 2 : 1 }}"
+                }
+              }
+            },
+            {
+              "displayName": "Rename Output",
+              "name": "renameOutput",
+              "type": "boolean",
+              "default": false
+            },
+            {
+              "displayName": "Output Name",
+              "name": "outputKey",
+              "type": "string",
+              "default": "",
+              "description": "The label of output to which to send data to if rule matches",
+              "displayOptions": {
+                "show": {
+                  "renameOutput": [
+                    true
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "placeholder": "Add Routing Rule"
+    },
+    {
+      "name": "looseTypeValidation",
+      "displayName": "Convert types where required",
+      "type": "boolean",
+      "default": false,
+      "description": "If the type of an expression doesn't match the type of the comparison, n8n will try to cast the expression to the required type. E.g. for booleans <code>\"false\"</code> or <code>0</code> will be cast to <code>false</code>",
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 3.1
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Fallback Output",
+          "name": "fallbackOutput",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "rules.values",
+              "/rules",
+              "/rules.values"
+            ],
+            "loadOptionsMethod": "getFallbackOutputOptions"
+          },
+          "default": "none",
+          "description": "If no rule matches the item will be sent to this output, by default they will be ignored"
+        },
+        {
+          "displayName": "Ignore Case",
+          "description": "Whether to ignore letter case when evaluating conditions",
+          "name": "ignoreCase",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "displayName": "Convert types where required",
+          "description": "If the type of an expression doesn't match the type of the comparison, n8n will try to cast the expression to the required type. E.g. for booleans <code>\"false\"</code> or <code>0</code> will be cast to <code>false</code>",
+          "name": "looseTypeValidation",
+          "type": "boolean",
+          "default": true,
+          "displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "lt": 3.1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Rename Fallback Output",
+          "name": "renameFallbackOutput",
+          "type": "string",
+          "placeholder": "e.g. Fallback",
+          "default": "",
+          "displayOptions": {
+            "show": {
+              "fallbackOutput": [
+                "extra"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Send data to all matching outputs",
+          "name": "allMatchingOutputs",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to send data to all outputs meeting conditions (and not just the first one)"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [],
+  "optionalFields": [
+    "mode",
+    "numberOutputs",
+    "numberOutputs",
+    "output",
+    "rules",
+    "looseTypeValidation",
+    "options"
+  ],
+  "parameterTypes": {
+    "mode": "options",
+    "numberOutputs": "number",
+    "output": "number",
+    "rules": "fixedCollection",
+    "looseTypeValidation": "boolean",
+    "options": "collection"
+  },
+  "hasVersions": true,
+  "availableVersions": [
+    1,
+    2,
+    3,
+    3.1,
+    3.2,
+    3.3
+  ],
+  "defaultVersion": 3.3
+}

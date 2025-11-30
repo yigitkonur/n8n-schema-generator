@@ -1,0 +1,710 @@
+{
+  "name": "contentful",
+  "displayName": "Contentful",
+  "description": "Consume Contentful API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "source": "deliveryApi",
+    "resource": "entry",
+    "operation": "get",
+    "contentTypeId": "",
+    "additionalFields": {},
+    "environmentId": "master",
+    "entryId": "",
+    "assetId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "source",
+      "displayName": "Source",
+      "type": "options",
+      "default": "deliveryApi",
+      "description": "Pick where your data comes from, delivery or preview API",
+      "options": [
+        {
+          "name": "Delivery API",
+          "value": "deliveryApi"
+        },
+        {
+          "name": "Preview API",
+          "value": "previewApi"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "entry",
+      "options": [
+        {
+          "name": "Asset",
+          "value": "asset"
+        },
+        {
+          "name": "Content Type",
+          "value": "contentType"
+        },
+        {
+          "name": "Entry",
+          "value": "entry"
+        },
+        {
+          "name": "Locale",
+          "value": "locale"
+        },
+        {
+          "name": "Space",
+          "value": "space"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "space"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contentType"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "locale"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "environmentId",
+      "displayName": "Environment ID",
+      "type": "string",
+      "default": "master",
+      "description": "The ID for the Contentful environment (e.g. master, staging, etc.). Depending on your plan, you might not have environments. In that case use \"master\".",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contentType"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contentTypeId",
+      "displayName": "Content Type ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contentType"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the data should be returned RAW instead of parsed"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "contentType"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "environmentId",
+      "displayName": "Environment ID",
+      "type": "string",
+      "default": "master",
+      "description": "The ID for the Contentful environment (e.g. master, staging, etc.). Depending on your plan, you might not have environments. In that case use \"master\".",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "entry"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "entry"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Content Type ID",
+          "name": "content_type",
+          "type": "string",
+          "default": "",
+          "description": "To search for entries with a specific content type"
+        },
+        {
+          "displayName": "Equal",
+          "name": "equal",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.title=n8n",
+          "description": "Search for all data that matches the condition: {attribute}={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Exclude",
+          "name": "exclude",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[nin]=accessories,flowers",
+          "description": "Search for all data that matches the condition: {attribute}[nin]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Exist",
+          "name": "exist",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[exists]=true",
+          "description": "Search for all data that matches the condition: {attribute}[exists]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Fields",
+          "name": "select",
+          "type": "string",
+          "placeholder": "fields.title",
+          "default": "",
+          "description": "The select operator allows you to choose what fields to return from an entity. You can choose multiple values by combining comma-separated operators."
+        },
+        {
+          "displayName": "Include",
+          "name": "include",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[in]=accessories,flowers",
+          "description": "Search for all data that matches the condition: {attribute}[in]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Not Equal",
+          "name": "notEqual",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.title[ne]=n8n",
+          "description": "Search for all data that matches the condition: {attribute}[ne]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "string",
+          "default": "",
+          "placeholder": "sys.createdAt",
+          "description": "You can order items in the response by specifying the order search parameter. You can use sys properties (such as sys.createdAt) or field values (such as fields.myCustomDateField) for ordering."
+        },
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "description": "Full-text search is case insensitive and might return more results than expected. A query will only take values with more than 1 character."
+        },
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the data should be returned RAW instead of parsed"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "entryId",
+      "displayName": "Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the data should be returned RAW instead of parsed"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "environmentId",
+      "displayName": "Environment ID",
+      "type": "string",
+      "default": "master",
+      "description": "The ID for the Contentful environment (e.g. master, staging, etc.). Depending on your plan, you might not have environments. In that case use \"master\".",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "asset"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "asset"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "assetId",
+      "displayName": "Asset ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Equal",
+          "name": "equal",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.title=n8n",
+          "description": "Search for all data that matches the condition: {attribute}={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Exclude",
+          "name": "exclude",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[nin]=accessories,flowers",
+          "description": "Search for all data that matches the condition: {attribute}[nin]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Exist",
+          "name": "exist",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[exists]=true",
+          "description": "Search for all data that matches the condition: {attribute}[exists]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Fields",
+          "name": "select",
+          "type": "string",
+          "placeholder": "fields.title",
+          "default": "",
+          "description": "The select operator allows you to choose what fields to return from an entity. You can choose multiple values by combining comma-separated operators."
+        },
+        {
+          "displayName": "Include",
+          "name": "include",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.tags[in]=accessories,flowers",
+          "description": "Search for all data that matches the condition: {attribute}[in]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Not Equal",
+          "name": "notEqual",
+          "type": "string",
+          "default": "",
+          "placeholder": "fields.title[ne]=n8n",
+          "description": "Search for all data that matches the condition: {attribute}[ne]={value}. Attribute can use dot notation."
+        },
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "string",
+          "default": "",
+          "placeholder": "sys.createdAt",
+          "description": "You can order items in the response by specifying the order search parameter. You can use sys properties (such as sys.createdAt) or field values (such as fields.myCustomDateField) for ordering."
+        },
+        {
+          "displayName": "Query",
+          "name": "query",
+          "type": "string",
+          "default": "",
+          "description": "Full-text search is case insensitive and might return more results than expected. A query will only take values with more than 1 character."
+        },
+        {
+          "displayName": "RAW Data",
+          "name": "rawData",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the data should be returned RAW instead of parsed"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "environmentId",
+      "displayName": "Environment ID",
+      "type": "string",
+      "default": "master",
+      "description": "The ID for the Contentful environment (e.g. master, staging, etc.). Depending on your plan, you might not have environments. In that case use \"master\".",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "locale"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "locale"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 500
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "locale"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "contentfulApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "contentTypeId",
+    "entryId",
+    "assetId"
+  ],
+  "optionalFields": [
+    "source",
+    "resource",
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "environmentId",
+    "additionalFields",
+    "environmentId",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "additionalFields",
+    "environmentId",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "environmentId",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "source": "options",
+    "resource": "options",
+    "operation": "options",
+    "environmentId": "string",
+    "contentTypeId": "string",
+    "additionalFields": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "entryId": "string",
+    "assetId": "string"
+  },
+  "hasVersions": false
+}

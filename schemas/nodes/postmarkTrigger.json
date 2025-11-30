@@ -1,0 +1,108 @@
+{
+  "name": "postmarkTrigger",
+  "displayName": "Postmark Trigger",
+  "description": "Starts the workflow when Postmark events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "events": [],
+    "firstOpen": false,
+    "includeContent": false
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "events",
+      "displayName": "Events",
+      "type": "multiOptions",
+      "default": [],
+      "required": true,
+      "description": "Webhook events that will be enabled for that endpoint",
+      "options": [
+        {
+          "name": "Bounce",
+          "value": "bounce",
+          "description": "Trigger on bounce"
+        },
+        {
+          "name": "Click",
+          "value": "click",
+          "description": "Trigger on click"
+        },
+        {
+          "name": "Delivery",
+          "value": "delivery",
+          "description": "Trigger on delivery"
+        },
+        {
+          "name": "Open",
+          "value": "open",
+          "description": "Trigger webhook on open"
+        },
+        {
+          "name": "Spam Complaint",
+          "value": "spamComplaint",
+          "description": "Trigger on spam complaint"
+        },
+        {
+          "name": "Subscription Change",
+          "value": "subscriptionChange",
+          "description": "Trigger on subscription change"
+        }
+      ]
+    },
+    {
+      "name": "firstOpen",
+      "displayName": "First Open",
+      "type": "boolean",
+      "default": false,
+      "description": "Only fires on first open for event \"Open\"",
+      "displayOptions": {
+        "show": {
+          "events": [
+            "open"
+          ]
+        }
+      }
+    },
+    {
+      "name": "includeContent",
+      "displayName": "Include Content",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to include message content for events \"Bounce\" and \"Spam Complaint\"",
+      "displayOptions": {
+        "show": {
+          "events": [
+            "bounce",
+            "spamComplaint"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "postmarkApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "events"
+  ],
+  "optionalFields": [
+    "firstOpen",
+    "includeContent"
+  ],
+  "parameterTypes": {
+    "events": "multiOptions",
+    "firstOpen": "boolean",
+    "includeContent": "boolean"
+  },
+  "hasVersions": false
+}

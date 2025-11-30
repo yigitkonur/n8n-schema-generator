@@ -1,0 +1,758 @@
+{
+  "name": "moveBinaryData",
+  "displayName": "Convert to/from binary data",
+  "description": "Move data between binary and JSON properties",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "mode": "binaryToJson",
+    "setAllData": true,
+    "sourceKey": "data",
+    "convertAllData": true,
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "mode",
+      "displayName": "Mode",
+      "type": "options",
+      "default": "binaryToJson",
+      "description": "From and to where data should be moved",
+      "options": [
+        {
+          "name": "Binary to JSON",
+          "value": "binaryToJson",
+          "description": "Move data from Binary to JSON"
+        },
+        {
+          "name": "JSON to Binary",
+          "value": "jsonToBinary",
+          "description": "Move data from JSON to Binary"
+        }
+      ]
+    },
+    {
+      "name": "setAllData",
+      "displayName": "Set All Data",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether all JSON data should be replaced with the data retrieved from binary key. Else the data will be written to a single key.",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "binaryToJson"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sourceKey",
+      "displayName": "Source Key",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the binary key to get data from. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.currentKey\".",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "binaryToJson"
+          ]
+        }
+      },
+      "placeholder": "data"
+    },
+    {
+      "name": "destinationKey",
+      "displayName": "Destination Key",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name the JSON key to copy data to. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.newKey\".",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "binaryToJson"
+          ],
+          "setAllData": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "convertAllData",
+      "displayName": "Convert All Data",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether all JSON data should be converted to binary. Else only the data of one key will be converted.",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sourceKey",
+      "displayName": "Source Key",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the JSON key to get data from. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.currentKey\".",
+      "displayOptions": {
+        "show": {
+          "convertAllData": [
+            false
+          ],
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      },
+      "placeholder": "data"
+    },
+    {
+      "name": "destinationKey",
+      "displayName": "Destination Key",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name the binary key to copy data to. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.newKey\".",
+      "displayOptions": {
+        "show": {
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      },
+      "placeholder": "data"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Add Byte Order Mark (BOM)",
+          "name": "addBOM",
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ],
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "displayName": "Data Is Base64",
+          "name": "dataIsBase64",
+          "type": "boolean",
+          "displayOptions": {
+            "hide": {
+              "useRawData": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ],
+              "/convertAllData": [
+                false
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to keep the binary data as base64 string"
+        },
+        {
+          "displayName": "Encoding",
+          "name": "encoding",
+          "type": "options",
+          "options": [
+            {
+              "name": "armscii8",
+              "value": "armscii8"
+            },
+            {
+              "name": "ascii",
+              "value": "ascii"
+            },
+            {
+              "name": "base64",
+              "value": "base64"
+            },
+            {
+              "name": "big5hkscs",
+              "value": "big5hkscs"
+            },
+            {
+              "name": "binary",
+              "value": "binary"
+            },
+            {
+              "name": "cesu8",
+              "value": "cesu8"
+            },
+            {
+              "name": "cp1046",
+              "value": "cp1046"
+            },
+            {
+              "name": "cp1124",
+              "value": "cp1124"
+            },
+            {
+              "name": "cp1125",
+              "value": "cp1125"
+            },
+            {
+              "name": "cp1129",
+              "value": "cp1129"
+            },
+            {
+              "name": "cp1133",
+              "value": "cp1133"
+            },
+            {
+              "name": "cp1161",
+              "value": "cp1161"
+            },
+            {
+              "name": "cp1162",
+              "value": "cp1162"
+            },
+            {
+              "name": "cp1163",
+              "value": "cp1163"
+            },
+            {
+              "name": "cp437",
+              "value": "cp437"
+            },
+            {
+              "name": "cp720",
+              "value": "cp720"
+            },
+            {
+              "name": "cp737",
+              "value": "cp737"
+            },
+            {
+              "name": "cp775",
+              "value": "cp775"
+            },
+            {
+              "name": "cp808",
+              "value": "cp808"
+            },
+            {
+              "name": "cp850",
+              "value": "cp850"
+            },
+            {
+              "name": "cp852",
+              "value": "cp852"
+            },
+            {
+              "name": "cp855",
+              "value": "cp855"
+            },
+            {
+              "name": "cp856",
+              "value": "cp856"
+            },
+            {
+              "name": "cp857",
+              "value": "cp857"
+            },
+            {
+              "name": "cp858",
+              "value": "cp858"
+            },
+            {
+              "name": "cp860",
+              "value": "cp860"
+            },
+            {
+              "name": "cp861",
+              "value": "cp861"
+            },
+            {
+              "name": "cp862",
+              "value": "cp862"
+            },
+            {
+              "name": "cp863",
+              "value": "cp863"
+            },
+            {
+              "name": "cp864",
+              "value": "cp864"
+            },
+            {
+              "name": "cp865",
+              "value": "cp865"
+            },
+            {
+              "name": "cp866",
+              "value": "cp866"
+            },
+            {
+              "name": "cp869",
+              "value": "cp869"
+            },
+            {
+              "name": "cp922",
+              "value": "cp922"
+            },
+            {
+              "name": "cp936",
+              "value": "cp936"
+            },
+            {
+              "name": "cp949",
+              "value": "cp949"
+            },
+            {
+              "name": "cp950",
+              "value": "cp950"
+            },
+            {
+              "name": "eucjp",
+              "value": "eucjp"
+            },
+            {
+              "name": "gb18030",
+              "value": "gb18030"
+            },
+            {
+              "name": "gbk",
+              "value": "gbk"
+            },
+            {
+              "name": "georgianacademy",
+              "value": "georgianacademy"
+            },
+            {
+              "name": "georgianps",
+              "value": "georgianps"
+            },
+            {
+              "name": "hex",
+              "value": "hex"
+            },
+            {
+              "name": "hproman8",
+              "value": "hproman8"
+            },
+            {
+              "name": "iso646cn",
+              "value": "iso646cn"
+            },
+            {
+              "name": "iso646jp",
+              "value": "iso646jp"
+            },
+            {
+              "name": "iso88591",
+              "value": "iso88591"
+            },
+            {
+              "name": "iso885910",
+              "value": "iso885910"
+            },
+            {
+              "name": "iso885911",
+              "value": "iso885911"
+            },
+            {
+              "name": "iso885913",
+              "value": "iso885913"
+            },
+            {
+              "name": "iso885914",
+              "value": "iso885914"
+            },
+            {
+              "name": "iso885915",
+              "value": "iso885915"
+            },
+            {
+              "name": "iso885916",
+              "value": "iso885916"
+            },
+            {
+              "name": "iso88592",
+              "value": "iso88592"
+            },
+            {
+              "name": "iso88593",
+              "value": "iso88593"
+            },
+            {
+              "name": "iso88594",
+              "value": "iso88594"
+            },
+            {
+              "name": "iso88595",
+              "value": "iso88595"
+            },
+            {
+              "name": "iso88596",
+              "value": "iso88596"
+            },
+            {
+              "name": "iso88597",
+              "value": "iso88597"
+            },
+            {
+              "name": "iso88598",
+              "value": "iso88598"
+            },
+            {
+              "name": "iso88599",
+              "value": "iso88599"
+            },
+            {
+              "name": "koi8r",
+              "value": "koi8r"
+            },
+            {
+              "name": "koi8ru",
+              "value": "koi8ru"
+            },
+            {
+              "name": "koi8t",
+              "value": "koi8t"
+            },
+            {
+              "name": "koi8u",
+              "value": "koi8u"
+            },
+            {
+              "name": "maccenteuro",
+              "value": "maccenteuro"
+            },
+            {
+              "name": "maccroatian",
+              "value": "maccroatian"
+            },
+            {
+              "name": "maccyrillic",
+              "value": "maccyrillic"
+            },
+            {
+              "name": "macgreek",
+              "value": "macgreek"
+            },
+            {
+              "name": "maciceland",
+              "value": "maciceland"
+            },
+            {
+              "name": "macintosh",
+              "value": "macintosh"
+            },
+            {
+              "name": "macroman",
+              "value": "macroman"
+            },
+            {
+              "name": "macromania",
+              "value": "macromania"
+            },
+            {
+              "name": "macthai",
+              "value": "macthai"
+            },
+            {
+              "name": "macturkish",
+              "value": "macturkish"
+            },
+            {
+              "name": "macukraine",
+              "value": "macukraine"
+            },
+            {
+              "name": "mik",
+              "value": "mik"
+            },
+            {
+              "name": "pt154",
+              "value": "pt154"
+            },
+            {
+              "name": "rk1048",
+              "value": "rk1048"
+            },
+            {
+              "name": "shiftjis",
+              "value": "shiftjis"
+            },
+            {
+              "name": "tcvn",
+              "value": "tcvn"
+            },
+            {
+              "name": "tis620",
+              "value": "tis620"
+            },
+            {
+              "name": "ucs2",
+              "value": "ucs2"
+            },
+            {
+              "name": "utf16",
+              "value": "utf16"
+            },
+            {
+              "name": "utf16be",
+              "value": "utf16be"
+            },
+            {
+              "name": "utf32",
+              "value": "utf32"
+            },
+            {
+              "name": "utf32be",
+              "value": "utf32be"
+            },
+            {
+              "name": "utf32le",
+              "value": "utf32le"
+            },
+            {
+              "name": "utf7",
+              "value": "utf7"
+            },
+            {
+              "name": "utf7imap",
+              "value": "utf7imap"
+            },
+            {
+              "name": "utf8",
+              "value": "utf8"
+            },
+            {
+              "name": "viscii",
+              "value": "viscii"
+            },
+            {
+              "name": "windows1250",
+              "value": "windows1250"
+            },
+            {
+              "name": "windows1251",
+              "value": "windows1251"
+            },
+            {
+              "name": "windows1252",
+              "value": "windows1252"
+            },
+            {
+              "name": "windows1253",
+              "value": "windows1253"
+            },
+            {
+              "name": "windows1254",
+              "value": "windows1254"
+            },
+            {
+              "name": "windows1255",
+              "value": "windows1255"
+            },
+            {
+              "name": "windows1256",
+              "value": "windows1256"
+            },
+            {
+              "name": "windows1257",
+              "value": "windows1257"
+            },
+            {
+              "name": "windows1258",
+              "value": "windows1258"
+            },
+            {
+              "name": "windows874",
+              "value": "windows874"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/mode": [
+                "binaryToJson",
+                "jsonToBinary"
+              ]
+            }
+          },
+          "default": "utf8",
+          "description": "Choose the character set to use to encode the data"
+        },
+        {
+          "displayName": "Strip BOM",
+          "name": "stripBOM",
+          "displayOptions": {
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "default": "",
+          "placeholder": "example.json",
+          "description": "The file name to set"
+        },
+        {
+          "displayName": "JSON Parse",
+          "name": "jsonParse",
+          "type": "boolean",
+          "displayOptions": {
+            "hide": {
+              "keepAsBase64": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "/setAllData": [
+                false
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to run JSON parse on the data to get proper object data"
+        },
+        {
+          "displayName": "Keep Source",
+          "name": "keepSource",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the source key should be kept. By default it will be deleted."
+        },
+        {
+          "displayName": "Keep As Base64",
+          "name": "keepAsBase64",
+          "type": "boolean",
+          "displayOptions": {
+            "hide": {
+              "jsonParse": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "/setAllData": [
+                false
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to keep the binary data as base64 string"
+        },
+        {
+          "displayName": "MIME Type",
+          "name": "mimeType",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "default": "application/json",
+          "placeholder": "application/json",
+          "description": "The mime-type to set. By default will the mime-type for JSON be set."
+        },
+        {
+          "displayName": "Use Raw Data",
+          "name": "useRawData",
+          "type": "boolean",
+          "displayOptions": {
+            "hide": {
+              "dataIsBase64": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to use data as is and do not JSON.stringify it"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "sourceKey",
+    "destinationKey",
+    "sourceKey",
+    "destinationKey"
+  ],
+  "optionalFields": [
+    "mode",
+    "setAllData",
+    "convertAllData",
+    "options"
+  ],
+  "parameterTypes": {
+    "mode": "options",
+    "setAllData": "boolean",
+    "sourceKey": "string",
+    "destinationKey": "string",
+    "convertAllData": "boolean",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

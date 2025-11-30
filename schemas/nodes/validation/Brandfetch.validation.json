@@ -1,0 +1,184 @@
+{
+  "nodeType": "n8n-nodes-base.Brandfetch",
+  "displayName": "Brandfetch",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [
+    "domain"
+  ],
+  "optionalParameters": [
+    "operation",
+    "download",
+    "imageTypes",
+    "imageFormats"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "logo",
+        "enumValues": [
+          "color",
+          "company",
+          "font",
+          "industry",
+          "logo"
+        ]
+      }
+    },
+    {
+      "field": "domain",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "download",
+      "type": "boolean",
+      "required": true,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "imageTypes",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [
+          "logo",
+          "icon"
+        ],
+        "enumValues": [
+          "icon",
+          "logo"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "download"
+      ]
+    },
+    {
+      "field": "imageFormats",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [
+          "png"
+        ],
+        "enumValues": [
+          "png",
+          "svg"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "download"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "logo",
+    "domain": "",
+    "download": false,
+    "imageTypes": [
+      "logo",
+      "icon"
+    ],
+    "imageFormats": [
+      "png"
+    ]
+  },
+  "conditionalFields": [
+    {
+      "field": "download",
+      "condition": {
+        "show": {
+          "operation": [
+            "logo"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "imageTypes",
+      "condition": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "download"
+      ]
+    },
+    {
+      "field": "imageFormats",
+      "condition": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "download"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

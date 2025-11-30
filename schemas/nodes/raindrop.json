@@ -1,0 +1,966 @@
+{
+  "name": "raindrop",
+  "displayName": "Raindrop",
+  "description": "Consume the Raindrop API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "collection",
+    "link": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "operation": "get",
+    "title": "",
+    "collectionId": "",
+    "type": "parent",
+    "tags": "",
+    "filters": {},
+    "self": true,
+    "userId": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "collection",
+      "options": [
+        {
+          "name": "Bookmark",
+          "value": "bookmark"
+        },
+        {
+          "name": "Collection",
+          "value": "collection"
+        },
+        {
+          "name": "Tag",
+          "value": "tag"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a bookmark"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a bookmark"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a bookmark"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many bookmarks"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a bookmark"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "link",
+      "displayName": "Link",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Link of the bookmark to be created",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Important",
+          "name": "important",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this bookmark is marked as favorite"
+        },
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "number",
+          "default": 0,
+          "description": "Sort order for the bookmark. For example, to move it to first place, enter 0."
+        },
+        {
+          "displayName": "Parse Metadata",
+          "name": "pleaseParse",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether Raindrop should load cover, description and HTML for the URL"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Bookmark tags. Multiple tags can be set separated by comma."
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Title of the bookmark to create"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "bookmarkId",
+      "displayName": "Bookmark ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bookmark to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "bookmarkId",
+      "displayName": "Bookmark ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bookmark to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection Name or ID",
+      "type": "options",
+      "default": [],
+      "required": true,
+      "description": "The ID of the collection from which to retrieve all bookmarks. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getCollections"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "bookmarkId",
+      "displayName": "Bookmark ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the bookmark to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Collection Name or ID",
+          "name": "collectionId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getCollections"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Important",
+          "name": "important",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this bookmark is marked as favorite"
+        },
+        {
+          "displayName": "Order",
+          "name": "order",
+          "type": "number",
+          "default": 0,
+          "description": "For example if you want to move bookmark to the first place set this field to 0"
+        },
+        {
+          "displayName": "Parse Metadata",
+          "name": "pleaseParse",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether Raindrop should reload cover, description and HTML for the URL"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "description": "Bookmark tags. Multiple tags can be set separated by comma."
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Title of the bookmark to be created"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a collection"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a collection"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a collection"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many collections"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "action": "Update a collection"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the collection to create",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Cover",
+          "name": "cover",
+          "type": "string",
+          "default": "",
+          "description": "URL of an image to use as cover for the collection"
+        },
+        {
+          "displayName": "Public",
+          "name": "public",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the collection will be accessible without authentication"
+        },
+        {
+          "displayName": "Parent ID",
+          "name": "parentId",
+          "type": "string",
+          "default": "",
+          "description": "ID of this collection's parent collection, if it is a child collection"
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sort",
+          "type": "number",
+          "default": 1,
+          "description": "Descending sort order of this collection. The number is the position of the collection among all the collections with the same parent ID."
+        },
+        {
+          "displayName": "View",
+          "name": "view",
+          "type": "options",
+          "default": "list",
+          "description": "View style of this collection",
+          "options": [
+            {
+              "name": "List",
+              "value": "list"
+            },
+            {
+              "name": "Simple",
+              "value": "simple"
+            },
+            {
+              "name": "Grid",
+              "value": "grid"
+            },
+            {
+              "name": "Masonry",
+              "value": "Masonry"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the collection to delete",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the collection to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "parent",
+      "required": true,
+      "options": [
+        {
+          "name": "Parent",
+          "value": "parent",
+          "description": "Root-level collections"
+        },
+        {
+          "name": "Children",
+          "value": "children",
+          "description": "Nested collections"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "collectionId",
+      "displayName": "Collection ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the collection to update",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Cover",
+          "name": "cover",
+          "type": "string",
+          "default": "data",
+          "placeholder": "",
+          "description": "Name of the binary property containing the data for the image to upload as a cover"
+        },
+        {
+          "displayName": "Public",
+          "name": "public",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the collection will be accessible without authentication"
+        },
+        {
+          "displayName": "Parent ID",
+          "name": "parentId",
+          "type": "string",
+          "default": "",
+          "description": "ID of this collection's parent collection, if it is a child collection"
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sort",
+          "type": "number",
+          "default": 1,
+          "description": "Descending sort order of this collection. The number is the position of the collection among all the collections with the same parent ID."
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Title of the collection to update"
+        },
+        {
+          "displayName": "View",
+          "name": "view",
+          "type": "options",
+          "default": "list",
+          "description": "View style of this collection",
+          "options": [
+            {
+              "name": "List",
+              "value": "list"
+            },
+            {
+              "name": "Simple",
+              "value": "simple"
+            },
+            {
+              "name": "Grid",
+              "value": "grid"
+            },
+            {
+              "name": "Masonry",
+              "value": "Masonry"
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Delete",
+          "value": "delete",
+          "action": "Delete a tag"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "action": "Get many tags"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "tags",
+      "displayName": "Tags",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "One or more tags to delete. Enter comma-separated values to delete multiple tags.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Collection Name or ID",
+          "name": "collectionId",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getCollections"
+          },
+          "default": "",
+          "description": "It's possible to restrict remove action to just one collection. It's optional. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Collection Name or ID",
+          "name": "collectionId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getCollections"
+          },
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Filter"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get a user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "self",
+      "displayName": "Self",
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "description": "Whether to return details on the logged-in user",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the user to retrieve",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "self": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "raindropOAuth2Api",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "link",
+    "bookmarkId",
+    "bookmarkId",
+    "collectionId",
+    "bookmarkId",
+    "title",
+    "collectionId",
+    "collectionId",
+    "type",
+    "collectionId",
+    "tags",
+    "self",
+    "userId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "collectionId",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "filters",
+    "operation"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "collectionId": "string",
+    "link": "string",
+    "additionalFields": "collection",
+    "bookmarkId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateFields": "collection",
+    "title": "string",
+    "type": "options",
+    "tags": "string",
+    "filters": "collection",
+    "self": "boolean",
+    "userId": "string"
+  },
+  "hasVersions": false
+}

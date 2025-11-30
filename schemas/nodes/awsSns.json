@@ -1,0 +1,210 @@
+{
+  "name": "awsSns",
+  "displayName": "AWS SNS",
+  "description": "Sends data to AWS SNS",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "operation": "publish",
+    "name": "",
+    "options": {},
+    "topic": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "subject": "",
+    "message": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "publish",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a topic",
+          "action": "Create a topic"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a topic",
+          "action": "Delete a topic"
+        },
+        {
+          "name": "Publish",
+          "value": "publish",
+          "description": "Publish a message to a topic",
+          "action": "Publish a message to a topic"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Display Name",
+          "name": "displayName",
+          "type": "string",
+          "default": "",
+          "description": "The display name to use for a topic with SMS subscriptions"
+        },
+        {
+          "displayName": "Fifo Topic",
+          "name": "fifoTopic",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the topic you want to create is a FIFO (first-in-first-out) topic"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "topic",
+      "displayName": "Topic",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "publish",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "subject",
+      "displayName": "Subject",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Subject when the message is delivered to email endpoints",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "publish"
+          ]
+        }
+      }
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The message you want to send",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "publish"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "name",
+    "topic",
+    "subject",
+    "message"
+  ],
+  "optionalFields": [
+    "authentication",
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "operation": "options",
+    "name": "string",
+    "options": "collection",
+    "topic": "resourceLocator",
+    "subject": "string",
+    "message": "string"
+  },
+  "hasVersions": false
+}

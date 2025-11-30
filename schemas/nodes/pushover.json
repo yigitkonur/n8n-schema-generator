@@ -1,0 +1,318 @@
+{
+  "name": "pushover",
+  "displayName": "Pushover",
+  "description": "Consume Pushover API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "message",
+    "operation": "push",
+    "userKey": "",
+    "message": "",
+    "priority": -2,
+    "retry": 30,
+    "expire": 30,
+    "additionalFields": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "message",
+      "options": [
+        {
+          "name": "Message",
+          "value": "message"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "push",
+      "options": [
+        {
+          "name": "Push",
+          "value": "push",
+          "action": "Push a message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "userKey",
+      "displayName": "User Key",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The user/group key (not e-mail address) of your user (or you), viewable when logged into the <a href=\"https://pushover.net/\">dashboard</a> (often referred to as <code>USER_KEY</code> in the <a href=\"https://support.pushover.net/i44-example-code-and-pushover-libraries\">libraries</a> and code examples)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      }
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Your message",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      }
+    },
+    {
+      "name": "priority",
+      "displayName": "Priority",
+      "type": "options",
+      "default": -2,
+      "description": "Send as -2 to generate no notification/alert, -1 to always send as a quiet notification, 1 to display as high-priority and bypass the user's quiet hours, or 2 to also require confirmation from the user",
+      "options": [
+        {
+          "name": "Lowest Priority",
+          "value": -2
+        },
+        {
+          "name": "Low Priority",
+          "value": -1
+        },
+        {
+          "name": "Normal Priority",
+          "value": 0
+        },
+        {
+          "name": "High Priority",
+          "value": 1
+        },
+        {
+          "name": "Emergency Priority",
+          "value": 2
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      }
+    },
+    {
+      "name": "retry",
+      "displayName": "Retry (Seconds)",
+      "type": "number",
+      "default": 30,
+      "required": true,
+      "description": "Specifies how often (in seconds) the Pushover servers will send the same notification to the user. This parameter must have a value of at least 30 seconds between retries.",
+      "typeOptions": {
+        "minValue": 0
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ],
+          "priority": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "expire",
+      "displayName": "Expire (Seconds)",
+      "type": "number",
+      "default": 30,
+      "required": true,
+      "description": "Specifies how many seconds your notification will continue to be retried for (every retry seconds)",
+      "typeOptions": {
+        "minValue": 0,
+        "maxValue": 10800
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ],
+          "priority": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Attachment",
+          "name": "attachmentsUi",
+          "placeholder": "Add Attachments",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "options": [
+            {
+              "name": "attachmentsValues",
+              "displayName": "Attachment Property",
+              "values": [
+                {
+                  "displayName": "Input Binary Field",
+                  "name": "binaryPropertyName",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "data",
+                  "hint": "The name of the input binary field containing the file which should be added to email as attachment"
+                }
+              ]
+            }
+          ],
+          "default": {}
+        },
+        {
+          "displayName": "Device",
+          "name": "device",
+          "type": "string",
+          "default": "",
+          "description": "Your user's device name to send the message directly to that device, rather than all of the user's devices (multiple devices may be separated by a comma)"
+        },
+        {
+          "displayName": "HTML Formatting",
+          "name": "html",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable messages formatting with HTML tags"
+        },
+        {
+          "displayName": "Sound Name or ID",
+          "name": "sound",
+          "type": "options",
+          "typeOptions": {
+            "loadOptionsMethod": "getSounds"
+          },
+          "default": "",
+          "description": "The name of one of the sounds supported by device clients to override the user's default sound choice. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        },
+        {
+          "displayName": "Timestamp",
+          "name": "timestamp",
+          "type": "dateTime",
+          "default": "",
+          "description": "A Unix timestamp of your message's date and time to display to the user, rather than the time your message is received by our API"
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": "",
+          "description": "Your message's title, otherwise your app's name is used"
+        },
+        {
+          "displayName": "Timestamp",
+          "name": "timestamp",
+          "type": "dateTime",
+          "default": "",
+          "description": "A Unix timestamp of your message's date and time to display to the user, rather than the time your message is received by our API"
+        },
+        {
+          "displayName": "URL",
+          "name": "url",
+          "type": "string",
+          "default": "",
+          "description": "A supplementary URL to show with your message"
+        },
+        {
+          "displayName": "URL Title",
+          "name": "url_title",
+          "type": "string",
+          "default": "",
+          "description": "A title for your supplementary URL, otherwise just the URL is shown"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "pushoverApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "userKey",
+    "message",
+    "retry",
+    "expire"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "priority",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "userKey": "string",
+    "message": "string",
+    "priority": "options",
+    "retry": "number",
+    "expire": "number",
+    "additionalFields": "collection"
+  },
+  "hasVersions": false
+}

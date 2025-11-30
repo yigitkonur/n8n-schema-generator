@@ -1,0 +1,173 @@
+{
+  "name": "awsLambda",
+  "displayName": "AWS Lambda",
+  "description": "Invoke functions on AWS Lambda",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "operation": "invoke",
+    "function": "",
+    "qualifier": "$LATEST",
+    "invocationType": "RequestResponse",
+    "payload": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "invoke",
+      "options": [
+        {
+          "name": "Invoke",
+          "value": "invoke",
+          "description": "Invoke a function",
+          "action": "Invoke a function"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "function",
+      "displayName": "Function Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The function you want to invoke. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "options": [],
+      "typeOptions": {
+        "loadOptionsMethod": "getFunctions"
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      }
+    },
+    {
+      "name": "qualifier",
+      "displayName": "Qualifier",
+      "type": "string",
+      "default": "$LATEST",
+      "required": true,
+      "description": "Specify a version or alias to invoke a published version of the function",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      }
+    },
+    {
+      "name": "invocationType",
+      "displayName": "Invocation Type",
+      "type": "options",
+      "default": "RequestResponse",
+      "description": "Specify if the workflow should wait for the function to return the results",
+      "options": [
+        {
+          "name": "Wait for Results",
+          "value": "RequestResponse",
+          "description": "Invoke the function synchronously and wait for the response"
+        },
+        {
+          "name": "Continue Workflow",
+          "value": "Event",
+          "description": "Invoke the function and immediately continue the workflow"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      }
+    },
+    {
+      "name": "payload",
+      "displayName": "JSON Input",
+      "type": "string",
+      "default": "",
+      "description": "The JSON that you want to provide to your Lambda function as input",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "function",
+    "qualifier"
+  ],
+  "optionalFields": [
+    "authentication",
+    "operation",
+    "invocationType",
+    "payload"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "operation": "options",
+    "function": "options",
+    "qualifier": "string",
+    "invocationType": "options",
+    "payload": "string"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,1006 @@
+{
+  "name": "awsSes",
+  "displayName": "AWS SES",
+  "description": "Sends data to AWS SES",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "iam",
+    "resource": "email",
+    "fromEmailAddress": "",
+    "templateContent": "",
+    "templateSubject": "",
+    "successRedirectionURL": "",
+    "failureRedirectionURL": "",
+    "email": "",
+    "additionalFields": {},
+    "updateFields": {},
+    "operation": "send",
+    "isBodyHtml": false,
+    "subject": "",
+    "body": "",
+    "fromEmail": "",
+    "toAddresses": [],
+    "templateDataUi": {},
+    "subjectPart": "",
+    "htmlPart": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "iam",
+      "options": [
+        {
+          "name": "AWS (IAM)",
+          "value": "iam"
+        },
+        {
+          "name": "AWS (Assume Role)",
+          "value": "assumeRole"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "email",
+      "options": [
+        {
+          "name": "Custom Verification Email",
+          "value": "customVerificationEmail"
+        },
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "Template",
+          "value": "template"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a new custom verification email template",
+          "action": "Create a custom verification email"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an existing custom verification email template",
+          "action": "Delete a custom verification email"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get the custom email verification template",
+          "action": "Get a custom verification email"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many of the existing custom verification email templates for your account",
+          "action": "Get many custom verifications"
+        },
+        {
+          "name": "Send",
+          "value": "send",
+          "description": "Add an email address to the list of identities",
+          "action": "Send a custom verification email"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an existing custom verification email template",
+          "action": "Update a custom verification email"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "fromEmailAddress",
+      "displayName": "From Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email address that the custom verification email is sent from",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "templateName",
+      "displayName": "Template Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the custom verification email template",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "templateContent",
+      "displayName": "Template Content",
+      "type": "string",
+      "default": "",
+      "description": "The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "templateSubject",
+      "displayName": "Template Subject",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The subject line of the custom verification email",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "successRedirectionURL",
+      "displayName": "Success Redirection URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL that the recipient of the verification email is sent to if his or her address is successfully verified",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "failureRedirectionURL",
+      "displayName": "Failure Redirection URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL that the recipient of the verification email is sent to if his or her address is not successfully verified",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "email",
+      "displayName": "Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The email address to verify",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "name@email.com"
+    },
+    {
+      "name": "templateName",
+      "displayName": "Template Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the custom verification email template to use when sending the verification email",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Configuration Set Name",
+          "name": "configurationSetName",
+          "type": "string",
+          "description": "Name of a configuration set to use when sending the verification email",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "templateName",
+      "displayName": "Template Name",
+      "type": "string",
+      "default": "",
+      "description": "The name of the custom verification email template",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "update",
+            "delete",
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Failure Redirection URL",
+          "name": "failureRedirectionURL",
+          "type": "string",
+          "description": "The URL that the recipient of the verification email is sent to if his or her address is not successfully verified",
+          "default": ""
+        },
+        {
+          "displayName": "From Email",
+          "name": "fromEmailAddress",
+          "type": "string",
+          "description": "The email address that the custom verification email is sent from",
+          "default": ""
+        },
+        {
+          "displayName": "Success Redirection URL",
+          "name": "successRedirectionURL",
+          "type": "string",
+          "description": "The URL that the recipient of the verification email is sent to if his or her address is successfully verified",
+          "default": ""
+        },
+        {
+          "displayName": "Template Content",
+          "name": "templateContent",
+          "type": "string",
+          "description": "The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML",
+          "default": ""
+        },
+        {
+          "displayName": "Template Subject",
+          "name": "templateSubject",
+          "type": "string",
+          "default": "",
+          "description": "The subject line of the custom verification email"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "send",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send an email"
+        },
+        {
+          "name": "Send Template",
+          "value": "sendTemplate",
+          "action": "Send an email based on a template"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "isBodyHtml",
+      "displayName": "Is Body HTML",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether body is HTML or simple text",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "subject",
+      "displayName": "Subject",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "body",
+      "displayName": "Body",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The message to be sent",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fromEmail",
+      "displayName": "From Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Email address of the sender",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "admin@example.com"
+    },
+    {
+      "name": "toAddresses",
+      "displayName": "To Addresses",
+      "type": "string",
+      "default": [],
+      "description": "Email addresses of the recipients",
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add To Email"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "placeholder": "info@example.com"
+    },
+    {
+      "name": "templateName",
+      "displayName": "Template Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "The ARN of the template to use when sending this email. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getTemplates"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fromEmail",
+      "displayName": "From Email",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Email address of the sender",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "placeholder": "admin@example.com"
+    },
+    {
+      "name": "toAddresses",
+      "displayName": "To Addresses",
+      "type": "string",
+      "default": [],
+      "description": "Email addresses of the recipients",
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add To Email"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "placeholder": "info@example.com"
+    },
+    {
+      "name": "templateDataUi",
+      "displayName": "Template Data",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Data",
+          "name": "templateDataValues",
+          "values": [
+            {
+              "displayName": "Key",
+              "name": "key",
+              "type": "string",
+              "default": ""
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "placeholder": "Add Data"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Bcc Addresses",
+          "name": "bccAddresses",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true,
+            "multipleValueButtonText": "Add Bcc Email"
+          },
+          "description": "Bcc Recipients of the email",
+          "default": []
+        },
+        {
+          "displayName": "Cc Addresses",
+          "name": "ccAddresses",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true,
+            "multipleValueButtonText": "Add Cc Email"
+          },
+          "description": "Cc recipients of the email",
+          "default": []
+        },
+        {
+          "displayName": "Configuration Set Name",
+          "name": "configurationSetName",
+          "type": "string",
+          "description": "Name of the configuration set to use when you send an email using send",
+          "default": ""
+        },
+        {
+          "displayName": "Reply To Addresses",
+          "name": "replyToAddresses",
+          "type": "string",
+          "typeOptions": {
+            "multipleValues": true,
+            "multipleValueButtonText": "Add Reply To Email"
+          },
+          "placeholder": "Add Reply Address",
+          "description": "Reply-to email address(es) for the message",
+          "default": []
+        },
+        {
+          "displayName": "Return Path",
+          "name": "returnPath",
+          "type": "string",
+          "description": "Email address that bounces and complaints will be forwarded to when feedback forwarding is enabled",
+          "default": ""
+        },
+        {
+          "displayName": "Return Path ARN",
+          "name": "returnPathArn",
+          "type": "string",
+          "default": "",
+          "description": "This parameter is used only for sending authorization"
+        },
+        {
+          "displayName": "Source ARN",
+          "name": "sourceArn",
+          "type": "string",
+          "description": "This parameter is used only for sending authorization",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send",
+            "sendTemplate"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a template",
+          "action": "Create a template"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a template",
+          "action": "Delete a template"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a template",
+          "action": "Get a template"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many templates",
+          "action": "Get many templates"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a template",
+          "action": "Update a template"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "templateName",
+      "displayName": "Template Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the template",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "update",
+            "create",
+            "get",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "subjectPart",
+      "displayName": "Subject Part",
+      "type": "string",
+      "default": "",
+      "description": "The subject line of the email",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "htmlPart",
+      "displayName": "Html Part",
+      "type": "string",
+      "default": "",
+      "description": "The HTML body of the email",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Text Part",
+          "name": "textPart",
+          "type": "string",
+          "description": "The email body that will be visible to recipients whose email clients do not display HTML",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Text Part",
+          "name": "textPart",
+          "type": "string",
+          "description": "The email body that will be visible to recipients whose email clients do not display HTML",
+          "default": ""
+        },
+        {
+          "displayName": "Subject Part",
+          "name": "subjectPart",
+          "type": "string",
+          "description": "The subject line of the email",
+          "default": ""
+        },
+        {
+          "displayName": "Html Part",
+          "name": "htmlPart",
+          "type": "string",
+          "description": "The HTML body of the email",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 20,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "fromEmailAddress",
+    "templateSubject",
+    "successRedirectionURL",
+    "failureRedirectionURL",
+    "email",
+    "templateName",
+    "subject",
+    "body",
+    "fromEmail",
+    "fromEmail",
+    "templateName"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "templateName",
+    "templateContent",
+    "additionalFields",
+    "templateName",
+    "updateFields",
+    "returnAll",
+    "limit",
+    "operation",
+    "isBodyHtml",
+    "toAddresses",
+    "templateName",
+    "toAddresses",
+    "templateDataUi",
+    "additionalFields",
+    "operation",
+    "subjectPart",
+    "htmlPart",
+    "additionalFields",
+    "updateFields",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "fromEmailAddress": "string",
+    "templateName": "string",
+    "templateContent": "string",
+    "templateSubject": "string",
+    "successRedirectionURL": "string",
+    "failureRedirectionURL": "string",
+    "email": "string",
+    "additionalFields": "collection",
+    "updateFields": "collection",
+    "returnAll": "boolean",
+    "limit": "number",
+    "isBodyHtml": "boolean",
+    "subject": "string",
+    "body": "string",
+    "fromEmail": "string",
+    "toAddresses": "string",
+    "templateDataUi": "fixedCollection",
+    "subjectPart": "string",
+    "htmlPart": "string"
+  },
+  "hasVersions": false
+}

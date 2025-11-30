@@ -1,0 +1,168 @@
+{
+  "nodeType": "n8n-nodes-base.pushcut",
+  "displayName": "Pushcut",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "notificationName",
+    "additionalFields"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "notification",
+        "enumValues": [
+          "notification"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "send",
+        "enumValues": [
+          "send"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "notificationName",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "notification",
+    "operation": "send",
+    "notificationName": "",
+    "additionalFields": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "notificationName",
+      "condition": {
+        "show": {
+          "resource": [
+            "notification"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "notification": {
+      "operations": [
+        "send"
+      ],
+      "fieldsPerOperation": {
+        "send": [
+          "notificationName",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

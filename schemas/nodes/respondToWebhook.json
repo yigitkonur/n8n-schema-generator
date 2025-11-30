@@ -1,0 +1,469 @@
+{
+  "name": "respondToWebhook",
+  "displayName": "Respond to Webhook",
+  "description": "Returns data for Webhook",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    1,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5
+  ],
+  "defaults": {
+    "enableResponseOutput": false,
+    "generalNotice": "",
+    "respondWith": "firstIncomingItem",
+    "credentials": "",
+    "webhookNotice": "",
+    "redirectURL": "",
+    "payload": "{\n  \"myField\": \"value\"\n}",
+    "responseDataSource": "automatically",
+    "inputFieldName": "data",
+    "contentTypeNotice": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": "={{((version, parameters) => {\n    const multipleOutputs = version === 1.3 || (version >= 1.4 && parameters.enableResponseOutput);\n    if (multipleOutputs) {\n        return [\n            {\n                type: 'main',\n                displayName: 'Input Data',\n            },\n            {\n                type: 'main',\n                displayName: 'Response',\n            },\n        ];\n    }\n    return ['main'];\n})($nodeVersion, $parameter)}}",
+  "properties": [
+    {
+      "name": "enableResponseOutput",
+      "displayName": "Enable Response Output Branch",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to provide an additional output branch with the response sent to the webhook",
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.4
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "generalNotice",
+      "displayName": "Verify that the \"Webhook\" node's \"Respond\" parameter is set to \"Using Respond to Webhook Node\". <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.respondtowebhook/\" target=\"_blank\">More details",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "respondWith",
+      "displayName": "Respond With",
+      "type": "options",
+      "default": "firstIncomingItem",
+      "description": "The data that should be returned",
+      "options": [
+        {
+          "name": "All Incoming Items",
+          "value": "allIncomingItems",
+          "description": "Respond with all input JSON items"
+        },
+        {
+          "name": "Binary File",
+          "value": "binary",
+          "description": "Respond with incoming file binary data"
+        },
+        {
+          "name": "First Incoming Item",
+          "value": "firstIncomingItem",
+          "description": "Respond with the first input JSON item"
+        },
+        {
+          "name": "JSON",
+          "value": "json",
+          "description": "Respond with a custom JSON body"
+        },
+        {
+          "name": "JWT Token",
+          "value": "jwt",
+          "description": "Respond with a JWT token"
+        },
+        {
+          "name": "No Data",
+          "value": "noData",
+          "description": "Respond with an empty body"
+        },
+        {
+          "name": "Redirect",
+          "value": "redirect",
+          "description": "Respond with a redirect to a given URL"
+        },
+        {
+          "name": "Text",
+          "value": "text",
+          "description": "Respond with a simple text message body"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1
+          ]
+        }
+      }
+    },
+    {
+      "name": "respondWith",
+      "displayName": "Respond With",
+      "type": "options",
+      "default": "firstIncomingItem",
+      "description": "The data that should be returned",
+      "options": [
+        {
+          "name": "All Incoming Items",
+          "value": "allIncomingItems",
+          "description": "Respond with all input JSON items"
+        },
+        {
+          "name": "Binary File",
+          "value": "binary",
+          "description": "Respond with incoming file binary data"
+        },
+        {
+          "name": "First Incoming Item",
+          "value": "firstIncomingItem",
+          "description": "Respond with the first input JSON item"
+        },
+        {
+          "name": "JSON",
+          "value": "json",
+          "description": "Respond with a custom JSON body"
+        },
+        {
+          "name": "JWT Token",
+          "value": "jwt",
+          "description": "Respond with a JWT token"
+        },
+        {
+          "name": "No Data",
+          "value": "noData",
+          "description": "Respond with an empty body"
+        },
+        {
+          "name": "Redirect",
+          "value": "redirect",
+          "description": "Respond with a redirect to a given URL"
+        },
+        {
+          "name": "Text",
+          "value": "text",
+          "description": "Respond with a simple text message body"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "credentials",
+      "displayName": "Credentials",
+      "type": "credentials",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "jwt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "webhookNotice",
+      "displayName": "When using expressions, note that this node will only run for the first item in the input data",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "json",
+            "text",
+            "jwt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "redirectURL",
+      "displayName": "Redirect URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The URL to redirect to",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "redirect"
+          ]
+        }
+      },
+      "placeholder": "e.g. http://www.n8n.io"
+    },
+    {
+      "name": "responseBody",
+      "displayName": "Response Body",
+      "type": "json",
+      "default": "{\n  \"myField\": \"value\"\n}",
+      "description": "The HTTP response JSON data",
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "name": "payload",
+      "displayName": "Payload",
+      "type": "json",
+      "default": "{\n  \"myField\": \"value\"\n}",
+      "description": "The payload to include in the JWT token",
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "jwt"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseBody",
+      "displayName": "Response Body",
+      "type": "string",
+      "default": "",
+      "description": "The HTTP response text data",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "text"
+          ]
+        }
+      },
+      "placeholder": "e.g. Workflow completed"
+    },
+    {
+      "name": "responseDataSource",
+      "displayName": "Response Data Source",
+      "type": "options",
+      "default": "automatically",
+      "options": [
+        {
+          "name": "Choose Automatically From Input",
+          "value": "automatically",
+          "description": "Use if input data will contain a single piece of binary data"
+        },
+        {
+          "name": "Specify Myself",
+          "value": "set",
+          "description": "Enter the name of the input field the binary data will be in"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "binary"
+          ]
+        }
+      }
+    },
+    {
+      "name": "inputFieldName",
+      "displayName": "Input Field Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the node input field with the binary data",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "binary"
+          ],
+          "responseDataSource": [
+            "set"
+          ]
+        }
+      }
+    },
+    {
+      "name": "contentTypeNotice",
+      "displayName": "To avoid unexpected behavior, add a \"Content-Type\" response header with the appropriate value",
+      "type": "notice",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "text"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Response Code",
+          "name": "responseCode",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 100,
+            "maxValue": 599
+          },
+          "default": 200,
+          "description": "The HTTP response code to return. Defaults to 200."
+        },
+        {
+          "displayName": "Response Headers",
+          "name": "responseHeaders",
+          "placeholder": "Add Response Header",
+          "description": "Add headers to the webhook response",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "name": "entries",
+              "displayName": "Entries",
+              "values": [
+                {
+                  "displayName": "Name",
+                  "name": "name",
+                  "type": "string",
+                  "default": "",
+                  "description": "Name of the header"
+                },
+                {
+                  "displayName": "Value",
+                  "name": "value",
+                  "type": "string",
+                  "default": "",
+                  "description": "Value of the header"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Put Response in Field",
+          "name": "responseKey",
+          "type": "string",
+          "displayOptions": {
+            "show": {
+              "/respondWith": [
+                "allIncomingItems",
+                "firstIncomingItem"
+              ]
+            }
+          },
+          "default": "",
+          "description": "The name of the response field to put all items in",
+          "placeholder": "e.g. data"
+        },
+        {
+          "displayName": "Enable Streaming",
+          "name": "enableStreaming",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to enable streaming to the response",
+          "displayOptions": {
+            "show": {
+              "/respondWith": [
+                "allIncomingItems",
+                "firstIncomingItem",
+                "text",
+                "json",
+                "jwt"
+              ],
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.5
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "jwtAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "respondWith": [
+            "jwt"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "redirectURL",
+    "inputFieldName"
+  ],
+  "optionalFields": [
+    "enableResponseOutput",
+    "generalNotice",
+    "respondWith",
+    "respondWith",
+    "credentials",
+    "webhookNotice",
+    "responseBody",
+    "payload",
+    "responseBody",
+    "responseDataSource",
+    "contentTypeNotice",
+    "options"
+  ],
+  "parameterTypes": {
+    "enableResponseOutput": "boolean",
+    "generalNotice": "notice",
+    "respondWith": "options",
+    "credentials": "credentials",
+    "webhookNotice": "notice",
+    "redirectURL": "string",
+    "responseBody": "string",
+    "payload": "json",
+    "responseDataSource": "options",
+    "inputFieldName": "string",
+    "contentTypeNotice": "notice",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

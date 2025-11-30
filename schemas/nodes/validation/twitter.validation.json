@@ -1,0 +1,987 @@
+{
+  "nodeType": "n8n-nodes-base.twitter",
+  "displayName": "X (Formerly Twitter)",
+  "version": 2,
+  "defaultVersion": 2,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "user",
+    "text",
+    "additionalFields",
+    "operation",
+    "list",
+    "user",
+    "operation",
+    "text",
+    "additionalFields",
+    "noticeLocation",
+    "noticeAttachments",
+    "tweetDeleteId",
+    "tweetId",
+    "searchText",
+    "returnAll",
+    "limit",
+    "additionalFields",
+    "tweetId",
+    "operation",
+    "user",
+    "me"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "tweet",
+        "enumValues": [
+          "directMessage",
+          "list",
+          "tweet",
+          "user"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "username",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "add",
+        "enumValues": [
+          "add"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "list",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "id",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "username",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "delete",
+          "like",
+          "retweet",
+          "search"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "noticeLocation",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "/additionalFields.location": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "/additionalFields.location"
+      ]
+    },
+    {
+      "field": "noticeAttachments",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "/additionalFields.attachments": [
+            ""
+          ]
+        }
+      },
+      "dependsOn": [
+        "/additionalFields.attachments"
+      ]
+    },
+    {
+      "field": "tweetDeleteId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "id",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "tweetId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "id",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "like"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "searchText",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "tweetId",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "id",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "searchUser",
+        "enumValues": [
+          "searchUser"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "type": "resourceLocator",
+      "required": true,
+      "constraints": {
+        "type": "resourceLocator",
+        "default": {
+          "mode": "username",
+          "value": ""
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        },
+        "hide": {
+          "me": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource",
+        "me"
+      ]
+    },
+    {
+      "field": "me",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "tweet",
+    "additionalFields": {},
+    "list": {
+      "__rl": true,
+      "mode": "id",
+      "value": ""
+    },
+    "operation": "create",
+    "text": "",
+    "noticeLocation": "",
+    "noticeAttachments": "",
+    "tweetDeleteId": {
+      "__rl": true,
+      "mode": "id",
+      "value": ""
+    },
+    "searchText": "",
+    "returnAll": false,
+    "limit": 50,
+    "me": false
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "list",
+      "condition": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "condition": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "text",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "noticeLocation",
+      "condition": {
+        "show": {
+          "/additionalFields.location": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "/additionalFields.location"
+      ]
+    },
+    {
+      "field": "noticeAttachments",
+      "condition": {
+        "show": {
+          "/additionalFields.attachments": [
+            ""
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "/additionalFields.attachments"
+      ]
+    },
+    {
+      "field": "tweetDeleteId",
+      "condition": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "tweetId",
+      "condition": {
+        "show": {
+          "operation": [
+            "like"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "searchText",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "tweetId",
+      "condition": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "user",
+      "condition": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        },
+        "hide": {
+          "me": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource",
+        "me"
+      ]
+    },
+    {
+      "field": "me",
+      "condition": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "resource"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "directMessage": {
+      "operations": [
+        "create"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "user",
+          "text",
+          "additionalFields"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

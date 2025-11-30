@@ -1,0 +1,415 @@
+{
+  "name": "medium",
+  "displayName": "Medium",
+  "description": "Consume Medium API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "accessToken",
+    "resource": "post",
+    "operation": "create",
+    "publication": false,
+    "publicationId": "",
+    "title": "",
+    "contentFormat": "",
+    "content": "",
+    "additionalFields": {},
+    "returnAll": false,
+    "limit": 100
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "accessToken",
+      "options": [
+        {
+          "name": "Access Token",
+          "value": "accessToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "post",
+      "options": [
+        {
+          "name": "Post",
+          "value": "post"
+        },
+        {
+          "name": "Publication",
+          "value": "publication"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a post",
+          "action": "Create a post"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "publication",
+      "displayName": "Publication",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether you are posting for a publication",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "publicationId",
+      "displayName": "Publication Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "Publication IDs. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPublications"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "publication": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Title of the post. Max Length : 100 characters.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "placeholder": "My Open Source Contribution"
+    },
+    {
+      "name": "contentFormat",
+      "displayName": "Content Format",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The format of the content to be posted",
+      "options": [
+        {
+          "name": "HTML",
+          "value": "html"
+        },
+        {
+          "name": "Markdown",
+          "value": "markdown"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      }
+    },
+    {
+      "name": "content",
+      "displayName": "Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The body of the post, in a valid semantic HTML fragment, or Markdown",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "placeholder": "My open source contribution"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Canonical Url",
+          "name": "canonicalUrl",
+          "type": "string",
+          "default": "",
+          "description": "The original home of this content, if it was originally published elsewhere"
+        },
+        {
+          "displayName": "License",
+          "name": "license",
+          "type": "options",
+          "default": "all-rights-reserved",
+          "options": [
+            {
+              "name": "all-rights-reserved",
+              "value": "all-rights-reserved"
+            },
+            {
+              "name": "cc-40-by",
+              "value": "cc-40-by"
+            },
+            {
+              "name": "cc-40-by-nc",
+              "value": "cc-40-by-nc"
+            },
+            {
+              "name": "cc-40-by-nc-nd",
+              "value": "cc-40-by-nc-nd"
+            },
+            {
+              "name": "cc-40-by-nc-sa",
+              "value": "cc-40-by-nc-sa"
+            },
+            {
+              "name": "cc-40-by-nd",
+              "value": "cc-40-by-nd"
+            },
+            {
+              "name": "cc-40-by-sa",
+              "value": "cc-40-by-sa"
+            },
+            {
+              "name": "cc-40-zero",
+              "value": "cc-40-zero"
+            },
+            {
+              "name": "public-domain",
+              "value": "public-domain"
+            }
+          ],
+          "description": "License of the post"
+        },
+        {
+          "displayName": "Notify Followers",
+          "name": "notifyFollowers",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to notify followers that the user has published"
+        },
+        {
+          "displayName": "Publish Status",
+          "name": "publishStatus",
+          "default": "public",
+          "type": "options",
+          "options": [
+            {
+              "name": "Public",
+              "value": "public"
+            },
+            {
+              "name": "Draft",
+              "value": "draft"
+            },
+            {
+              "name": "Unlisted",
+              "value": "unlisted"
+            }
+          ],
+          "description": "The status of the post"
+        },
+        {
+          "displayName": "Tags",
+          "name": "tags",
+          "type": "string",
+          "default": "",
+          "placeholder": "open-source,mlh,fellowship",
+          "description": "Comma-separated strings to be used as tags for post classification. Max allowed tags: 5. Max tag length: 25 characters."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "publication",
+      "options": [
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many publications",
+          "action": "Get many publications"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 100,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 200
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "mediumApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediumOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "title",
+    "contentFormat",
+    "content"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "publication",
+    "publicationId",
+    "additionalFields",
+    "operation",
+    "returnAll",
+    "limit"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "publication": "boolean",
+    "publicationId": "options",
+    "title": "string",
+    "contentFormat": "options",
+    "content": "string",
+    "additionalFields": "collection",
+    "returnAll": "boolean",
+    "limit": "number"
+  },
+  "hasVersions": false
+}

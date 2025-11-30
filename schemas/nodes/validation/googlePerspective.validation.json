@@ -1,0 +1,205 @@
+{
+  "nodeType": "n8n-nodes-base.googlePerspective",
+  "displayName": "Google Perspective",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "operation",
+    "text",
+    "requestedAttributesUi",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "analyzeComment",
+        "enumValues": [
+          "analyzeComment"
+        ]
+      }
+    },
+    {
+      "field": "text",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "requestedAttributesUi",
+      "type": "fixedCollection",
+      "required": true,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "requestedAttributesValues": {
+            "type": "object",
+            "properties": {
+              "attributeName": {
+                "type": "options",
+                "default": "flirtation",
+                "enumValues": [
+                  "flirtation",
+                  "identity_attack",
+                  "insult",
+                  "profanity",
+                  "severe_toxicity",
+                  "sexually_explicit",
+                  "threat",
+                  "toxicity"
+                ]
+              },
+              "scoreThreshold": {
+                "type": "number",
+                "default": 0,
+                "minValue": 0,
+                "maxValue": 1
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "analyzeComment",
+    "text": "",
+    "requestedAttributesUi": {},
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "text",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "requestedAttributesUi",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "requestedAttributesUi",
+      "validOptions": [
+        "requestedAttributesValues"
+      ],
+      "optionSchemas": {
+        "requestedAttributesValues": [
+          {
+            "field": "attributeName",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "flirtation",
+              "enumValues": [
+                "flirtation",
+                "identity_attack",
+                "insult",
+                "profanity",
+                "severe_toxicity",
+                "sexually_explicit",
+                "threat",
+                "toxicity"
+              ]
+            }
+          },
+          {
+            "field": "scoreThreshold",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0,
+              "minValue": 0,
+              "maxValue": 1
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

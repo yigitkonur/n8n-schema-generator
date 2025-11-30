@@ -1,0 +1,725 @@
+{
+  "nodeType": "n8n-nodes-base.payPal",
+  "displayName": "PayPal",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "operation",
+    "senderBatchId",
+    "jsonParameters",
+    "itemsUi",
+    "itemsJson",
+    "additionalFields",
+    "payoutBatchId",
+    "returnAll",
+    "limit",
+    "payoutItemId",
+    "payoutItemId"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "payout",
+        "enumValues": [
+          "payout",
+          "payoutItem"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "cancel",
+          "get"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "senderBatchId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "itemsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "itemsValues": {
+            "type": "object",
+            "properties": {
+              "recipientType": {
+                "type": "options",
+                "default": "email",
+                "enumValues": [
+                  "phone",
+                  "email",
+                  "paypalId"
+                ]
+              },
+              "receiverValue": {
+                "type": "string",
+                "default": ""
+              },
+              "currency": {
+                "type": "options",
+                "default": "USD",
+                "enumValues": [
+                  "AUD",
+                  "BRL",
+                  "CAD",
+                  "CZK",
+                  "DKK",
+                  "EUR",
+                  "USD"
+                ]
+              },
+              "amount": {
+                "type": "string",
+                "default": ""
+              },
+              "note": {
+                "type": "string",
+                "default": ""
+              },
+              "senderItemId": {
+                "type": "string",
+                "default": ""
+              },
+              "recipientWallet": {
+                "type": "options",
+                "default": "paypal",
+                "enumValues": [
+                  "paypal",
+                  "venmo"
+                ]
+              }
+            }
+          }
+        },
+        "requiredProperties": [
+          "itemsValues.receiverValue",
+          "itemsValues.amount"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "itemsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "payoutBatchId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 100,
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "payoutItemId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "payoutItemId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ],
+          "operation": [
+            "cancel"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "payout",
+    "operation": "create",
+    "senderBatchId": "",
+    "jsonParameters": false,
+    "itemsUi": {},
+    "itemsJson": "",
+    "additionalFields": {},
+    "payoutBatchId": "",
+    "returnAll": false,
+    "limit": 100
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "senderBatchId",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "itemsUi",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "itemsJson",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "additionalFields",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "payoutBatchId",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "resource": [
+            "payout"
+          ],
+          "operation": [
+            "get"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "payoutItemId",
+      "condition": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "payoutItemId",
+      "condition": {
+        "show": {
+          "resource": [
+            "payoutItem"
+          ],
+          "operation": [
+            "cancel"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "payout": {
+      "operations": [
+        "create",
+        "get"
+      ],
+      "fieldsPerOperation": {
+        "create": [
+          "senderBatchId",
+          "jsonParameters",
+          "itemsUi",
+          "itemsJson",
+          "additionalFields"
+        ],
+        "get": [
+          "payoutBatchId",
+          "returnAll",
+          "limit"
+        ]
+      }
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "itemsUi",
+      "validOptions": [
+        "itemsValues"
+      ],
+      "optionSchemas": {
+        "itemsValues": [
+          {
+            "field": "recipientType",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "email",
+              "enumValues": [
+                "phone",
+                "email",
+                "paypalId"
+              ]
+            }
+          },
+          {
+            "field": "receiverValue",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "currency",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "USD",
+              "enumValues": [
+                "AUD",
+                "BRL",
+                "CAD",
+                "CZK",
+                "DKK",
+                "EUR",
+                "USD"
+              ]
+            }
+          },
+          {
+            "field": "amount",
+            "type": "string",
+            "required": true,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "note",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "senderItemId",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "recipientWallet",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "paypal",
+              "enumValues": [
+                "paypal",
+                "venmo"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

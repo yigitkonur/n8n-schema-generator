@@ -1,0 +1,1442 @@
+{
+  "name": "openAi",
+  "displayName": "OpenAI",
+  "description": "Consume Open AI",
+  "group": [
+    "transform"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "oldVersionNotice": "",
+    "resource": "text",
+    "chatModel": "gpt-3.5-turbo",
+    "prompt": "",
+    "options": {},
+    "imageModel": "dall-e-2",
+    "responseFormat": "binaryData",
+    "operation": "complete",
+    "model": "gpt-3.5-turbo-instruct",
+    "instruction": "",
+    "simplifyOutput": true
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "oldVersionNotice",
+      "displayName": "<strong>New node version available:</strong> get the latest version with added features from the nodes panel.",
+      "type": "notice",
+      "default": ""
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "text",
+      "options": [
+        {
+          "name": "Chat",
+          "value": "chat"
+        },
+        {
+          "name": "Image",
+          "value": "image"
+        },
+        {
+          "name": "Text",
+          "value": "text"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "complete",
+      "options": [
+        {
+          "name": "Complete",
+          "value": "complete",
+          "action": "Create a Completion",
+          "description": "Create one or more completions for a given text",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v1/chat/completions"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "gpt-3.5-turbo",
+      "description": "The model which will generate the completion. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/v1/models"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "filter",
+                  "properties": {
+                    "pass": "={{ $responseItem.id.startsWith('gpt-') && !$responseItem.id.startsWith('gpt-4-vision') }}"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.id}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "chat"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "chatModel",
+      "displayName": "Model",
+      "type": "options",
+      "default": "gpt-3.5-turbo",
+      "description": "The model which will generate the completion. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/v1/models"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "filter",
+                  "properties": {
+                    "pass": "={{ $responseItem.id.startsWith('gpt-') && !$responseItem.id.startsWith('gpt-4-vision') }}"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.id}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "chat"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "prompt",
+      "displayName": "Prompt",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Messages",
+          "name": "messages",
+          "values": [
+            {
+              "displayName": "Role",
+              "name": "role",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Assistant",
+                  "value": "assistant"
+                },
+                {
+                  "name": "System",
+                  "value": "system"
+                },
+                {
+                  "name": "User",
+                  "value": "user"
+                }
+              ],
+              "default": "user"
+            },
+            {
+              "displayName": "Content",
+              "name": "content",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "sortable": true,
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "placeholder": "Add Message",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "messages",
+          "value": "={{ $value.messages }}"
+        }
+      }
+    },
+    {
+      "name": "simplifyOutput",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "chat"
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "set",
+              "enabled": "={{$value}}",
+              "properties": {
+                "value": "={{ { \"data\": $response.body.choices } }}"
+              }
+            },
+            {
+              "type": "rootProperty",
+              "enabled": "={{$value}}",
+              "properties": {
+                "property": "data"
+              }
+            },
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "description": "Additional options to add",
+      "options": [
+        {
+          "displayName": "Echo Prompt",
+          "name": "echo",
+          "type": "boolean",
+          "description": "Whether the prompt should be echo back in addition to the completion",
+          "default": false,
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "echo"
+            }
+          }
+        },
+        {
+          "displayName": "Frequency Penalty",
+          "name": "frequency_penalty",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 2,
+            "minValue": -2,
+            "numberPrecision": 1
+          },
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "frequency_penalty"
+            }
+          }
+        },
+        {
+          "displayName": "Maximum Number of Tokens",
+          "name": "maxTokens",
+          "default": 16,
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768).",
+          "type": "number",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "typeOptions": {
+            "maxValue": 32768
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "max_tokens"
+            }
+          }
+        },
+        {
+          "displayName": "Number of Completions",
+          "name": "n",
+          "default": 1,
+          "description": "How many completions to generate for each prompt. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "n"
+            }
+          }
+        },
+        {
+          "displayName": "Presence Penalty",
+          "name": "presence_penalty",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 2,
+            "minValue": -2,
+            "numberPrecision": 1
+          },
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "presence_penalty"
+            }
+          }
+        },
+        {
+          "displayName": "Sampling Temperature",
+          "name": "temperature",
+          "default": 1,
+          "typeOptions": {
+            "maxValue": 1,
+            "minValue": 0,
+            "numberPrecision": 1
+          },
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "temperature"
+            }
+          }
+        },
+        {
+          "displayName": "Top P",
+          "name": "topP",
+          "default": 1,
+          "typeOptions": {
+            "maxValue": 1,
+            "minValue": 0,
+            "numberPrecision": 1
+          },
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "top_p"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "chat"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an Image",
+          "description": "Create an image for a given text",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v1/images/generations"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "noDataExpression": true,
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "rootProperty",
+              "properties": {
+                "property": "data"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "prompt",
+      "displayName": "Prompt",
+      "type": "string",
+      "default": "",
+      "description": "A text description of the desired image(s). The maximum length is 1000 characters.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "e.g. A cute cat eating a dinosaur",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "prompt"
+        }
+      }
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "dall-e-2",
+      "description": "The model to use for image generation",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/v1/models"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "filter",
+                  "properties": {
+                    "pass": "={{ $responseItem.id.startsWith('dall-') }}"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.id}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "imageModel",
+      "displayName": "Model",
+      "type": "options",
+      "default": "dall-e-2",
+      "description": "The model to use for image generation",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/v1/models"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "filter",
+                  "properties": {
+                    "pass": "={{ $responseItem.id.startsWith('dall-') }}"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.id}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "responseFormat",
+      "displayName": "Response Format",
+      "type": "options",
+      "default": "binaryData",
+      "description": "The format in which to return the image(s)",
+      "options": [
+        {
+          "name": "Binary File",
+          "value": "binaryData"
+        },
+        {
+          "name": "Image Url",
+          "value": "imageUrl"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "response_format",
+          "value": "={{ $value === \"imageUrl\" ? \"url\" : \"b64_json\" }}"
+        },
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "description": "Additional options to add",
+      "options": [
+        {
+          "displayName": "Number of Images",
+          "name": "n",
+          "default": 1,
+          "description": "Number of images to generate",
+          "type": "number",
+          "typeOptions": {
+            "minValue": 1,
+            "maxValue": 10
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "n"
+            }
+          }
+        },
+        {
+          "displayName": "Quality",
+          "name": "quality",
+          "type": "options",
+          "options": [
+            {
+              "name": "HD",
+              "value": "hd"
+            },
+            {
+              "name": "Standard",
+              "value": "standard"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/model": [
+                "dall-e-3"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "quality"
+            }
+          },
+          "default": "standard"
+        },
+        {
+          "displayName": "Resolution",
+          "name": "size",
+          "type": "options",
+          "options": [
+            {
+              "name": "256x256",
+              "value": "256x256"
+            },
+            {
+              "name": "512x512",
+              "value": "512x512"
+            },
+            {
+              "name": "1024x1024",
+              "value": "1024x1024"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/model": [
+                "dall-e-2"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "size"
+            }
+          },
+          "default": "1024x1024"
+        },
+        {
+          "displayName": "Resolution",
+          "name": "size",
+          "type": "options",
+          "options": [
+            {
+              "name": "1024x1024",
+              "value": "1024x1024"
+            },
+            {
+              "name": "1792x1024",
+              "value": "1792x1024"
+            },
+            {
+              "name": "1024x1792",
+              "value": "1024x1792"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/model": [
+                "dall-e-3"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "size"
+            }
+          },
+          "default": "1024x1024"
+        },
+        {
+          "displayName": "Style",
+          "name": "style",
+          "type": "options",
+          "options": [
+            {
+              "name": "Natural",
+              "value": "natural"
+            },
+            {
+              "name": "Vivid",
+              "value": "vivid"
+            }
+          ],
+          "displayOptions": {
+            "show": {
+              "/model": [
+                "dall-e-3"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "style"
+            }
+          },
+          "default": "vivid"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "complete",
+      "options": [
+        {
+          "name": "Complete",
+          "value": "complete",
+          "action": "Create a Completion",
+          "description": "Create one or more completions for a given text",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v1/completions"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Edit",
+          "value": "edit",
+          "action": "Create an Edit",
+          "description": "Create an edited version for a given text",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v1/edits"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        },
+        {
+          "name": "Moderate",
+          "value": "moderate",
+          "action": "Create a Moderation",
+          "description": "Classify if a text violates OpenAI's content policy",
+          "routing": {
+            "request": {
+              "method": "POST",
+              "url": "/v1/moderations"
+            },
+            "output": {
+              "postReceive": [
+                null
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "gpt-3.5-turbo-instruct",
+      "description": "The model which will generate the completion. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "method": "GET",
+              "url": "/v1/models"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "filter",
+                  "properties": {
+                    "pass": "={{ !$responseItem.id.startsWith('audio-') && ($responseItem.id === 'gpt-3.5-turbo-instruct' || !$responseItem.id.startsWith('gpt-') ) && !$responseItem.id.startsWith('dall-') && !$responseItem.id.startsWith('tts-') && !$responseItem.id.startsWith('whisper-') && !['cushman:2020-05-03', 'davinci-if:3.0.0', 'davinci-instruct-beta:2.0.0', 'if'].includes($responseItem.id) && !$responseItem.id.includes('-edit-') && !$responseItem.id.endsWith(':001') }}"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.id}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "prompt",
+      "displayName": "Prompt",
+      "type": "string",
+      "default": "",
+      "description": "The prompt to generate completion(s) for",
+      "typeOptions": {
+        "rows": 2
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "placeholder": "e.g. Say this is a test",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "prompt"
+        }
+      }
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "text-davinci-edit-001",
+      "description": "The model which will generate the edited version. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "options": [
+        {
+          "name": "code-davinci-edit-001",
+          "value": "code-davinci-edit-001"
+        },
+        {
+          "name": "text-davinci-edit-001",
+          "value": "text-davinci-edit-001"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "input",
+      "displayName": "Input",
+      "type": "string",
+      "default": "",
+      "description": "The input text to be edited",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "edit"
+          ]
+        }
+      },
+      "placeholder": "e.g. What day of the wek is it?",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "input"
+        }
+      }
+    },
+    {
+      "name": "instruction",
+      "displayName": "Instruction",
+      "type": "string",
+      "default": "",
+      "description": "The instruction that tells the model how to edit the input text",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "edit"
+          ]
+        }
+      },
+      "placeholder": "e.g. Fix the spelling mistakes",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "instruction"
+        }
+      }
+    },
+    {
+      "name": "model",
+      "displayName": "Model",
+      "type": "options",
+      "default": "text-moderation-latest",
+      "description": "The model which will classify the text. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "options": [
+        {
+          "name": "text-moderation-stable",
+          "value": "text-moderation-stable"
+        },
+        {
+          "name": "text-moderation-latest",
+          "value": "text-moderation-latest"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "moderate"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "model"
+        }
+      }
+    },
+    {
+      "name": "input",
+      "displayName": "Input",
+      "type": "string",
+      "default": "",
+      "description": "The input text to classify",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "moderate"
+          ]
+        }
+      },
+      "placeholder": "e.g. My cat is adorable ❤️❤️",
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "input"
+        }
+      }
+    },
+    {
+      "name": "simplifyOutput",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "moderate"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "set",
+              "enabled": "={{$value}}",
+              "properties": {
+                "value": "={{ { \"data\": $response.body.results } }}"
+              }
+            },
+            {
+              "type": "rootProperty",
+              "enabled": "={{$value}}",
+              "properties": {
+                "property": "data"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplifyOutput",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete",
+            "edit"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "routing": {
+        "output": {
+          "postReceive": [
+            {
+              "type": "set",
+              "enabled": "={{$value}}",
+              "properties": {
+                "value": "={{ { \"data\": $response.body.choices } }}"
+              }
+            },
+            {
+              "type": "rootProperty",
+              "enabled": "={{$value}}",
+              "properties": {
+                "property": "data"
+              }
+            },
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "description": "Additional options to add",
+      "options": [
+        {
+          "displayName": "Echo Prompt",
+          "name": "echo",
+          "type": "boolean",
+          "description": "Whether the prompt should be echo back in addition to the completion",
+          "default": false,
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "echo"
+            }
+          }
+        },
+        {
+          "displayName": "Frequency Penalty",
+          "name": "frequency_penalty",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 2,
+            "minValue": -2,
+            "numberPrecision": 1
+          },
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "frequency_penalty"
+            }
+          }
+        },
+        {
+          "displayName": "Maximum Number of Tokens",
+          "name": "maxTokens",
+          "default": 16,
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768).",
+          "type": "number",
+          "displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "typeOptions": {
+            "maxValue": 32768
+          },
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "max_tokens"
+            }
+          }
+        },
+        {
+          "displayName": "Number of Completions",
+          "name": "n",
+          "default": 1,
+          "description": "How many completions to generate for each prompt. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "n"
+            }
+          }
+        },
+        {
+          "displayName": "Presence Penalty",
+          "name": "presence_penalty",
+          "default": 0,
+          "typeOptions": {
+            "maxValue": 2,
+            "minValue": -2,
+            "numberPrecision": 1
+          },
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "presence_penalty"
+            }
+          }
+        },
+        {
+          "displayName": "Sampling Temperature",
+          "name": "temperature",
+          "default": 1,
+          "typeOptions": {
+            "maxValue": 1,
+            "minValue": 0,
+            "numberPrecision": 1
+          },
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "temperature"
+            }
+          }
+        },
+        {
+          "displayName": "Top P",
+          "name": "topP",
+          "default": 1,
+          "typeOptions": {
+            "maxValue": 1,
+            "minValue": 0,
+            "numberPrecision": 1
+          },
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "type": "number",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "top_p"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "complete",
+            "edit"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [],
+  "optionalFields": [
+    "oldVersionNotice",
+    "resource",
+    "operation",
+    "model",
+    "chatModel",
+    "prompt",
+    "simplifyOutput",
+    "options",
+    "operation",
+    "prompt",
+    "model",
+    "imageModel",
+    "responseFormat",
+    "options",
+    "operation",
+    "model",
+    "prompt",
+    "model",
+    "input",
+    "instruction",
+    "model",
+    "input",
+    "simplifyOutput",
+    "simplifyOutput",
+    "options"
+  ],
+  "parameterTypes": {
+    "oldVersionNotice": "notice",
+    "resource": "options",
+    "operation": "options",
+    "model": "options",
+    "chatModel": "options",
+    "prompt": "string",
+    "simplifyOutput": "boolean",
+    "options": "collection",
+    "imageModel": "options",
+    "responseFormat": "options",
+    "input": "string",
+    "instruction": "string"
+  },
+  "hasVersions": false
+}

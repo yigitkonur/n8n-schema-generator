@@ -1,0 +1,108 @@
+{
+  "nodeType": "n8n-nodes-base.postmarkTrigger",
+  "displayName": "Postmark Trigger",
+  "version": 1,
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [
+    "events"
+  ],
+  "optionalParameters": [
+    "firstOpen",
+    "includeContent"
+  ],
+  "validationRules": [
+    {
+      "field": "events",
+      "type": "multiOptions",
+      "required": true,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [],
+        "enumValues": [
+          "bounce",
+          "click",
+          "delivery",
+          "open",
+          "spamComplaint",
+          "subscriptionChange"
+        ]
+      }
+    },
+    {
+      "field": "firstOpen",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "events": [
+            "open"
+          ]
+        }
+      },
+      "dependsOn": [
+        "events"
+      ]
+    },
+    {
+      "field": "includeContent",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "events": [
+            "bounce",
+            "spamComplaint"
+          ]
+        }
+      },
+      "dependsOn": [
+        "events"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "events": [],
+    "firstOpen": false,
+    "includeContent": false
+  },
+  "conditionalFields": [
+    {
+      "field": "firstOpen",
+      "condition": {
+        "show": {
+          "events": [
+            "open"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "events"
+      ]
+    },
+    {
+      "field": "includeContent",
+      "condition": {
+        "show": {
+          "events": [
+            "bounce",
+            "spamComplaint"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "events"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

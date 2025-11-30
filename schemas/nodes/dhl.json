@@ -1,0 +1,102 @@
+{
+  "name": "dhl",
+  "displayName": "DHL",
+  "description": "Consume DHL API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "shipment",
+    "operation": "get",
+    "trackingNumber": "",
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "hidden",
+      "default": "shipment",
+      "options": [
+        {
+          "name": "Shipment",
+          "value": "shipment"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get Tracking Details",
+          "value": "get",
+          "action": "Get tracking details for a shipment"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "shipment"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "trackingNumber",
+      "displayName": "Tracking Number",
+      "type": "string",
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Recipient's Postal Code",
+          "name": "recipientPostalCode",
+          "type": "string",
+          "default": "",
+          "description": "DHL will return more detailed information on the shipment when you provide the Recipient's Postal Code - it acts as a verification step"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "dhlApi",
+      "required": true,
+      "testedBy": "dhlApiCredentialTest"
+    }
+  ],
+  "requiredFields": [
+    "trackingNumber"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "hidden",
+    "operation": "options",
+    "trackingNumber": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

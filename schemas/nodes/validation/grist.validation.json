@@ -1,0 +1,410 @@
+{
+  "nodeType": "n8n-nodes-base.grist",
+  "displayName": "Grist",
+  "version": 1,
+  "category": [
+    "input"
+  ],
+  "requiredParameters": [
+    "docId",
+    "tableId"
+  ],
+  "optionalParameters": [
+    "operation",
+    "rowId",
+    "returnAll",
+    "limit",
+    "additionalOptions",
+    "rowId",
+    "dataToSend",
+    "inputsToIgnore",
+    "fieldsToSend"
+  ],
+  "validationRules": [
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "getAll",
+        "enumValues": [
+          "create",
+          "delete",
+          "getAll",
+          "update"
+        ]
+      }
+    },
+    {
+      "field": "docId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "tableId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "rowId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 50,
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalOptions",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "rowId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dataToSend",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "defineInNode",
+        "enumValues": [
+          "autoMapInputs",
+          "defineInNode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "inputsToIgnore",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputs"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "fieldsToSend",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "properties": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "type": "options",
+                "default": ""
+              },
+              "fieldValue": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineInNode"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation",
+        "dataToSend"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "operation": "getAll",
+    "docId": "",
+    "tableId": "",
+    "returnAll": false,
+    "limit": 50,
+    "additionalOptions": {},
+    "dataToSend": "defineInNode",
+    "inputsToIgnore": "",
+    "fieldsToSend": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "rowId",
+      "condition": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "returnAll",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "limit",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "returnAll"
+      ]
+    },
+    {
+      "field": "additionalOptions",
+      "condition": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "rowId",
+      "condition": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "dataToSend",
+      "condition": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "inputsToIgnore",
+      "condition": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputs"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "dataToSend"
+      ]
+    },
+    {
+      "field": "fieldsToSend",
+      "condition": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineInNode"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation",
+        "dataToSend"
+      ]
+    }
+  ],
+  "fixedCollections": [
+    {
+      "name": "fieldsToSend",
+      "validOptions": [
+        "properties"
+      ],
+      "optionSchemas": {
+        "properties": [
+          {
+            "field": "fieldId",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": ""
+            }
+          },
+          {
+            "field": "fieldValue",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{
+  "nodeType": "n8n-nodes-base.postBin",
+  "displayName": "PostBin",
+  "version": 1,
+  "category": [
+    "transform"
+  ],
+  "requiredParameters": [
+    "resource"
+  ],
+  "optionalParameters": [
+    "operation",
+    "binId",
+    "operation",
+    "binId",
+    "binContent",
+    "requestId"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "bin",
+        "enumValues": [
+          "bin",
+          "request"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "create",
+        "enumValues": [
+          "create",
+          "get",
+          "delete"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bin"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "binId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "bin"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "get",
+        "enumValues": [
+          "get",
+          "removeFirst",
+          "send"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "binId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get",
+            "removeFirst",
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "binContent",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "requestId",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "bin",
+    "operation": "create",
+    "binContent": "",
+    "requestId": ""
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "bin"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "binId",
+      "condition": {
+        "show": {
+          "resource": [
+            "bin"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "request"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "binId",
+      "condition": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get",
+            "removeFirst",
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "binContent",
+      "condition": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    },
+    {
+      "field": "requestId",
+      "condition": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource",
+        "operation"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "bin": {
+      "operations": [
+        "create",
+        "get",
+        "delete"
+      ],
+      "fieldsPerOperation": {
+        "get": [
+          "binId"
+        ],
+        "delete": [
+          "binId"
+        ]
+      }
+    }
+  },
+  "fixedCollections": []
+}

@@ -1,0 +1,418 @@
+{
+  "name": "loneScale",
+  "displayName": "LoneScale",
+  "description": "Create List, add / delete items",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "list",
+    "operation": "create",
+    "list": "",
+    "first_name": "",
+    "last_name": "",
+    "company_name": "",
+    "peopleAdditionalFields": {},
+    "companyAdditionalFields": {},
+    "name": "",
+    "type": "COMPANY"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "list",
+      "required": true,
+      "description": "Create a new list",
+      "options": [
+        {
+          "name": "List",
+          "value": "list",
+          "description": "Manipulate list"
+        },
+        {
+          "name": "Item",
+          "value": "item",
+          "description": "Manipulate item"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a list",
+          "action": "Create a list"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "add",
+      "options": [
+        {
+          "name": "Create",
+          "value": "add",
+          "description": "Create an item",
+          "action": "Create a item"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "PEOPLE",
+      "required": true,
+      "description": "Type of your list",
+      "options": [
+        {
+          "name": "Company",
+          "value": "COMPANY",
+          "description": "List of company"
+        },
+        {
+          "name": "Contact",
+          "value": "PEOPLE",
+          "description": "List of contact"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "list",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists",
+        "loadOptionsDependsOn": [
+          "type"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      }
+    },
+    {
+      "name": "first_name",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Contact first name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      }
+    },
+    {
+      "name": "last_name",
+      "displayName": "Last Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Contact last name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      }
+    },
+    {
+      "name": "company_name",
+      "displayName": "Company Name",
+      "type": "string",
+      "default": "",
+      "description": "Contact company name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "COMPANY"
+          ]
+        }
+      }
+    },
+    {
+      "name": "peopleAdditionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Full Name",
+          "name": "full_name",
+          "type": "string",
+          "default": "",
+          "description": "Contact full name"
+        },
+        {
+          "displayName": "Contact Email",
+          "name": "email",
+          "type": "string",
+          "placeholder": "name@email.com",
+          "default": ""
+        },
+        {
+          "displayName": "Company Name",
+          "name": "company_name",
+          "type": "string",
+          "default": "",
+          "description": "Contact company name"
+        },
+        {
+          "displayName": "Current Position",
+          "name": "current_position",
+          "type": "string",
+          "default": "",
+          "description": "Contact current position"
+        },
+        {
+          "displayName": "Company Domain",
+          "name": "domain",
+          "type": "string",
+          "default": "",
+          "description": "Contact company domain"
+        },
+        {
+          "displayName": "Linkedin Url",
+          "name": "linkedin_url",
+          "type": "string",
+          "default": "",
+          "description": "Contact Linkedin URL"
+        },
+        {
+          "displayName": "Contact Location",
+          "name": "location",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Contact ID",
+          "name": "contact_id",
+          "type": "string",
+          "default": "",
+          "description": "Contact ID from your source"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "companyAdditionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Linkedin Url",
+          "name": "linkedin_url",
+          "type": "string",
+          "default": "",
+          "description": "Company Linkedin URL"
+        },
+        {
+          "displayName": "Company Domain",
+          "name": "domain",
+          "type": "string",
+          "default": "",
+          "description": "Company company domain"
+        },
+        {
+          "displayName": "Contact Location",
+          "name": "location",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Contact ID",
+          "name": "contact_id",
+          "type": "string",
+          "default": "",
+          "description": "Contact ID from your source"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "COMPANY"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of your list",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "list name"
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "COMPANY",
+      "required": true,
+      "description": "Type of your list",
+      "options": [
+        {
+          "name": "Company",
+          "value": "COMPANY",
+          "description": "Create a list of companies",
+          "action": "Create a list of companies"
+        },
+        {
+          "name": "Contact",
+          "value": "PEOPLE",
+          "description": "Create a list of contacts",
+          "action": "Create a list of contacts"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    }
+  ],
+  "credentials": [
+    {
+      "name": "loneScaleApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "type",
+    "list",
+    "first_name",
+    "last_name",
+    "name",
+    "type"
+  ],
+  "optionalFields": [
+    "operation",
+    "operation",
+    "company_name",
+    "peopleAdditionalFields",
+    "companyAdditionalFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "type": "options",
+    "list": "options",
+    "first_name": "string",
+    "last_name": "string",
+    "company_name": "string",
+    "peopleAdditionalFields": "collection",
+    "companyAdditionalFields": "collection",
+    "name": "string"
+  },
+  "hasVersions": false
+}

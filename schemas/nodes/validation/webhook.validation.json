@@ -1,0 +1,473 @@
+{
+  "nodeType": "n8n-nodes-base.webhook",
+  "displayName": "Webhook",
+  "version": [
+    1,
+    1.1,
+    2,
+    2.1
+  ],
+  "category": [
+    "trigger"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "multipleMethods",
+    "httpMethod",
+    "httpMethod",
+    "path",
+    "authentication",
+    "responseMode",
+    "responseMode",
+    "webhookNotice",
+    "webhookStreamingNotice",
+    "responseCode",
+    "responseData",
+    "responseBinaryPropertyName",
+    "contentTypeNotice",
+    "options"
+  ],
+  "validationRules": [
+    {
+      "field": "multipleMethods",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    {
+      "field": "httpMethod",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "GET",
+        "enumValues": [
+          "DELETE",
+          "GET",
+          "HEAD",
+          "PATCH",
+          "POST",
+          "PUT"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "multipleMethods": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "multipleMethods"
+      ]
+    },
+    {
+      "field": "httpMethod",
+      "type": "multiOptions",
+      "required": false,
+      "constraints": {
+        "type": "multiOptions",
+        "default": [
+          "GET",
+          "POST"
+        ],
+        "enumValues": [
+          "DELETE",
+          "GET",
+          "HEAD",
+          "PATCH",
+          "POST",
+          "PUT"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "multipleMethods": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "multipleMethods"
+      ]
+    },
+    {
+      "field": "path",
+      "type": "string",
+      "required": false,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      }
+    },
+    {
+      "field": "authentication",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "none",
+        "enumValues": [
+          "basicAuth",
+          "headerAuth",
+          "jwtAuth",
+          "none"
+        ]
+      }
+    },
+    {
+      "field": "responseMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "onReceived",
+        "enumValues": [
+          "onReceived",
+          "lastNode",
+          "responseNode"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "onReceived",
+        "enumValues": [
+          "onReceived",
+          "lastNode",
+          "responseNode",
+          "streaming"
+        ]
+      },
+      "displayOptions": {
+        "hide": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version"
+      ]
+    },
+    {
+      "field": "webhookNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "webhookStreamingNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "streaming"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseCode",
+      "type": "number",
+      "required": false,
+      "constraints": {
+        "type": "number",
+        "default": 200,
+        "minValue": 100,
+        "maxValue": 599
+      },
+      "displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOn": [
+        "@version",
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseData",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "firstEntryJson",
+        "enumValues": [
+          "allEntries",
+          "firstEntryJson",
+          "firstEntryBinary",
+          "noData"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "lastNode"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseBinaryPropertyName",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": "data"
+      },
+      "displayOptions": {
+        "show": {
+          "responseData": [
+            "firstEntryBinary"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseData"
+      ]
+    },
+    {
+      "field": "contentTypeNotice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "responseMode": [
+            "onReceived"
+          ]
+        }
+      },
+      "dependsOn": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "multipleMethods": false,
+    "httpMethod": "GET",
+    "path": "",
+    "authentication": "none",
+    "responseMode": "onReceived",
+    "webhookNotice": "",
+    "webhookStreamingNotice": "",
+    "responseCode": 200,
+    "responseData": "firstEntryJson",
+    "responseBinaryPropertyName": "data",
+    "contentTypeNotice": "",
+    "options": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "httpMethod",
+      "condition": {
+        "show": {
+          "multipleMethods": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "multipleMethods"
+      ]
+    },
+    {
+      "field": "httpMethod",
+      "condition": {
+        "show": {
+          "multipleMethods": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "multipleMethods"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "condition": {
+        "show": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "responseMode",
+      "condition": {
+        "hide": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version"
+      ]
+    },
+    {
+      "field": "webhookNotice",
+      "condition": {
+        "show": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "webhookStreamingNotice",
+      "condition": {
+        "show": {
+          "responseMode": [
+            "streaming"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseCode",
+      "condition": {
+        "show": {
+          "@version": [
+            1,
+            1.1
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "@version",
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseData",
+      "condition": {
+        "show": {
+          "responseMode": [
+            "lastNode"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseMode"
+      ]
+    },
+    {
+      "field": "responseBinaryPropertyName",
+      "condition": {
+        "show": {
+          "responseData": [
+            "firstEntryBinary"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseData"
+      ]
+    },
+    {
+      "field": "contentTypeNotice",
+      "condition": {
+        "show": {
+          "responseMode": [
+            "onReceived"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "responseMode"
+      ]
+    }
+  ],
+  "fixedCollections": []
+}

@@ -1,0 +1,192 @@
+{
+  "name": "kafkaTrigger",
+  "displayName": "Kafka Trigger",
+  "description": "Consume messages from a Kafka topic",
+  "group": [
+    "trigger"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "topic": "",
+    "groupId": "",
+    "useSchemaRegistry": false,
+    "schemaRegistryUrl": "",
+    "options": {}
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "topic",
+      "displayName": "Topic",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Name of the queue of topic to consume from",
+      "placeholder": "topic-name"
+    },
+    {
+      "name": "groupId",
+      "displayName": "Group ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the consumer group",
+      "placeholder": "n8n-kafka"
+    },
+    {
+      "name": "useSchemaRegistry",
+      "displayName": "Use Schema Registry",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to use Confluent Schema Registry"
+    },
+    {
+      "name": "schemaRegistryUrl",
+      "displayName": "Schema Registry URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL of the schema registry",
+      "displayOptions": {
+        "show": {
+          "useSchemaRegistry": [
+            true
+          ]
+        }
+      },
+      "placeholder": "https://schema-registry-domain:8081"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Allow Topic Creation",
+          "name": "allowAutoTopicCreation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to allow sending message to a previously non exisiting topic"
+        },
+        {
+          "displayName": "Auto Commit Threshold",
+          "name": "autoCommitThreshold",
+          "type": "number",
+          "default": 0,
+          "description": "The consumer will commit offsets after resolving a given number of messages"
+        },
+        {
+          "displayName": "Auto Commit Interval",
+          "name": "autoCommitInterval",
+          "type": "number",
+          "default": 0,
+          "description": "The consumer will commit offsets after a given period, for example, five seconds",
+          "hint": "Value in milliseconds"
+        },
+        {
+          "displayName": "Heartbeat Interval",
+          "name": "heartbeatInterval",
+          "type": "number",
+          "default": 3000,
+          "description": "Heartbeats are used to ensure that the consumer's session stays active",
+          "hint": "The value must be set lower than Session Timeout"
+        },
+        {
+          "displayName": "Max Number of Requests",
+          "name": "maxInFlightRequests",
+          "type": "number",
+          "default": 1,
+          "description": "The maximum number of unacknowledged requests the client will send on a single connection"
+        },
+        {
+          "displayName": "Read Messages From Beginning",
+          "name": "fromBeginning",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to read message from beginning"
+        },
+        {
+          "displayName": "JSON Parse Message",
+          "name": "jsonParseMessage",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to try to parse the message to an object"
+        },
+        {
+          "displayName": "Parallel Processing",
+          "name": "parallelProcessing",
+          "type": "boolean",
+          "default": true,
+          "displayOptions": {
+            "hide": {
+              "@version": [
+                1
+              ]
+            }
+          },
+          "description": "Whether to process messages in parallel or by keeping the message in order"
+        },
+        {
+          "displayName": "Only Message",
+          "name": "onlyMessage",
+          "type": "boolean",
+          "displayOptions": {
+            "show": {
+              "jsonParseMessage": [
+                true
+              ]
+            }
+          },
+          "default": false,
+          "description": "Whether to return only the message property"
+        },
+        {
+          "displayName": "Return Headers",
+          "name": "returnHeaders",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to return the headers received from Kafka"
+        },
+        {
+          "displayName": "Session Timeout",
+          "name": "sessionTimeout",
+          "type": "number",
+          "default": 30000,
+          "description": "The time to await a response in ms",
+          "hint": "Value in milliseconds"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "kafka",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "topic",
+    "groupId",
+    "schemaRegistryUrl"
+  ],
+  "optionalFields": [
+    "useSchemaRegistry",
+    "options"
+  ],
+  "parameterTypes": {
+    "topic": "string",
+    "groupId": "string",
+    "useSchemaRegistry": "boolean",
+    "schemaRegistryUrl": "string",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

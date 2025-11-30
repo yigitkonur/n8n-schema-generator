@@ -1,0 +1,1165 @@
+{
+  "name": "itemLists",
+  "displayName": "Item Lists",
+  "description": "Helper for working with lists of items and transforming arrays",
+  "group": [
+    "input"
+  ],
+  "version": [
+    3,
+    3.1
+  ],
+  "defaults": {
+    "resource": "itemList",
+    "operation": "splitOutItems",
+    "aggregate": "aggregateIndividualFields",
+    "fieldsToAggregate": {
+      "fieldToAggregate": [
+        {
+          "fieldToAggregate": "",
+          "renameField": false,
+          "outputFieldName": ""
+        }
+      ]
+    },
+    "destinationFieldName": "data",
+    "options": {},
+    "maxItems": 1,
+    "keep": "firstItems",
+    "compare": "allFields",
+    "fieldsToCompare": "",
+    "type": "simple",
+    "sortFieldsUi": {},
+    "code": "// The two items to compare are in the variables a and b\n// Access the fields in a.json and b.json\n// Return -1 if a should go before b\n// Return 1 if b should go before a\n// Return 0 if there's no difference\n\nfieldName = 'myField';\n\nif (a.json[fieldName] < b.json[fieldName]) {\nreturn -1;\n}\nif (a.json[fieldName] > b.json[fieldName]) {\nreturn 1;\n}\nreturn 0;",
+    "fieldToSplitOut": "",
+    "include": "noOtherFields",
+    "fieldsToSummarize": {
+      "values": [
+        {
+          "aggregation": "count",
+          "field": "",
+          "includeEmpty": false,
+          "separateBy": ",",
+          "customSeparator": ""
+        }
+      ]
+    }
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "hidden",
+      "default": "itemList",
+      "options": [
+        {
+          "name": "Item List",
+          "value": "itemList"
+        }
+      ]
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "splitOutItems",
+      "options": [
+        {
+          "name": "Concatenate Items",
+          "value": "concatenateItems",
+          "description": "Combine fields into a list in a single new item",
+          "action": "Concatenate Items"
+        },
+        {
+          "name": "Limit",
+          "value": "limit",
+          "description": "Remove items if there are too many",
+          "action": "Limit"
+        },
+        {
+          "name": "Remove Duplicates",
+          "value": "removeDuplicates",
+          "description": "Remove extra items that are similar",
+          "action": "Remove Duplicates"
+        },
+        {
+          "name": "Sort",
+          "value": "sort",
+          "description": "Change the item order",
+          "action": "Sort"
+        },
+        {
+          "name": "Split Out Items",
+          "value": "splitOutItems",
+          "description": "Turn a list or values of object's properties inside item(s) into separate items",
+          "action": "Split Out Items"
+        },
+        {
+          "name": "Summarize",
+          "value": "summarize",
+          "description": "Aggregate items together (pivot table)",
+          "action": "Summarize"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "aggregate",
+      "displayName": "Aggregate",
+      "type": "options",
+      "default": "aggregateIndividualFields",
+      "options": [
+        {
+          "name": "Individual Fields",
+          "value": "aggregateIndividualFields"
+        },
+        {
+          "name": "All Item Data (Into a Single List)",
+          "value": "aggregateAllItemData"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsToAggregate",
+      "displayName": "Fields To Aggregate",
+      "type": "fixedCollection",
+      "default": {
+        "fieldToAggregate": [
+          {
+            "fieldToAggregate": "",
+            "renameField": false
+          }
+        ]
+      },
+      "options": [
+        {
+          "displayName": "",
+          "name": "fieldToAggregate",
+          "values": [
+            {
+              "displayName": "Input Field Name",
+              "name": "fieldToAggregate",
+              "type": "string",
+              "default": "",
+              "description": "The name of a field in the input items to aggregate together",
+              "placeholder": "e.g. id",
+              "hint": " Enter the field name as text",
+              "requiresDataPath": "single"
+            },
+            {
+              "displayName": "Rename Field",
+              "name": "renameField",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to give the field a different name in the output"
+            },
+            {
+              "displayName": "Output Field Name",
+              "name": "outputFieldName",
+              "displayOptions": {
+                "show": {
+                  "renameField": [
+                    true
+                  ]
+                }
+              },
+              "type": "string",
+              "default": "",
+              "description": "The name of the field to put the aggregated data in. Leave blank to use the input field name.",
+              "requiresDataPath": "single"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateIndividualFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "placeholder": "Add Field To Aggregate"
+    },
+    {
+      "name": "destinationFieldName",
+      "displayName": "Put Output in Field",
+      "type": "string",
+      "default": "data",
+      "description": "The name of the output field to put the data in",
+      "displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateAllItemData"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      }
+    },
+    {
+      "name": "include",
+      "displayName": "Include",
+      "type": "options",
+      "default": "allFields",
+      "options": [
+        {
+          "name": "All Fields",
+          "value": "allFields"
+        },
+        {
+          "name": "Specified Fields",
+          "value": "specifiedFields"
+        },
+        {
+          "name": "All Fields Except",
+          "value": "allFieldsExcept"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateAllItemData"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsToExclude",
+      "displayName": "Fields To Exclude",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateAllItemData"
+          ],
+          "include": [
+            "allFieldsExcept"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "placeholder": "e.g. email, name"
+    },
+    {
+      "name": "fieldsToInclude",
+      "displayName": "Fields To Include",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateAllItemData"
+          ],
+          "include": [
+            "specifiedFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "placeholder": "e.g. email, name"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Disable Dot Notation",
+          "name": "disableDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "displayOptions": {
+            "hide": {
+              "/aggregate": [
+                "aggregateAllItemData"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Merge Lists",
+          "name": "mergeLists",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to merge the output into a single flat list (rather than a list of lists), if the field to aggregate is a list",
+          "displayOptions": {
+            "hide": {
+              "/aggregate": [
+                "aggregateAllItemData"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Include Binaries",
+          "name": "includeBinaries",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the binary data in the new item"
+        },
+        {
+          "displayName": "Keep Only Unique Binaries",
+          "name": "keepOnlyUnique",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to keep only unique binaries by comparing mime types, file types, file sizes and file extensions",
+          "displayOptions": {
+            "show": {
+              "includeBinaries": [
+                true
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Keep Missing And Null Values",
+          "name": "keepMissing",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to add a null entry to the aggregated list when there is a missing or null value",
+          "displayOptions": {
+            "hide": {
+              "/aggregate": [
+                "aggregateAllItemData"
+              ]
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "maxItems",
+      "displayName": "Max Items",
+      "type": "number",
+      "default": 1,
+      "description": "If there are more items than this number, some are removed",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "limit"
+          ]
+        }
+      }
+    },
+    {
+      "name": "keep",
+      "displayName": "Keep",
+      "type": "options",
+      "default": "firstItems",
+      "description": "When removing items, whether to keep the ones at the start or the ending",
+      "options": [
+        {
+          "name": "First Items",
+          "value": "firstItems"
+        },
+        {
+          "name": "Last Items",
+          "value": "lastItems"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "limit"
+          ]
+        }
+      }
+    },
+    {
+      "name": "compare",
+      "displayName": "Compare",
+      "type": "options",
+      "default": "allFields",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "options": [
+        {
+          "name": "All Fields",
+          "value": "allFields"
+        },
+        {
+          "name": "All Fields Except",
+          "value": "allFieldsExcept"
+        },
+        {
+          "name": "Selected Fields",
+          "value": "selectedFields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsToExclude",
+      "displayName": "Fields To Exclude",
+      "type": "string",
+      "default": "",
+      "description": "Fields in the input to exclude from the comparison",
+      "displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "placeholder": "e.g. email, name"
+    },
+    {
+      "name": "fieldsToCompare",
+      "displayName": "Fields To Compare",
+      "type": "string",
+      "default": "",
+      "description": "Fields in the input to add to the comparison",
+      "displayOptions": {
+        "show": {
+          "compare": [
+            "selectedFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "placeholder": "e.g. email, name"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Disable Dot Notation",
+          "name": "disableDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name"
+        },
+        {
+          "displayName": "Remove Other Fields",
+          "name": "removeOtherFields",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to remove any fields that are not being compared. If disabled, will keep the values from the first of the duplicates."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept",
+            "selectedFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "type",
+      "displayName": "Type",
+      "type": "options",
+      "default": "simple",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "options": [
+        {
+          "name": "Simple",
+          "value": "simple"
+        },
+        {
+          "name": "Random",
+          "value": "random"
+        },
+        {
+          "name": "Code",
+          "value": "code"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sortFieldsUi",
+      "displayName": "Fields To Sort By",
+      "type": "fixedCollection",
+      "default": {},
+      "description": "The fields of the input items to compare to see if they are the same",
+      "options": [
+        {
+          "displayName": "",
+          "name": "sortField",
+          "values": [
+            {
+              "displayName": "Field Name",
+              "name": "fieldName",
+              "type": "string",
+              "required": true,
+              "default": "",
+              "description": "The field to sort by",
+              "placeholder": "e.g. id",
+              "hint": " Enter the field name as text",
+              "requiresDataPath": "single"
+            },
+            {
+              "displayName": "Order",
+              "name": "order",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Ascending",
+                  "value": "ascending"
+                },
+                {
+                  "name": "Descending",
+                  "value": "descending"
+                }
+              ],
+              "default": "ascending",
+              "description": "The order to sort by"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "type": [
+            "simple"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      },
+      "placeholder": "Add Field To Sort By"
+    },
+    {
+      "name": "code",
+      "displayName": "Code",
+      "type": "string",
+      "default": "// The two items to compare are in the variables a and b\n// Access the fields in a.json and b.json\n// Return -1 if a should go before b\n// Return 1 if b should go before a\n// Return 0 if there's no difference\n\nfieldName = 'myField';\n\nif (a.json[fieldName] < b.json[fieldName]) {\nreturn -1;\n}\nif (a.json[fieldName] > b.json[fieldName]) {\nreturn 1;\n}\nreturn 0;",
+      "description": "Javascript code to determine the order of any two items",
+      "typeOptions": {
+        "alwaysOpenEditWindow": true,
+        "editor": "jsEditor",
+        "rows": 10
+      },
+      "displayOptions": {
+        "show": {
+          "type": [
+            "code"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Disable Dot Notation",
+          "name": "disableDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "type": [
+            "simple"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "fieldToSplitOut",
+      "displayName": "Fields To Split Out",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the input fields to break out into separate items. Separate multiple field names by commas. For binary data, use $binary.",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "placeholder": "Drag fields from the left or type their names"
+    },
+    {
+      "name": "include",
+      "displayName": "Include",
+      "type": "options",
+      "default": "noOtherFields",
+      "description": "Whether to copy any other fields into the new items",
+      "options": [
+        {
+          "name": "No Other Fields",
+          "value": "noOtherFields"
+        },
+        {
+          "name": "All Other Fields",
+          "value": "allOtherFields"
+        },
+        {
+          "name": "Selected Other Fields",
+          "value": "selectedOtherFields"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fieldsToInclude",
+      "displayName": "Fields To Include",
+      "type": "string",
+      "default": "",
+      "description": "Fields in the input items to aggregate together",
+      "displayOptions": {
+        "show": {
+          "include": [
+            "selectedOtherFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "placeholder": "e.g. email, name"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Disable Dot Notation",
+          "name": "disableDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name"
+        },
+        {
+          "displayName": "Destination Field Name",
+          "name": "destinationFieldName",
+          "type": "string",
+          "requiresDataPath": "multiple",
+          "default": "",
+          "description": "The field in the output under which to put the split field contents"
+        },
+        {
+          "displayName": "Include Binary",
+          "name": "includeBinary",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the binary data in the new items"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "fieldsToSummarize",
+      "displayName": "Fields to Summarize",
+      "type": "fixedCollection",
+      "default": {
+        "values": [
+          {
+            "aggregation": "count",
+            "field": ""
+          }
+        ]
+      },
+      "options": [
+        {
+          "displayName": "",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Aggregation",
+              "name": "aggregation",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Append",
+                  "value": "append"
+                },
+                {
+                  "name": "Average",
+                  "value": "average"
+                },
+                {
+                  "name": "Concatenate",
+                  "value": "concatenate"
+                },
+                {
+                  "name": "Count",
+                  "value": "count"
+                },
+                {
+                  "name": "Count Unique",
+                  "value": "countUnique"
+                },
+                {
+                  "name": "Max",
+                  "value": "max"
+                },
+                {
+                  "name": "Min",
+                  "value": "min"
+                },
+                {
+                  "name": "Sum",
+                  "value": "sum"
+                }
+              ],
+              "default": "count",
+              "description": "How to combine the values of the field you want to summarize"
+            },
+            {
+              "displayName": "Field",
+              "name": "field",
+              "type": "string",
+              "default": "",
+              "description": "The name of an input field that you want to summarize",
+              "placeholder": "e.g. cost",
+              "hint": " Enter the field name as text",
+              "displayOptions": {
+                "hide": {
+                  "aggregation": [
+                    "average",
+                    "sum",
+                    "countUnique",
+                    "count",
+                    "max",
+                    "min"
+                  ]
+                }
+              },
+              "requiresDataPath": "single"
+            },
+            {
+              "displayName": "Field",
+              "name": "field",
+              "type": "string",
+              "default": "",
+              "description": "The name of an input field that you want to summarize. The field should contain numerical values; null, undefined, empty strings would be ignored.",
+              "placeholder": "e.g. cost",
+              "hint": " Enter the field name as text",
+              "displayOptions": {
+                "show": {
+                  "aggregation": [
+                    "average",
+                    "sum"
+                  ]
+                }
+              },
+              "requiresDataPath": "single"
+            },
+            {
+              "displayName": "Field",
+              "name": "field",
+              "type": "string",
+              "default": "",
+              "description": "The name of an input field that you want to summarize; null, undefined, empty strings would be ignored",
+              "placeholder": "e.g. cost",
+              "hint": " Enter the field name as text",
+              "displayOptions": {
+                "show": {
+                  "aggregation": [
+                    "countUnique",
+                    "count",
+                    "max",
+                    "min"
+                  ]
+                }
+              },
+              "requiresDataPath": "single"
+            },
+            {
+              "displayName": "Include Empty Values",
+              "name": "includeEmpty",
+              "type": "boolean",
+              "default": false,
+              "displayOptions": {
+                "show": {
+                  "aggregation": [
+                    "append",
+                    "concatenate"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Separator",
+              "name": "separateBy",
+              "type": "options",
+              "default": ",",
+              "options": [
+                {
+                  "name": "Comma",
+                  "value": ","
+                },
+                {
+                  "name": "Comma and Space",
+                  "value": ", "
+                },
+                {
+                  "name": "New Line",
+                  "value": "\n"
+                },
+                {
+                  "name": "None",
+                  "value": ""
+                },
+                {
+                  "name": "Space",
+                  "value": " "
+                },
+                {
+                  "name": "Other",
+                  "value": "other"
+                }
+              ],
+              "hint": "What to insert between values",
+              "displayOptions": {
+                "show": {
+                  "aggregation": [
+                    "concatenate"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Custom Separator",
+              "name": "customSeparator",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "aggregation": [
+                    "concatenate"
+                  ],
+                  "separateBy": [
+                    "other"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "fieldsToSplitBy",
+      "displayName": "Fields to Split By",
+      "type": "string",
+      "default": "",
+      "description": "The name of the input fields that you want to split the summary by",
+      "displayOptions": {
+        "hide": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        },
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "placeholder": "e.g. country, city",
+      "hint": "Enter the name of the fields as text (separated by commas)"
+    },
+    {
+      "name": "fieldsToSplitBy",
+      "displayName": "Fields to Group By",
+      "type": "string",
+      "default": "",
+      "description": "The name of the input fields that you want to split the summary by",
+      "displayOptions": {
+        "show": {
+          "/options.outputFormat": [
+            "singleItem"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "placeholder": "e.g. country, city",
+      "hint": "Enter the name of the fields as text (separated by commas)"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Disable Dot Notation",
+          "name": "disableDotNotation",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name"
+        },
+        {
+          "displayName": "Output Format",
+          "name": "outputFormat",
+          "type": "options",
+          "default": "separateItems",
+          "options": [
+            {
+              "name": "Each Split in a Separate Item",
+              "value": "separateItems"
+            },
+            {
+              "name": "All Splits in a Single Item",
+              "value": "singleItem"
+            }
+          ]
+        },
+        {
+          "displayName": "Ignore items without valid fields to group by",
+          "name": "skipEmptySplitFields",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "fieldToSplitOut"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "aggregate",
+    "fieldsToAggregate",
+    "destinationFieldName",
+    "include",
+    "fieldsToExclude",
+    "fieldsToInclude",
+    "options",
+    "maxItems",
+    "keep",
+    "compare",
+    "fieldsToExclude",
+    "fieldsToCompare",
+    "options",
+    "type",
+    "sortFieldsUi",
+    "code",
+    "options",
+    "include",
+    "fieldsToInclude",
+    "options",
+    "fieldsToSummarize",
+    "fieldsToSplitBy",
+    "fieldsToSplitBy",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "hidden",
+    "operation": "options",
+    "aggregate": "options",
+    "fieldsToAggregate": "fixedCollection",
+    "destinationFieldName": "string",
+    "include": "options",
+    "fieldsToExclude": "string",
+    "fieldsToInclude": "string",
+    "options": "collection",
+    "maxItems": "number",
+    "keep": "options",
+    "compare": "options",
+    "fieldsToCompare": "string",
+    "type": "options",
+    "sortFieldsUi": "fixedCollection",
+    "code": "string",
+    "fieldToSplitOut": "string",
+    "fieldsToSummarize": "fixedCollection",
+    "fieldsToSplitBy": "string"
+  },
+  "hasVersions": false
+}

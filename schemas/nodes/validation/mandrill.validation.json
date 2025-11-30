@@ -1,0 +1,743 @@
+{
+  "nodeType": "n8n-nodes-base.mandrill",
+  "displayName": "Mandrill",
+  "version": 1,
+  "category": [
+    "output"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "resource",
+    "operation",
+    "template",
+    "fromEmail",
+    "toEmail",
+    "jsonParameters",
+    "options",
+    "mergeVarsJson",
+    "mergeVarsUi",
+    "metadataUi",
+    "metadataJson",
+    "attachmentsJson",
+    "attachmentsUi",
+    "headersJson",
+    "headersUi"
+  ],
+  "validationRules": [
+    {
+      "field": "resource",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "message",
+        "enumValues": [
+          "message"
+        ]
+      }
+    },
+    {
+      "field": "operation",
+      "type": "options",
+      "required": false,
+      "constraints": {
+        "type": "options",
+        "default": "sendTemplate",
+        "enumValues": [
+          "sendTemplate",
+          "sendHtml"
+        ]
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "dependsOn": [
+        "resource"
+      ]
+    },
+    {
+      "field": "template",
+      "type": "options",
+      "required": true,
+      "constraints": {
+        "type": "options",
+        "default": "",
+        "enumValues": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "fromEmail",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "toEmail",
+      "type": "string",
+      "required": true,
+      "constraints": {
+        "type": "string",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "type": "boolean",
+      "required": false,
+      "constraints": {
+        "type": "boolean",
+        "default": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "type": "collection",
+      "required": false,
+      "constraints": {
+        "type": "collection",
+        "default": {},
+        "properties": {},
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOn": [
+        "operation"
+      ]
+    },
+    {
+      "field": "mergeVarsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "mergeVarsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "mergeVarsValues": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": ""
+              },
+              "content": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "metadataUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "metadataValues": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": "Name of the metadata key to add."
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "metadataJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "attachmentsJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "attachmentsUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "attachmentsValues": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": ""
+              },
+              "name": {
+                "type": "string",
+                "default": ""
+              },
+              "content": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          },
+          "attachmentsBinary": {
+            "type": "object",
+            "properties": {
+              "property": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "headersJson",
+      "type": "json",
+      "required": false,
+      "constraints": {
+        "type": "json",
+        "default": ""
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "headersUi",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "headersValues": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": ""
+              },
+              "value": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      },
+      "displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOn": [
+        "jsonParameters"
+      ]
+    }
+  ],
+  "computedDefaults": {
+    "resource": "message",
+    "operation": "sendTemplate",
+    "template": "",
+    "fromEmail": "",
+    "toEmail": "",
+    "jsonParameters": false,
+    "options": {},
+    "mergeVarsJson": "",
+    "mergeVarsUi": {},
+    "metadataUi": {},
+    "metadataJson": "",
+    "attachmentsJson": "",
+    "attachmentsUi": {},
+    "headersJson": "",
+    "headersUi": {}
+  },
+  "conditionalFields": [
+    {
+      "field": "operation",
+      "condition": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "resource"
+      ]
+    },
+    {
+      "field": "template",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "fromEmail",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "toEmail",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "jsonParameters",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "options",
+      "condition": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "operation"
+      ]
+    },
+    {
+      "field": "mergeVarsJson",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "mergeVarsUi",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "metadataUi",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "metadataJson",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "attachmentsJson",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "attachmentsUi",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "headersJson",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    },
+    {
+      "field": "headersUi",
+      "condition": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "dependsOnFields": [
+        "jsonParameters"
+      ]
+    }
+  ],
+  "resourceOperations": {
+    "message": {
+      "operations": [
+        "sendTemplate",
+        "sendHtml"
+      ],
+      "fieldsPerOperation": {}
+    }
+  },
+  "fixedCollections": [
+    {
+      "name": "mergeVarsUi",
+      "validOptions": [
+        "mergeVarsValues"
+      ],
+      "optionSchemas": {
+        "mergeVarsValues": [
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "content",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "metadataUi",
+      "validOptions": [
+        "metadataValues"
+      ],
+      "optionSchemas": {
+        "metadataValues": [
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": "Name of the metadata key to add."
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "attachmentsUi",
+      "validOptions": [
+        "attachmentsValues",
+        "attachmentsBinary"
+      ],
+      "optionSchemas": {
+        "attachmentsValues": [
+          {
+            "field": "type",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "content",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "attachmentsBinary": [
+          {
+            "field": "property",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "headersUi",
+      "validOptions": [
+        "headersValues"
+      ],
+      "optionSchemas": {
+        "headersValues": [
+          {
+            "field": "name",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "field": "value",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,651 @@
+{
+  "name": "linear",
+  "displayName": "Linear",
+  "description": "Consume Linear API",
+  "group": [
+    "output"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "authentication": "apiToken",
+    "resource": "issue",
+    "comment": "",
+    "additionalFields": {},
+    "operation": "create",
+    "teamId": "",
+    "title": "",
+    "returnAll": false,
+    "limit": 50,
+    "updateFields": {},
+    "link": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "options",
+      "default": "apiToken",
+      "options": [
+        {
+          "name": "API Token",
+          "value": "apiToken"
+        },
+        {
+          "name": "OAuth2",
+          "value": "oAuth2"
+        }
+      ]
+    },
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "issue",
+      "options": [
+        {
+          "name": "Comment",
+          "value": "comment"
+        },
+        {
+          "name": "Issue",
+          "value": "issue"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "addComment",
+      "options": [
+        {
+          "name": "Add Comment",
+          "value": "addComment",
+          "description": "Add a comment to an issue",
+          "action": "Add a comment to an issue"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "issueId",
+      "displayName": "Issue ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "addComment"
+          ]
+        }
+      }
+    },
+    {
+      "name": "comment",
+      "displayName": "Comment",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "addComment"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Parent Comment ID",
+          "name": "parentId",
+          "type": "string",
+          "description": "ID of the parent comment if this is a reply",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "addComment"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Add Link",
+          "value": "addLink",
+          "description": "Add a link to an issue",
+          "action": "Add a link to an issue"
+        },
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an issue",
+          "action": "Create an issue"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an issue",
+          "action": "Delete an issue"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an issue",
+          "action": "Get an issue"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many issues",
+          "action": "Get many issues"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an issue",
+          "action": "Update an issue"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "teamId",
+      "displayName": "Team Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getTeams"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "title",
+      "displayName": "Title",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee Name or ID",
+          "name": "assigneeId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Priority",
+          "name": "priorityId",
+          "type": "options",
+          "options": [
+            {
+              "name": "Urgent",
+              "value": 1
+            },
+            {
+              "name": "High",
+              "value": 2
+            },
+            {
+              "name": "Normal",
+              "value": 3
+            },
+            {
+              "name": "Low",
+              "value": 4
+            },
+            {
+              "name": "No Priority",
+              "value": 0
+            }
+          ],
+          "default": 0
+        },
+        {
+          "displayName": "State Name or ID",
+          "name": "stateId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getStates"
+          },
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "issueId",
+      "displayName": "Issue ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "addLink",
+            "get",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "issueId",
+      "displayName": "Issue ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee Name or ID",
+          "name": "assigneeId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Priority Name/ID",
+          "name": "priorityId",
+          "type": "options",
+          "options": [
+            {
+              "name": "Urgent",
+              "value": 1
+            },
+            {
+              "name": "High",
+              "value": 2
+            },
+            {
+              "name": "Medium",
+              "value": 3
+            },
+            {
+              "name": "Low",
+              "value": 3
+            },
+            {
+              "name": "No Priority",
+              "value": 0
+            }
+          ],
+          "default": 0
+        },
+        {
+          "displayName": "State Name or ID",
+          "name": "stateId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getStates"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Team Name or ID",
+          "name": "teamId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "update"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assignee Name or ID",
+          "name": "assigneeId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getUsers"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Description",
+          "name": "description",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Priority Name/ID",
+          "name": "priorityId",
+          "type": "options",
+          "options": [
+            {
+              "name": "Urgent",
+              "value": 1
+            },
+            {
+              "name": "High",
+              "value": 2
+            },
+            {
+              "name": "Medium",
+              "value": 3
+            },
+            {
+              "name": "Low",
+              "value": 4
+            },
+            {
+              "name": "No Priority",
+              "value": 0
+            }
+          ],
+          "default": 0
+        },
+        {
+          "displayName": "State Name or ID",
+          "name": "stateId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getStates"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Team Name or ID",
+          "name": "teamId",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsMethod": "getTeams"
+          },
+          "default": ""
+        },
+        {
+          "displayName": "Title",
+          "name": "title",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "link",
+      "displayName": "Link",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "addLink"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "linearApi",
+      "required": true,
+      "testedBy": "linearApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "linearOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "issueId",
+    "comment",
+    "teamId",
+    "title",
+    "issueId",
+    "issueId",
+    "link"
+  ],
+  "optionalFields": [
+    "authentication",
+    "resource",
+    "operation",
+    "additionalFields",
+    "operation",
+    "additionalFields",
+    "returnAll",
+    "limit",
+    "updateFields",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "authentication": "options",
+    "resource": "options",
+    "operation": "options",
+    "issueId": "string",
+    "comment": "string",
+    "additionalFields": "collection",
+    "teamId": "options",
+    "title": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "updateFields": "collection",
+    "link": "string"
+  },
+  "hasVersions": false
+}

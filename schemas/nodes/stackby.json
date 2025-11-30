@@ -1,0 +1,190 @@
+{
+  "name": "stackby",
+  "displayName": "Stackby",
+  "description": "Read, write, and delete data in Stackby",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "operation": "append",
+    "stackId": "",
+    "table": "",
+    "id": "",
+    "returnAll": true,
+    "limit": 1000,
+    "additionalFields": {},
+    "columns": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "append",
+      "options": [
+        {
+          "name": "Append",
+          "value": "append"
+        },
+        {
+          "name": "Delete",
+          "value": "delete"
+        },
+        {
+          "name": "List",
+          "value": "list"
+        },
+        {
+          "name": "Read",
+          "value": "read"
+        }
+      ],
+      "placeholder": "Action to perform",
+      "noDataExpression": true
+    },
+    {
+      "name": "stackId",
+      "displayName": "Stack ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the stack to access"
+    },
+    {
+      "name": "table",
+      "displayName": "Table",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Enter Table Name",
+      "placeholder": "Stories"
+    },
+    {
+      "name": "id",
+      "displayName": "ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the record to return",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "read",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 1000,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "View",
+          "name": "view",
+          "type": "string",
+          "default": "",
+          "placeholder": "All Stories",
+          "description": "The name or ID of a view in the Stories table. If set, only the records in that view will be returned. The records will be sorted according to the order of the view."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Comma-separated list of the properties which should used as columns for the new rows",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "append"
+          ]
+        }
+      },
+      "placeholder": "id,name,description"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "stackbyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "stackId",
+    "table",
+    "id",
+    "columns"
+  ],
+  "optionalFields": [
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalFields"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "stackId": "string",
+    "table": "string",
+    "id": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "additionalFields": "collection",
+    "columns": "string"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,4423 @@
+{
+  "name": "whatsApp",
+  "displayName": "WhatsApp Business Cloud",
+  "description": "Access WhatsApp API",
+  "group": [
+    "output"
+  ],
+  "version": [
+    1,
+    1.1
+  ],
+  "defaults": {
+    "resource": "message",
+    "operation": "sendTemplate",
+    "messagingProduct": "whatsapp",
+    "phoneNumberId": "",
+    "recipientPhoneNumber": "",
+    "messageType": "text",
+    "name": {},
+    "additionalFields": {},
+    "longitude": "",
+    "latitude": "",
+    "textBody": "",
+    "mediaLink": "",
+    "mediaId": "",
+    "mediaFilename": "",
+    "template": "",
+    "components": {},
+    "mediaGetId": "",
+    "mediaDeleteId": "",
+    "message": "",
+    "responseType": "approval",
+    "defineForm": "fields",
+    "jsonOutput": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+    "formFields": {},
+    "approvalOptions": {},
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "message",
+      "options": [
+        {
+          "name": "Message",
+          "value": "message"
+        },
+        {
+          "name": "Media",
+          "value": "media"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "sendTemplate",
+      "options": [
+        {
+          "name": "Send",
+          "value": "send",
+          "action": "Send message"
+        },
+        {
+          "name": "Send and Wait for Response",
+          "value": "sendAndWait",
+          "action": "Send message and wait for response"
+        },
+        {
+          "name": "Send Template",
+          "value": "sendTemplate",
+          "action": "Send template"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "noDataExpression": true,
+      "routing": {
+        "request": {
+          "ignoreHttpStatusErrors": true
+        },
+        "send": {
+          "preSend": [
+            null
+          ]
+        },
+        "output": {
+          "postReceive": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "messagingProduct",
+      "displayName": "Messaging Product",
+      "type": "hidden",
+      "default": "whatsapp",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "messaging_product"
+        }
+      }
+    },
+    {
+      "name": "phoneNumberId",
+      "displayName": "Sender Phone Number (or ID)",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The ID of the business account's phone number from which the message will be sent from",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "url": "={{$credentials.businessAccountId}}/phone_numbers",
+              "method": "GET"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.display_phone_number}} - {{$responseItem.verified_name}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "method": "POST",
+          "url": "={{$value}}/messages"
+        }
+      }
+    },
+    {
+      "name": "recipientPhoneNumber",
+      "displayName": "Recipient's Phone Number",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Phone number of the recipient of the message",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "hint": "When entering a phone number, make sure to include the country code",
+      "routing": {
+        "send": {
+          "type": "body",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "messageType",
+      "displayName": "MessageType",
+      "type": "options",
+      "default": "text",
+      "description": "The type of the message",
+      "options": [
+        {
+          "name": "Audio",
+          "value": "audio"
+        },
+        {
+          "name": "Contacts",
+          "value": "contacts"
+        },
+        {
+          "name": "Document",
+          "value": "document"
+        },
+        {
+          "name": "Image",
+          "value": "image"
+        },
+        {
+          "name": "Location",
+          "value": "location"
+        },
+        {
+          "name": "Text",
+          "value": "text"
+        },
+        {
+          "name": "Video",
+          "value": "video"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "mediaUpload",
+      "description": "The operation to perform on the media",
+      "options": [
+        {
+          "name": "Upload",
+          "value": "mediaUpload",
+          "action": "Upload media"
+        },
+        {
+          "name": "Download",
+          "value": "mediaUrlGet",
+          "action": "Download media"
+        },
+        {
+          "name": "Delete",
+          "value": "mediaDelete",
+          "action": "Delete media"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Name",
+          "name": "data",
+          "values": [
+            {
+              "displayName": "Formatted Name",
+              "name": "formatted_name",
+              "type": "string",
+              "required": true,
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.formatted_name"
+                }
+              }
+            },
+            {
+              "displayName": "First Name",
+              "name": "first_name",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.first_name"
+                }
+              }
+            },
+            {
+              "displayName": "Last Name",
+              "name": "last_name",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.last_name"
+                }
+              }
+            },
+            {
+              "displayName": "Middle Name",
+              "name": "middle_name",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.middle_name"
+                }
+              }
+            },
+            {
+              "displayName": "Suffix",
+              "name": "suffix",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.suffix"
+                }
+              }
+            },
+            {
+              "displayName": "Prefix",
+              "name": "prefix",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "contacts[0].name.prefix"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": false
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "contacts"
+          ]
+        }
+      },
+      "placeholder": "Add Parameter"
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Addresses",
+          "name": "addresses",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Parameter",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Address",
+              "name": "address",
+              "values": [
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Home",
+                      "value": "HOME"
+                    },
+                    {
+                      "name": "Work",
+                      "value": "WORK"
+                    }
+                  ],
+                  "default": "HOME",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].type",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Street",
+                  "name": "street",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].street",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "City",
+                  "name": "city",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].city",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "State",
+                  "name": "state",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].state",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Zip",
+                  "name": "zip",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].zip",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Country",
+                  "name": "country",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].country",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Country Code",
+                  "name": "country_code",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].addresses[{{$index}}].country_code",
+                      "type": "body"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Birthday",
+          "name": "birthday",
+          "type": "string",
+          "default": "",
+          "routing": {
+            "send": {
+              "property": "contacts[0].birthday",
+              "type": "body"
+            }
+          },
+          "placeholder": "YYYY-MM-DD"
+        },
+        {
+          "displayName": "Emails",
+          "name": "emails",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Parameter",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Email",
+              "name": "data",
+              "values": [
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Home",
+                      "value": "HOME"
+                    },
+                    {
+                      "name": "Work",
+                      "value": "WORK"
+                    }
+                  ],
+                  "default": "HOME",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].emails[{{$index}}].type",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Email",
+                  "name": "email",
+                  "type": "string",
+                  "placeholder": "name@email.com",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].emails[{{$index}}].email",
+                      "type": "body"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Organization",
+          "name": "organization",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": false
+          },
+          "placeholder": "Add Parameter",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Organization",
+              "name": "data",
+              "values": [
+                {
+                  "displayName": "Company",
+                  "name": "company",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "type": "body",
+                      "property": "contacts[0].org.company"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Department",
+                  "name": "department",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "type": "body",
+                      "property": "contacts[0].org.department"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Title",
+                  "name": "title",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "type": "body",
+                      "property": "contacts[0].org.title"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Phones",
+          "name": "phones",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Parameter",
+          "default": {},
+          "options": [
+            {
+              "displayName": "Phone",
+              "name": "data",
+              "values": [
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "displayOptions": {
+                    "show": {
+                      "@version": [
+                        1
+                      ]
+                    }
+                  },
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Cell",
+                      "value": "CELL"
+                    },
+                    {
+                      "name": "Home",
+                      "value": "HOME"
+                    },
+                    {
+                      "name": "Iphone",
+                      "value": "IPHONE"
+                    },
+                    {
+                      "name": "Main",
+                      "value": "MAIN"
+                    },
+                    {
+                      "name": "WhatsApp ID",
+                      "value": "wa_id"
+                    },
+                    {
+                      "name": "Work",
+                      "value": "WORK"
+                    }
+                  ],
+                  "default": "CELL",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].phones[{{$index}}].type",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "displayOptions": {
+                    "show": {
+                      "@version": [
+                        {
+                          "_cnd": {
+                            "gt": 1
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Cell",
+                      "value": "CELL"
+                    },
+                    {
+                      "name": "Home",
+                      "value": "HOME"
+                    },
+                    {
+                      "name": "Iphone",
+                      "value": "IPHONE"
+                    },
+                    {
+                      "name": "Main",
+                      "value": "MAIN"
+                    },
+                    {
+                      "name": "Work",
+                      "value": "WORK"
+                    }
+                  ],
+                  "default": "CELL",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].phones[{{$index}}].type",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "Phone",
+                  "name": "phone",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].phones[{{$index}}].phone",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "WhatsApp User ID",
+                  "name": "whatsapp_user_id",
+                  "type": "string",
+                  "default": "",
+                  "description": "If omitted, the message will display an Invite to WhatsApp button instead of the standard buttons",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].phones[{{$index}}].wa_id",
+                      "type": "body"
+                    }
+                  },
+                  "displayOptions": {
+                    "hide": {
+                      "@version": [
+                        {
+                          "_cnd": {
+                            "lt": 1.1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "URLs",
+          "name": "urls",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "placeholder": "Add Parameter",
+          "default": {},
+          "options": [
+            {
+              "displayName": "URL",
+              "name": "url",
+              "values": [
+                {
+                  "displayName": "Type",
+                  "name": "type",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Home",
+                      "value": "HOME"
+                    },
+                    {
+                      "name": "Work",
+                      "value": "WORK"
+                    }
+                  ],
+                  "default": "HOME",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].urls[{{$index}}].type",
+                      "type": "body"
+                    }
+                  }
+                },
+                {
+                  "displayName": "URL",
+                  "name": "url",
+                  "type": "string",
+                  "default": "",
+                  "routing": {
+                    "send": {
+                      "property": "=contacts[0].urls[{{$index}}].url",
+                      "type": "body"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "contacts"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "longitude",
+      "displayName": "Longitude",
+      "type": "number",
+      "default": "",
+      "required": true,
+      "typeOptions": {
+        "minValue": -180,
+        "maxValue": 180
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "location"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "location.longitude"
+        }
+      }
+    },
+    {
+      "name": "latitude",
+      "displayName": "Latitude",
+      "type": "number",
+      "default": "",
+      "required": true,
+      "typeOptions": {
+        "minValue": -90,
+        "maxValue": 90
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "location"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "location.latitude"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Name and Address",
+          "name": "nameAndAddress",
+          "values": [
+            {
+              "displayName": "Name",
+              "name": "name",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "location.name"
+                }
+              }
+            },
+            {
+              "displayName": "Address",
+              "name": "address",
+              "type": "string",
+              "default": "",
+              "routing": {
+                "send": {
+                  "type": "body",
+                  "property": "location.address"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "location"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "textBody",
+      "displayName": "Text Body",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The body of the message (max 4096 characters)",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "text"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "text.body"
+        }
+      }
+    },
+    {
+      "name": "mediaPath",
+      "displayName": "Take Audio From",
+      "type": "options",
+      "default": "useMediaLink",
+      "description": "Use a link, an ID, or n8n to upload an audio file",
+      "options": [
+        {
+          "name": "Link",
+          "value": "useMediaLink",
+          "description": "WhatsApp will download the audio, saving you the step of uploading audio yourself"
+        },
+        {
+          "name": "WhatsApp Media",
+          "value": "useMediaId",
+          "description": "If you have already uploaded the audio to WhatsApp"
+        },
+        {
+          "name": "n8n",
+          "value": "useMedian8n",
+          "description": "Use binary data passed into this node"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "audio"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaPath",
+      "displayName": "Take Document From",
+      "type": "options",
+      "default": "useMediaLink",
+      "description": "Use a link, an ID, or n8n to upload a document",
+      "options": [
+        {
+          "name": "Link",
+          "value": "useMediaLink",
+          "description": "When using a link, WhatsApp will download the document, saving you the step of uploading document yourself"
+        },
+        {
+          "name": "WhatsApp Media",
+          "value": "useMediaId",
+          "description": "You can use an ID if you have already uploaded the document to WhatsApp"
+        },
+        {
+          "name": "n8n",
+          "value": "useMedian8n",
+          "description": "Upload a binary file on the item being processed in n8n"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "document"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaPath",
+      "displayName": "Take Image From",
+      "type": "options",
+      "default": "useMediaLink",
+      "description": "Use a link, an ID, or n8n to upload an image",
+      "options": [
+        {
+          "name": "Link",
+          "value": "useMediaLink",
+          "description": "When using a link, WhatsApp will download the image, saving you the step of uploading image yourself"
+        },
+        {
+          "name": "WhatsApp Media",
+          "value": "useMediaId",
+          "description": "You can use an ID if you have already uploaded the image to WhatsApp"
+        },
+        {
+          "name": "n8n",
+          "value": "useMedian8n",
+          "description": "Upload a binary file on the item being processed in n8n"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaPath",
+      "displayName": "Take Video From",
+      "type": "options",
+      "default": "useMediaLink",
+      "description": "Use a link, an ID, or n8n to upload a video",
+      "options": [
+        {
+          "name": "Link",
+          "value": "useMediaLink",
+          "description": "When using a link, WhatsApp will download the video, saving you the step of uploading video yourself"
+        },
+        {
+          "name": "WhatsApp Media",
+          "value": "useMediaId",
+          "description": "You can use an ID if you have already uploaded the video to WhatsApp"
+        },
+        {
+          "name": "n8n",
+          "value": "useMedian8n",
+          "description": "Upload a binary file on the item being processed in n8n"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "video"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaLink",
+      "displayName": "Link",
+      "type": "string",
+      "default": "",
+      "description": "Link of the media to be sent",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaLink"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "={{$parameter[\"messageType\"]}}.link"
+        }
+      }
+    },
+    {
+      "name": "mediaId",
+      "displayName": "ID",
+      "type": "string",
+      "default": "",
+      "description": "ID of the media to be sent",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaId"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "={{$parameter[\"messageType\"]}}.id"
+        }
+      }
+    },
+    {
+      "name": "mediaPropertyName",
+      "displayName": "Input Data Field Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the input field containing the binary file data to be uploaded",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ],
+          "mediaPath": [
+            "useMedian8n"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaFilename",
+      "displayName": "Filename",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the file (required when using a file ID)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaId"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "property": "={{$parameter[\"messageType\"]}}.filename"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Filename",
+          "name": "mediaFilename",
+          "type": "string",
+          "default": "",
+          "description": "The name of the file",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "={{$parameter[\"messageType\"]}}.filename"
+            }
+          },
+          "displayOptions": {
+            "show": {
+              "/messageType": [
+                "document"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Caption",
+          "name": "mediaCaption",
+          "type": "string",
+          "default": "",
+          "description": "The caption of the media",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "={{$parameter[\"messageType\"]}}.caption"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "template",
+      "displayName": "Template",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Name of the template",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "url": "={{$credentials.businessAccountId}}/message_templates",
+              "method": "GET"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.name}} - {{$responseItem.language}}",
+                    "value": "={{$responseItem.name}}|{{$responseItem.language}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "type": "body",
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "components",
+      "displayName": "Components",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "name": "component",
+          "displayName": "Component",
+          "values": [
+            {
+              "displayName": "Type",
+              "name": "type",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Body",
+                  "value": "body"
+                },
+                {
+                  "name": "Button",
+                  "value": "button"
+                },
+                {
+                  "name": "Header",
+                  "value": "header"
+                }
+              ],
+              "default": "body"
+            },
+            {
+              "displayName": "Parameters",
+              "name": "bodyParameters",
+              "type": "fixedCollection",
+              "typeOptions": {
+                "sortable": true,
+                "multipleValues": true
+              },
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "body"
+                  ]
+                }
+              },
+              "placeholder": "Add Parameter",
+              "default": {},
+              "options": [
+                {
+                  "displayName": "Parameter",
+                  "name": "parameter",
+                  "values": [
+                    {
+                      "displayName": "Type",
+                      "name": "type",
+                      "type": "options",
+                      "options": [
+                        {
+                          "name": "Text",
+                          "value": "text"
+                        },
+                        {
+                          "name": "Currency",
+                          "value": "currency"
+                        },
+                        {
+                          "name": "Date Time",
+                          "value": "date_time"
+                        }
+                      ],
+                      "default": "text"
+                    },
+                    {
+                      "displayName": "Text",
+                      "name": "text",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "text"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Currency Code",
+                      "name": "code",
+                      "type": "options",
+                      "options": [
+                        {
+                          "name": "AED - UAE Dirham",
+                          "value": "AED"
+                        },
+                        {
+                          "name": "AFN - Afghani",
+                          "value": "AFN"
+                        },
+                        {
+                          "name": "ALL - Lek",
+                          "value": "ALL"
+                        },
+                        {
+                          "name": "AMD - Armenian Dram",
+                          "value": "AMD"
+                        },
+                        {
+                          "name": "ANG - Netherlands Antillean Guilder",
+                          "value": "ANG"
+                        },
+                        {
+                          "name": "AOA - Kwanza",
+                          "value": "AOA"
+                        },
+                        {
+                          "name": "ARS - Argentine Peso",
+                          "value": "ARS"
+                        },
+                        {
+                          "name": "AUD - Australian Dollar",
+                          "value": "AUD"
+                        },
+                        {
+                          "name": "AWG - Aruban Florin",
+                          "value": "AWG"
+                        },
+                        {
+                          "name": "AZN - Azerbaijan Manat",
+                          "value": "AZN"
+                        },
+                        {
+                          "name": "BAM - Convertible Mark",
+                          "value": "BAM"
+                        },
+                        {
+                          "name": "BBD - Barbados Dollar",
+                          "value": "BBD"
+                        },
+                        {
+                          "name": "BDT - Taka",
+                          "value": "BDT"
+                        },
+                        {
+                          "name": "BGN - Bulgarian Lev",
+                          "value": "BGN"
+                        },
+                        {
+                          "name": "BHD - Bahraini Dinar",
+                          "value": "BHD"
+                        },
+                        {
+                          "name": "BIF - Burundi Franc",
+                          "value": "BIF"
+                        },
+                        {
+                          "name": "BMD - Bermudian Dollar",
+                          "value": "BMD"
+                        },
+                        {
+                          "name": "BND - Brunei Dollar",
+                          "value": "BND"
+                        },
+                        {
+                          "name": "BOB - Boliviano",
+                          "value": "BOB"
+                        },
+                        {
+                          "name": "BOV - Mvdol",
+                          "value": "BOV"
+                        },
+                        {
+                          "name": "BRL - Brazilian Real",
+                          "value": "BRL"
+                        },
+                        {
+                          "name": "BSD - Bahamian Dollar",
+                          "value": "BSD"
+                        },
+                        {
+                          "name": "BTN - Ngultrum",
+                          "value": "BTN"
+                        },
+                        {
+                          "name": "BWP - Pula",
+                          "value": "BWP"
+                        },
+                        {
+                          "name": "BYN - Belarusian Ruble",
+                          "value": "BYN"
+                        },
+                        {
+                          "name": "BZD - Belize Dollar",
+                          "value": "BZD"
+                        },
+                        {
+                          "name": "CAD - Canadian Dollar",
+                          "value": "CAD"
+                        },
+                        {
+                          "name": "CDF - Congolese Franc",
+                          "value": "CDF"
+                        },
+                        {
+                          "name": "CHE - WIR Euro",
+                          "value": "CHE"
+                        },
+                        {
+                          "name": "CHF - Swiss Franc",
+                          "value": "CHF"
+                        },
+                        {
+                          "name": "CHW - WIR Franc",
+                          "value": "CHW"
+                        },
+                        {
+                          "name": "CLF - Unidad de Fomento",
+                          "value": "CLF"
+                        },
+                        {
+                          "name": "CLP - Chilean Peso",
+                          "value": "CLP"
+                        },
+                        {
+                          "name": "CNY - Yuan Renminbi",
+                          "value": "CNY"
+                        },
+                        {
+                          "name": "COP - Colombian Peso",
+                          "value": "COP"
+                        },
+                        {
+                          "name": "COU - Unidad de Valor Real",
+                          "value": "COU"
+                        },
+                        {
+                          "name": "CRC - Costa Rican Colon",
+                          "value": "CRC"
+                        },
+                        {
+                          "name": "CUC - Peso Convertible",
+                          "value": "CUC"
+                        },
+                        {
+                          "name": "CUP - Cuban Peso",
+                          "value": "CUP"
+                        },
+                        {
+                          "name": "CVE - Cabo Verde Escudo",
+                          "value": "CVE"
+                        },
+                        {
+                          "name": "CZK - Czech Koruna",
+                          "value": "CZK"
+                        },
+                        {
+                          "name": "DJF - Djibouti Franc",
+                          "value": "DJF"
+                        },
+                        {
+                          "name": "DKK - Danish Krone",
+                          "value": "DKK"
+                        },
+                        {
+                          "name": "DOP - Dominican Peso",
+                          "value": "DOP"
+                        },
+                        {
+                          "name": "DZD - Algerian Dinar",
+                          "value": "DZD"
+                        },
+                        {
+                          "name": "EGP - Egyptian Pound",
+                          "value": "EGP"
+                        },
+                        {
+                          "name": "ERN - Nakfa",
+                          "value": "ERN"
+                        },
+                        {
+                          "name": "ETB - Ethiopian Birr",
+                          "value": "ETB"
+                        },
+                        {
+                          "name": "EUR - Euro",
+                          "value": "EUR"
+                        },
+                        {
+                          "name": "FJD - Fiji Dollar",
+                          "value": "FJD"
+                        },
+                        {
+                          "name": "FKP - Falkland Islands Pound",
+                          "value": "FKP"
+                        },
+                        {
+                          "name": "GBP - Pound Sterling",
+                          "value": "GBP"
+                        },
+                        {
+                          "name": "GEL - Lari",
+                          "value": "GEL"
+                        },
+                        {
+                          "name": "GHS - Ghana Cedi",
+                          "value": "GHS"
+                        },
+                        {
+                          "name": "GIP - Gibraltar Pound",
+                          "value": "GIP"
+                        },
+                        {
+                          "name": "GMD - Dalasi",
+                          "value": "GMD"
+                        },
+                        {
+                          "name": "GNF - Guinean Franc",
+                          "value": "GNF"
+                        },
+                        {
+                          "name": "GTQ - Quetzal",
+                          "value": "GTQ"
+                        },
+                        {
+                          "name": "GYD - Guyana Dollar",
+                          "value": "GYD"
+                        },
+                        {
+                          "name": "HKD - Hong Kong Dollar",
+                          "value": "HKD"
+                        },
+                        {
+                          "name": "HNL - Lempira",
+                          "value": "HNL"
+                        },
+                        {
+                          "name": "HRK - Kuna",
+                          "value": "HRK"
+                        },
+                        {
+                          "name": "HTG - Gourde",
+                          "value": "HTG"
+                        },
+                        {
+                          "name": "HUF - Forint",
+                          "value": "HUF"
+                        },
+                        {
+                          "name": "IDR - Rupiah",
+                          "value": "IDR"
+                        },
+                        {
+                          "name": "ILS - New Israeli Sheqel",
+                          "value": "ILS"
+                        },
+                        {
+                          "name": "INR - Indian Rupee",
+                          "value": "INR"
+                        },
+                        {
+                          "name": "IQD - Iraqi Dinar",
+                          "value": "IQD"
+                        },
+                        {
+                          "name": "IRR - Iranian Rial",
+                          "value": "IRR"
+                        },
+                        {
+                          "name": "ISK - Iceland Krona",
+                          "value": "ISK"
+                        },
+                        {
+                          "name": "JMD - Jamaican Dollar",
+                          "value": "JMD"
+                        },
+                        {
+                          "name": "JOD - Jordanian Dinar",
+                          "value": "JOD"
+                        },
+                        {
+                          "name": "JPY - Yen",
+                          "value": "JPY"
+                        },
+                        {
+                          "name": "KES - Kenyan Shilling",
+                          "value": "KES"
+                        },
+                        {
+                          "name": "KGS - Som",
+                          "value": "KGS"
+                        },
+                        {
+                          "name": "KHR - Riel",
+                          "value": "KHR"
+                        },
+                        {
+                          "name": "KMF - Comorian Franc ",
+                          "value": "KMF"
+                        },
+                        {
+                          "name": "KPW - North Korean Won",
+                          "value": "KPW"
+                        },
+                        {
+                          "name": "KRW - Won",
+                          "value": "KRW"
+                        },
+                        {
+                          "name": "KWD - Kuwaiti Dinar",
+                          "value": "KWD"
+                        },
+                        {
+                          "name": "KYD - Cayman Islands Dollar",
+                          "value": "KYD"
+                        },
+                        {
+                          "name": "KZT - Tenge",
+                          "value": "KZT"
+                        },
+                        {
+                          "name": "LAK - Lao Kip",
+                          "value": "LAK"
+                        },
+                        {
+                          "name": "LBP - Lebanese Pound",
+                          "value": "LBP"
+                        },
+                        {
+                          "name": "LKR - Sri Lanka Rupee",
+                          "value": "LKR"
+                        },
+                        {
+                          "name": "LRD - Liberian Dollar",
+                          "value": "LRD"
+                        },
+                        {
+                          "name": "LSL - Loti",
+                          "value": "LSL"
+                        },
+                        {
+                          "name": "LYD - Libyan Dinar",
+                          "value": "LYD"
+                        },
+                        {
+                          "name": "MAD - Moroccan Dirham",
+                          "value": "MAD"
+                        },
+                        {
+                          "name": "MDL - Moldovan Leu",
+                          "value": "MDL"
+                        },
+                        {
+                          "name": "MGA - Malagasy Ariary",
+                          "value": "MGA"
+                        },
+                        {
+                          "name": "MKD - Denar",
+                          "value": "MKD"
+                        },
+                        {
+                          "name": "MMK - Kyat",
+                          "value": "MMK"
+                        },
+                        {
+                          "name": "MNT - Tugrik",
+                          "value": "MNT"
+                        },
+                        {
+                          "name": "MOP - Pataca",
+                          "value": "MOP"
+                        },
+                        {
+                          "name": "MRU - Ouguiya",
+                          "value": "MRU"
+                        },
+                        {
+                          "name": "MUR - Mauritius Rupee",
+                          "value": "MUR"
+                        },
+                        {
+                          "name": "MVR - Rufiyaa",
+                          "value": "MVR"
+                        },
+                        {
+                          "name": "MWK - Malawi Kwacha",
+                          "value": "MWK"
+                        },
+                        {
+                          "name": "MXN - Mexican Peso",
+                          "value": "MXN"
+                        },
+                        {
+                          "name": "MXV - Mexican Unidad de Inversion (UDI)",
+                          "value": "MXV"
+                        },
+                        {
+                          "name": "MYR - Malaysian Ringgit",
+                          "value": "MYR"
+                        },
+                        {
+                          "name": "MZN - Mozambique Metical",
+                          "value": "MZN"
+                        },
+                        {
+                          "name": "NAD - Namibia Dollar",
+                          "value": "NAD"
+                        },
+                        {
+                          "name": "NGN - Naira",
+                          "value": "NGN"
+                        },
+                        {
+                          "name": "NIO - Cordoba Oro",
+                          "value": "NIO"
+                        },
+                        {
+                          "name": "NOK - Norwegian Krone",
+                          "value": "NOK"
+                        },
+                        {
+                          "name": "NPR - Nepalese Rupee",
+                          "value": "NPR"
+                        },
+                        {
+                          "name": "NZD - New Zealand Dollar",
+                          "value": "NZD"
+                        },
+                        {
+                          "name": "OMR - Rial Omani",
+                          "value": "OMR"
+                        },
+                        {
+                          "name": "PAB - Balboa",
+                          "value": "PAB"
+                        },
+                        {
+                          "name": "PEN - Sol",
+                          "value": "PEN"
+                        },
+                        {
+                          "name": "PGK - Kina",
+                          "value": "PGK"
+                        },
+                        {
+                          "name": "PHP - Philippine Peso",
+                          "value": "PHP"
+                        },
+                        {
+                          "name": "PKR - Pakistan Rupee",
+                          "value": "PKR"
+                        },
+                        {
+                          "name": "PLN - Zloty",
+                          "value": "PLN"
+                        },
+                        {
+                          "name": "PYG - Guarani",
+                          "value": "PYG"
+                        },
+                        {
+                          "name": "QAR - Qatari Rial",
+                          "value": "QAR"
+                        },
+                        {
+                          "name": "RON - Romanian Leu",
+                          "value": "RON"
+                        },
+                        {
+                          "name": "RSD - Serbian Dinar",
+                          "value": "RSD"
+                        },
+                        {
+                          "name": "RUB - Russian Ruble",
+                          "value": "RUB"
+                        },
+                        {
+                          "name": "RWF - Rwanda Franc",
+                          "value": "RWF"
+                        },
+                        {
+                          "name": "SAR - Saudi Riyal",
+                          "value": "SAR"
+                        },
+                        {
+                          "name": "SBD - Solomon Islands Dollar",
+                          "value": "SBD"
+                        },
+                        {
+                          "name": "SCR - Seychelles Rupee",
+                          "value": "SCR"
+                        },
+                        {
+                          "name": "SDG - Sudanese Pound",
+                          "value": "SDG"
+                        },
+                        {
+                          "name": "SEK - Swedish Krona",
+                          "value": "SEK"
+                        },
+                        {
+                          "name": "SGD - Singapore Dollar",
+                          "value": "SGD"
+                        },
+                        {
+                          "name": "SHP - Saint Helena Pound",
+                          "value": "SHP"
+                        },
+                        {
+                          "name": "SLL - Leone",
+                          "value": "SLL"
+                        },
+                        {
+                          "name": "SOS - Somali Shilling",
+                          "value": "SOS"
+                        },
+                        {
+                          "name": "SRD - Surinam Dollar",
+                          "value": "SRD"
+                        },
+                        {
+                          "name": "SSP - South Sudanese Pound",
+                          "value": "SSP"
+                        },
+                        {
+                          "name": "STN - Dobra",
+                          "value": "STN"
+                        },
+                        {
+                          "name": "SVC - El Salvador Colon",
+                          "value": "SVC"
+                        },
+                        {
+                          "name": "SYP - Syrian Pound",
+                          "value": "SYP"
+                        },
+                        {
+                          "name": "SZL - Lilangeni",
+                          "value": "SZL"
+                        },
+                        {
+                          "name": "THB - Baht",
+                          "value": "THB"
+                        },
+                        {
+                          "name": "TJS - Somoni",
+                          "value": "TJS"
+                        },
+                        {
+                          "name": "TMT - Turkmenistan New Manat",
+                          "value": "TMT"
+                        },
+                        {
+                          "name": "TND - Tunisian Dinar",
+                          "value": "TND"
+                        },
+                        {
+                          "name": "TOP - Pa’anga",
+                          "value": "TOP"
+                        },
+                        {
+                          "name": "TRY - Turkish Lira",
+                          "value": "TRY"
+                        },
+                        {
+                          "name": "TTD - Trinidad and Tobago Dollar",
+                          "value": "TTD"
+                        },
+                        {
+                          "name": "TWD - New Taiwan Dollar",
+                          "value": "TWD"
+                        },
+                        {
+                          "name": "TZS - Tanzanian Shilling",
+                          "value": "TZS"
+                        },
+                        {
+                          "name": "UAH - Hryvnia",
+                          "value": "UAH"
+                        },
+                        {
+                          "name": "UGX - Uganda Shilling",
+                          "value": "UGX"
+                        },
+                        {
+                          "name": "USD - US Dollar",
+                          "value": "USD"
+                        },
+                        {
+                          "name": "USN - US Dollar (Next day)",
+                          "value": "USN"
+                        },
+                        {
+                          "name": "UYI - Uruguay Peso en Unidades Indexadas (UI)",
+                          "value": "UYI"
+                        },
+                        {
+                          "name": "UYU - Peso Uruguayo",
+                          "value": "UYU"
+                        },
+                        {
+                          "name": "UYW - Unidad Previsional",
+                          "value": "UYW"
+                        },
+                        {
+                          "name": "UZS - Uzbekistan Sum",
+                          "value": "UZS"
+                        },
+                        {
+                          "name": "VES - Bolívar Soberano",
+                          "value": "VES"
+                        },
+                        {
+                          "name": "VND - Dong",
+                          "value": "VND"
+                        },
+                        {
+                          "name": "VUV - Vatu",
+                          "value": "VUV"
+                        },
+                        {
+                          "name": "WST - Tala",
+                          "value": "WST"
+                        },
+                        {
+                          "name": "XAF - CFA Franc BEAC",
+                          "value": "XAF"
+                        },
+                        {
+                          "name": "XAG - Silver",
+                          "value": "XAG"
+                        },
+                        {
+                          "name": "XAU - Gold",
+                          "value": "XAU"
+                        },
+                        {
+                          "name": "XBA - Bond Markets Unit European Composite Unit (EURCO)",
+                          "value": "XBA"
+                        },
+                        {
+                          "name": "XBB - Bond Markets Unit European Monetary Unit (E.M.U.-6)",
+                          "value": "XBB"
+                        },
+                        {
+                          "name": "XBC - Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
+                          "value": "XBC"
+                        },
+                        {
+                          "name": "XBD - Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
+                          "value": "XBD"
+                        },
+                        {
+                          "name": "XCD - East Caribbean Dollar",
+                          "value": "XCD"
+                        },
+                        {
+                          "name": "XDR - SDR (Special Drawing Right)",
+                          "value": "XDR"
+                        },
+                        {
+                          "name": "XOF - CFA Franc BCEAO",
+                          "value": "XOF"
+                        },
+                        {
+                          "name": "XPD - Palladium",
+                          "value": "XPD"
+                        },
+                        {
+                          "name": "XPF - CFP Franc",
+                          "value": "XPF"
+                        },
+                        {
+                          "name": "XPT - Platinum",
+                          "value": "XPT"
+                        },
+                        {
+                          "name": "XSU - Sucre",
+                          "value": "XSU"
+                        },
+                        {
+                          "name": "XTS - Codes specifically reserved for testing purposes",
+                          "value": "XTS"
+                        },
+                        {
+                          "name": "XUA - ADB Unit of Account",
+                          "value": "XUA"
+                        },
+                        {
+                          "name": "XXX - The codes assigned for transactions where no currency is involved",
+                          "value": "XXX"
+                        },
+                        {
+                          "name": "YER - Yemeni Rial",
+                          "value": "YER"
+                        },
+                        {
+                          "name": "ZAR - Rand",
+                          "value": "ZAR"
+                        },
+                        {
+                          "name": "ZMW - Zambian Kwacha",
+                          "value": "ZMW"
+                        },
+                        {
+                          "name": "ZWL - Zimbabwe Dollar",
+                          "value": "ZWL"
+                        }
+                      ],
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "currency"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": "USD"
+                    },
+                    {
+                      "displayName": "Amount",
+                      "name": "amount_1000",
+                      "type": "number",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "currency"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": ""
+                    },
+                    {
+                      "displayName": "Date Time",
+                      "name": "date_time",
+                      "type": "dateTime",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "date_time"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": ""
+                    },
+                    {
+                      "displayName": "Fallback Value",
+                      "name": "fallback_value",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "currency"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Sub Type",
+              "name": "sub_type",
+              "type": "options",
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "button"
+                  ]
+                }
+              },
+              "options": [
+                {
+                  "name": "Quick Reply",
+                  "value": "quick_reply",
+                  "description": "Allows your customer to call a phone number and visit a website"
+                },
+                {
+                  "name": "URL",
+                  "value": "url"
+                }
+              ],
+              "default": "quick_reply"
+            },
+            {
+              "displayName": "Index",
+              "name": "index",
+              "type": "number",
+              "typeOptions": {
+                "maxValue": 2,
+                "minValue": 0
+              },
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "button"
+                  ]
+                }
+              },
+              "default": 0
+            },
+            {
+              "displayName": "Parameters",
+              "name": "buttonParameters",
+              "type": "fixedCollection",
+              "typeOptions": {
+                "multipleValues": false
+              },
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "button"
+                  ]
+                }
+              },
+              "placeholder": "Add Parameter",
+              "default": {},
+              "options": [
+                {
+                  "displayName": "Parameter",
+                  "name": "parameter",
+                  "values": [
+                    {
+                      "displayName": "Type",
+                      "name": "type",
+                      "type": "options",
+                      "options": [
+                        {
+                          "name": "Payload",
+                          "value": "payload"
+                        },
+                        {
+                          "name": "Text",
+                          "value": "text"
+                        }
+                      ],
+                      "default": "payload"
+                    },
+                    {
+                      "displayName": "Payload",
+                      "name": "payload",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "payload"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Text",
+                      "name": "text",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "text"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Parameters",
+              "name": "headerParameters",
+              "type": "fixedCollection",
+              "typeOptions": {
+                "sortable": true,
+                "multipleValues": true
+              },
+              "displayOptions": {
+                "show": {
+                  "type": [
+                    "header"
+                  ]
+                }
+              },
+              "placeholder": "Add Parameter",
+              "default": {},
+              "options": [
+                {
+                  "displayName": "Parameter",
+                  "name": "parameter",
+                  "values": [
+                    {
+                      "displayName": "Type",
+                      "name": "type",
+                      "type": "options",
+                      "options": [
+                        {
+                          "name": "Text",
+                          "value": "text"
+                        },
+                        {
+                          "name": "Currency",
+                          "value": "currency"
+                        },
+                        {
+                          "name": "Date Time",
+                          "value": "date_time"
+                        },
+                        {
+                          "name": "Image",
+                          "value": "image"
+                        }
+                      ],
+                      "default": "text"
+                    },
+                    {
+                      "displayName": "Text",
+                      "name": "text",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "text"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    },
+                    {
+                      "displayName": "Currency Code",
+                      "name": "code",
+                      "type": "options",
+                      "options": [
+                        {
+                          "name": "AED - UAE Dirham",
+                          "value": "AED"
+                        },
+                        {
+                          "name": "AFN - Afghani",
+                          "value": "AFN"
+                        },
+                        {
+                          "name": "ALL - Lek",
+                          "value": "ALL"
+                        },
+                        {
+                          "name": "AMD - Armenian Dram",
+                          "value": "AMD"
+                        },
+                        {
+                          "name": "ANG - Netherlands Antillean Guilder",
+                          "value": "ANG"
+                        },
+                        {
+                          "name": "AOA - Kwanza",
+                          "value": "AOA"
+                        },
+                        {
+                          "name": "ARS - Argentine Peso",
+                          "value": "ARS"
+                        },
+                        {
+                          "name": "AUD - Australian Dollar",
+                          "value": "AUD"
+                        },
+                        {
+                          "name": "AWG - Aruban Florin",
+                          "value": "AWG"
+                        },
+                        {
+                          "name": "AZN - Azerbaijan Manat",
+                          "value": "AZN"
+                        },
+                        {
+                          "name": "BAM - Convertible Mark",
+                          "value": "BAM"
+                        },
+                        {
+                          "name": "BBD - Barbados Dollar",
+                          "value": "BBD"
+                        },
+                        {
+                          "name": "BDT - Taka",
+                          "value": "BDT"
+                        },
+                        {
+                          "name": "BGN - Bulgarian Lev",
+                          "value": "BGN"
+                        },
+                        {
+                          "name": "BHD - Bahraini Dinar",
+                          "value": "BHD"
+                        },
+                        {
+                          "name": "BIF - Burundi Franc",
+                          "value": "BIF"
+                        },
+                        {
+                          "name": "BMD - Bermudian Dollar",
+                          "value": "BMD"
+                        },
+                        {
+                          "name": "BND - Brunei Dollar",
+                          "value": "BND"
+                        },
+                        {
+                          "name": "BOB - Boliviano",
+                          "value": "BOB"
+                        },
+                        {
+                          "name": "BOV - Mvdol",
+                          "value": "BOV"
+                        },
+                        {
+                          "name": "BRL - Brazilian Real",
+                          "value": "BRL"
+                        },
+                        {
+                          "name": "BSD - Bahamian Dollar",
+                          "value": "BSD"
+                        },
+                        {
+                          "name": "BTN - Ngultrum",
+                          "value": "BTN"
+                        },
+                        {
+                          "name": "BWP - Pula",
+                          "value": "BWP"
+                        },
+                        {
+                          "name": "BYN - Belarusian Ruble",
+                          "value": "BYN"
+                        },
+                        {
+                          "name": "BZD - Belize Dollar",
+                          "value": "BZD"
+                        },
+                        {
+                          "name": "CAD - Canadian Dollar",
+                          "value": "CAD"
+                        },
+                        {
+                          "name": "CDF - Congolese Franc",
+                          "value": "CDF"
+                        },
+                        {
+                          "name": "CHE - WIR Euro",
+                          "value": "CHE"
+                        },
+                        {
+                          "name": "CHF - Swiss Franc",
+                          "value": "CHF"
+                        },
+                        {
+                          "name": "CHW - WIR Franc",
+                          "value": "CHW"
+                        },
+                        {
+                          "name": "CLF - Unidad de Fomento",
+                          "value": "CLF"
+                        },
+                        {
+                          "name": "CLP - Chilean Peso",
+                          "value": "CLP"
+                        },
+                        {
+                          "name": "CNY - Yuan Renminbi",
+                          "value": "CNY"
+                        },
+                        {
+                          "name": "COP - Colombian Peso",
+                          "value": "COP"
+                        },
+                        {
+                          "name": "COU - Unidad de Valor Real",
+                          "value": "COU"
+                        },
+                        {
+                          "name": "CRC - Costa Rican Colon",
+                          "value": "CRC"
+                        },
+                        {
+                          "name": "CUC - Peso Convertible",
+                          "value": "CUC"
+                        },
+                        {
+                          "name": "CUP - Cuban Peso",
+                          "value": "CUP"
+                        },
+                        {
+                          "name": "CVE - Cabo Verde Escudo",
+                          "value": "CVE"
+                        },
+                        {
+                          "name": "CZK - Czech Koruna",
+                          "value": "CZK"
+                        },
+                        {
+                          "name": "DJF - Djibouti Franc",
+                          "value": "DJF"
+                        },
+                        {
+                          "name": "DKK - Danish Krone",
+                          "value": "DKK"
+                        },
+                        {
+                          "name": "DOP - Dominican Peso",
+                          "value": "DOP"
+                        },
+                        {
+                          "name": "DZD - Algerian Dinar",
+                          "value": "DZD"
+                        },
+                        {
+                          "name": "EGP - Egyptian Pound",
+                          "value": "EGP"
+                        },
+                        {
+                          "name": "ERN - Nakfa",
+                          "value": "ERN"
+                        },
+                        {
+                          "name": "ETB - Ethiopian Birr",
+                          "value": "ETB"
+                        },
+                        {
+                          "name": "EUR - Euro",
+                          "value": "EUR"
+                        },
+                        {
+                          "name": "FJD - Fiji Dollar",
+                          "value": "FJD"
+                        },
+                        {
+                          "name": "FKP - Falkland Islands Pound",
+                          "value": "FKP"
+                        },
+                        {
+                          "name": "GBP - Pound Sterling",
+                          "value": "GBP"
+                        },
+                        {
+                          "name": "GEL - Lari",
+                          "value": "GEL"
+                        },
+                        {
+                          "name": "GHS - Ghana Cedi",
+                          "value": "GHS"
+                        },
+                        {
+                          "name": "GIP - Gibraltar Pound",
+                          "value": "GIP"
+                        },
+                        {
+                          "name": "GMD - Dalasi",
+                          "value": "GMD"
+                        },
+                        {
+                          "name": "GNF - Guinean Franc",
+                          "value": "GNF"
+                        },
+                        {
+                          "name": "GTQ - Quetzal",
+                          "value": "GTQ"
+                        },
+                        {
+                          "name": "GYD - Guyana Dollar",
+                          "value": "GYD"
+                        },
+                        {
+                          "name": "HKD - Hong Kong Dollar",
+                          "value": "HKD"
+                        },
+                        {
+                          "name": "HNL - Lempira",
+                          "value": "HNL"
+                        },
+                        {
+                          "name": "HRK - Kuna",
+                          "value": "HRK"
+                        },
+                        {
+                          "name": "HTG - Gourde",
+                          "value": "HTG"
+                        },
+                        {
+                          "name": "HUF - Forint",
+                          "value": "HUF"
+                        },
+                        {
+                          "name": "IDR - Rupiah",
+                          "value": "IDR"
+                        },
+                        {
+                          "name": "ILS - New Israeli Sheqel",
+                          "value": "ILS"
+                        },
+                        {
+                          "name": "INR - Indian Rupee",
+                          "value": "INR"
+                        },
+                        {
+                          "name": "IQD - Iraqi Dinar",
+                          "value": "IQD"
+                        },
+                        {
+                          "name": "IRR - Iranian Rial",
+                          "value": "IRR"
+                        },
+                        {
+                          "name": "ISK - Iceland Krona",
+                          "value": "ISK"
+                        },
+                        {
+                          "name": "JMD - Jamaican Dollar",
+                          "value": "JMD"
+                        },
+                        {
+                          "name": "JOD - Jordanian Dinar",
+                          "value": "JOD"
+                        },
+                        {
+                          "name": "JPY - Yen",
+                          "value": "JPY"
+                        },
+                        {
+                          "name": "KES - Kenyan Shilling",
+                          "value": "KES"
+                        },
+                        {
+                          "name": "KGS - Som",
+                          "value": "KGS"
+                        },
+                        {
+                          "name": "KHR - Riel",
+                          "value": "KHR"
+                        },
+                        {
+                          "name": "KMF - Comorian Franc ",
+                          "value": "KMF"
+                        },
+                        {
+                          "name": "KPW - North Korean Won",
+                          "value": "KPW"
+                        },
+                        {
+                          "name": "KRW - Won",
+                          "value": "KRW"
+                        },
+                        {
+                          "name": "KWD - Kuwaiti Dinar",
+                          "value": "KWD"
+                        },
+                        {
+                          "name": "KYD - Cayman Islands Dollar",
+                          "value": "KYD"
+                        },
+                        {
+                          "name": "KZT - Tenge",
+                          "value": "KZT"
+                        },
+                        {
+                          "name": "LAK - Lao Kip",
+                          "value": "LAK"
+                        },
+                        {
+                          "name": "LBP - Lebanese Pound",
+                          "value": "LBP"
+                        },
+                        {
+                          "name": "LKR - Sri Lanka Rupee",
+                          "value": "LKR"
+                        },
+                        {
+                          "name": "LRD - Liberian Dollar",
+                          "value": "LRD"
+                        },
+                        {
+                          "name": "LSL - Loti",
+                          "value": "LSL"
+                        },
+                        {
+                          "name": "LYD - Libyan Dinar",
+                          "value": "LYD"
+                        },
+                        {
+                          "name": "MAD - Moroccan Dirham",
+                          "value": "MAD"
+                        },
+                        {
+                          "name": "MDL - Moldovan Leu",
+                          "value": "MDL"
+                        },
+                        {
+                          "name": "MGA - Malagasy Ariary",
+                          "value": "MGA"
+                        },
+                        {
+                          "name": "MKD - Denar",
+                          "value": "MKD"
+                        },
+                        {
+                          "name": "MMK - Kyat",
+                          "value": "MMK"
+                        },
+                        {
+                          "name": "MNT - Tugrik",
+                          "value": "MNT"
+                        },
+                        {
+                          "name": "MOP - Pataca",
+                          "value": "MOP"
+                        },
+                        {
+                          "name": "MRU - Ouguiya",
+                          "value": "MRU"
+                        },
+                        {
+                          "name": "MUR - Mauritius Rupee",
+                          "value": "MUR"
+                        },
+                        {
+                          "name": "MVR - Rufiyaa",
+                          "value": "MVR"
+                        },
+                        {
+                          "name": "MWK - Malawi Kwacha",
+                          "value": "MWK"
+                        },
+                        {
+                          "name": "MXN - Mexican Peso",
+                          "value": "MXN"
+                        },
+                        {
+                          "name": "MXV - Mexican Unidad de Inversion (UDI)",
+                          "value": "MXV"
+                        },
+                        {
+                          "name": "MYR - Malaysian Ringgit",
+                          "value": "MYR"
+                        },
+                        {
+                          "name": "MZN - Mozambique Metical",
+                          "value": "MZN"
+                        },
+                        {
+                          "name": "NAD - Namibia Dollar",
+                          "value": "NAD"
+                        },
+                        {
+                          "name": "NGN - Naira",
+                          "value": "NGN"
+                        },
+                        {
+                          "name": "NIO - Cordoba Oro",
+                          "value": "NIO"
+                        },
+                        {
+                          "name": "NOK - Norwegian Krone",
+                          "value": "NOK"
+                        },
+                        {
+                          "name": "NPR - Nepalese Rupee",
+                          "value": "NPR"
+                        },
+                        {
+                          "name": "NZD - New Zealand Dollar",
+                          "value": "NZD"
+                        },
+                        {
+                          "name": "OMR - Rial Omani",
+                          "value": "OMR"
+                        },
+                        {
+                          "name": "PAB - Balboa",
+                          "value": "PAB"
+                        },
+                        {
+                          "name": "PEN - Sol",
+                          "value": "PEN"
+                        },
+                        {
+                          "name": "PGK - Kina",
+                          "value": "PGK"
+                        },
+                        {
+                          "name": "PHP - Philippine Peso",
+                          "value": "PHP"
+                        },
+                        {
+                          "name": "PKR - Pakistan Rupee",
+                          "value": "PKR"
+                        },
+                        {
+                          "name": "PLN - Zloty",
+                          "value": "PLN"
+                        },
+                        {
+                          "name": "PYG - Guarani",
+                          "value": "PYG"
+                        },
+                        {
+                          "name": "QAR - Qatari Rial",
+                          "value": "QAR"
+                        },
+                        {
+                          "name": "RON - Romanian Leu",
+                          "value": "RON"
+                        },
+                        {
+                          "name": "RSD - Serbian Dinar",
+                          "value": "RSD"
+                        },
+                        {
+                          "name": "RUB - Russian Ruble",
+                          "value": "RUB"
+                        },
+                        {
+                          "name": "RWF - Rwanda Franc",
+                          "value": "RWF"
+                        },
+                        {
+                          "name": "SAR - Saudi Riyal",
+                          "value": "SAR"
+                        },
+                        {
+                          "name": "SBD - Solomon Islands Dollar",
+                          "value": "SBD"
+                        },
+                        {
+                          "name": "SCR - Seychelles Rupee",
+                          "value": "SCR"
+                        },
+                        {
+                          "name": "SDG - Sudanese Pound",
+                          "value": "SDG"
+                        },
+                        {
+                          "name": "SEK - Swedish Krona",
+                          "value": "SEK"
+                        },
+                        {
+                          "name": "SGD - Singapore Dollar",
+                          "value": "SGD"
+                        },
+                        {
+                          "name": "SHP - Saint Helena Pound",
+                          "value": "SHP"
+                        },
+                        {
+                          "name": "SLL - Leone",
+                          "value": "SLL"
+                        },
+                        {
+                          "name": "SOS - Somali Shilling",
+                          "value": "SOS"
+                        },
+                        {
+                          "name": "SRD - Surinam Dollar",
+                          "value": "SRD"
+                        },
+                        {
+                          "name": "SSP - South Sudanese Pound",
+                          "value": "SSP"
+                        },
+                        {
+                          "name": "STN - Dobra",
+                          "value": "STN"
+                        },
+                        {
+                          "name": "SVC - El Salvador Colon",
+                          "value": "SVC"
+                        },
+                        {
+                          "name": "SYP - Syrian Pound",
+                          "value": "SYP"
+                        },
+                        {
+                          "name": "SZL - Lilangeni",
+                          "value": "SZL"
+                        },
+                        {
+                          "name": "THB - Baht",
+                          "value": "THB"
+                        },
+                        {
+                          "name": "TJS - Somoni",
+                          "value": "TJS"
+                        },
+                        {
+                          "name": "TMT - Turkmenistan New Manat",
+                          "value": "TMT"
+                        },
+                        {
+                          "name": "TND - Tunisian Dinar",
+                          "value": "TND"
+                        },
+                        {
+                          "name": "TOP - Pa’anga",
+                          "value": "TOP"
+                        },
+                        {
+                          "name": "TRY - Turkish Lira",
+                          "value": "TRY"
+                        },
+                        {
+                          "name": "TTD - Trinidad and Tobago Dollar",
+                          "value": "TTD"
+                        },
+                        {
+                          "name": "TWD - New Taiwan Dollar",
+                          "value": "TWD"
+                        },
+                        {
+                          "name": "TZS - Tanzanian Shilling",
+                          "value": "TZS"
+                        },
+                        {
+                          "name": "UAH - Hryvnia",
+                          "value": "UAH"
+                        },
+                        {
+                          "name": "UGX - Uganda Shilling",
+                          "value": "UGX"
+                        },
+                        {
+                          "name": "USD - US Dollar",
+                          "value": "USD"
+                        },
+                        {
+                          "name": "USN - US Dollar (Next day)",
+                          "value": "USN"
+                        },
+                        {
+                          "name": "UYI - Uruguay Peso en Unidades Indexadas (UI)",
+                          "value": "UYI"
+                        },
+                        {
+                          "name": "UYU - Peso Uruguayo",
+                          "value": "UYU"
+                        },
+                        {
+                          "name": "UYW - Unidad Previsional",
+                          "value": "UYW"
+                        },
+                        {
+                          "name": "UZS - Uzbekistan Sum",
+                          "value": "UZS"
+                        },
+                        {
+                          "name": "VES - Bolívar Soberano",
+                          "value": "VES"
+                        },
+                        {
+                          "name": "VND - Dong",
+                          "value": "VND"
+                        },
+                        {
+                          "name": "VUV - Vatu",
+                          "value": "VUV"
+                        },
+                        {
+                          "name": "WST - Tala",
+                          "value": "WST"
+                        },
+                        {
+                          "name": "XAF - CFA Franc BEAC",
+                          "value": "XAF"
+                        },
+                        {
+                          "name": "XAG - Silver",
+                          "value": "XAG"
+                        },
+                        {
+                          "name": "XAU - Gold",
+                          "value": "XAU"
+                        },
+                        {
+                          "name": "XBA - Bond Markets Unit European Composite Unit (EURCO)",
+                          "value": "XBA"
+                        },
+                        {
+                          "name": "XBB - Bond Markets Unit European Monetary Unit (E.M.U.-6)",
+                          "value": "XBB"
+                        },
+                        {
+                          "name": "XBC - Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
+                          "value": "XBC"
+                        },
+                        {
+                          "name": "XBD - Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
+                          "value": "XBD"
+                        },
+                        {
+                          "name": "XCD - East Caribbean Dollar",
+                          "value": "XCD"
+                        },
+                        {
+                          "name": "XDR - SDR (Special Drawing Right)",
+                          "value": "XDR"
+                        },
+                        {
+                          "name": "XOF - CFA Franc BCEAO",
+                          "value": "XOF"
+                        },
+                        {
+                          "name": "XPD - Palladium",
+                          "value": "XPD"
+                        },
+                        {
+                          "name": "XPF - CFP Franc",
+                          "value": "XPF"
+                        },
+                        {
+                          "name": "XPT - Platinum",
+                          "value": "XPT"
+                        },
+                        {
+                          "name": "XSU - Sucre",
+                          "value": "XSU"
+                        },
+                        {
+                          "name": "XTS - Codes specifically reserved for testing purposes",
+                          "value": "XTS"
+                        },
+                        {
+                          "name": "XUA - ADB Unit of Account",
+                          "value": "XUA"
+                        },
+                        {
+                          "name": "XXX - The codes assigned for transactions where no currency is involved",
+                          "value": "XXX"
+                        },
+                        {
+                          "name": "YER - Yemeni Rial",
+                          "value": "YER"
+                        },
+                        {
+                          "name": "ZAR - Rand",
+                          "value": "ZAR"
+                        },
+                        {
+                          "name": "ZMW - Zambian Kwacha",
+                          "value": "ZMW"
+                        },
+                        {
+                          "name": "ZWL - Zimbabwe Dollar",
+                          "value": "ZWL"
+                        }
+                      ],
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "currency"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": "USD"
+                    },
+                    {
+                      "displayName": "Amount",
+                      "name": "amount_1000",
+                      "type": "number",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "currency"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": ""
+                    },
+                    {
+                      "displayName": "Date Time",
+                      "name": "date_time",
+                      "type": "dateTime",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "date_time"
+                          ]
+                        }
+                      },
+                      "default": "",
+                      "placeholder": ""
+                    },
+                    {
+                      "displayName": "Image Link",
+                      "name": "imageLink",
+                      "type": "string",
+                      "displayOptions": {
+                        "show": {
+                          "type": [
+                            "image"
+                          ]
+                        }
+                      },
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "placeholder": "Add Component",
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Show URL Previews",
+          "name": "previewUrl",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to display URL previews in text messages",
+          "routing": {
+            "send": {
+              "type": "body",
+              "property": "text.preview_url"
+            }
+          }
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "text"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "phoneNumberId",
+      "displayName": "Sender Phone Number (or ID)",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The ID of the business account's phone number to store the media",
+      "typeOptions": {
+        "loadOptions": {
+          "routing": {
+            "request": {
+              "url": "={{$credentials.businessAccountId}}/phone_numbers",
+              "method": "GET"
+            },
+            "output": {
+              "postReceive": [
+                {
+                  "type": "rootProperty",
+                  "properties": {
+                    "property": "data"
+                  }
+                },
+                {
+                  "type": "setKeyValue",
+                  "properties": {
+                    "name": "={{$responseItem.display_phone_number}} - {{$responseItem.verified_name}}",
+                    "value": "={{$responseItem.id}}"
+                  }
+                },
+                {
+                  "type": "sort",
+                  "properties": {
+                    "key": "name"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUpload"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "method": "POST",
+          "url": "={{$value}}/media"
+        }
+      }
+    },
+    {
+      "name": "mediaPropertyName",
+      "displayName": "Property Name",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the binary property which contains the data for the file to be uploaded",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUpload"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "routing": {
+        "send": {
+          "preSend": [
+            null
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediaGetId",
+      "displayName": "Media ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the media",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUrlGet"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "method": "GET",
+          "url": "=/{{$value}}"
+        }
+      }
+    },
+    {
+      "name": "mediaDeleteId",
+      "displayName": "Media ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The ID of the media",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "mediaDelete"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "routing": {
+        "request": {
+          "method": "DELETE",
+          "url": "=/{{$value}}"
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Filename",
+          "name": "mediaFileName",
+          "type": "string",
+          "default": "",
+          "description": "The name to use for the file"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ],
+          "operation": [
+            "mediaUpload"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "message",
+      "displayName": "Message",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "typeOptions": {
+        "rows": 4
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      }
+    },
+    {
+      "name": "responseType",
+      "displayName": "Response Type",
+      "type": "options",
+      "default": "approval",
+      "options": [
+        {
+          "name": "Approval",
+          "value": "approval",
+          "description": "User can approve/disapprove from within the message"
+        },
+        {
+          "name": "Free Text",
+          "value": "freeText",
+          "description": "User can submit a response via a form"
+        },
+        {
+          "name": "Custom Form",
+          "value": "customForm",
+          "description": "User can submit a response via a custom form"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      }
+    },
+    {
+      "name": "defineForm",
+      "displayName": "Define Form",
+      "type": "options",
+      "default": "fields",
+      "options": [
+        {
+          "name": "Using Fields Below",
+          "value": "fields"
+        },
+        {
+          "name": "Using JSON",
+          "value": "json"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "jsonOutput",
+      "displayName": "Form Fields",
+      "type": "json",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "typeOptions": {
+        "rows": 5
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "hint": "<a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.form/\" target=\"_blank\">See docs</a> for field syntax"
+    },
+    {
+      "name": "formFields",
+      "displayName": "Form Elements",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Field Name",
+              "name": "fieldLabel",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. What is your name?",
+              "description": "Label that appears above the input field",
+              "required": true,
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "hiddenField",
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Name",
+              "name": "fieldName",
+              "description": "The name of the field, used in input attributes and referenced by the workflow",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Element Type",
+              "name": "fieldType",
+              "type": "options",
+              "default": "text",
+              "description": "The type of field to add to the form",
+              "options": [
+                {
+                  "name": "Checkboxes",
+                  "value": "checkbox"
+                },
+                {
+                  "name": "Custom HTML",
+                  "value": "html"
+                },
+                {
+                  "name": "Date",
+                  "value": "date"
+                },
+                {
+                  "name": "Dropdown",
+                  "value": "dropdown"
+                },
+                {
+                  "name": "Email",
+                  "value": "email"
+                },
+                {
+                  "name": "File",
+                  "value": "file"
+                },
+                {
+                  "name": "Hidden Field",
+                  "value": "hiddenField"
+                },
+                {
+                  "name": "Number",
+                  "value": "number"
+                },
+                {
+                  "name": "Password",
+                  "value": "password"
+                },
+                {
+                  "name": "Radio Buttons",
+                  "value": "radio"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                },
+                {
+                  "name": "Textarea",
+                  "value": "textarea"
+                }
+              ],
+              "required": true
+            },
+            {
+              "displayName": "Element Name",
+              "name": "elementName",
+              "type": "string",
+              "default": "",
+              "placeholder": "e.g. content-section",
+              "description": "Optional field. It can be used to include the html in the output.",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Placeholder",
+              "name": "placeholder",
+              "description": "Sample text to display inside the field",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "dropdown",
+                    "date",
+                    "file",
+                    "html",
+                    "hiddenField",
+                    "radio",
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+              "type": "string",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "hiddenField"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Field Options",
+              "name": "fieldOptions",
+              "placeholder": "Add Field Option",
+              "description": "List of options that can be selected from the dropdown",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Option",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Checkboxes",
+              "name": "fieldOptions",
+              "placeholder": "Add Checkbox",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Checkbox Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Radio Buttons",
+              "name": "fieldOptions",
+              "placeholder": "Add Radio Button",
+              "type": "fixedCollection",
+              "default": {
+                "values": [
+                  {
+                    "option": ""
+                  }
+                ]
+              },
+              "required": true,
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "radio"
+                  ]
+                }
+              },
+              "typeOptions": {
+                "multipleValues": true,
+                "sortable": true
+              },
+              "options": [
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "values": [
+                    {
+                      "displayName": "Radio Button Label",
+                      "name": "option",
+                      "type": "string",
+                      "default": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "displayName": "Multiple Choice is a legacy option, please use Checkboxes or Radio Buttons field type instead",
+              "name": "multiselectLegacyNotice",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "multiselect": [
+                    true
+                  ],
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Choice",
+              "name": "multiselect",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to allow the user to select multiple options from the dropdown list",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "dropdown"
+                  ],
+                  "@version": [
+                    {
+                      "_cnd": {
+                        "lt": 2.3
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Limit Selection",
+              "name": "limitSelection",
+              "type": "options",
+              "default": "unlimited",
+              "options": [
+                {
+                  "name": "Exact Number",
+                  "value": "exact"
+                },
+                {
+                  "name": "Range",
+                  "value": "range"
+                },
+                {
+                  "name": "Unlimited",
+                  "value": "unlimited"
+                }
+              ],
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Number of Selections",
+              "name": "numberOfSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "exact"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Minimum Selections",
+              "name": "minSelections",
+              "type": "number",
+              "default": 0,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 0
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Maximum Selections",
+              "name": "maxSelections",
+              "type": "number",
+              "default": 1,
+              "typeOptions": {
+                "numberPrecision": 0,
+                "minValue": 1
+              },
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "checkbox"
+                  ],
+                  "limitSelection": [
+                    "range"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "HTML",
+              "name": "html",
+              "typeOptions": {
+                "editor": "htmlEditor"
+              },
+              "type": "string",
+              "noDataExpression": true,
+              "default": "<!-- Your custom HTML here --->\n\n\n",
+              "description": "HTML elements to display on the form page",
+              "hint": "Does not accept <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> or <code>&lt;input&gt;</code> tags",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "html"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Multiple Files",
+              "name": "multipleFiles",
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to allow the user to select multiple files from the file input or just one",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Accepted File Types",
+              "name": "acceptFileTypes",
+              "type": "string",
+              "default": "",
+              "description": "Comma-separated list of allowed file extensions",
+              "hint": "Leave empty to allow all file types",
+              "placeholder": "e.g. .jpg, .png",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "file"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "The displayed date is formatted based on the locale of the user's browser",
+              "name": "formatDate",
+              "type": "notice",
+              "default": "",
+              "displayOptions": {
+                "show": {
+                  "fieldType": [
+                    "date"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Required Field",
+              "name": "requiredField",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to require the user to enter a value for this field before submitting the form",
+              "displayOptions": {
+                "hide": {
+                  "fieldType": [
+                    "html",
+                    "hiddenField"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true,
+        "sortable": true
+      },
+      "displayOptions": {
+        "show": {
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add Form Element"
+    },
+    {
+      "name": "approvalOptions",
+      "displayName": "Approval Options",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Values",
+          "name": "values",
+          "values": [
+            {
+              "displayName": "Type of Approval",
+              "name": "approvalType",
+              "type": "options",
+              "placeholder": "Add option",
+              "default": "single",
+              "options": [
+                {
+                  "name": "Approve Only",
+                  "value": "single"
+                },
+                {
+                  "name": "Approve and Disapprove",
+                  "value": "double"
+                }
+              ]
+            },
+            {
+              "displayName": "Approve Button Label",
+              "name": "approveLabel",
+              "type": "string",
+              "default": "✓ Approve",
+              "displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              }
+            },
+            {
+              "displayName": "Disapprove Button Label",
+              "name": "disapproveLabel",
+              "type": "string",
+              "default": "✗ Decline",
+              "displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Limit Wait Time",
+          "name": "limitWaitTime",
+          "type": "fixedCollection",
+          "description": "Whether the workflow will automatically resume execution after the specified limit type",
+          "default": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Limit Type",
+                  "name": "limitType",
+                  "type": "options",
+                  "default": "afterTimeInterval",
+                  "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+                  "options": [
+                    {
+                      "name": "After Time Interval",
+                      "description": "Waits for a certain amount of time",
+                      "value": "afterTimeInterval"
+                    },
+                    {
+                      "name": "At Specified Time",
+                      "description": "Waits until the set date and time to continue",
+                      "value": "atSpecifiedTime"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Amount",
+                  "name": "resumeAmount",
+                  "type": "number",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "typeOptions": {
+                    "minValue": 0,
+                    "numberPrecision": 2
+                  },
+                  "default": 1,
+                  "description": "The time to wait"
+                },
+                {
+                  "displayName": "Unit",
+                  "name": "resumeUnit",
+                  "type": "options",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "options": [
+                    {
+                      "name": "Minutes",
+                      "value": "minutes"
+                    },
+                    {
+                      "name": "Hours",
+                      "value": "hours"
+                    },
+                    {
+                      "name": "Days",
+                      "value": "days"
+                    }
+                  ],
+                  "default": "hours",
+                  "description": "Unit of the interval value"
+                },
+                {
+                  "displayName": "Max Date and Time",
+                  "name": "maxDateAndTime",
+                  "type": "dateTime",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "atSpecifiedTime"
+                      ]
+                    }
+                  },
+                  "default": "",
+                  "description": "Continue execution after the specified date and time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the phrase \"This message was sent automatically with n8n\" to the end of the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Message Button Label",
+          "name": "messageButtonLabel",
+          "type": "string",
+          "default": "Respond"
+        },
+        {
+          "displayName": "Response Form Title",
+          "name": "responseFormTitle",
+          "description": "Title of the form that the user can access to provide their response",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Response Form Description",
+          "name": "responseFormDescription",
+          "description": "Description of the form that the user can access to provide their response",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Response Form Button Label",
+          "name": "responseFormButtonLabel",
+          "type": "string",
+          "default": "Submit"
+        },
+        {
+          "displayName": "Response Form Custom Styling",
+          "name": "responseFormCustomCss",
+          "type": "string",
+          "typeOptions": {
+            "rows": 10,
+            "editor": "cssEditor"
+          },
+          "default": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}",
+          "description": "Override default styling of the response form with CSS"
+        },
+        {
+          "displayName": "Limit Wait Time",
+          "name": "limitWaitTime",
+          "type": "fixedCollection",
+          "description": "Whether the workflow will automatically resume execution after the specified limit type",
+          "default": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Limit Type",
+                  "name": "limitType",
+                  "type": "options",
+                  "default": "afterTimeInterval",
+                  "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+                  "options": [
+                    {
+                      "name": "After Time Interval",
+                      "description": "Waits for a certain amount of time",
+                      "value": "afterTimeInterval"
+                    },
+                    {
+                      "name": "At Specified Time",
+                      "description": "Waits until the set date and time to continue",
+                      "value": "atSpecifiedTime"
+                    }
+                  ]
+                },
+                {
+                  "displayName": "Amount",
+                  "name": "resumeAmount",
+                  "type": "number",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "typeOptions": {
+                    "minValue": 0,
+                    "numberPrecision": 2
+                  },
+                  "default": 1,
+                  "description": "The time to wait"
+                },
+                {
+                  "displayName": "Unit",
+                  "name": "resumeUnit",
+                  "type": "options",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "options": [
+                    {
+                      "name": "Minutes",
+                      "value": "minutes"
+                    },
+                    {
+                      "name": "Hours",
+                      "value": "hours"
+                    },
+                    {
+                      "name": "Days",
+                      "value": "days"
+                    }
+                  ],
+                  "default": "hours",
+                  "description": "Unit of the interval value"
+                },
+                {
+                  "displayName": "Max Date and Time",
+                  "name": "maxDateAndTime",
+                  "type": "dateTime",
+                  "displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "atSpecifiedTime"
+                      ]
+                    }
+                  },
+                  "default": "",
+                  "description": "Continue execution after the specified date and time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Append n8n Attribution",
+          "name": "appendAttribution",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include the phrase \"This message was sent automatically with n8n\" to the end of the message"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "responseType": [
+            "freeText",
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "whatsAppApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "phoneNumberId",
+    "recipientPhoneNumber",
+    "longitude",
+    "latitude",
+    "textBody",
+    "mediaPropertyName",
+    "mediaFilename",
+    "template",
+    "phoneNumberId",
+    "mediaPropertyName",
+    "mediaGetId",
+    "mediaDeleteId",
+    "message"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "messagingProduct",
+    "messageType",
+    "operation",
+    "name",
+    "additionalFields",
+    "additionalFields",
+    "mediaPath",
+    "mediaPath",
+    "mediaPath",
+    "mediaPath",
+    "mediaLink",
+    "mediaId",
+    "additionalFields",
+    "components",
+    "additionalFields",
+    "additionalFields",
+    "responseType",
+    "defineForm",
+    "jsonOutput",
+    "formFields",
+    "approvalOptions",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "messagingProduct": "hidden",
+    "phoneNumberId": "options",
+    "recipientPhoneNumber": "string",
+    "messageType": "options",
+    "name": "fixedCollection",
+    "additionalFields": "collection",
+    "longitude": "number",
+    "latitude": "number",
+    "textBody": "string",
+    "mediaPath": "options",
+    "mediaLink": "string",
+    "mediaId": "string",
+    "mediaPropertyName": "string",
+    "mediaFilename": "string",
+    "template": "options",
+    "components": "fixedCollection",
+    "mediaGetId": "string",
+    "mediaDeleteId": "string",
+    "message": "string",
+    "responseType": "options",
+    "defineForm": "options",
+    "jsonOutput": "json",
+    "formFields": "fixedCollection",
+    "approvalOptions": "fixedCollection",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

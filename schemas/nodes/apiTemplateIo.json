@@ -1,0 +1,434 @@
+{
+  "name": "apiTemplateIo",
+  "displayName": "APITemplate.io",
+  "description": "Consume the APITemplate.io API",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "image",
+    "operation": "create",
+    "imageTemplateId": "",
+    "pdfTemplateId": "",
+    "jsonParameters": false,
+    "download": false,
+    "binaryProperty": "data",
+    "overridesJson": "",
+    "propertiesJson": "",
+    "overridesUi": {},
+    "propertiesUi": {},
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "image",
+      "options": [
+        {
+          "name": "Account",
+          "value": "account"
+        },
+        {
+          "name": "Image",
+          "value": "image"
+        },
+        {
+          "name": "PDF",
+          "value": "pdf"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "required": true,
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create an image"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "required": true,
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "action": "Create a pdf"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "required": true,
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "action": "Get an account"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "imageTemplateId",
+      "displayName": "Template Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the image template to use. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getImageTemplates"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "pdfTemplateId",
+      "displayName": "Template Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "ID of the PDF template to use. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getPdfTemplates"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jsonParameters",
+      "displayName": "JSON Parameters",
+      "type": "boolean",
+      "default": false,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download",
+      "type": "boolean",
+      "default": false,
+      "description": "Name of the binary property to which to write the data of the read file",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "binaryProperty",
+      "displayName": "Put Output File in Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "hint": "The name of the output binary field to put the file in"
+    },
+    {
+      "name": "overridesJson",
+      "displayName": "Overrides (JSON)",
+      "type": "json",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "placeholder": "[ {\"name\": \"text_1\", \"text\": \"hello world\", \"textBackgroundColor\": \"rgba(246, 243, 243, 0)\" } ]"
+    },
+    {
+      "name": "propertiesJson",
+      "displayName": "Properties (JSON)",
+      "type": "json",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "placeholder": "{ \"name\": \"text_1\" }"
+    },
+    {
+      "name": "overridesUi",
+      "displayName": "Overrides",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "name": "overrideValues",
+          "displayName": "Override",
+          "values": [
+            {
+              "displayName": "Properties",
+              "name": "propertiesUi",
+              "placeholder": "Add Property",
+              "type": "fixedCollection",
+              "typeOptions": {
+                "multipleValues": true
+              },
+              "default": {},
+              "options": [
+                {
+                  "name": "propertyValues",
+                  "displayName": "Property",
+                  "values": [
+                    {
+                      "displayName": "Key",
+                      "name": "key",
+                      "type": "string",
+                      "default": "",
+                      "description": "Name of the property"
+                    },
+                    {
+                      "displayName": "Value",
+                      "name": "value",
+                      "type": "string",
+                      "default": "",
+                      "description": "Value to the property"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Override"
+    },
+    {
+      "name": "propertiesUi",
+      "displayName": "Properties",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "name": "propertyValues",
+          "displayName": "Property",
+          "values": [
+            {
+              "displayName": "Key",
+              "name": "key",
+              "type": "string",
+              "default": "",
+              "description": "Name of the property"
+            },
+            {
+              "displayName": "Value",
+              "name": "value",
+              "type": "string",
+              "default": "",
+              "description": "Value to the property"
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "placeholder": "Add Property"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "File Name",
+          "name": "fileName",
+          "type": "string",
+          "default": "",
+          "description": "The name of the downloaded image/pdf. It has to include the extension. For example: report.pdf"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "apiTemplateIoApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "operation",
+    "operation",
+    "operation",
+    "imageTemplateId",
+    "pdfTemplateId",
+    "binaryProperty"
+  ],
+  "optionalFields": [
+    "resource",
+    "jsonParameters",
+    "download",
+    "overridesJson",
+    "propertiesJson",
+    "overridesUi",
+    "propertiesUi",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "imageTemplateId": "options",
+    "pdfTemplateId": "options",
+    "jsonParameters": "boolean",
+    "download": "boolean",
+    "binaryProperty": "string",
+    "overridesJson": "json",
+    "propertiesJson": "json",
+    "overridesUi": "fixedCollection",
+    "propertiesUi": "fixedCollection",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

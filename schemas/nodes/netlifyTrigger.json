@@ -1,0 +1,110 @@
+{
+  "name": "netlifyTrigger",
+  "displayName": "Netlify Trigger",
+  "description": "Handle netlify events via webhooks",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "siteId": "",
+    "event": "",
+    "formId": "",
+    "simple": true
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Select the Site ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getSites"
+      }
+    },
+    {
+      "name": "event",
+      "displayName": "Event",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "options": [
+        {
+          "name": "Deploy Building",
+          "value": "deployBuilding"
+        },
+        {
+          "name": "Deploy Failed",
+          "value": "deployFailed"
+        },
+        {
+          "name": "Deploy Created",
+          "value": "deployCreated"
+        },
+        {
+          "name": "Form Submitted",
+          "value": "submissionCreated"
+        }
+      ]
+    },
+    {
+      "name": "formId",
+      "displayName": "Form Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Select a form. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getForms"
+      },
+      "displayOptions": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simple",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "event": [
+            "submissionCreated"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "netlifyApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "siteId",
+    "event",
+    "formId"
+  ],
+  "optionalFields": [
+    "simple"
+  ],
+  "parameterTypes": {
+    "siteId": "options",
+    "event": "options",
+    "formId": "options",
+    "simple": "boolean"
+  },
+  "hasVersions": false
+}

@@ -1,0 +1,1117 @@
+{
+  "name": "affinity",
+  "displayName": "Affinity",
+  "description": "Consume Affinity API",
+  "group": [
+    "output"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "organization",
+    "entityId": "",
+    "additionalFields": {},
+    "operation": "create",
+    "name": "",
+    "domain": "",
+    "updateFields": {},
+    "options": {},
+    "firstName": "",
+    "lastName": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "organization",
+      "options": [
+        {
+          "name": "List",
+          "value": "list"
+        },
+        {
+          "name": "List Entry",
+          "value": "listEntry"
+        },
+        {
+          "name": "Organization",
+          "value": "organization"
+        },
+        {
+          "name": "Person",
+          "value": "person"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "get",
+      "options": [
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a list",
+          "action": "Get a list"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many lists",
+          "action": "Get many lists"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "listId",
+      "displayName": "List ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list object to be retrieved",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a list entry",
+          "action": "Create a list entry"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a list entry",
+          "action": "Delete a list entry"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a list entry",
+          "action": "Get a list entry"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many list entries",
+          "action": "Get many list entries"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list whose list entries are to be retrieved. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "entityId",
+      "displayName": "Entity ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the entity (person, organization, or opportunity) to add to this list",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Creator ID",
+          "name": "creator_id",
+          "type": "string",
+          "default": "",
+          "description": "The ID of a Person resource who should be recorded as adding the entry to the list. Must be a person who can access Affinity. If not provided the creator defaults to the owner of the API key."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list that contains the specified list_entry_id. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listEntryId",
+      "displayName": "List Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list entry object to be retrieved",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "description": "The unique ID of the list whose list entries are to be retrieved. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "listId",
+      "displayName": "List Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list that contains the specified list_entry_id. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "typeOptions": {
+        "loadOptionsMethod": "getLists"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "listEntryId",
+      "displayName": "List Entry ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The unique ID of the list entry object to be deleted",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create an organization",
+          "action": "Create an organization"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete an organization",
+          "action": "Delete an organization"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get an organization",
+          "action": "Get an organization"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many organizations",
+          "action": "Get many organizations"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update an organization",
+          "action": "Update an organization"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "name",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The name of the organization",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "domain",
+      "displayName": "Domain",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The domain name of the organization",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Person Names or IDs",
+          "name": "persons",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getPersons"
+          },
+          "default": [],
+          "description": "Persons that the new organization will be associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "organizationId",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the organization",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Domain",
+          "name": "domain",
+          "type": "string",
+          "default": "",
+          "description": "The domain name of the organization"
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "The name of the organization"
+        },
+        {
+          "displayName": "Person Names or IDs",
+          "name": "persons",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getPersons"
+          },
+          "default": [],
+          "description": "Persons that the new organization will be associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "organizationId",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the organization",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "With Interaction Dates",
+          "name": "withInteractionDates",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether interaction dates will be present on the returned resources"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Term",
+          "name": "term",
+          "type": "string",
+          "default": "",
+          "description": "A string used to search all the organizations in your team’s address book. This could be an email address, a first name or a last name."
+        },
+        {
+          "displayName": "With Interaction Dates",
+          "name": "withInteractionDates",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether interaction dates will be present on the returned resources"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "organizationId",
+      "displayName": "Organization ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the organization",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a person",
+          "action": "Create a person"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a person",
+          "action": "Delete a person"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a person",
+          "action": "Get a person"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many persons",
+          "action": "Get many people"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a person",
+          "action": "Update a person"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "firstName",
+      "displayName": "First Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The first name of the person",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "lastName",
+      "displayName": "Last Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The last name of the person",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Organization Names or IDs",
+          "name": "organizations",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getOrganizations"
+          },
+          "default": [],
+          "description": "Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "emails",
+      "displayName": "Emails",
+      "type": "string",
+      "default": [],
+      "description": "The email addresses of the person",
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add To Email"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "info@example.com"
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the person",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "First Name",
+          "name": "firstName",
+          "type": "string",
+          "default": "",
+          "description": "The first name of the person"
+        },
+        {
+          "displayName": "Last Name",
+          "name": "lastName",
+          "type": "string",
+          "default": "",
+          "description": "The last name of the person"
+        },
+        {
+          "displayName": "Organization Names or IDs",
+          "name": "organizations",
+          "type": "multiOptions",
+          "typeOptions": {
+            "loadOptionsMethod": "getOrganizations"
+          },
+          "default": [],
+          "description": "Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "emails",
+      "displayName": "Emails",
+      "type": "string",
+      "default": [],
+      "description": "The email addresses of the person",
+      "typeOptions": {
+        "multipleValues": true,
+        "multipleValueButtonText": "Add To Email"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "info@example.com"
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the person",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "With Interaction Dates",
+          "name": "withInteractionDates",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether interaction dates will be present on the returned resources"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 5,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 10
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Term",
+          "name": "term",
+          "type": "string",
+          "default": "",
+          "description": "A string used to search all the persons in your team’s address book. This could be an email address, a first name or a last name."
+        },
+        {
+          "displayName": "With Interaction Dates",
+          "name": "withInteractionDates",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether interaction dates will be present on the returned resources"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "personId",
+      "displayName": "Person ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Unique identifier for the person",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "affinityApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "listId",
+    "listId",
+    "entityId",
+    "listId",
+    "listEntryId",
+    "listId",
+    "listEntryId",
+    "name",
+    "domain",
+    "organizationId",
+    "organizationId",
+    "organizationId",
+    "firstName",
+    "lastName",
+    "personId",
+    "personId",
+    "personId"
+  ],
+  "optionalFields": [
+    "resource",
+    "operation",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "listId",
+    "returnAll",
+    "limit",
+    "operation",
+    "additionalFields",
+    "updateFields",
+    "options",
+    "returnAll",
+    "limit",
+    "options",
+    "operation",
+    "additionalFields",
+    "emails",
+    "updateFields",
+    "emails",
+    "options",
+    "returnAll",
+    "limit",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "listId": "options",
+    "returnAll": "boolean",
+    "limit": "number",
+    "entityId": "string",
+    "additionalFields": "collection",
+    "listEntryId": "string",
+    "name": "string",
+    "domain": "string",
+    "organizationId": "string",
+    "updateFields": "collection",
+    "options": "collection",
+    "firstName": "string",
+    "lastName": "string",
+    "emails": "string",
+    "personId": "string"
+  },
+  "hasVersions": false
+}

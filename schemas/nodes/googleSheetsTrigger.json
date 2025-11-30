@@ -1,0 +1,328 @@
+{
+  "name": "googleSheetsTrigger",
+  "displayName": "Google Sheets Trigger",
+  "description": "Starts the workflow when Google Sheets events occur",
+  "group": [
+    "trigger"
+  ],
+  "version": 1,
+  "defaults": {
+    "authentication": "triggerOAuth2",
+    "documentId": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "sheetName": {
+      "__rl": true,
+      "mode": "list",
+      "value": ""
+    },
+    "event": "anyUpdate",
+    "includeInOutput": "new",
+    "options": {}
+  },
+  "inputs": [],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "authentication",
+      "displayName": "Authentication",
+      "type": "hidden",
+      "default": "triggerOAuth2",
+      "options": [
+        {
+          "name": "OAuth2 (recommended)",
+          "value": "triggerOAuth2"
+        }
+      ]
+    },
+    {
+      "name": "documentId",
+      "displayName": "Document",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true
+    },
+    {
+      "name": "sheetName",
+      "displayName": "Sheet",
+      "type": "resourceLocator",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "required": true,
+      "typeOptions": {
+        "loadOptionsDependsOn": [
+          "documentId.value"
+        ]
+      }
+    },
+    {
+      "name": "event",
+      "displayName": "Trigger On",
+      "type": "options",
+      "default": "anyUpdate",
+      "required": true,
+      "description": "It will be triggered also by newly created columns (if the 'Columns to Watch' option is not set)",
+      "options": [
+        {
+          "name": "Row Added",
+          "value": "rowAdded"
+        },
+        {
+          "name": "Row Updated",
+          "value": "rowUpdate"
+        },
+        {
+          "name": "Row Added or Updated",
+          "value": "anyUpdate"
+        }
+      ]
+    },
+    {
+      "name": "includeInOutput",
+      "displayName": "Include in Output",
+      "type": "options",
+      "default": "new",
+      "description": "This option will be effective only when automatically executing the workflow",
+      "options": [
+        {
+          "name": "New Version",
+          "value": "new"
+        },
+        {
+          "name": "Old Version",
+          "value": "old"
+        },
+        {
+          "name": "Both Versions",
+          "value": "both"
+        }
+      ],
+      "displayOptions": {
+        "hide": {
+          "event": [
+            "rowAdded"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Columns to Watch",
+          "name": "columnsToWatch",
+          "type": "multiOptions",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "typeOptions": {
+            "loadOptionsDependsOn": [
+              "sheetName.value"
+            ],
+            "loadOptionsMethod": "getSheetHeaderRowAndSkipEmpty"
+          },
+          "default": [],
+          "displayOptions": {
+            "show": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "Data Location on Sheet",
+          "name": "dataLocationOnSheet",
+          "type": "fixedCollection",
+          "placeholder": "Select Range",
+          "default": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1"
+            }
+          },
+          "options": [
+            {
+              "displayName": "Values",
+              "name": "values",
+              "values": [
+                {
+                  "displayName": "Range Definition",
+                  "name": "rangeDefinition",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Specify Range (A1 Notation)",
+                      "value": "specifyRangeA1",
+                      "description": "Manually specify the data range"
+                    },
+                    {
+                      "name": "Specify Range (Rows)",
+                      "value": "specifyRange",
+                      "description": "Manually specify the data range"
+                    }
+                  ],
+                  "default": ""
+                },
+                {
+                  "displayName": "Header Row",
+                  "name": "headerRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 1,
+                  "description": "Index of the row which contains the keys. Starts at 1. The incoming node data is matched to the keys for assignment. The matching is case sensitive.",
+                  "hint": "First row is row 1",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "First Data Row",
+                  "name": "firstDataRow",
+                  "type": "number",
+                  "typeOptions": {
+                    "minValue": 1
+                  },
+                  "default": 2,
+                  "description": "Index of the first row which contains the actual data and not the keys. Starts with 1.",
+                  "hint": "First row is row 1",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "displayName": "Range",
+                  "name": "range",
+                  "type": "string",
+                  "default": "",
+                  "placeholder": "A:Z",
+                  "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details.",
+                  "hint": "You can specify both the rows and the columns, e.g. C4:E7",
+                  "displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRangeA1"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Value Render",
+          "name": "valueRender",
+          "type": "options",
+          "options": [
+            {
+              "name": "Unformatted",
+              "value": "UNFORMATTED_VALUE",
+              "description": "Values will be calculated, but not formatted in the reply"
+            },
+            {
+              "name": "Formatted",
+              "value": "FORMATTED_VALUE",
+              "description": "Values will be formatted and calculated according to the cell's formatting (based on the spreadsheet's locale)"
+            },
+            {
+              "name": "Formula",
+              "value": "FORMULA",
+              "description": "Values will not be calculated. The reply will include the formulas."
+            }
+          ],
+          "default": "UNFORMATTED_VALUE",
+          "description": "Determines how values will be rendered in the output. <a href=\"https://developers.google.com/sheets/api/reference/rest/v4/ValueRenderOption\" target=\"_blank\">More info</a>.",
+          "displayOptions": {
+            "hide": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          }
+        },
+        {
+          "displayName": "DateTime Render",
+          "name": "dateTimeRenderOption",
+          "type": "options",
+          "options": [
+            {
+              "name": "Serial Number",
+              "value": "SERIAL_NUMBER",
+              "description": "Fields will be returned as doubles in \"serial number\" format (as popularized by Lotus 1-2-3)"
+            },
+            {
+              "name": "Formatted String",
+              "value": "FORMATTED_STRING",
+              "description": "Fields will be rendered as strings in their given number format (which depends on the spreadsheet locale)"
+            }
+          ],
+          "default": "SERIAL_NUMBER",
+          "description": "Determines how dates should be rendered in the output.  <a href=\"https://developers.google.com/sheets/api/reference/rest/v4/DateTimeRenderOption\" target=\"_blank\">More info</a>.",
+          "displayOptions": {
+            "hide": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          }
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "googleSheetsTriggerOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "triggerOAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "requiredFields": [
+    "documentId",
+    "sheetName",
+    "event"
+  ],
+  "optionalFields": [
+    "authentication",
+    "includeInOutput",
+    "options"
+  ],
+  "parameterTypes": {
+    "authentication": "hidden",
+    "documentId": "resourceLocator",
+    "sheetName": "resourceLocator",
+    "event": "options",
+    "includeInOutput": "options",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

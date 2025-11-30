@@ -1,0 +1,187 @@
+{
+  "name": "htmlExtract",
+  "displayName": "HTML Extract",
+  "description": "Extracts data from HTML",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "sourceData": "json",
+    "dataPropertyName": "data",
+    "extractionValues": {},
+    "options": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "sourceData",
+      "displayName": "Source Data",
+      "type": "options",
+      "default": "json",
+      "description": "If HTML should be read from binary or JSON data",
+      "options": [
+        {
+          "name": "Binary",
+          "value": "binary"
+        },
+        {
+          "name": "JSON",
+          "value": "json"
+        }
+      ]
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "Input Binary Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "sourceData": [
+            "binary"
+          ]
+        }
+      },
+      "hint": "The name of the input binary field containing the file to be extracted"
+    },
+    {
+      "name": "dataPropertyName",
+      "displayName": "JSON Property",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "Name of the JSON property in which the HTML to extract the data from can be found. The property can either contain a string or an array of strings.",
+      "displayOptions": {
+        "show": {
+          "sourceData": [
+            "json"
+          ]
+        }
+      }
+    },
+    {
+      "name": "extractionValues",
+      "displayName": "Extraction Values",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "name": "values",
+          "displayName": "Values",
+          "values": [
+            {
+              "displayName": "Key",
+              "name": "key",
+              "type": "string",
+              "default": "",
+              "description": "The key under which the extracted value should be saved"
+            },
+            {
+              "displayName": "CSS Selector",
+              "name": "cssSelector",
+              "type": "string",
+              "default": "",
+              "placeholder": ".price",
+              "description": "The CSS selector to use"
+            },
+            {
+              "displayName": "Return Value",
+              "name": "returnValue",
+              "type": "options",
+              "options": [
+                {
+                  "name": "Attribute",
+                  "value": "attribute",
+                  "description": "Get an attribute value like \"class\" from an element"
+                },
+                {
+                  "name": "HTML",
+                  "value": "html",
+                  "description": "Get the HTML the element contains"
+                },
+                {
+                  "name": "Text",
+                  "value": "text",
+                  "description": "Get only the text content of the element"
+                },
+                {
+                  "name": "Value",
+                  "value": "value",
+                  "description": "Get value of an input, select or textarea"
+                }
+              ],
+              "default": "text",
+              "description": "What kind of data should be returned"
+            },
+            {
+              "displayName": "Attribute",
+              "name": "attribute",
+              "type": "string",
+              "displayOptions": {
+                "show": {
+                  "returnValue": [
+                    "attribute"
+                  ]
+                }
+              },
+              "default": "",
+              "placeholder": "class",
+              "description": "The name of the attribute to return the value off"
+            },
+            {
+              "displayName": "Return Array",
+              "name": "returnArray",
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to return the values as an array so if multiple ones get found they also get returned separately. If not set all will be returned as a single string."
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValues": true
+      },
+      "placeholder": "Add Value"
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Trim Values",
+          "name": "trimValues",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to remove automatically all spaces and newlines from the beginning and end of the values"
+        }
+      ],
+      "placeholder": "Add option"
+    }
+  ],
+  "credentials": [],
+  "requiredFields": [
+    "dataPropertyName",
+    "dataPropertyName"
+  ],
+  "optionalFields": [
+    "sourceData",
+    "extractionValues",
+    "options"
+  ],
+  "parameterTypes": {
+    "sourceData": "options",
+    "dataPropertyName": "string",
+    "extractionValues": "fixedCollection",
+    "options": "collection"
+  },
+  "hasVersions": false
+}

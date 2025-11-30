@@ -1,0 +1,378 @@
+{
+  "name": "grist",
+  "displayName": "Grist",
+  "description": "Consume the Grist API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "operation": "getAll",
+    "docId": "",
+    "tableId": "",
+    "returnAll": false,
+    "limit": 50,
+    "additionalOptions": {},
+    "dataToSend": "defineInNode",
+    "inputsToIgnore": "",
+    "fieldsToSend": {}
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "getAll",
+      "options": [
+        {
+          "name": "Create Row",
+          "value": "create",
+          "description": "Create rows in a table",
+          "action": "Create rows in a table"
+        },
+        {
+          "name": "Delete Row",
+          "value": "delete",
+          "description": "Delete rows from a table",
+          "action": "Delete rows from a table"
+        },
+        {
+          "name": "Get Many Rows",
+          "value": "getAll",
+          "description": "Read rows from a table",
+          "action": "Read rows from a table"
+        },
+        {
+          "name": "Update Row",
+          "value": "update",
+          "description": "Update rows in a table",
+          "action": "Update rows in a table"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "docId",
+      "displayName": "Document ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "In your document, click your profile icon, then Document Settings, then copy the value under \"This document's ID\""
+    },
+    {
+      "name": "tableId",
+      "displayName": "Table ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of table to operate on. If unsure, look at the Code View."
+    },
+    {
+      "name": "rowId",
+      "displayName": "Row ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the row to delete, or comma-separated list of row IDs to delete",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalOptions",
+      "displayName": "Additional Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Filter",
+          "name": "filter",
+          "placeholder": "Add Filter",
+          "description": "Only return rows matching all of the given filters. For complex filters, create a formula column and filter for the value \"true\".",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Filter Properties",
+              "name": "filterProperties",
+              "values": [
+                {
+                  "displayName": "Column Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsDependsOn": [
+                      "docId",
+                      "tableId"
+                    ],
+                    "loadOptionsMethod": "getTableColumns"
+                  },
+                  "default": "",
+                  "description": "Column to apply the filter in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                  "required": true
+                },
+                {
+                  "displayName": "Values",
+                  "name": "values",
+                  "type": "string",
+                  "default": "",
+                  "description": "Comma-separated list of values to search for in the filtered column"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "displayName": "Sort Order",
+          "name": "sort",
+          "placeholder": "Add Field",
+          "type": "fixedCollection",
+          "typeOptions": {
+            "multipleValues": true
+          },
+          "default": {},
+          "options": [
+            {
+              "displayName": "Sort Properties",
+              "name": "sortProperties",
+              "values": [
+                {
+                  "displayName": "Column Name or ID",
+                  "name": "field",
+                  "type": "options",
+                  "typeOptions": {
+                    "loadOptionsDependsOn": [
+                      "docId",
+                      "tableId"
+                    ],
+                    "loadOptionsMethod": "getTableColumns"
+                  },
+                  "default": "",
+                  "required": true,
+                  "description": "Column to sort on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>."
+                },
+                {
+                  "displayName": "Direction",
+                  "name": "direction",
+                  "type": "options",
+                  "options": [
+                    {
+                      "name": "Ascending",
+                      "value": "asc"
+                    },
+                    {
+                      "name": "Descending",
+                      "value": "desc"
+                    }
+                  ],
+                  "default": "asc",
+                  "description": "Direction to sort in"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "rowId",
+      "displayName": "Row ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "ID of the row to update",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dataToSend",
+      "displayName": "Data to Send",
+      "type": "options",
+      "default": "defineInNode",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "options": [
+        {
+          "name": "Auto-Map Input Data to Columns",
+          "value": "autoMapInputs",
+          "description": "Use when node input properties match destination column names"
+        },
+        {
+          "name": "Define Below for Each Column",
+          "value": "defineInNode",
+          "description": "Set the value for each destination column"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "inputsToIgnore",
+      "displayName": "Inputs to Ignore",
+      "type": "string",
+      "default": "",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputs"
+          ]
+        }
+      },
+      "placeholder": "Enter properties..."
+    },
+    {
+      "name": "fieldsToSend",
+      "displayName": "Fields to Send",
+      "type": "fixedCollection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Properties",
+          "name": "properties",
+          "values": [
+            {
+              "displayName": "Column Name or ID",
+              "name": "fieldId",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "type": "options",
+              "typeOptions": {
+                "loadOptionsDependsOn": [
+                  "tableId"
+                ],
+                "loadOptionsMethod": "getTableColumns"
+              },
+              "default": ""
+            },
+            {
+              "displayName": "Field Value",
+              "name": "fieldValue",
+              "type": "string",
+              "default": ""
+            }
+          ]
+        }
+      ],
+      "typeOptions": {
+        "multipleValueButtonText": "Add Field to Send",
+        "multipleValues": true
+      },
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineInNode"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "gristApi",
+      "required": true,
+      "testedBy": "gristApiTest"
+    }
+  ],
+  "requiredFields": [
+    "docId",
+    "tableId",
+    "rowId",
+    "rowId"
+  ],
+  "optionalFields": [
+    "operation",
+    "returnAll",
+    "limit",
+    "additionalOptions",
+    "dataToSend",
+    "inputsToIgnore",
+    "fieldsToSend"
+  ],
+  "parameterTypes": {
+    "operation": "options",
+    "docId": "string",
+    "tableId": "string",
+    "rowId": "string",
+    "returnAll": "boolean",
+    "limit": "number",
+    "additionalOptions": "collection",
+    "dataToSend": "options",
+    "inputsToIgnore": "string",
+    "fieldsToSend": "fixedCollection"
+  },
+  "hasVersions": false
+}

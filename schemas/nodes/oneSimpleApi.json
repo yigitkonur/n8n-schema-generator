@@ -1,0 +1,787 @@
+{
+  "name": "oneSimpleApi",
+  "displayName": "One Simple API",
+  "description": "A toolbox of no-code utilities",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "website",
+    "operation": "pdf",
+    "link": "",
+    "download": false,
+    "options": {},
+    "message": "",
+    "profileName": "",
+    "artistName": "",
+    "value": "",
+    "fromCurrency": "",
+    "toCurrency": "",
+    "emailAddress": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "website",
+      "required": true,
+      "options": [
+        {
+          "name": "Information",
+          "value": "information"
+        },
+        {
+          "name": "Social Profile",
+          "value": "socialProfile"
+        },
+        {
+          "name": "Utility",
+          "value": "utility"
+        },
+        {
+          "name": "Website",
+          "value": "website"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "pdf",
+      "options": [
+        {
+          "name": "Generate PDF",
+          "value": "pdf",
+          "description": "Generate a PDF from a webpage",
+          "action": "Generate PDF"
+        },
+        {
+          "name": "Get SEO Data",
+          "value": "seo",
+          "description": "Get SEO information from website",
+          "action": "Get SEO Data"
+        },
+        {
+          "name": "Take Screenshot",
+          "value": "screenshot",
+          "description": "Create a screenshot from a webpage",
+          "action": "Screenshot"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "website"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "instagramProfile",
+      "options": [
+        {
+          "name": "Instagram",
+          "value": "instagramProfile",
+          "description": "Get details about an Instagram profile",
+          "action": "Get details about an Instagram profile"
+        },
+        {
+          "name": "Spotify",
+          "value": "spotifyArtistProfile",
+          "description": "Get details about a Spotify Artist",
+          "action": "Get details about a Spotify artist"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "socialProfile"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "exchangeRate",
+      "options": [
+        {
+          "name": "Exchange Rate",
+          "value": "exchangeRate",
+          "description": "Convert a value between currencies",
+          "action": "Convert a value between currencies"
+        },
+        {
+          "name": "Image Metadata",
+          "value": "imageMetadata",
+          "description": "Retrieve image metadata from a URL",
+          "action": "Get image metadata from a URL"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "validateEmail",
+      "options": [
+        {
+          "name": "Expand URL",
+          "value": "expandURL",
+          "description": "Expand a shortened URL",
+          "action": "Expand a shortened URL"
+        },
+        {
+          "name": "Generate QR Code",
+          "value": "qrCode",
+          "description": "Generate a QR Code",
+          "action": "Generate a QR code utility"
+        },
+        {
+          "name": "Validate Email",
+          "value": "validateEmail",
+          "description": "Validate an email address",
+          "action": "Validate an email address"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "utility"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "link",
+      "displayName": "Webpage URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Link to webpage to convert",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download PDF?",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download the PDF or return a link to it",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Put Output In Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the output field to put the binary file data in",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ],
+          "resource": [
+            "website"
+          ],
+          "download": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Page Size",
+          "name": "page",
+          "type": "options",
+          "options": [
+            {
+              "name": "A0",
+              "value": "A0"
+            },
+            {
+              "name": "A1",
+              "value": "A1"
+            },
+            {
+              "name": "A2",
+              "value": "A2"
+            },
+            {
+              "name": "A3",
+              "value": "A3"
+            },
+            {
+              "name": "A4",
+              "value": "A4"
+            },
+            {
+              "name": "A5",
+              "value": "A5"
+            },
+            {
+              "name": "A6",
+              "value": "A6"
+            },
+            {
+              "name": "Ledger",
+              "value": "Ledger"
+            },
+            {
+              "name": "Legal",
+              "value": "Legal"
+            },
+            {
+              "name": "Letter",
+              "value": "Letter"
+            },
+            {
+              "name": "Tabloid",
+              "value": "Tabloid"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Force Refresh",
+          "name": "force",
+          "type": "boolean",
+          "default": false,
+          "description": "Normally the API will reuse a previously taken screenshot of the URL to give a faster response. This option allows you to retake the screenshot at that exact time, for those times when it's necessary."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "website"
+          ],
+          "operation": [
+            "pdf"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "message",
+      "displayName": "QR Content",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "The text that should be turned into a QR code - like a website URL",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "qrCode"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download Image?",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download the QR code or return a link to it",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "qrCode"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Put Output In Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the output field to put the binary file data in",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "qrCode"
+          ],
+          "resource": [
+            "utility"
+          ],
+          "download": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Size",
+          "name": "size",
+          "type": "options",
+          "options": [
+            {
+              "name": "Small",
+              "value": "Small"
+            },
+            {
+              "name": "Medium",
+              "value": "Medium"
+            },
+            {
+              "name": "Large",
+              "value": "Large"
+            }
+          ],
+          "default": "Small",
+          "description": "The QR Code size"
+        },
+        {
+          "displayName": "Format",
+          "name": "format",
+          "type": "options",
+          "options": [
+            {
+              "name": "PNG",
+              "value": "PNG"
+            },
+            {
+              "name": "SVG",
+              "value": "SVG"
+            }
+          ],
+          "default": "PNG",
+          "description": "The QR Code format"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "utility"
+          ],
+          "operation": [
+            "qrCode"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "link",
+      "displayName": "Webpage URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Link to webpage to convert",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "screenshot"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      }
+    },
+    {
+      "name": "download",
+      "displayName": "Download Screenshot?",
+      "type": "boolean",
+      "default": false,
+      "required": true,
+      "description": "Whether to download the screenshot or return a link to it",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "screenshot"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      }
+    },
+    {
+      "name": "output",
+      "displayName": "Put Output In Field",
+      "type": "string",
+      "default": "data",
+      "required": true,
+      "description": "The name of the output field to put the binary file data in",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "screenshot"
+          ],
+          "resource": [
+            "website"
+          ],
+          "download": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Screen Size",
+          "name": "screen",
+          "type": "options",
+          "options": [
+            {
+              "name": "Phone",
+              "value": "phone"
+            },
+            {
+              "name": "Phone Landscape",
+              "value": "phone-landscape"
+            },
+            {
+              "name": "Retina",
+              "value": "retina"
+            },
+            {
+              "name": "Tablet",
+              "value": "tablet"
+            },
+            {
+              "name": "Tablet Landscape",
+              "value": "tablet-landscape"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "displayName": "Force Refresh",
+          "name": "force",
+          "type": "boolean",
+          "default": false,
+          "description": "Normally the API will reuse a previously taken screenshot of the URL to give a faster response. This option allows you to retake the screenshot at that exact time, for those times when it's necessary."
+        },
+        {
+          "displayName": "Full Page",
+          "name": "fullpage",
+          "type": "boolean",
+          "default": false,
+          "description": "The API takes a screenshot of the viewable area for the desired screen size. If you need a screenshot of the whole length of the page, use this option."
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "website"
+          ],
+          "operation": [
+            "screenshot"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "profileName",
+      "displayName": "Profile Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Profile name to get details of",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "instagramProfile"
+          ],
+          "resource": [
+            "socialProfile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "artistName",
+      "displayName": "Artist Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Artist name to get details for",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "spotifyArtistProfile"
+          ],
+          "resource": [
+            "socialProfile"
+          ]
+        }
+      }
+    },
+    {
+      "name": "value",
+      "displayName": "Value",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Value to convert",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      }
+    },
+    {
+      "name": "fromCurrency",
+      "displayName": "From Currency",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "placeholder": "USD"
+    },
+    {
+      "name": "toCurrency",
+      "displayName": "To Currency",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "placeholder": "EUR"
+    },
+    {
+      "name": "link",
+      "displayName": "Link To Image",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Image to get metadata from",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "imageMetadata"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      }
+    },
+    {
+      "name": "link",
+      "displayName": "Webpage URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Webpage to get SEO information for",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "seo"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      }
+    },
+    {
+      "name": "options",
+      "displayName": "Options",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Include Headers?",
+          "name": "headers",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "website"
+          ],
+          "operation": [
+            "seo"
+          ]
+        }
+      },
+      "placeholder": "Add option"
+    },
+    {
+      "name": "emailAddress",
+      "displayName": "Email Address",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "validateEmail"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      }
+    },
+    {
+      "name": "link",
+      "displayName": "URL",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "URL to unshorten",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "expandURL"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "name": "oneSimpleApi",
+      "required": true
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "link",
+    "download",
+    "output",
+    "message",
+    "download",
+    "output",
+    "link",
+    "download",
+    "output",
+    "profileName",
+    "artistName",
+    "value",
+    "fromCurrency",
+    "toCurrency",
+    "link",
+    "link",
+    "emailAddress",
+    "link"
+  ],
+  "optionalFields": [
+    "operation",
+    "operation",
+    "operation",
+    "operation",
+    "options",
+    "options",
+    "options",
+    "options"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "link": "string",
+    "download": "boolean",
+    "output": "string",
+    "options": "collection",
+    "message": "string",
+    "profileName": "string",
+    "artistName": "string",
+    "value": "string",
+    "fromCurrency": "string",
+    "toCurrency": "string",
+    "emailAddress": "string"
+  },
+  "hasVersions": false
+}

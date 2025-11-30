@@ -1,0 +1,1499 @@
+{
+  "name": "haloPSA",
+  "displayName": "HaloPSA",
+  "description": "Consume HaloPSA API",
+  "group": [
+    "input"
+  ],
+  "version": 1,
+  "defaults": {
+    "resource": "client",
+    "operation": "create",
+    "clientName": "",
+    "additionalFields": {},
+    "filters": {},
+    "updateFields": {},
+    "ticketType": "",
+    "summary": "",
+    "details": "",
+    "siteName": "",
+    "selectOption": false,
+    "userName": ""
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "name": "resource",
+      "displayName": "Resource",
+      "type": "options",
+      "default": "client",
+      "required": true,
+      "options": [
+        {
+          "name": "Client",
+          "value": "client"
+        },
+        {
+          "name": "Site",
+          "value": "site"
+        },
+        {
+          "name": "Ticket",
+          "value": "ticket"
+        },
+        {
+          "name": "User",
+          "value": "user"
+        }
+      ],
+      "noDataExpression": true
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a client",
+          "action": "Create a client"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a client",
+          "action": "Delete a client"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a client",
+          "action": "Get a client"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many clients",
+          "action": "Get many clients"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a client",
+          "action": "Update a client"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "clientName",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Enter client name",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "client"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Account Status",
+          "name": "inactive",
+          "type": "options",
+          "default": false,
+          "options": [
+            {
+              "name": "Active",
+              "value": false
+            },
+            {
+              "name": "Inactive",
+              "value": true
+            }
+          ]
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "VIP",
+          "name": "is_vip",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the client is VIP or not"
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "client"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active Status",
+          "name": "activeStatus",
+          "type": "options",
+          "default": "active",
+          "options": [
+            {
+              "name": "Active Only",
+              "value": "active",
+              "description": "Whether to include active customers in the response"
+            },
+            {
+              "name": "All",
+              "value": "all",
+              "description": "Whether to include active and inactive customers in the response"
+            },
+            {
+              "name": "Inactive Only",
+              "value": "inactive",
+              "description": "Whether to include inactive Customers in the response"
+            }
+          ]
+        },
+        {
+          "displayName": "Text To Filter By",
+          "name": "search",
+          "type": "string",
+          "default": "",
+          "description": "Filter clients by your search string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Account Status",
+          "name": "inactive",
+          "type": "options",
+          "default": false,
+          "options": [
+            {
+              "name": "Active",
+              "value": false
+            },
+            {
+              "name": "Inactive",
+              "value": true
+            }
+          ]
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "VIP",
+          "name": "is_vip",
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the client is VIP or not"
+        },
+        {
+          "displayName": "Website",
+          "name": "website",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "delete",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a ticket",
+          "action": "Create a ticket"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a ticket",
+          "action": "Delete a ticket"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a ticket",
+          "action": "Get a ticket"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many tickets",
+          "action": "Get many tickets"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a ticket",
+          "action": "Update a ticket"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "ticketType",
+      "displayName": "Ticket Type Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getHaloPSATicketsTypes"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "summary",
+      "displayName": "Summary",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "details",
+      "displayName": "Details",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned Agent Name or ID",
+          "name": "agent_id",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsMethod": "getHaloPSAAgents"
+          }
+        },
+        {
+          "displayName": "Start Date",
+          "name": "startdate",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Target Date",
+          "name": "targetdate",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "ticketId",
+      "displayName": "Ticket ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active Status",
+          "name": "activeStatus",
+          "type": "options",
+          "default": "all",
+          "options": [
+            {
+              "name": "Active Only",
+              "value": "active",
+              "description": "Whether to include active customers in the response"
+            },
+            {
+              "name": "All",
+              "value": "all",
+              "description": "Whether to include active and inactive customers in the response"
+            },
+            {
+              "name": "Inactive Only",
+              "value": "inactive",
+              "description": "Whether to include inactive Customers in the responsee"
+            }
+          ]
+        },
+        {
+          "displayName": "Text To Filter By",
+          "name": "search",
+          "type": "string",
+          "default": "",
+          "description": "Filter tickets by your search string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "ticketId",
+      "displayName": "Ticket ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Assigned Agent Name or ID",
+          "name": "agent_id",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsMethod": "getHaloPSAAgents"
+          }
+        },
+        {
+          "displayName": "Details",
+          "name": "details",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Start Date",
+          "name": "startdate",
+          "type": "dateTime",
+          "default": ""
+        },
+        {
+          "displayName": "Summary",
+          "name": "summary",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Target Date",
+          "name": "targetdate",
+          "type": "dateTime",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a site",
+          "action": "Create a site"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a site",
+          "action": "Delete a site"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a site",
+          "action": "Get a site"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many sites",
+          "action": "Get many sites"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a site",
+          "action": "Update a site"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "siteName",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Enter site name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "selectOption",
+      "displayName": "Select Client by ID",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether client can be selected by ID",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ],
+          "selectOption": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "clientId",
+      "displayName": "Client Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getHaloPSAClients"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ],
+          "selectOption": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Main Contact",
+          "name": "maincontact_name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone Number",
+          "name": "phonenumber",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active Status",
+          "name": "activeStatus",
+          "type": "options",
+          "default": "all",
+          "options": [
+            {
+              "name": "Active Only",
+              "value": "active",
+              "description": "Whether to include active sites in the response"
+            },
+            {
+              "name": "All",
+              "value": "all",
+              "description": "Whether to include active and inactive sites in the response"
+            },
+            {
+              "name": "Inactive Only",
+              "value": "inactive",
+              "description": "Whether to include inactive sites in the response"
+            }
+          ]
+        },
+        {
+          "displayName": "Text To Filter By",
+          "name": "search",
+          "type": "string",
+          "default": "",
+          "description": "Filter sites by your search string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Client ID",
+          "name": "client_id",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Main Contact",
+          "name": "maincontact_name",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Enter site name"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Phone Number",
+          "name": "phonenumber",
+          "type": "string",
+          "default": ""
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "operation",
+      "displayName": "Operation",
+      "type": "options",
+      "default": "create",
+      "options": [
+        {
+          "name": "Create",
+          "value": "create",
+          "description": "Create a user",
+          "action": "Create a user"
+        },
+        {
+          "name": "Delete",
+          "value": "delete",
+          "description": "Delete a user",
+          "action": "Delete a user"
+        },
+        {
+          "name": "Get",
+          "value": "get",
+          "description": "Get a user",
+          "action": "Get a user"
+        },
+        {
+          "name": "Get Many",
+          "value": "getAll",
+          "description": "Get many users",
+          "action": "Get many users"
+        },
+        {
+          "name": "Update",
+          "value": "update",
+          "description": "Update a user",
+          "action": "Update a user"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "noDataExpression": true
+    },
+    {
+      "name": "userName",
+      "displayName": "Name",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "description": "Enter user name",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "siteId",
+      "displayName": "Site Name or ID",
+      "type": "options",
+      "default": "",
+      "required": true,
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "typeOptions": {
+        "loadOptionsMethod": "getHaloPSASites"
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "additionalFields",
+      "displayName": "Additional Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email",
+          "name": "emailaddress",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Password",
+          "name": "password",
+          "type": "string",
+          "typeOptions": {
+            "password": true
+          },
+          "default": "",
+          "description": "Your new password must be at least 8 characters long and contain at least one letter, one number or symbol, one upper case character and one lower case character"
+        },
+        {
+          "displayName": "Surname",
+          "name": "surname",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "User Is Inactive",
+          "name": "inactive",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      }
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify",
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "returnAll",
+      "displayName": "Return All",
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to return all results or only up to a given limit",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      }
+    },
+    {
+      "name": "limit",
+      "displayName": "Limit",
+      "type": "number",
+      "default": 50,
+      "description": "Max number of results to return",
+      "typeOptions": {
+        "minValue": 1,
+        "maxValue": 1000
+      },
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      }
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Active Status",
+          "name": "activeStatus",
+          "type": "options",
+          "default": "all",
+          "options": [
+            {
+              "name": "Active Only",
+              "value": "active",
+              "description": "Whether to include active customers in the response"
+            },
+            {
+              "name": "All",
+              "value": "all",
+              "description": "Whether to include active and inactive customers in the response"
+            },
+            {
+              "name": "Inactive Only",
+              "value": "inactive",
+              "description": "Whether to include inactive Customers in the response"
+            }
+          ]
+        },
+        {
+          "displayName": "Text To Filter By",
+          "name": "search",
+          "type": "string",
+          "default": "",
+          "description": "Filter users by your search string"
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    },
+    {
+      "name": "userId",
+      "displayName": "User ID",
+      "type": "string",
+      "default": "",
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      }
+    },
+    {
+      "name": "updateFields",
+      "displayName": "Update Fields",
+      "type": "collection",
+      "default": {},
+      "options": [
+        {
+          "displayName": "Email",
+          "name": "emailaddress",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Name",
+          "name": "name",
+          "type": "string",
+          "default": "",
+          "description": "Enter user name"
+        },
+        {
+          "displayName": "Notes",
+          "name": "notes",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "Password",
+          "name": "password",
+          "type": "string",
+          "typeOptions": {
+            "password": true
+          },
+          "default": "",
+          "description": "Your new password must be at least 8 characters long and contain at least one letter, one number or symbol, one upper case character and one lower case character"
+        },
+        {
+          "displayName": "Site Name or ID",
+          "name": "site_id",
+          "type": "options",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "typeOptions": {
+            "loadOptionsMethod": "getHaloPSASites"
+          }
+        },
+        {
+          "displayName": "Surname",
+          "name": "surname",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "displayName": "User Is Inactive",
+          "name": "inactive",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "placeholder": "Add Field"
+    }
+  ],
+  "credentials": [
+    {
+      "name": "haloPSAApi",
+      "required": true,
+      "testedBy": "haloPSAApiCredentialTest"
+    }
+  ],
+  "requiredFields": [
+    "resource",
+    "clientName",
+    "clientId",
+    "clientId",
+    "ticketType",
+    "summary",
+    "details",
+    "ticketId",
+    "siteName",
+    "clientId",
+    "clientId",
+    "siteId",
+    "userName",
+    "siteId",
+    "userId"
+  ],
+  "optionalFields": [
+    "operation",
+    "additionalFields",
+    "simplify",
+    "returnAll",
+    "limit",
+    "filters",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "simplify",
+    "returnAll",
+    "limit",
+    "filters",
+    "ticketId",
+    "updateFields",
+    "operation",
+    "selectOption",
+    "additionalFields",
+    "simplify",
+    "returnAll",
+    "limit",
+    "filters",
+    "siteId",
+    "updateFields",
+    "operation",
+    "additionalFields",
+    "simplify",
+    "returnAll",
+    "limit",
+    "filters",
+    "userId",
+    "updateFields"
+  ],
+  "parameterTypes": {
+    "resource": "options",
+    "operation": "options",
+    "clientName": "string",
+    "additionalFields": "collection",
+    "clientId": "options",
+    "simplify": "boolean",
+    "returnAll": "boolean",
+    "limit": "number",
+    "filters": "collection",
+    "updateFields": "collection",
+    "ticketType": "options",
+    "summary": "string",
+    "details": "string",
+    "ticketId": "string",
+    "siteName": "string",
+    "selectOption": "boolean",
+    "siteId": "options",
+    "userName": "string",
+    "userId": "string"
+  },
+  "hasVersions": false
+}

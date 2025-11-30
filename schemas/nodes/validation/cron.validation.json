@@ -1,0 +1,298 @@
+{
+  "nodeType": "n8n-nodes-base.cron",
+  "displayName": "Cron",
+  "version": 1,
+  "category": [
+    "trigger",
+    "schedule"
+  ],
+  "requiredParameters": [],
+  "optionalParameters": [
+    "notice",
+    "triggerTimes"
+  ],
+  "validationRules": [
+    {
+      "field": "notice",
+      "type": "notice",
+      "required": false,
+      "constraints": {
+        "type": "notice",
+        "default": ""
+      }
+    },
+    {
+      "field": "triggerTimes",
+      "type": "fixedCollection",
+      "required": false,
+      "constraints": {
+        "type": "fixedCollection",
+        "default": {},
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "options",
+                "default": "everyDay",
+                "enumValues": [
+                  "everyMinute",
+                  "everyHour",
+                  "everyDay",
+                  "everyWeek",
+                  "everyMonth",
+                  "everyX",
+                  "custom"
+                ]
+              },
+              "hour": {
+                "type": "number",
+                "default": 14,
+                "minValue": 0,
+                "maxValue": 23
+              },
+              "minute": {
+                "type": "number",
+                "default": 0,
+                "minValue": 0,
+                "maxValue": 59
+              },
+              "dayOfMonth": {
+                "type": "number",
+                "default": 1,
+                "minValue": 1,
+                "maxValue": 31
+              },
+              "weekday": {
+                "type": "options",
+                "default": "1",
+                "enumValues": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "0"
+                ]
+              },
+              "cronExpression": {
+                "type": "string",
+                "default": "* * * * * *"
+              },
+              "value": {
+                "type": "number",
+                "default": 2,
+                "minValue": 0,
+                "maxValue": 1000
+              },
+              "unit": {
+                "type": "options",
+                "default": "hours",
+                "enumValues": [
+                  "minutes",
+                  "hours"
+                ]
+              }
+            }
+          }
+        },
+        "requiredProperties": []
+      }
+    }
+  ],
+  "computedDefaults": {
+    "notice": "",
+    "triggerTimes": {}
+  },
+  "conditionalFields": [],
+  "fixedCollections": [
+    {
+      "name": "triggerTimes",
+      "validOptions": [
+        "item"
+      ],
+      "optionSchemas": {
+        "item": [
+          {
+            "field": "mode",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "everyDay",
+              "enumValues": [
+                "everyMinute",
+                "everyHour",
+                "everyDay",
+                "everyWeek",
+                "everyMonth",
+                "everyX",
+                "custom"
+              ]
+            }
+          },
+          {
+            "field": "hour",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 14,
+              "minValue": 0,
+              "maxValue": 23
+            },
+            "displayOptions": {
+              "hide": {
+                "mode": [
+                  "custom",
+                  "everyHour",
+                  "everyMinute",
+                  "everyX"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "minute",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 0,
+              "minValue": 0,
+              "maxValue": 59
+            },
+            "displayOptions": {
+              "hide": {
+                "mode": [
+                  "custom",
+                  "everyMinute",
+                  "everyX"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "dayOfMonth",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 1,
+              "minValue": 1,
+              "maxValue": 31
+            },
+            "displayOptions": {
+              "show": {
+                "mode": [
+                  "everyMonth"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "weekday",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "1",
+              "enumValues": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "0"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "mode": [
+                  "everyWeek"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "cronExpression",
+            "type": "string",
+            "required": false,
+            "constraints": {
+              "type": "string",
+              "default": "* * * * * *"
+            },
+            "displayOptions": {
+              "show": {
+                "mode": [
+                  "custom"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "value",
+            "type": "number",
+            "required": false,
+            "constraints": {
+              "type": "number",
+              "default": 2,
+              "minValue": 0,
+              "maxValue": 1000
+            },
+            "displayOptions": {
+              "show": {
+                "mode": [
+                  "everyX"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          },
+          {
+            "field": "unit",
+            "type": "options",
+            "required": false,
+            "constraints": {
+              "type": "options",
+              "default": "hours",
+              "enumValues": [
+                "minutes",
+                "hours"
+              ]
+            },
+            "displayOptions": {
+              "show": {
+                "mode": [
+                  "everyX"
+                ]
+              }
+            },
+            "dependsOn": [
+              "mode"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
