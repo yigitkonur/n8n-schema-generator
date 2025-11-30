@@ -120,12 +120,23 @@ function validateNode(nodeConfig: any): ValidationResult {
   const validation = schemas.validations.get(shortType);
 
   if (!schema) {
-    errors.push({
-      path: 'type',
-      message: `Unknown node type: ${nodeType}`,
-      hint: `Available nodes: ${Array.from(schemas.nodes.keys()).slice(0, 10).join(', ')}...`,
-    });
-    return { valid: false, errors, warnings };
+    // Known missing nodes that require additional dependencies
+    const knownMissing = ['merge', 'splitInBatches'];
+    const isCommunityNode = nodeType.includes('@') || !nodeType.startsWith('n8n-nodes-base.');
+    
+    if (knownMissing.includes(shortType)) {
+      warnings.push(`Node '${shortType}' schema not available (requires n8n-core)`);
+    } else if (isCommunityNode) {
+      warnings.push(`Community/custom node: ${nodeType} (not validated)`);
+    } else {
+      errors.push({
+        path: 'type',
+        message: `Unknown node type: ${nodeType}`,
+        hint: `Available nodes: ${Array.from(schemas.nodes.keys()).slice(0, 10).join(', ')}...`,
+      });
+      return { valid: false, errors, warnings };
+    }
+    return { valid: true, errors, warnings };
   }
 
   // Validate required fields
@@ -194,31 +205,53 @@ function validateParameters(
     }
   }
 
-  // Validate each rule
+  // Group rules by field to merge all possible enum values
+  const rulesByField = new Map<string, any[]>();
   for (const rule of validation.rules) {
-    const value = params[rule.field];
+    const existing = rulesByField.get(rule.field) || [];
+    existing.push(rule);
+    rulesByField.set(rule.field, existing);
+  }
 
-    // Check enum values
-    if (rule.enumValues && value !== undefined) {
-      if (!rule.enumValues.includes(value)) {
-        errors.push({
-          path: `parameters.${rule.field}`,
-          message: `Invalid value for ${rule.field}`,
-          expected: rule.enumValues,
-          received: value,
-          hint: `Valid options: ${rule.enumValues.join(', ')}`,
-        });
+  // Validate each field
+  for (const [field, rules] of rulesByField) {
+    const value = params[field];
+    if (value === undefined) continue;
+
+    // Merge all possible enum values for this field
+    const allEnumValues = new Set<string>();
+    let hasEnumValidation = false;
+    let hasFilterType = false;
+    let hasFixedCollection = false;
+
+    for (const rule of rules) {
+      if (rule.enumValues) {
+        hasEnumValidation = true;
+        for (const v of rule.enumValues) allEnumValues.add(v);
       }
+      if (rule.type === 'filter') hasFilterType = true;
+      if (rule.type === 'fixedCollection') hasFixedCollection = true;
+    }
+
+    // Check enum values (merged from all rules)
+    if (hasEnumValidation && !allEnumValues.has(value)) {
+      errors.push({
+        path: `parameters.${field}`,
+        message: `Invalid value for ${field}`,
+        expected: Array.from(allEnumValues),
+        received: value,
+        hint: `Valid options: ${Array.from(allEnumValues).join(', ')}`,
+      });
     }
 
     // Check filter type structure
-    if (rule.type === 'filter' && value !== undefined) {
-      validateFilterValue(value, `parameters.${rule.field}`, errors);
+    if (hasFilterType) {
+      validateFilterValue(value, `parameters.${field}`, errors);
     }
 
     // Check fixedCollection structure
-    if (rule.type === 'fixedCollection' && value !== undefined) {
-      validateFixedCollection(value, rule.field, schema, errors);
+    if (hasFixedCollection) {
+      validateFixedCollection(value, field, schema, errors);
     }
   }
 }
@@ -234,37 +267,40 @@ function validateFilterValue(value: any, path: string, errors: ValidationError[]
     return;
   }
 
-  // Check required filter fields
-  if (!value.options || typeof value.options !== 'object') {
-    errors.push({
-      path: `${path}.options`,
-      message: 'Filter missing required "options" object',
-      expected: { caseSensitive: true, leftValue: '', typeValidation: 'strict' },
-      hint: 'This is a common LLM mistake - options must be inside the filter object',
-    });
-  }
-
-  if (!Array.isArray(value.conditions)) {
+  // options is optional in newer versions - n8n uses defaults
+  // Only warn if completely wrong structure
+  
+  if (!Array.isArray(value.conditions) && value.conditions !== undefined) {
     errors.push({
       path: `${path}.conditions`,
-      message: 'Filter missing required "conditions" array',
+      message: 'Filter conditions must be an array',
       expected: [],
+      received: typeof value.conditions,
     });
   }
 
-  if (!value.combinator) {
-    errors.push({
-      path: `${path}.combinator`,
-      message: 'Filter missing required "combinator"',
-      expected: ['and', 'or'],
-      hint: 'Add combinator: "and" or "or"',
-    });
-  } else if (!['and', 'or'].includes(value.combinator)) {
+  if (value.combinator !== undefined && !['and', 'or'].includes(value.combinator)) {
     errors.push({
       path: `${path}.combinator`,
       message: `Invalid combinator: ${value.combinator}`,
       expected: ['and', 'or'],
     });
+  }
+  
+  // Validate condition structure if present
+  if (Array.isArray(value.conditions)) {
+    for (let i = 0; i < value.conditions.length; i++) {
+      const cond = value.conditions[i];
+      if (cond && typeof cond === 'object') {
+        if (!cond.operator && !cond.leftValue) {
+          errors.push({
+            path: `${path}.conditions[${i}]`,
+            message: 'Condition missing operator or leftValue',
+            hint: 'Each condition needs at least leftValue and operator',
+          });
+        }
+      }
+    }
   }
 }
 
