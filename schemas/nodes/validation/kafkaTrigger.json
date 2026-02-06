@@ -3,7 +3,9 @@
   "displayName": "Kafka Trigger",
   "version": [
     1,
-    1.1
+    1.1,
+    1.2,
+    1.3
   ],
   "rules": [
     {
@@ -17,6 +19,61 @@
       "type": "string",
       "required": true,
       "default": ""
+    },
+    {
+      "field": "resolveOffset",
+      "type": "options",
+      "required": false,
+      "default": "onCompletion",
+      "enumValues": [
+        "onCompletion",
+        "onSuccess",
+        "onStatus",
+        "immediately"
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "field": "allowedStatuses",
+      "type": "multiOptions",
+      "required": false,
+      "default": [
+        "success"
+      ],
+      "enumValues": [
+        "canceled",
+        "crashed",
+        "error",
+        "new",
+        "running",
+        "success",
+        "unknown",
+        "waiting"
+      ],
+      "displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "resolveOffset": [
+            "onStatus"
+          ]
+        }
+      }
     },
     {
       "field": "useSchemaRegistry",
@@ -47,6 +104,10 @@
   "computedDefaults": {
     "topic": "",
     "groupId": "",
+    "resolveOffset": "onCompletion",
+    "allowedStatuses": [
+      "success"
+    ],
     "useSchemaRegistry": false,
     "schemaRegistryUrl": "",
     "options": {}
